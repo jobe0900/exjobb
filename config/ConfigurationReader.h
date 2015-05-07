@@ -1,11 +1,7 @@
 /**  Read configurations from a json file.
  *
- * #include "ConfigurationReader.h" <BR>
- * -llib
+ * #include "ConfigurationReader.h"
  *
- * A longer description.
- *
- * @see something
  * @author Jonas Bergman
  */
 #ifndef CONFIG_CONFIGURATIONREADER_H_
@@ -28,7 +24,9 @@
 // FORWARD REFERENCES
 //
 
-
+/**
+ * A class to handle the reading of data from a json configuration file.
+ */
 class ConfigurationReader
 {
 public:
