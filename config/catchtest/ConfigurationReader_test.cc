@@ -13,7 +13,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 {
 	GIVEN ("a filename to a valid configuration file")
 	{
-		std::string filename("settings.json");
+		std::string filename("config/catchtest/testsettings.json");
 
 		WHEN ("asking for database configuration")
 		{
