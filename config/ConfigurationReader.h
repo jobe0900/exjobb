@@ -20,6 +20,7 @@
 //
 #include "DatabaseConfig.h"
 #include "ConfigurationException.h"
+#include "VehicleConfig.h"
 
 // FORWARD REFERENCES
 //
@@ -51,6 +52,13 @@ public:
 	 * @throw	ConfigurationException	If missing configuration.
 	 */
 	void	getDatabaseConfiguration(DatabaseConfig& rDatabaseConfig);
+
+	/** Read the vehicle part of the configuration and populate config struct.
+	 *
+	 * @param	rVehicleConfig		The configuration structure to populate.
+	 * @throw	ConfigurationException	If missing configuration.
+	 */
+	void	getVehicleConfiguration(VehicleConfig& rVehicleConfig);
 
 	// ACCESS
 	// INQUIRY

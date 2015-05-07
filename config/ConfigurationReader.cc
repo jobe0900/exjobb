@@ -47,6 +47,26 @@ ConfigurationReader::getDatabaseConfiguration(DatabaseConfig& rDatabaseConfig)
 	}
 }
 
+
+void
+ConfigurationReader::getVehicleConfiguration(VehicleConfig& rVehicleConfig)
+{
+	std::string prefix("vehicle.");
+
+	try
+	{
+		rVehicleConfig.mCategory = mPropertyTree.get<std::string>(prefix + "category");
+		rVehicleConfig.mHeight = mPropertyTree.get<double>(prefix + "height");
+		rVehicleConfig.mLength = mPropertyTree.get<double>(prefix + "length");
+		rVehicleConfig.mWeight = mPropertyTree.get<double>(prefix + "weight");
+		rVehicleConfig.mWidth = mPropertyTree.get<double>(prefix + "width");
+	}
+	catch (boost::property_tree::ptree_error& e)
+	{
+		throw ConfigurationException(std::string("Could not read config ") + e.what());
+	}
+}
+
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
