@@ -75,7 +75,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		WHEN ("asking for vehicle configuration")
 		{
 			ConfigurationReader config_reader(filename);
-			VehicleConfiguration config;
+			VehicleConfig config;
 			config_reader.getVehicleConfiguration(config);
 
 			THEN ("we get a vehicle configuration filled out")
