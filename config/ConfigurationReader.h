@@ -35,14 +35,22 @@ public:
 
 	/** Constructor.
 	 * Always initialize a Configuration reader with the configuration file.
+	 *
+	 * @param	rFilename	The filename for the configuration json file
+	 * @throw	boost::property_tree::json_parser_error		If invalid file
 	 */
-	ConfigurationReader(std::string& filename);
+	ConfigurationReader(const std::string& rFilename);
 
 
 
 	// OPERATORS
 	// OPERATIONS
 
+	/** Read the database part of the configuration and populate config struct.
+	 *
+	 * @param	rDatabaseConfig		The configuration structure to populate.
+	 * @throw	boost::property_tree::ptree_error	If missing configuration.
+	 */
 	void	getDatabaseConfiguration(DatabaseConfig& rDatabaseConfig);
 
 	// ACCESS
