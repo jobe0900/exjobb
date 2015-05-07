@@ -50,6 +50,21 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 			}
 		}
 	}
+
+	//------------------------------------------------------------------------
+	GIVEN ("a filename to a non-existing file")
+	{
+		std::string filename("config/catchtest/foo.json");
+
+		WHEN ("asking for database configuration")
+		{
+			THEN ("we get an exception")
+			{
+				REQUIRE_THROWS_AS (ConfigurationReader config_reader(filename),
+						boost::property_tree::json_parser_error&);
+			}
+		}
+	}
 }
 
 
