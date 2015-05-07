@@ -5,5 +5,12 @@
 		"username": "jonas",
 		"password": "jonas",
 		"database": "mikh_style"
+	},
+	"vehicle": {
+		"category": "motorcar",
+		"height": 1.6,
+		"length": 4.5,
+		"weight": 2.0,
+		"width": 1.9
 	}
 }

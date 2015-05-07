@@ -66,6 +66,28 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 			}
 		}
 	}
+
+	//------------------------------------------------------------------------
+	GIVEN ("a filename to a valid configuration file")
+	{
+		std::string filename("config/catchtest/testsettings.json");
+
+		WHEN ("asking for vehicle configuration")
+		{
+			ConfigurationReader config_reader(filename);
+			VehicleConfiguration config;
+			config_reader.getVehicleConfiguration(config);
+
+			THEN ("we get a vehicle configuration filled out")
+			{
+				REQUIRE (config.mCategory == "motorcar");
+				REQUIRE (config.mHeight == Approx(1.6));
+				REQUIRE (config.mLength == Approx(4.5));
+				REQUIRE (config.mWeight == Approx(2.0));
+				REQUIRE (config.mWidth == Approx(1.9));
+			}
+		}
+	}
 }
 
 
