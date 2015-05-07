@@ -7,6 +7,7 @@
 
 #include "../../catchtest/catch.hpp"
 #include "../ConfigurationReader.h"
+#include "../ConfigurationException.h"
 
 SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		"[json],[config]")
@@ -46,7 +47,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 			THEN ("we get an exception")
 			{
 				REQUIRE_THROWS_AS (config_reader.getDatabaseConfiguration(db_config),
-						boost::property_tree::ptree_error&);
+						ConfigurationException&);
 			}
 		}
 	}
@@ -61,7 +62,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 			THEN ("we get an exception")
 			{
 				REQUIRE_THROWS_AS (ConfigurationReader config_reader(filename),
-						boost::property_tree::json_parser_error&);
+						ConfigurationException&);
 			}
 		}
 	}

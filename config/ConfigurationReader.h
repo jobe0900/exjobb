@@ -23,6 +23,7 @@
 // LOCAL INCLUDES
 //
 #include "DatabaseConfig.h"
+#include "ConfigurationException.h"
 
 // FORWARD REFERENCES
 //
@@ -37,7 +38,7 @@ public:
 	 * Always initialize a Configuration reader with the configuration file.
 	 *
 	 * @param	rFilename	The filename for the configuration json file
-	 * @throw	boost::property_tree::json_parser_error		If invalid file
+	 * @throw	ConfigurationException		If invalid file
 	 */
 	ConfigurationReader(const std::string& rFilename);
 
@@ -49,7 +50,7 @@ public:
 	/** Read the database part of the configuration and populate config struct.
 	 *
 	 * @param	rDatabaseConfig		The configuration structure to populate.
-	 * @throw	boost::property_tree::ptree_error	If missing configuration.
+	 * @throw	ConfigurationException	If missing configuration.
 	 */
 	void	getDatabaseConfiguration(DatabaseConfig& rDatabaseConfig);
 
