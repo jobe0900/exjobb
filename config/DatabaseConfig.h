@@ -33,6 +33,9 @@ struct DatabaseConfig
 	std::string		mDatabase;
 
 	// OPERATIONS
+	/** Construct a connection string from the attributes.
+	 * @return	A valid connection string for 'pqxx::conn()'
+	 */
 	std::string
 	getConnectionString() {
 		std::ostringstream oss;
