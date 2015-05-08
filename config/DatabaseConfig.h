@@ -13,6 +13,7 @@
 // SYSTEM INCLUDES
 //
 #include <string>
+#include <sstream>
 
 // PROJECT INCLUDES
 //
@@ -30,6 +31,18 @@ struct DatabaseConfig
 	std::string		mUsername;
 	std::string		mPassword;
 	std::string		mDatabase;
+
+	// OPERATIONS
+	std::string
+	getConnectionString() {
+		std::ostringstream oss;
+		oss << "host=" << mHostname
+			<< "port=" << mPort
+			<< "user=" << mUsername
+			<< "password=" << mPassword
+			<< "dbname=" << mDatabase;
+		return oss.str();
+	}
 };
 
 // INLINE METHODS
