@@ -5,12 +5,13 @@
  *      Author: Jonas Bergman
  */
 
+#include "../PostgisOsmProvider.h"
+
 #include <string>
 
 #include "../../catchtest/catch.hpp"
 #include "../../config/ConfigurationReader.h"
 #include "../../config/DatabaseConfig.h"
-#include "../DatabaseHandler.h"
 
 SCENARIO ("Communicate with database", "[database]")
 {
@@ -26,7 +27,7 @@ SCENARIO ("Communicate with database", "[database]")
 
 			WHEN ("we try to connect to the database")
 			{
-				DatabaseHandler db_handler(db_config);
+				PostgisOsmProvider db_handler(db_config);
 
 				THEN ("we should not receive an exception")
 				{

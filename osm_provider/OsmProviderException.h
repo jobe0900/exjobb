@@ -8,8 +8,8 @@
  * @author Jonas Bergman
  */
 
-#ifndef DATABASE_DATABASEEXCEPTION_H_
-#define DATABASE_DATABASEEXCEPTION_H_
+#ifndef OSM_PROVIDER_OSMPROVIDEREXCEPTION_H_
+#define OSM_PROVIDER_OSMPROVIDEREXCEPTION_H_
 
 // SYSTEM INCLUDES
 //
@@ -29,7 +29,7 @@
  * Exception to throw from the 'database' package.
  * More information of the type of exception is given in the 'what()' message.
  */
-class DatabaseException : public std::exception
+class OsmProviderException : public std::exception
 {
 public:
 	// LIFECYCLE
@@ -38,7 +38,7 @@ public:
 	 *
 	 * @param	message		The message to prepend when 'what()' is called.
 	 */
-	DatabaseException(const std::string& rMessage) noexcept
+	OsmProviderException(const std::string& rMessage) noexcept
 		: std::exception(), mMessage(rMessage)
 	{}
 
@@ -54,7 +54,7 @@ private:
 	/** Default constructor.
 	 * Hidden.
 	 */
-	DatabaseException();
+	OsmProviderException();
 
 	// ATTRIBUTES
 	std::string		mMessage;
@@ -66,4 +66,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* DATABASE_DATABASEEXCEPTION_H_ */
+#endif /* OSM_PROVIDER_OSMPROVIDEREXCEPTION_H_ */

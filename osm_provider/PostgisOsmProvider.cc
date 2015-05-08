@@ -5,15 +5,16 @@
  *      Author: Jonas Bergman
  */
 
+#include "PostgisOsmProvider.h"  // class implemented
+
 #include <sstream>
 
-#include "DatabaseHandler.h"  // class implemented
 
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-DatabaseHandler::DatabaseHandler(const DatabaseConfig& rDatabaseConfig)
+PostgisOsmProvider::PostgisOsmProvider(const DatabaseConfig& rDatabaseConfig)
 	: mDbConfig(rDatabaseConfig)
 {
 }
@@ -22,12 +23,12 @@ DatabaseHandler::DatabaseHandler(const DatabaseConfig& rDatabaseConfig)
 
 //============================= OPERATIONS ===================================
 std::string
-DatabaseHandler::getDatabaseVersion()
+PostgisOsmProvider::getDatabaseVersion()
 {
 	try {
 		pqxx::connection conn(mDbConfig.getConnectionString());
 		if(!conn.is_open()) {
-			throw DatabaseException(
+			throw OsmProviderException(
 					std::string("Could not open ") + mDbConfig.mDatabase);
 		}
 		std::ostringstream oss;
@@ -36,7 +37,7 @@ DatabaseHandler::getDatabaseVersion()
 		return oss.str();
 	}
 	catch(const std::exception& e) {
-		throw DatabaseException(std::string("Database error: ") + e.what());
+		throw OsmProviderException(std::string("Database error: ") + e.what());
 	}
 }
 
@@ -45,6 +46,6 @@ DatabaseHandler::getDatabaseVersion()
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-DatabaseHandler::DatabaseHandler()
+PostgisOsmProvider::PostgisOsmProvider()
 {}
 
