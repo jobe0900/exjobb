@@ -5,8 +5,8 @@
  * @author Jonas Bergman
  */
 
-#ifndef OSM_PROVIDER_POSTGISOSMPROVIDER_H_
-#define OSM_PROVIDER_POSTGISOSMPROVIDER_H_
+#ifndef DATABASE_DATABASEHANDLER_H_
+#define DATABASE_DATABASEHANDLER_H_
 
 // SYSTEM INCLUDES
 //
@@ -19,7 +19,7 @@
 // LOCAL INCLUDES
 //
 #include "../config/DatabaseConfig.h"
-#include "OsmProviderException.h"
+#include "DatabaseException.h"
 
 // FORWARD REFERENCES
 //
@@ -27,7 +27,7 @@
 /**
  * A class to handle the reading of data from a json configuration file.
  */
-class PostgisOsmProvider
+class DatabaseHandler
 {
 public:
 	// LIFECYCLE
@@ -37,7 +37,7 @@ public:
 	 *
 	 * @param	rDatabaseConfig		The configuration fo connections
 	 */
-	PostgisOsmProvider(const DatabaseConfig& rDatabaseConfig);
+	DatabaseHandler(const DatabaseConfig& rDatabaseConfig);
 
 
 	// OPERATORS
@@ -59,7 +59,7 @@ private:
 	/** Default constructor.
 	 * Hidden.
 	 */
-	PostgisOsmProvider();
+	DatabaseHandler();
 
 	// ATTRIBUTES
 	DatabaseConfig	mDbConfig;
@@ -71,4 +71,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* OSM_PROVIDER_POSTGISOSMPROVIDER_H_ */
+#endif /* DATABASE_DATABASEHANDLER_H_ */
