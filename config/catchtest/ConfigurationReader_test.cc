@@ -27,8 +27,8 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 			{
 				REQUIRE (db_config.mHostname == "127.0.0.1");
 				REQUIRE (db_config.mPort == 5432);
-				REQUIRE (db_config.mUsername == "jonas");
-				REQUIRE (db_config.mPassword == "jonas");
+				REQUIRE (db_config.mUsername == "tester");
+				REQUIRE (db_config.mPassword == "tester");
 				REQUIRE (db_config.mDatabase == "mikh_style");
 			}
 		}
