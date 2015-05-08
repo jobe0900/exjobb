@@ -37,10 +37,10 @@ struct DatabaseConfig
 	getConnectionString() {
 		std::ostringstream oss;
 		oss << "host=" << mHostname
-			<< "port=" << mPort
-			<< "user=" << mUsername
-			<< "password=" << mPassword
-			<< "dbname=" << mDatabase;
+			<< " port=" << mPort
+			<< " user=" << mUsername
+			<< " password=" << mPassword
+			<< " dbname=" << mDatabase;
 		return oss.str();
 	}
 };
