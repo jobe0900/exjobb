@@ -14,6 +14,7 @@
 
 // PROJECT INCLUDES
 //
+#include <pqxx/pqxx>	// link with -lpqxx -lpq
 
 // LOCAL INCLUDES
 //
@@ -41,7 +42,7 @@ public:
 	// OPERATORS
 	// OPERATIONS
 
-	/** Get the verriosn of the database.
+	/** Get the version of the database.
 	 * Used for testing connection.
 	 *
 	 * @param	rDatabaseConfig		The configuration structure to populate.
@@ -60,8 +61,7 @@ private:
 	DatabaseHandler();
 
 	// ATTRIBUTES
-	std::string		mConnectionString;
-
+	DatabaseConfig	mDbConfig;
 };
 
 // INLINE METHODS
