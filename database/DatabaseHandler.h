@@ -18,7 +18,8 @@
 
 // LOCAL INCLUDES
 //
-#include "DatabaseConfig.h"
+#include "../config/DatabaseConfig.h"
+#include "DatabaseException.h"
 
 // FORWARD REFERENCES
 //

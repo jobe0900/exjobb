@@ -5,6 +5,8 @@
  *      Author: Jonas Bergman
  */
 
+#include <sstream>
+
 #include "DatabaseHandler.h"  // class implemented
 
 
@@ -28,9 +30,10 @@ DatabaseHandler::getDatabaseVersion()
 			throw DatabaseException(
 					std::string("Could not open ") + mDbConfig.mDatabase);
 		}
-		std::string db_version(conn.server_version());
+		std::ostringstream oss;
+		oss << conn.server_version();
 		conn.disconnect();
-		return db_version;
+		return oss.str();
 	}
 	catch(const std::exception& e) {
 		throw DatabaseException(std::string("Database error: ") + e.what());
