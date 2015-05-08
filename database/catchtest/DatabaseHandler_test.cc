@@ -24,6 +24,7 @@ SCENARIO ("Communicate with database", "[database]")
 			DatabaseConfig db_config;
 			config_reader.getDatabaseConfiguration(db_config);
 
+			// ...............................................................
 			WHEN ("we try to connect to the database")
 			{
 				DatabaseHandler db_handler(db_config);
@@ -31,6 +32,17 @@ SCENARIO ("Communicate with database", "[database]")
 				THEN ("we should not receive an exception")
 				{
 					REQUIRE_NOTHROW (db_handler.getDatabaseVersion());
+				}
+			}
+
+			// ...............................................................
+			WHEN ("we try to install postgis topology extension")
+			{
+				DatabaseHandler db_handler(db_config);
+
+				THEN ("we should not receive an exception")
+				{
+					REQUIRE_NOTHROW (db_handler.installPostgisTopology());
 				}
 			}
 		}

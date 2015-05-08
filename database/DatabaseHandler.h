@@ -46,9 +46,13 @@ public:
 	/** Get the version of the database.
 	 * Used for testing connection.
 	 *
-	 * @param	rDatabaseConfig		The configuration structure to populate.
+	 * @return	A string representing the version.
 	 */
 	std::string	getDatabaseVersion();
+
+	/** Make sure the postgis_topology extension is installed.
+	 */
+	void		installPostgisTopology();
 
 	// ACCESS
 	// INQUIRY
