@@ -15,64 +15,57 @@
 
 //============================= LIFECYCLE ====================================
 DatabaseHandler::DatabaseHandler(const DatabaseConfig& rDatabaseConfig)
-	: mDbConfig(rDatabaseConfig)
+try		// catch error when initializing connection
+	: mDbConfig(rDatabaseConfig), mConnection(mDbConfig.getConnectionString())
 {
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw DatabaseException(
+					std::string("Could not open ") + mDbConfig.mDatabase);
+		}
+	}
+	catch(const std::exception& e)
+	{
+		throw DatabaseException(std::string("Database error, open: ") + e.what());
+	}
+}
+// catch error in initializer list (opening connection)
+catch(const std::exception& e)
+{
+	throw DatabaseException(std::string("Database error, open: ") + e.what());
+}
+
+
+DatabaseHandler::~DatabaseHandler()
+{
+	try
+	{
+		if(mConnection.is_open())
+		{
+			mConnection.disconnect();
+		}
+	}
+	catch(const std::exception& e)
+	{
+		//swallow errors
+//		throw DatabaseException(std::string("Database error, closing: ") + e.what());
+	}
 }
 
 //============================= OPERATORS ====================================
 
 //============================= OPERATIONS ===================================
-std::string
-DatabaseHandler::getDatabaseVersion()
-{
-	try {
-		pqxx::connection conn(mDbConfig.getConnectionString());
-		if(!conn.is_open()) {
-			throw DatabaseException(
-					std::string("Could not open ") + mDbConfig.mDatabase);
-		}
-		std::ostringstream oss;
-		oss << conn.server_version();
-		conn.disconnect();
-		return oss.str();
-	}
-	catch(const std::exception& e) {
-		throw DatabaseException(std::string("Database error: ") + e.what());
-	}
-}
-
 
 void
-DatabaseHandler::installPostgisTopology()
-{
-	try {
-		pqxx::connection conn(mDbConfig.getConnectionString());
-		if(!conn.is_open()) {
-			throw DatabaseException(
-					std::string("Could not open ") + mDbConfig.mDatabase);
-		}
-
-		std::string sql = "CREATE EXTENSION IF NOT EXISTS postgis_topology";
-
-		// Execute nontransaction query
-		pqxx::nontransaction non_trans(conn);
-		non_trans.exec(sql);
-
-		conn.disconnect();
-	}
-	catch(const std::exception& e) {
-		throw DatabaseException(std::string("Database error: ") + e.what());
-	}
-}
-
-
-void
-DatabaseHandler::buildTopology(const std::string& rTopoName, int srid)
+DatabaseHandler::buildTopology(const std::string& rTopoName,
+							   int srid,
+							   double tolerance)
 {
 	try
 	{
-		pqxx::connection conn(mDbConfig.getConnectionString());
-		if(!conn.is_open())
+		if(!mConnection.is_open())
 		{
 			throw DatabaseException(
 					std::string("Could not open ") + mDbConfig.mDatabase);
@@ -80,46 +73,20 @@ DatabaseHandler::buildTopology(const std::string& rTopoName, int srid)
 
 
 		// TRANSACTION START
-		pqxx::work transaction(conn);
+		pqxx::work transaction(mConnection);
 
 		std::string temp_schema = "topo_" + transaction.esc(rTopoName);
 		std::string temp_table = "highways_" + transaction.esc(rTopoName);
 
-		transaction.exec(
-				"CREATE EXTENSION IF NOT EXISTS postgis_topology"
-		);
-		transaction.exec(
-				"SET search_path = topology, public"
-		);
-		transaction.exec(
-				"CREATE TABLE public." + temp_table + " " +
-				"AS SELECT * "
-				"FROM planet_osm_line "
-				"WHERE highway IS NOT NULL"
-		);
-		transaction.exec(
-				"SELECT topology.CreateTopology('" +
-				temp_schema + "'," +
-				transaction.quote(srid) + ")"
-		);
-		transaction.exec(
-				"SELECT topology.AddTopoGeometryColumn('" +
-				temp_schema + "', " +
-				"'public', '" +
-				temp_table + "', " +
-				"'topo_geom', 'LINESTRING')"
-		);
-		transaction.exec(
-				"UPDATE public." +
-				temp_table + " " +
-				"SET topo_geom = topology.toTopoGeom(way, '" +
-				temp_schema +
-				"', 1, 1.0)"
-		);
+		installPostgisTopology(transaction);
+		setSearchPath(transaction);
+		createTemporaryTable(transaction, temp_table);
+		createTemporarySchema(transaction, temp_schema, srid);
+		addTopoGeometryColumn(transaction, temp_schema, temp_table);
+		fillTopoGeometryColumn(transaction, temp_schema, temp_table, tolerance);
 
 		// TRANSACTION END
 		transaction.commit();
-		conn.disconnect();
 	}
 	catch(const std::exception& e)
 	{
@@ -135,3 +102,71 @@ DatabaseHandler::buildTopology(const std::string& rTopoName, int srid)
 DatabaseHandler::DatabaseHandler()
 {}
 
+void
+DatabaseHandler::installPostgisTopology(pqxx::transaction_base& rTrans)
+{
+	rTrans.exec(
+			"CREATE EXTENSION IF NOT EXISTS postgis_topology"
+	);
+}
+
+void
+DatabaseHandler::setSearchPath(pqxx::transaction_base& rTrans)
+{
+	rTrans.exec(
+			"SET search_path = topology, public"
+	);
+}
+
+void
+DatabaseHandler::createTemporaryTable(pqxx::transaction_base& rTrans,
+									  const std::string& rTablename)
+{
+	rTrans.exec(
+			"CREATE TABLE public." + rTablename + " " +
+			"AS SELECT * "
+			"FROM planet_osm_line "
+			"WHERE highway IS NOT NULL"
+	);
+}
+
+void
+DatabaseHandler::createTemporarySchema(pqxx::transaction_base& rTrans,
+									  const std::string& rSchemaname, int srid)
+{
+	rTrans.exec(
+			"SELECT topology.CreateTopology('" +
+			rSchemaname + "'," +
+			rTrans.quote(srid) + ")"
+	);
+}
+
+void
+DatabaseHandler::addTopoGeometryColumn(pqxx::transaction_base& rTrans,
+									   const std::string& rSchemaname,
+									   const std::string& rTablename)
+{
+	rTrans.exec(
+			"SELECT topology.AddTopoGeometryColumn('" +
+			rSchemaname + "', " +
+			"'public', '" +
+			rTablename + "', " +
+			"'topo_geom', 'LINESTRING')"
+	);
+}
+
+void
+DatabaseHandler::fillTopoGeometryColumn(pqxx::transaction_base& rTrans,
+									    const std::string& rSchemaname,
+									    const std::string& rTablename,
+										double tolerance)
+{
+	rTrans.exec(
+			"UPDATE public." +
+			rTablename + " " +
+			"SET topo_geom = topology.toTopoGeom(way, '" +
+			rSchemaname +
+			"', 1, " +
+			rTrans.quote(tolerance) + ")"
+	);
+}

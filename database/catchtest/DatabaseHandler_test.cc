@@ -20,44 +20,25 @@ SCENARIO ("Communicate with database", "[database]")
 		std::string config_file("config/catchtest/testsettings.json");
 		ConfigurationReader config_reader(config_file);
 
-		GIVEN ("a valid database configuration structure")
+		GIVEN ("a valid database configuration structure and a temporary name")
 		{
 			DatabaseConfig db_config;
 			config_reader.getDatabaseConfiguration(db_config);
-
-			// ...............................................................
-			WHEN ("we try to connect to the database")
-			{
-				DatabaseHandler db_handler(db_config);
-
-				THEN ("we should not receive an exception")
-				{
-					REQUIRE_NOTHROW (db_handler.getDatabaseVersion());
-				}
-			}
-
-			// ...............................................................
-			WHEN ("we try to install postgis topology extension")
-			{
-				DatabaseHandler db_handler(db_config);
-
-				THEN ("we should not receive an exception")
-				{
-					REQUIRE_NOTHROW (db_handler.installPostgisTopology());
-				}
-			}
+			TimeToStringMaker* p_tts = new EpochMsTimeToString();
+			std::string temp_topo = p_tts->getCurrentTimeString();
+			delete p_tts;
 
 			// ...............................................................
 			WHEN ("we try to create postgis topology with a temp name and srid")
 			{
 				DatabaseHandler db_handler(db_config);
-				TimeToStringMaker* p_tts = new EpochMsTimeToString();
-				std::string temp_topo = p_tts->getCurrentTimeString();
-				delete p_tts;
+				int srid = 900913;
+				double tolerance = 1.0;
 
 				THEN ("we should not receive an exception")
 				{
-					REQUIRE_NOTHROW (db_handler.buildTopology(temp_topo, 900913));
+					REQUIRE_NOTHROW (
+						db_handler.buildTopology(temp_topo, srid, tolerance));
 				}
 			}
 		}
@@ -68,7 +49,3 @@ SCENARIO ("Communicate with database", "[database]")
 	}
 
 }
-
-
-
-
