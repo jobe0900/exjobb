@@ -157,10 +157,10 @@ DatabaseHandler::setSearchPath(pqxx::transaction_base& rTrans)
 
 void
 DatabaseHandler::createTemporaryTable(pqxx::transaction_base& rTrans,
-									  const std::string& rTablename)
+									  const std::string& rTableName)
 {
 	rTrans.exec(
-			"CREATE TABLE public." + rTablename + " " +
+			"CREATE TABLE public." + rTableName + " " +
 			"AS SELECT * "
 			"FROM planet_osm_line "
 			"WHERE highway IS NOT NULL"
@@ -169,40 +169,40 @@ DatabaseHandler::createTemporaryTable(pqxx::transaction_base& rTrans,
 
 void
 DatabaseHandler::createTemporarySchema(pqxx::transaction_base& rTrans,
-									  const std::string& rSchemaname, int srid)
+									  const std::string& rSchemaName, int srid)
 {
 	rTrans.exec(
 			"SELECT topology.CreateTopology('" +
-			rSchemaname + "'," +
+			rSchemaName + "'," +
 			rTrans.quote(srid) + ")"
 	);
 }
 
 void
 DatabaseHandler::addTopoGeometryColumn(pqxx::transaction_base& rTrans,
-									   const std::string& rSchemaname,
-									   const std::string& rTablename)
+									   const std::string& rSchemaName,
+									   const std::string& rTableName)
 {
 	rTrans.exec(
 			"SELECT topology.AddTopoGeometryColumn('" +
-			rSchemaname + "', " +
+			rSchemaName + "', " +
 			"'public', '" +
-			rTablename + "', " +
+			rTableName + "', " +
 			"'topo_geom', 'LINESTRING')"
 	);
 }
 
 void
 DatabaseHandler::fillTopoGeometryColumn(pqxx::transaction_base& rTrans,
-									    const std::string& rSchemaname,
-									    const std::string& rTablename,
+									    const std::string& rSchemaName,
+									    const std::string& rTableName,
 										double tolerance)
 {
 	rTrans.exec(
 			"UPDATE public." +
-			rTablename + " " +
+			rTableName + " " +
 			"SET topo_geom = topology.toTopoGeom(way, '" +
-			rSchemaname +
+			rSchemaName +
 			"', 1, " +
 			rTrans.quote(tolerance) + ")"
 	);
