@@ -5,6 +5,7 @@
  *      Author: Jonas Bergman
  */
 
+#include <iostream>
 #include <sstream>
 
 #include "DatabaseHandler.h"  // class implemented
@@ -81,7 +82,7 @@ DatabaseHandler::buildTopology(const std::string& rTopoName, int srid)
 		// TRANSACTION START
 		pqxx::work transaction(conn);
 
-		std::string temp_schema = transaction.quote(rTopoName);
+		std::string temp_schema = "topo_" + transaction.esc(rTopoName);
 		std::string temp_table = "highways_" + transaction.esc(rTopoName);
 
 		transaction.exec(
@@ -96,42 +97,33 @@ DatabaseHandler::buildTopology(const std::string& rTopoName, int srid)
 				"FROM planet_osm_line "
 				"WHERE highway IS NOT NULL"
 		);
-
 		transaction.exec(
-				"SELECT topology.CreateTopology(" +
-				transaction.quote(temp_schema) + "," +
+				"SELECT topology.CreateTopology('" +
+				temp_schema + "'," +
 				transaction.quote(srid) + ")"
 		);
 		transaction.exec(
-				"SELECT topology.AddTopoGeometryColumn(" +
-				transaction.quote(temp_schema) + ", " +
+				"SELECT topology.AddTopoGeometryColumn('" +
+				temp_schema + "', " +
 				"'public', '" +
 				temp_table + "', " +
 				"'topo_geom', 'LINESTRING')"
 		);
 		transaction.exec(
-				"UPDATE " +
+				"UPDATE public." +
 				temp_table + " " +
-				"SET topo_geom = topology.toTopoGeom(way, " +
-				transaction.quote(temp_schema) +
-				", 1, 1.0)"
+				"SET topo_geom = topology.toTopoGeom(way, '" +
+				temp_schema +
+				"', 1, 1.0)"
 		);
 
 		// TRANSACTION END
 		transaction.commit();
 		conn.disconnect();
 	}
-	catch(const pqxx::pqxx_exception& e)
-	{
-		throw DatabaseException(std::string("pqxx error: ") + e.base().what());
-	}
 	catch(const std::exception& e)
 	{
 		throw DatabaseException(std::string("Database error: ") + e.what());
-	}
-	catch(...)
-	{
-		throw DatabaseException("Unknown");
 	}
 }
 
