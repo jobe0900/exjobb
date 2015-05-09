@@ -113,13 +113,9 @@ DatabaseHandler::removeTopology(const std::string& rTopoName)
 		std::string temp_table = TEMP_TABLE_PREFIX + transaction.esc(rTopoName);
 
 		dropTemporaryTable(transaction, temp_table);
-		std::cout << "OK drop table" << std::endl;
 		dropTemporarySchema(transaction, temp_schema);
-		std::cout << "OK drop schema" << std::endl;
 		deleteTemporaryLayerRecord(transaction, temp_table);
-		std::cout << "OK deleted layer record" << std::endl;
 		deleteTemporaryTopoRecord(transaction, temp_schema);
-		std::cout << "OK deleted topo record" << std::endl;
 
 		// TRANSACTION END
 		transaction.commit();
