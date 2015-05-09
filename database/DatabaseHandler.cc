@@ -75,8 +75,8 @@ DatabaseHandler::buildTopology(const std::string& rTopoName,
 		// TRANSACTION START
 		pqxx::work transaction(mConnection);
 
-		std::string temp_schema = "topo_" + transaction.esc(rTopoName);
-		std::string temp_table = "highways_" + transaction.esc(rTopoName);
+		std::string temp_schema = TEMP_SCHEMA_PREFIX + transaction.esc(rTopoName);
+		std::string temp_table = TEMP_TABLE_PREFIX + transaction.esc(rTopoName);
 
 		installPostgisTopology(transaction);
 		setSearchPath(transaction);
@@ -92,6 +92,43 @@ DatabaseHandler::buildTopology(const std::string& rTopoName,
 	{
 		throw DatabaseException(std::string("Database error: ") + e.what());
 	}
+}
+
+
+void
+DatabaseHandler::removeTopology(const std::string& rTopoName)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw DatabaseException(
+					std::string("Could not open ") + mDbConfig.mDatabase);
+		}
+
+		// TRANSACTION START
+		pqxx::work transaction(mConnection);
+
+		std::string temp_schema = TEMP_SCHEMA_PREFIX + transaction.esc(rTopoName);
+		std::string temp_table = TEMP_TABLE_PREFIX + transaction.esc(rTopoName);
+
+		dropTemporaryTable(transaction, temp_table);
+		std::cout << "OK drop table" << std::endl;
+		dropTemporarySchema(transaction, temp_schema);
+		std::cout << "OK drop schema" << std::endl;
+		deleteTemporaryLayerRecord(transaction, temp_table);
+		std::cout << "OK deleted layer record" << std::endl;
+		deleteTemporaryTopoRecord(transaction, temp_schema);
+		std::cout << "OK deleted topo record" << std::endl;
+
+		// TRANSACTION END
+		transaction.commit();
+	}
+	catch(const std::exception& e)
+	{
+		throw DatabaseException(std::string("Database error: ") + e.what());
+	}
+
 }
 
 //============================= ACESS      ===================================
@@ -170,3 +207,42 @@ DatabaseHandler::fillTopoGeometryColumn(pqxx::transaction_base& rTrans,
 			rTrans.quote(tolerance) + ")"
 	);
 }
+
+void
+DatabaseHandler::dropTemporaryTable(pqxx::transaction_base& rTrans,
+									const std::string& rTableName)
+{
+	rTrans.exec(
+			"DROP TABLE IF EXISTS public." + rTableName
+	);
+}
+
+void
+DatabaseHandler::dropTemporarySchema(pqxx::transaction_base& rTrans,
+									 const std::string& rSchemaName)
+{
+	rTrans.exec(
+			"DROP SCHEMA IF EXISTS " + rSchemaName + " CASCADE"
+	);
+}
+
+void
+DatabaseHandler::deleteTemporaryLayerRecord(pqxx::transaction_base& rTrans,
+									 	 	 const std::string& rTableName)
+{
+	rTrans.exec(
+			"DELETE FROM topology.layer "
+			"WHERE table_name = " + rTrans.quote(rTableName)
+	);
+}
+
+void
+DatabaseHandler::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
+									 	 	 const std::string& rSchemaName)
+{
+	rTrans.exec(
+			"DELETE FROM topology.topology "
+			"WHERE name = " + rTrans.quote(rSchemaName)
+	);
+}
+

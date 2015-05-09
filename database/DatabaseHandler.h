@@ -49,15 +49,21 @@ public:
 	// OPERATORS
 	// OPERATIONS
 
-	/** Build a PostGIS topoplogy.
+	/** Build a PostGIS topology.
 	 * @param	rTopoName	Name to use for temporary tables and topo schema.
 	 * @param	srid		The SRID for the projection to use
 	 * @param	tolerance	The distance to look for merging vertices, unit of srid.
 	 * @throws	DatabaseException
 	 */
-	void		buildTopology(const std::string& rTopoName,
+	void	buildTopology(const std::string& rTopoName,
 							  int srid,
 							  double tolerance);
+
+	/** Remove a PostGIS topology (tables and schema) from the database.
+	 * @param	rTopoName	Name base used when creating topo table and schema.
+	 * @throws	DatabaseException
+	 */
+	void	removeTopology(const std::string& rTopoName);
 
 	// ACCESS
 	// INQUIRY
@@ -84,9 +90,24 @@ private:
 								   const std::string& rSchemaName,
 								   const std::string& rTableName,
 								   double tolerance);
+
+	// Helpers for 'removeTopology()'
+	void	dropTemporaryTable(pqxx::transaction_base& rTrans,
+							   const std::string& rTableName);
+	void	dropTemporarySchema(pqxx::transaction_base& rTrans,
+							    const std::string& rSchemaName);
+	void	deleteTemporaryLayerRecord(pqxx::transaction_base& rTrans,
+	 	 	 	 	 	 	 	 	   const std::string& rTableName);
+	void	deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
+	 	 	 	 	 	 	 	 	  const std::string& rSchemaName);
+
 	// ATTRIBUTES
 	DatabaseConfig	mDbConfig;
 	pqxx::connection mConnection;
+
+	// CONSTANTS
+	const std::string TEMP_SCHEMA_PREFIX = "topo_";
+	const std::string TEMP_TABLE_PREFIX = "highways_";
 };
 
 // INLINE METHODS

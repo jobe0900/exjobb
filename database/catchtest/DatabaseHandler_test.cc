@@ -41,6 +41,18 @@ SCENARIO ("Communicate with database", "[database]")
 						db_handler.buildTopology(temp_topo, srid, tolerance));
 				}
 			}
+
+			// ...............................................................
+			WHEN ("we try to remove postgis topology valid arguments")
+			{
+				DatabaseHandler db_handler(db_config);
+
+				THEN ("we should not receive an exception")
+				{
+					REQUIRE_NOTHROW (
+						db_handler.removeTopology(temp_topo));
+				}
+			}
 		}
 	}
 	catch (ConfigurationException& e) {
