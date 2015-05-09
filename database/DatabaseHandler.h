@@ -54,6 +54,12 @@ public:
 	 */
 	void		installPostgisTopology();
 
+	/** Build a PostGIS topoplogy.
+	 * @param	rTopoName	Name to use for temporary tables and topo schema.
+	 * @param	srid		The SRID for the projection to use
+	 */
+	void		buildTopology(const std::string& rTopoName, int srid);
+
 	// ACCESS
 	// INQUIRY
 

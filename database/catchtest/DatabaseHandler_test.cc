@@ -11,6 +11,7 @@
 #include "../../config/ConfigurationReader.h"
 #include "../../config/DatabaseConfig.h"
 #include "../DatabaseHandler.h"
+#include "../../util/EpochMsTimeToString.h"
 
 SCENARIO ("Communicate with database", "[database]")
 {
@@ -43,6 +44,20 @@ SCENARIO ("Communicate with database", "[database]")
 				THEN ("we should not receive an exception")
 				{
 					REQUIRE_NOTHROW (db_handler.installPostgisTopology());
+				}
+			}
+
+			// ...............................................................
+			WHEN ("we try to create postgis topology with a temp name and srid")
+			{
+				DatabaseHandler db_handler(db_config);
+				TimeToStringMaker* p_tts = new EpochMsTimeToString();
+				std::string temp_topo = p_tts->getCurrentTimeString();
+				delete p_tts;
+
+				THEN ("we should not receive an exception")
+				{
+					REQUIRE_NOTHROW (db_handler.buildTopology(temp_topo, 900913));
 				}
 			}
 		}

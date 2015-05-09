@@ -64,6 +64,77 @@ DatabaseHandler::installPostgisTopology()
 	}
 }
 
+
+void
+DatabaseHandler::buildTopology(const std::string& rTopoName, int srid)
+{
+	try
+	{
+		pqxx::connection conn(mDbConfig.getConnectionString());
+		if(!conn.is_open())
+		{
+			throw DatabaseException(
+					std::string("Could not open ") + mDbConfig.mDatabase);
+		}
+
+
+		// TRANSACTION START
+		pqxx::work transaction(conn);
+
+		std::string temp_schema = transaction.quote(rTopoName);
+		std::string temp_table = "highways_" + transaction.esc(rTopoName);
+
+		transaction.exec(
+				"CREATE EXTENSION IF NOT EXISTS postgis_topology"
+		);
+		transaction.exec(
+				"SET search_path = topology, public"
+		);
+		transaction.exec(
+				"CREATE TABLE public." + temp_table + " " +
+				"AS SELECT * "
+				"FROM planet_osm_line "
+				"WHERE highway IS NOT NULL"
+		);
+
+		transaction.exec(
+				"SELECT topology.CreateTopology(" +
+				transaction.quote(temp_schema) + "," +
+				transaction.quote(srid) + ")"
+		);
+		transaction.exec(
+				"SELECT topology.AddTopoGeometryColumn(" +
+				transaction.quote(temp_schema) + ", " +
+				"'public', '" +
+				temp_table + "', " +
+				"'topo_geom', 'LINESTRING')"
+		);
+		transaction.exec(
+				"UPDATE " +
+				temp_table + " " +
+				"SET topo_geom = topology.toTopoGeom(way, " +
+				transaction.quote(temp_schema) +
+				", 1, 1.0)"
+		);
+
+		// TRANSACTION END
+		transaction.commit();
+		conn.disconnect();
+	}
+	catch(const pqxx::pqxx_exception& e)
+	{
+		throw DatabaseException(std::string("pqxx error: ") + e.base().what());
+	}
+	catch(const std::exception& e)
+	{
+		throw DatabaseException(std::string("Database error: ") + e.what());
+	}
+	catch(...)
+	{
+		throw DatabaseException("Unknown");
+	}
+}
+
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
