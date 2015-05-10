@@ -108,6 +108,11 @@ SCENARIO ("PostGis queries", "[query]")
 				db_handler.getTopologyVertices(topo_name, topo_vertices);
 				size_t nr_vertices = topo_vertices.size();
 
+				if(nr_vertices > 0) {
+					INFO ("First vertex " << *topo_vertices.at(0));
+					REQUIRE (true);
+				}
+
 				// clean up
 				for(TopologyVertex* p_tv : topo_vertices) {
 					delete p_tv;
