@@ -11,6 +11,7 @@
 // SYSTEM INCLUDES
 //
 #include <string>
+#include <vector>
 
 // PROJECT INCLUDES
 //
@@ -20,6 +21,7 @@
 //
 #include "../config/DatabaseConfig.h"
 #include "DatabaseException.h"
+#include "../graph/TopologyVertex.h"
 
 // FORWARD REFERENCES
 //
@@ -64,6 +66,14 @@ public:
 	 * @throws	DatabaseException
 	 */
 	void	removeTopology(const std::string& rTopoName);
+
+	/** Get topology vertices from the db and put them in the vector.
+	 * @param	rTopoName			Name for the topology to query.
+	 * @param	rTopologyVertices	Vector to store the vertices in.
+	 * @throws	DatabaseException
+	 */
+	void	getTopologyVertices(const std::string& rTopoName,
+								std::vector<TopologyVertex*>& rTopologyVertices);
 
 	// ACCESS
 	// INQUIRY

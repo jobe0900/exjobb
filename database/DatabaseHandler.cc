@@ -127,6 +127,42 @@ DatabaseHandler::removeTopology(const std::string& rTopoName)
 
 }
 
+
+void
+DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
+									 std::vector<TopologyVertex*>& rTopologyVertices)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw DatabaseException(
+					std::string("Could not open ") + mDbConfig.mDatabase);
+		}
+
+		// NON-TRANSACTION START
+		pqxx::nontransaction non_trans(mConnection);
+
+		std::string temp_schema = TEMP_SCHEMA_PREFIX + non_trans.esc(rTopoName);
+//		std::string temp_table = TEMP_TABLE_PREFIX + non_trans.esc(rTopoName);
+
+		pqxx::result result = non_trans.exec(
+				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
+				"FROM " + temp_schema + ".node;"
+		);
+
+		for(int row = 0; row < result.size(); ++row) {
+			Point p(result[row][1].as<double>(), result[row][2].as<double>());
+			TopologyVertex* p_vertex = new TopologyVertex(result[row][0].as<int>(), p);
+			rTopologyVertices.push_back(p_vertex);
+		}
+	}
+	catch(const std::exception& e)
+	{
+		throw DatabaseException(std::string("Database error: ") + e.what());
+	}
+}
+
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

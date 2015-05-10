@@ -33,7 +33,7 @@ struct TopologyVertex
 
 	TopologyVertex(int id, Point point) : mId(id), mPoint(point) {}
 	TopologyVertex() = delete;
-	TopologyVertex(const TopologyVertex&) = delete;
+//	TopologyVertex(const TopologyVertex&) = delete;
 };
 
 // INLINE METHODS
