@@ -36,6 +36,14 @@ struct TopologyEdge
 		: mId(id), mSource(source), mTarget(target) {}
 	TopologyEdge() = delete;
 	TopologyEdge(const TopologyEdge&) = delete;
+
+	friend std::ostream& operator<<(std::ostream& os, const TopologyEdge& rEdge)
+	{
+		os  << "TopologyEdge [id: " << rEdge.mId
+			<< ", source: " << rEdge.mSource
+			<< ", target: " << rEdge.mTarget << "]";
+		return os;
+	}
 };
 
 // INLINE METHODS
