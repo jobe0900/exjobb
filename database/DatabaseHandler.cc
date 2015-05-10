@@ -151,7 +151,7 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 				"ORDER BY node_id ASC;"
 		);
 
-		for(int row = 0; row < result.size(); ++row) {
+		for(size_t row = 0; row < result.size(); ++row) {
 			Point p(result[row][1].as<double>(), result[row][2].as<double>());
 			TopologyVertex* p_vertex = new TopologyVertex(result[row][0].as<int>(), p);
 			rTopologyVertices.push_back(p_vertex);
@@ -187,7 +187,7 @@ DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
 				"ORDER BY edge_id ASC;"
 		);
 
-		for(int row = 0; row < result.size(); ++row) {
+		for(size_t row = 0; row < result.size(); ++row) {
 			Point p(result[row][1].as<double>(), result[row][2].as<double>());
 			TopologyEdge* p_edge = new TopologyEdge(result[row][0].as<int>(),
 					result[row][1].as<int>(),
