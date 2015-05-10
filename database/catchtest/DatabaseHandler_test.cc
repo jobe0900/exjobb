@@ -13,7 +13,7 @@
 #include "../DatabaseHandler.h"
 #include "../../util/EpochMsTimeToString.h"
 
-SCENARIO ("Communicate with database", "[database]")
+SCENARIO ("PostGis topology handling", "[topology]")
 {
 	try
 	{
@@ -43,7 +43,7 @@ SCENARIO ("Communicate with database", "[database]")
 			}
 
 			// ...............................................................
-			WHEN ("we try to remove postgis topology valid arguments")
+			WHEN ("we try to remove postgis topology with valid arguments")
 			{
 				DatabaseHandler db_handler(db_config);
 
@@ -69,5 +69,4 @@ SCENARIO ("Communicate with database", "[database]")
 		INFO(e.what());
 		REQUIRE (false);	// force output of error and failure
 	}
-
 }
