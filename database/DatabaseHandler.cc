@@ -144,11 +144,11 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 		pqxx::nontransaction non_trans(mConnection);
 
 		std::string temp_schema = TEMP_SCHEMA_PREFIX + non_trans.esc(rTopoName);
-//		std::string temp_table = TEMP_TABLE_PREFIX + non_trans.esc(rTopoName);
 
 		pqxx::result result = non_trans.exec(
 				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
-				"FROM " + temp_schema + ".node;"
+				"FROM " + temp_schema + ".node "
+				"ORDER BY node_id ASC;"
 		);
 
 		for(int row = 0; row < result.size(); ++row) {
