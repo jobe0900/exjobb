@@ -49,8 +49,18 @@ SCENARIO ("Communicate with database", "[database]")
 
 				THEN ("we should not receive an exception")
 				{
-					REQUIRE_NOTHROW (
-						db_handler.removeTopology(temp_topo));
+					REQUIRE_NOTHROW (db_handler.removeTopology(temp_topo));
+				}
+			}
+
+			// ...............................................................
+			WHEN ("we try to remove postgis topology with invalid arguments")
+			{
+				DatabaseHandler db_handler(db_config);
+
+				THEN ("we should not receive an exception")
+				{
+					REQUIRE_NOTHROW (db_handler.removeTopology("foo"));
 				}
 			}
 		}
