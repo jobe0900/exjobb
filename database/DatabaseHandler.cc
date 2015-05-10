@@ -163,6 +163,43 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 	}
 }
 
+
+void
+DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
+								  std::vector<TopologyEdge*>& rTopologyEdges)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw DatabaseException(
+					std::string("Could not open ") + mDbConfig.mDatabase);
+		}
+
+		// NON-TRANSACTION START
+		pqxx::nontransaction non_trans(mConnection);
+
+		std::string temp_schema = TEMP_SCHEMA_PREFIX + non_trans.esc(rTopoName);
+
+		pqxx::result result = non_trans.exec(
+				"SELECT edge_id, start_node, end_node "
+				"FROM " + temp_schema + ".edge_data "
+				"ORDER BY edge_id ASC;"
+		);
+
+		for(int row = 0; row < result.size(); ++row) {
+			Point p(result[row][1].as<double>(), result[row][2].as<double>());
+			TopologyEdge* p_edge = new TopologyEdge(result[row][0].as<int>(),
+					result[row][1].as<int>(),
+					result[row][2].as<int>());
+			rTopologyEdges.push_back(p_edge);
+		}
+	}
+	catch(const std::exception& e)
+	{
+		throw DatabaseException(std::string("Database error: ") + e.what());
+	}
+}
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

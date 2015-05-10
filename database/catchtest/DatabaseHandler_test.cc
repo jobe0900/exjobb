@@ -103,14 +103,13 @@ SCENARIO ("PostGis queries", "[query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology vertices")
 			{
-				// TODO should perhaps handle pointers instead.
 				std::vector<TopologyVertex*> topo_vertices;
 				db_handler.getTopologyVertices(topo_name, topo_vertices);
 				size_t nr_vertices = topo_vertices.size();
 
 				if(nr_vertices > 0) {
 					INFO ("First vertex " << *topo_vertices.at(0));
-					REQUIRE (true);
+					REQUIRE (true); // force output
 				}
 
 				// clean up
@@ -123,10 +122,41 @@ SCENARIO ("PostGis queries", "[query]")
 					REQUIRE (nr_vertices > 0);
 				}
 			}
+
+			// ...............................................................
+			WHEN ("we try to fetch topology edges")
+			{
+				// TODO should perhaps handle pointers instead.
+				std::vector<TopologyEdge*> topo_edges;
+				db_handler.getTopologyEdges(topo_name, topo_edges);
+				size_t nr_edges = topo_edges.size();
+
+				if(nr_edges > 0) {
+					INFO ("First edge " << *topo_edges.at(0));
+					REQUIRE (true); // force output
+				}
+
+				// clean up
+				for(TopologyEdge* p_te : topo_edges) {
+					delete p_te;
+				}
+
+				THEN ("we should receive a list of TopologyEdge")
+				{
+					REQUIRE (nr_edges > 0);
+				}
+			}
 		}
 	}
-	catch (ConfigurationException& e) {
+	catch (ConfigurationException& e)
+	{
 		INFO(e.what());
 		REQUIRE (false);	// force output of error and failure
+	}
+	catch (DatabaseException& dbe)
+	{
+		INFO(dbe.what());
+		REQUIRE (false);	// force output of error and failure
+
 	}
 }
