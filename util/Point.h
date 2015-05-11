@@ -32,10 +32,16 @@ struct Point
 	Point() = delete;
 	Point(const Point&) = default;
 
+// OPERATORS
 	friend std::ostream& operator<<(std::ostream& os, const Point& rPoint)
 	{
 		os << std::fixed << "Point [x: " << rPoint.x << ", y: " << rPoint.y << "]";
 		return os;
+	}
+
+	bool	operator==(const Point& rhs) const
+	{
+		return (rhs.x == x) && (rhs.y == y);
 	}
 };
 

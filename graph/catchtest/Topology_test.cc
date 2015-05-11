@@ -14,9 +14,10 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 	GIVEN ("a Topology object and data for a vertex")
 	{
 		Topology topo;
-		TopologyId id(1);
-		double x = 2, y = 3;
-		Point point(x, y);
+		const TopologyId id(1);
+		const double x = 2;
+		const double y = 3;
+		const Point point(x, y);
 
 		WHEN ("we try to add vertex to Topology")
 		{
@@ -25,6 +26,7 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 			THEN ("we should get a reference to a TopologyVertex object")
 			{
 				REQUIRE (r_vertex.mId == id);
+				REQUIRE (r_vertex.mPoint == point);
 				REQUIRE (r_vertex.mPoint.x == Approx(x));
 				REQUIRE (r_vertex.mPoint.y == Approx(y));
 			}
