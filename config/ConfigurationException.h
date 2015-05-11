@@ -33,6 +33,9 @@ class ConfigurationException : public std::exception
 {
 public:
 // LIFECYCLE
+	/** Default constructor.
+	 */
+	ConfigurationException() = delete;
 
 	/** Constructor taking a message to display.
 	 *
@@ -51,11 +54,6 @@ public:
 
 protected:
 private:
-	/** Default constructor.
-	 * Hidden.
-	 */
-	ConfigurationException();
-
 // ATTRIBUTES
 	std::string		mMessage;
 };

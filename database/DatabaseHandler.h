@@ -36,6 +36,10 @@ class DatabaseHandler
 public:
 // LIFECYCLE
 
+	/** Default constructor.
+	 */
+	DatabaseHandler() = delete;
+
 	/** Constructor.
 	 * Establish connection to database.
 	 *
@@ -89,11 +93,6 @@ public:
 protected:
 
 private:
-	/** Default constructor.
-	 * Hidden.
-	 */
-	DatabaseHandler();
-
 // HELPERS
 	// Helpers for 'buildTopology()'
 	void	installPostgisTopology(pqxx::transaction_base& rTrans);

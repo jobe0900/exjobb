@@ -34,6 +34,10 @@ class DatabaseException : public std::exception
 public:
 // LIFECYCLE
 
+	/** Default constructor.
+	 */
+	DatabaseException() = delete;
+
 	/** Constructor taking a message to display.
 	 *
 	 * @param	message		The message to prepend when 'what()' is called.
@@ -51,11 +55,6 @@ public:
 
 protected:
 private:
-	/** Default constructor.
-	 * Hidden.
-	 */
-	DatabaseException();
-
 // ATTRIBUTES
 	std::string		mMessage;
 };

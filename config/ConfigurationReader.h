@@ -32,6 +32,9 @@ class ConfigurationReader
 {
 public:
 // LIFECYCLE
+	/** Default constructor.
+	 */
+	ConfigurationReader() = delete;
 
 	/** Constructor.
 	 * Always initialize a Configuration reader with the configuration file.
@@ -66,11 +69,6 @@ public:
 protected:
 
 private:
-	/** Default constructor.
-	 * Hidden.
-	 */
-	ConfigurationReader();
-
 // ATTRIBUTES
 	std::string					mFilename;
 	boost::property_tree::ptree	mPropertyTree;

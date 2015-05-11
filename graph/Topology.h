@@ -46,12 +46,6 @@ public:
 	 */
 	Topology(const Topology& from) = delete;
 
-
-	/** Destructor.
-	 */
-//	~Topology(void);
-
-
 // OPERATORS
 // OPERATIONS
 

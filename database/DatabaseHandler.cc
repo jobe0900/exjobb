@@ -276,9 +276,6 @@ DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-DatabaseHandler::DatabaseHandler()
-{}
-
 void
 DatabaseHandler::installPostgisTopology(pqxx::transaction_base& rTrans)
 {
