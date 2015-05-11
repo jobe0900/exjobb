@@ -34,7 +34,7 @@ struct TopologyVertex
 
 	TopologyVertex(int id, Point point) : mId(id), mPoint(point) {}
 	TopologyVertex() = delete;
-	TopologyVertex(const TopologyVertex&) = delete;
+//	TopologyVertex(const TopologyVertex&) = delete;
 
 	friend std::ostream& operator<<(std::ostream& os, const TopologyVertex& rVertex)
 	{
