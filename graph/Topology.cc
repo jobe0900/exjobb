@@ -33,14 +33,14 @@ Topology::addEdge(EdgeId id, VertexId source, VertexId target)
 	{
 		const TopologyVertex& r_source = getVertex(source);
 		const TopologyVertex& r_target = getVertex(target);
+		auto res = mEdgeMap.emplace(id, TopologyEdge(id, r_source, r_target));
+		return res.first->second;
 	}
 	catch (TopologyException& e)
 	{
 		throw TopologyException("Cannot add edge: " + std::to_string(id) +
 				". " + e.what());
 	}
-	auto res = mEdgeMap.emplace(id, TopologyEdge(id, r_source, r_target));
-	return res.first->second;
 }
 
 
@@ -51,7 +51,7 @@ Topology::getVertex(VertexId id) const
 	if(it == mVertexMap.end()) {
 		throw TopologyException("Vertex not found: " + std::to_string(id));
 	}
-	return *it;
+	return it->second;
 }
 
 //============================= ACESS      ===================================

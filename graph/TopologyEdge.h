@@ -33,13 +33,13 @@ public:
 	TopologyEdge(EdgeId id, const TopologyVertex& source, const TopologyVertex& target)
 		: mId(id), mrSource(source), mrTarget(target) {}
 	TopologyEdge() = delete;
-	TopologyEdge(const TopologyEdge&) = delete;
+//	TopologyEdge(const TopologyEdge&) = delete;
 
 // OPERATORS
 	friend
 	std::ostream&	operator<<(std::ostream& os, const TopologyEdge& rEdge)
 	{
-		os  << "TopologyEdge [id: " << id()
+		os  << "TopologyEdge [id: " << rEdge.id()
 			<< ", source: " << rEdge.source().mId
 			<< ", target: " << rEdge.target().mId << "]";
 		return os;

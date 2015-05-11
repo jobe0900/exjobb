@@ -19,6 +19,7 @@
 
 // LOCAL INCLUDES
 //
+#include "TopologyException.h"
 #include "TopologyEdge.h"
 #include "TopologyVertex.h"
 #include "../util/Point.h"
