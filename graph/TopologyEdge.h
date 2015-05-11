@@ -26,14 +26,12 @@ typedef int EdgeId;
 /**
  * Data structure for edges in the topology.
  */
-struct TopologyEdge
+class TopologyEdge
 {
-	EdgeId		mId;
-	VertexId	mSource;
-	VertexId	mTarget;
-
-	TopologyEdge(EdgeId id, VertexId source, VertexId target)
-		: mId(id), mSource(source), mTarget(target) {}
+public:
+// LIFECYCLE
+	TopologyEdge(EdgeId id, const TopologyVertex& source, const TopologyVertex& target)
+		: mId(id), mrSource(source), mrTarget(target) {}
 	TopologyEdge() = delete;
 	TopologyEdge(const TopologyEdge&) = delete;
 
@@ -41,18 +39,29 @@ struct TopologyEdge
 	friend
 	std::ostream&	operator<<(std::ostream& os, const TopologyEdge& rEdge)
 	{
-		os  << "TopologyEdge [id: " << rEdge.mId
-			<< ", source: " << rEdge.mSource
-			<< ", target: " << rEdge.mTarget << "]";
+		os  << "TopologyEdge [id: " << id()
+			<< ", source: " << rEdge.source().mId
+			<< ", target: " << rEdge.target().mId << "]";
 		return os;
 	}
 
 	bool			operator==(const TopologyEdge& rhs) const
 	{
-		return (rhs.mId == mId)
-				&& (rhs.mSource == mSource)
-				&& (rhs.mTarget == mTarget);
+		return (rhs.id() == id())
+				&& (rhs.source() == source())
+				&& (rhs.target() == target());
 	}
+// OPERATIONS
+// ACCESSORS
+	EdgeId					id() const { return mId; }
+	const TopologyVertex&	source() const { return mrSource; }
+	const TopologyVertex&	target() const { return mrTarget; }
+// INQUIRY
+
+private:
+	EdgeId					mId;
+	const TopologyVertex&	mrSource;
+	const TopologyVertex&	mrTarget;
 };
 
 // INLINE METHODS
