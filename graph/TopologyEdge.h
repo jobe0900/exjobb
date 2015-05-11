@@ -30,32 +30,26 @@ class TopologyEdge
 {
 public:
 // LIFECYCLE
-	TopologyEdge(EdgeId id, const TopologyVertex& source, const TopologyVertex& target)
-		: mId(id), mrSource(source), mrTarget(target) {}
+	/** Constructor.
+	 * @param	id		Id for this Edge
+	 * @param	source	Source vertex
+	 * @param	target	Target vertex
+	 */
+	TopologyEdge(EdgeId id, const TopologyVertex& source, const TopologyVertex& target);
 	TopologyEdge() = delete;
-//	TopologyEdge(const TopologyEdge&) = delete;
+	TopologyEdge(const TopologyEdge&) = default;
 
 // OPERATORS
 	friend
-	std::ostream&	operator<<(std::ostream& os, const TopologyEdge& rEdge)
-	{
-		os  << "TopologyEdge [id: " << rEdge.id()
-			<< ", source: " << rEdge.source().mId
-			<< ", target: " << rEdge.target().mId << "]";
-		return os;
-	}
+	std::ostream&	operator<<(std::ostream& os, const TopologyEdge& rEdge);
 
-	bool			operator==(const TopologyEdge& rhs) const
-	{
-		return (rhs.id() == id())
-				&& (rhs.source() == source())
-				&& (rhs.target() == target());
-	}
+	bool			operator==(const TopologyEdge& rhs) const;
+
 // OPERATIONS
 // ACCESSORS
-	EdgeId					id() const { return mId; }
-	const TopologyVertex&	source() const { return mrSource; }
-	const TopologyVertex&	target() const { return mrTarget; }
+	EdgeId					id() const;
+	const TopologyVertex&	source() const;
+	const TopologyVertex&	target() const;
 // INQUIRY
 
 private:
