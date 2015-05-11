@@ -62,6 +62,22 @@ public:
 	 */
 	const TopologyVertex&	addVertex(TopologyId id, Point point);
 
+	/** Try to add an edge to the topology.
+	 * If an edge with the id already exists: return old value.
+	 * @param	id		Id for the edge
+	 * @param	source	Id for source vertex
+	 * @param	target	Id for target vertex
+	 * @return	A reference to an edge with given id
+	 * @throw	Topology Exception if vertices are not in topology.
+	 */
+	const TopologyEdge&		addEdge(EdgeId id, VertexId source, VertexId target);
+
+	/** Fetch the vertex with given id.
+	 * @param	id		Id of the vertex to get
+	 * @return	Reference to the found vertex
+	 * @throws	TopologyException if vertex does not exist.
+	 */
+	const TopologyVertex&	getVertex(VertexId id) const;
 	// ACCESS
 	// INQUIRY
 
@@ -69,6 +85,7 @@ protected:
 private:
 	std::map<TopologyId, TopologyVertex> mVertexMap;
 	std::map<TopologyId, TopologyEdge> mEdgeMap;
+
 };
 
 // INLINE METHODS
