@@ -53,6 +53,7 @@ public:
 // INQUIRY
 
 private:
+// ATTRIBUTES
 	EdgeId					mId;
 	const TopologyVertex&	mrSource;
 	const TopologyVertex&	mrTarget;

@@ -23,7 +23,7 @@ try		// catch error when initializing connection
 		if(!mConnection.is_open())
 		{
 			throw DatabaseException(
-					std::string("Could not open ") + mDbConfig.mDatabase);
+					std::string("Could not open ") + mDbConfig.database);
 		}
 	}
 	catch(const std::exception& e)
@@ -68,7 +68,7 @@ DatabaseHandler::buildTopology(const std::string& rTopoName,
 		if(!mConnection.is_open())
 		{
 			throw DatabaseException(
-					std::string("Could not open ") + mDbConfig.mDatabase);
+					std::string("Could not open ") + mDbConfig.database);
 		}
 
 
@@ -103,7 +103,7 @@ DatabaseHandler::removeTopology(const std::string& rTopoName)
 		if(!mConnection.is_open())
 		{
 			throw DatabaseException(
-					std::string("Could not open ") + mDbConfig.mDatabase);
+					std::string("Could not open ") + mDbConfig.database);
 		}
 
 		// TRANSACTION START
@@ -137,7 +137,7 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 		if(!mConnection.is_open())
 		{
 			throw DatabaseException(
-					std::string("Could not open ") + mDbConfig.mDatabase);
+					std::string("Could not open ") + mDbConfig.database);
 		}
 
 		// NON-TRANSACTION START
@@ -173,7 +173,7 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 //		if(!mConnection.is_open())
 //		{
 //			throw DatabaseException(
-//					std::string("Could not open ") + mDbConfig.mDatabase);
+//					std::string("Could not open ") + mDbConfig.database);
 //		}
 //
 //		// NON-TRANSACTION START
@@ -207,7 +207,7 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 //		if(!mConnection.is_open())
 //		{
 //			throw DatabaseException(
-//					std::string("Could not open ") + mDbConfig.mDatabase);
+//					std::string("Could not open ") + mDbConfig.database);
 //		}
 //
 //		// NON-TRANSACTION START
@@ -244,7 +244,7 @@ DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
 		if(!mConnection.is_open())
 		{
 			throw DatabaseException(
-					std::string("Could not open ") + mDbConfig.mDatabase);
+					std::string("Could not open ") + mDbConfig.database);
 		}
 
 		// NON-TRANSACTION START

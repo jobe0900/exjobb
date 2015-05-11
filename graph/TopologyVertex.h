@@ -50,9 +50,10 @@ public:
 	VertexId	id() const;
 	Point		point() const;
 
-	//INQUIRY
+//INQUIRY
 
 private:
+// ATTRIBUTES
 	VertexId	mId;
 	Point		mPoint;
 };

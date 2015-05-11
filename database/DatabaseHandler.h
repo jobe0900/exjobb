@@ -34,7 +34,7 @@
 class DatabaseHandler
 {
 public:
-	// LIFECYCLE
+// LIFECYCLE
 
 	/** Constructor.
 	 * Establish connection to database.
@@ -50,8 +50,8 @@ public:
 	~DatabaseHandler();
 
 
-	// OPERATORS
-	// OPERATIONS
+// OPERATORS
+// OPERATIONS
 
 	/** Build a PostGIS topology.
 	 * @param	rTopoName	Name to use for temporary tables and topo schema.
@@ -75,13 +75,6 @@ public:
 	 * @throws	DatabaseException
 	 */
 	void	getTopologyVertices(const std::string& rTopoName, Topology& rTopology);
-//	/** Get topology vertices from the db and put them in the vector.
-//		 * @param	rTopoName			Name for the topology to query.
-//		 * @param	rTopologyVertices	Vector to store the vertices in.
-//		 * @throws	DatabaseException
-//		 */
-//		void	getTopologyVertices(const std::string& rTopoName,
-//									std::vector<TopologyVertex*>& rTopologyVertices);
 
 	/** Get topology edges from the db and put them in the vector.
 	 * @param	rTopoName			Name for the topology to query.
@@ -90,16 +83,8 @@ public:
 	 */
 	void	getTopologyEdges(const std::string& rTopoName, Topology& rTopology);
 
-//	/** Get topology edges from the db and put them in the vector.
-//	 * @param	rTopoName			Name for the topology to query.
-//	 * @param	rTopologyEdges		Vector to store the edges in.
-//	 * @throws	DatabaseException
-//	 */
-//	void	getTopologyEdges(const std::string& rTopoName,
-//							 std::vector<TopologyEdge*>& rTopologyEdges);
-
-	// ACCESS
-	// INQUIRY
+// ACCESS
+// INQUIRY
 
 protected:
 
@@ -109,6 +94,7 @@ private:
 	 */
 	DatabaseHandler();
 
+// HELPERS
 	// Helpers for 'buildTopology()'
 	void	installPostgisTopology(pqxx::transaction_base& rTrans);
 	void	setSearchPath(pqxx::transaction_base& rTrans);
@@ -134,11 +120,11 @@ private:
 	void	deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
 	 	 	 	 	 	 	 	 	  const std::string& rSchemaName);
 
-	// ATTRIBUTES
+// ATTRIBUTES
 	DatabaseConfig	mDbConfig;
 	pqxx::connection mConnection;
 
-	// CONSTANTS
+// CONSTANTS
 	const std::string TEMP_SCHEMA_PREFIX = "topo_";
 	const std::string TEMP_TABLE_PREFIX = "highways_";
 };

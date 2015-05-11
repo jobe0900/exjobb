@@ -27,7 +27,7 @@
 class TimeToStringMaker
 {
 public:
-	// LIFECYCLE
+// LIFECYCLE
 
 	/** Default constructor.
 	 */
@@ -37,8 +37,8 @@ public:
 	 */
 	virtual ~TimeToStringMaker() {};
 
-	// OPERATORS
-	// OPERATIONS
+// OPERATORS
+// OPERATIONS
 
 	/** Get the current time as a string.
 	 *
@@ -46,8 +46,8 @@ public:
 	 */
 	virtual	std::string		getCurrentTimeString() = 0;
 
-	// ACCESS
-	// INQUIRY
+// ACCESS
+// INQUIRY
 
 protected:
 

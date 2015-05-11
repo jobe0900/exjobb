@@ -30,7 +30,7 @@
 class EpochMsTimeToString : public TimeToStringMaker
 {
 public:
-	// LIFECYCLE
+// LIFECYCLE
 
 	/** Default constructor.
 	 */
@@ -40,16 +40,16 @@ public:
 	 */
 	virtual ~EpochMsTimeToString();
 
-	// OPERATORS
-	// OPERATIONS
+// OPERATORS
+// OPERATIONS
 
 	/** Get the current time as a string like '1431110306615'.
 	 *
 	 * @return	A string representation of the time.
 	 */
 	virtual	std::string		getCurrentTimeString();
-	// ACCESS
-	// INQUIRY
+// ACCESS
+// INQUIRY
 
 protected:
 

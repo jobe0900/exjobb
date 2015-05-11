@@ -26,24 +26,25 @@
 
 struct DatabaseConfig
 {
-	std::string		mHostname;
-	int				mPort;
-	std::string		mUsername;
-	std::string		mPassword;
-	std::string		mDatabase;
+// ATTRIBUTES
+	std::string		hostname;
+	int				port;
+	std::string		username;
+	std::string		password;
+	std::string		database;
 
-	// OPERATIONS
+// OPERATIONS
 	/** Construct a connection string from the attributes.
 	 * @return	A valid connection string for 'pqxx::conn()'
 	 */
 	std::string
 	getConnectionString() {
 		std::ostringstream oss;
-		oss << "host=" << mHostname
-			<< " port=" << mPort
-			<< " user=" << mUsername
-			<< " password=" << mPassword
-			<< " dbname=" << mDatabase;
+		oss << "host=" << hostname
+			<< " port=" << port
+			<< " user=" << username
+			<< " password=" << password
+			<< " dbname=" << database;
 		return oss.str();
 	}
 };

@@ -29,7 +29,7 @@
 class TopologyException : public std::exception
 {
 public:
-	// LIFECYCLE
+// LIFECYCLE
 	/** Default constructor.
 	 */
 	TopologyException() = delete;
@@ -42,16 +42,16 @@ public:
 		: std::exception(), mMessage(rMessage)
 	{}
 
-	// OPERATORS
-	// OPERATIONS
-	// ACCESS
-	// INQUIRY
+// OPERATORS
+// OPERATIONS
+// ACCESS
+// INQUIRY
 	const char* what() const noexcept
 	{return (mMessage + " " + std::exception::what()).c_str();}
 
 protected:
 private:
-	// ATTRIBUTES
+// ATTRIBUTES
 	std::string		mMessage;
 };
 

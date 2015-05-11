@@ -35,11 +35,11 @@ ConfigurationReader::getDatabaseConfiguration(DatabaseConfig& rDatabaseConfig)
 
 	try
 	{
-		rDatabaseConfig.mHostname = mPropertyTree.get<std::string>(prefix + "host");
-		rDatabaseConfig.mPort = mPropertyTree.get<int>(prefix + "port");
-		rDatabaseConfig.mUsername = mPropertyTree.get<std::string>(prefix + "username");
-		rDatabaseConfig.mPassword = mPropertyTree.get<std::string>(prefix + "password");
-		rDatabaseConfig.mDatabase = mPropertyTree.get<std::string>(prefix + "database");
+		rDatabaseConfig.hostname = mPropertyTree.get<std::string>(prefix + "host");
+		rDatabaseConfig.port = mPropertyTree.get<int>(prefix + "port");
+		rDatabaseConfig.username = mPropertyTree.get<std::string>(prefix + "username");
+		rDatabaseConfig.password = mPropertyTree.get<std::string>(prefix + "password");
+		rDatabaseConfig.database = mPropertyTree.get<std::string>(prefix + "database");
 	}
 	catch (boost::property_tree::ptree_error& e)
 	{
@@ -55,11 +55,11 @@ ConfigurationReader::getVehicleConfiguration(VehicleConfig& rVehicleConfig)
 
 	try
 	{
-		rVehicleConfig.mCategory = mPropertyTree.get<std::string>(prefix + "category");
-		rVehicleConfig.mHeight = mPropertyTree.get<double>(prefix + "height");
-		rVehicleConfig.mLength = mPropertyTree.get<double>(prefix + "length");
-		rVehicleConfig.mWeight = mPropertyTree.get<double>(prefix + "weight");
-		rVehicleConfig.mWidth = mPropertyTree.get<double>(prefix + "width");
+		rVehicleConfig.category = mPropertyTree.get<std::string>(prefix + "category");
+		rVehicleConfig.height = mPropertyTree.get<double>(prefix + "height");
+		rVehicleConfig.length = mPropertyTree.get<double>(prefix + "length");
+		rVehicleConfig.weight = mPropertyTree.get<double>(prefix + "weight");
+		rVehicleConfig.width = mPropertyTree.get<double>(prefix + "width");
 	}
 	catch (boost::property_tree::ptree_error& e)
 	{

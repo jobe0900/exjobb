@@ -32,7 +32,7 @@
 class ConfigurationException : public std::exception
 {
 public:
-	// LIFECYCLE
+// LIFECYCLE
 
 	/** Constructor taking a message to display.
 	 *
@@ -42,10 +42,10 @@ public:
 		: std::exception(), mMessage(rMessage)
 	{}
 
-	// OPERATORS
-	// OPERATIONS
-	// ACCESS
-	// INQUIRY
+// OPERATORS
+// OPERATIONS
+// ACCESS
+// INQUIRY
 	const char* what() const noexcept
 	{return (mMessage + " " + std::exception::what()).c_str();}
 
@@ -56,7 +56,7 @@ private:
 	 */
 	ConfigurationException();
 
-	// ATTRIBUTES
+// ATTRIBUTES
 	std::string		mMessage;
 };
 

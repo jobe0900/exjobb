@@ -33,7 +33,7 @@ typedef int TopologyId;
 class Topology
 {
 public:
-	// LIFECYCLE
+// LIFECYCLE
 
 	/** Default constructor.
 	 */
@@ -52,8 +52,8 @@ public:
 //	~Topology(void);
 
 
-	// OPERATORS
-	// OPERATIONS
+// OPERATORS
+// OPERATIONS
 
 	/** Try to add a vertex to the topology.
 	 * If a vertex with the id already exists: return old value.
@@ -80,7 +80,7 @@ public:
 	 */
 	const TopologyVertex&	getVertex(VertexId id) const;
 
-	// ACCESS
+// ACCESS
 	/**
 	 * @return	the Number of vertices in topology.
 	 */
@@ -91,10 +91,11 @@ public:
 	 */
 	size_t					nrEdges() const;
 
-	// INQUIRY
+// INQUIRY
 
 protected:
 private:
+// ATTRIBUTES
 	std::map<TopologyId, TopologyVertex> 	mVertexMap;
 	std::map<TopologyId, TopologyEdge> 		mEdgeMap;
 

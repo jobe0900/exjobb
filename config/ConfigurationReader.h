@@ -31,7 +31,7 @@
 class ConfigurationReader
 {
 public:
-	// LIFECYCLE
+// LIFECYCLE
 
 	/** Constructor.
 	 * Always initialize a Configuration reader with the configuration file.
@@ -43,8 +43,8 @@ public:
 
 
 
-	// OPERATORS
-	// OPERATIONS
+// OPERATORS
+// OPERATIONS
 
 	/** Read the database part of the configuration and populate config struct.
 	 *
@@ -60,8 +60,8 @@ public:
 	 */
 	void	getVehicleConfiguration(VehicleConfig& rVehicleConfig);
 
-	// ACCESS
-	// INQUIRY
+// ACCESS
+// INQUIRY
 
 protected:
 
@@ -71,7 +71,7 @@ private:
 	 */
 	ConfigurationReader();
 
-	// ATTRIBUTES
+// ATTRIBUTES
 	std::string					mFilename;
 	boost::property_tree::ptree	mPropertyTree;
 

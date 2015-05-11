@@ -25,6 +25,7 @@
 
 struct Point
 {
+// ATTRIBUTES
 	double	x;
 	double	y;
 

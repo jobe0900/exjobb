@@ -25,11 +25,11 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 
 			THEN ("we get a  database configuration filled out")
 			{
-				REQUIRE (db_config.mHostname == "127.0.0.1");
-				REQUIRE (db_config.mPort == 5432);
-				REQUIRE (db_config.mUsername == "tester");
-				REQUIRE (db_config.mPassword == "tester");
-				REQUIRE (db_config.mDatabase == "mikh_style");
+				REQUIRE (db_config.hostname == "127.0.0.1");
+				REQUIRE (db_config.port == 5432);
+				REQUIRE (db_config.username == "tester");
+				REQUIRE (db_config.password == "tester");
+				REQUIRE (db_config.database == "mikh_style");
 			}
 		}
 	}
@@ -80,11 +80,11 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 
 			THEN ("we get a vehicle configuration filled out")
 			{
-				REQUIRE (config.mCategory == "motorcar");
-				REQUIRE (config.mHeight == Approx(1.6));
-				REQUIRE (config.mLength == Approx(4.5));
-				REQUIRE (config.mWeight == Approx(2.0));
-				REQUIRE (config.mWidth == Approx(1.9));
+				REQUIRE (config.category == "motorcar");
+				REQUIRE (config.height == Approx(1.6));
+				REQUIRE (config.length == Approx(4.5));
+				REQUIRE (config.weight == Approx(2.0));
+				REQUIRE (config.width == Approx(1.9));
 			}
 		}
 	}

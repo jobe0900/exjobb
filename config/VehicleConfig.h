@@ -22,11 +22,12 @@
 
 struct VehicleConfig
 {
-	std::string		mCategory;
-	double			mHeight;
-	double			mLength;
-	double			mWeight;
-	double			mWidth;
+// ATTRIBUTES
+	std::string		category;
+	double			height;
+	double			length;
+	double			weight;
+	double			width;
 };
 
 // INLINE METHODS
