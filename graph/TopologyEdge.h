@@ -35,7 +35,7 @@ public:
 	 * @param	source	Source vertex
 	 * @param	target	Target vertex
 	 */
-	TopologyEdge(EdgeId id, const TopologyVertex& source, const TopologyVertex& target);
+	TopologyEdge(EdgeId id, VertexId source, VertexId target);
 	TopologyEdge() = delete;
 	TopologyEdge(const TopologyEdge&) = default;
 
@@ -47,16 +47,16 @@ public:
 
 // OPERATIONS
 // ACCESSORS
-	EdgeId					id() const;
-	const TopologyVertex&	source() const;
-	const TopologyVertex&	target() const;
+	EdgeId		id() const;
+	VertexId	source() const;
+	VertexId	target() const;
 // INQUIRY
 
 private:
 // ATTRIBUTES
-	EdgeId					mId;
-	const TopologyVertex&	mrSource;
-	const TopologyVertex&	mrTarget;
+	EdgeId		mId;
+	VertexId	mSource;
+	VertexId	mTarget;
 };
 
 // INLINE METHODS

@@ -11,11 +11,8 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-TopologyEdge::TopologyEdge(
-		EdgeId id,
-		const TopologyVertex& source,
-		const TopologyVertex& target)
-	: mId(id), mrSource(source), mrTarget(target)
+TopologyEdge::TopologyEdge(EdgeId id, VertexId source, VertexId target)
+	: mId(id), mSource(source), mTarget(target)
 {}
 
 //============================= OPERATORS ====================================
@@ -23,8 +20,8 @@ std::ostream&
 operator<<(std::ostream& os, const TopologyEdge& rEdge)
 {
 	os  << "TopologyEdge [id: " << rEdge.id()
-		<< ", source: " << rEdge.source().id()
-		<< ", target: " << rEdge.target().id() << "]";
+		<< ", source: " << rEdge.source()
+		<< ", target: " << rEdge.target() << "]";
 	return os;
 }
 
@@ -42,13 +39,13 @@ EdgeId
 TopologyEdge::id() const
 { return mId; }
 
-const TopologyVertex&
+VertexId
 TopologyEdge::source() const
-{ return mrSource; }
+{ return mSource; }
 
-const TopologyVertex&
+VertexId
 TopologyEdge::target() const
-{ return mrTarget; }
+{ return mTarget; }
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

@@ -33,7 +33,7 @@ Topology::addEdge(EdgeId id, VertexId source, VertexId target)
 	{
 		const TopologyVertex& r_source = getVertex(source);
 		const TopologyVertex& r_target = getVertex(target);
-		auto res = mEdgeMap.emplace(id, TopologyEdge(id, r_source, r_target));
+		auto res = mEdgeMap.emplace(id, TopologyEdge(id, source, target));
 		return res.first->second;
 	}
 	catch (TopologyException& e)
@@ -59,7 +59,7 @@ void
 Topology::buildTopologyGraph(TopologyGraph& rGraph)
 {
     for(auto& edge_it : mEdgeMap) {
-        boost::add_edge(edge_it.second.source().id(), edge_it.second.target().id(), rGraph);
+        boost::add_edge(edge_it.second.source(), edge_it.second.target(), rGraph);
     }
 }
 
