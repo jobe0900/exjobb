@@ -16,6 +16,8 @@
 
 // PROJECT INCLUDES
 //
+#include <boost/graph/adjacency_list.hpp>
+#include <boost/graph/graph_traits.hpp>
 
 // LOCAL INCLUDES
 //
@@ -29,6 +31,11 @@
 //
 
 typedef int TopologyId;
+typedef boost::adjacency_list<
+            boost::listS,
+            boost::vecS,
+            boost::bidirectionalS
+    > TopologyGraph;
 
 class Topology
 {
@@ -73,6 +80,11 @@ public:
 	 * @throws	TopologyException if vertex does not exist.
 	 */
 	const TopologyVertex&	getVertex(VertexId id) const;
+
+	/** Build a simple graph over the topology.
+	 * @param   rGraph  Reference to TopologyGraph to build
+	 */
+	void                    buildTopologyGraph(TopologyGraph& rGraph);
 
 // ACCESS
 	/**

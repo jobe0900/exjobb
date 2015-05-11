@@ -54,6 +54,16 @@ Topology::getVertex(VertexId id) const
 	return it->second;
 }
 
+
+void
+Topology::buildTopologyGraph(TopologyGraph& rGraph)
+{
+    for(auto& edge_it : mEdgeMap) {
+//        edge_it.second
+        boost::add_edge(edge_it.second.source().id(), edge_it.second.target().id(), rGraph);
+    }
+}
+
 //============================= ACESS      ===================================
 size_t
 Topology::nrVertices() const

@@ -22,15 +22,30 @@ SCENARIO ("Building a sample BGL graph", "[graph]")
     {
         Topology topo;
         loadSampleData(topo);
+        const int nr_vertices = 13;
+        const int nr_edges = 16;
 
-        REQUIRE (topo.nrVertices() == 13);
-        REQUIRE (topo.nrEdges() == 16);
+        REQUIRE (topo.nrVertices() == nr_vertices);
+        REQUIRE (topo.nrEdges() == nr_edges);
 
         WHEN ("we try to build a graph")
         {
+            TopologyGraph topo_graph;
+            topo.buildTopologyGraph(topo_graph);
+
             THEN ("we should get a reference to a Graph object")
             {
-
+                auto edge_it = boost::edges(topo_graph);
+                for(; edge_it.first != edge_it.second; ++edge_it.first)
+                {
+                    std::cout << "edge: source:"
+                              << boost::source(*edge_it.first, topo_graph)
+                              << ", target: "
+                              << boost::target(*edge_it.first, topo_graph)
+                              << std::endl;
+                }
+//                size_t edge_cnt = edge_it.second - edge_it.first;
+//                REQUIRE (edge_cnt == nr_edges);
             }
         }
     }
