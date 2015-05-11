@@ -27,28 +27,34 @@ typedef int VertexId;
 /**
  * Data structure for vertices in the topology.
  */
-struct TopologyVertex
+class TopologyVertex
 {
-	int		mId;
-	Point	mPoint;
-
-	TopologyVertex(int id, Point point) : mId(id), mPoint(point) {}
+public:
+// LIFECYCLE
+	/** Constructor.
+	 * @param	id		Id for this vertex.
+	 * @param	point	The Point (geometry).
+	 */
+	TopologyVertex(int id, Point point);
 	TopologyVertex() = delete;
-//	TopologyVertex(const TopologyVertex&) = delete;
+	TopologyVertex(const TopologyVertex&) = default;
 
 // OPERATORS
 	friend
-	std::ostream&	operator<<(std::ostream& os, const TopologyVertex& rVertex)
-	{
-		os  << "TopologyVertex [id: " << rVertex.mId
-			<< ", point: " << rVertex.mPoint << "]";
-		return os;
-	}
+	std::ostream&	operator<<(std::ostream& os, const TopologyVertex& rVertex);
 
-	bool			operator==(const TopologyVertex& rhs) const
-	{
-		return (rhs.mId == mId) && (rhs.mPoint == mPoint);
-	}
+	bool			operator==(const TopologyVertex& rhs) const;
+
+// OPERATIONS
+// ACCESS
+	VertexId	id() const;
+	Point		point() const;
+
+	//INQUIRY
+
+private:
+	VertexId	mId;
+	Point		mPoint;
 };
 
 // INLINE METHODS

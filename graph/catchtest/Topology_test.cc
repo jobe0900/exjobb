@@ -26,10 +26,10 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 
 			THEN ("we should get a reference to a TopologyVertex object")
 			{
-				REQUIRE (r_vertex.mId == id);
-				REQUIRE (r_vertex.mPoint == point);
-				REQUIRE (r_vertex.mPoint.x == Approx(x));
-				REQUIRE (r_vertex.mPoint.y == Approx(y));
+				REQUIRE (r_vertex.id() == id);
+				REQUIRE (r_vertex.point() == point);
+				REQUIRE (r_vertex.point().x == Approx(x));
+				REQUIRE (r_vertex.point().y == Approx(y));
 			}
 		}
 	}

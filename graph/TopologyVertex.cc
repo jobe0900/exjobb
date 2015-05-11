@@ -1,58 +1,51 @@
 /*
- * TopologyEdge.cc
+ * TopologyVertex.cc
  *
  *  Created on: 2015-05-11
  *      Author: Jonas Bergman
  */
 
-#include "TopologyEdge.h"  // class implemented
+#include "TopologyVertex.h"  // class implemented
 
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-TopologyEdge::TopologyEdge(
-		EdgeId id,
-		const TopologyVertex& source,
-		const TopologyVertex& target)
-	: mId(id), mrSource(source), mrTarget(target)
+TopologyVertex::TopologyVertex(int id, Point point)
+	: mId(id), mPoint(point)
 {}
 
 //============================= OPERATORS ====================================
 std::ostream&
-operator<<(std::ostream& os, const TopologyEdge& rEdge)
+operator<<(std::ostream& os, const TopologyVertex& rVertex)
 {
-	os  << "TopologyEdge [id: " << rEdge.id()
-		<< ", source: " << rEdge.source().id()
-		<< ", target: " << rEdge.target().id() << "]";
+	os  << "TopologyVertex [id: " << rVertex.mId
+		<< ", point: " << rVertex.mPoint << "]";
 	return os;
 }
 
 bool
-TopologyEdge::operator==(const TopologyEdge& rhs) const
+TopologyVertex::operator==(const TopologyVertex& rhs) const
 {
-	return (rhs.id() == id())
-			&& (rhs.source() == source())
-			&& (rhs.target() == target());
+	return (rhs.mId == mId) && (rhs.mPoint == mPoint);
 }
 
 //============================= OPERATIONS ===================================
 //============================= ACESS      ===================================
-EdgeId
-TopologyEdge::id() const
+VertexId
+TopologyVertex::id() const
 { return mId; }
 
-const TopologyVertex&
-TopologyEdge::source() const
-{ return mrSource; }
+Point
+TopologyVertex::point() const
+{ return mPoint; }
 
-const TopologyVertex&
-TopologyEdge::target() const
-{ return mrTarget; }
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
+
+
 
 
 
