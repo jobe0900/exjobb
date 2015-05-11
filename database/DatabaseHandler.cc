@@ -130,7 +130,7 @@ DatabaseHandler::removeTopology(const std::string& rTopoName)
 
 void
 DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
-									 std::vector<TopologyVertex*>& rTopologyVertices)
+									 Topology& rTopology)
 {
 	try
 	{
@@ -151,10 +151,11 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 				"ORDER BY node_id ASC;"
 		);
 
-		for(size_t row = 0; row < result.size(); ++row) {
-			Point p(result[row][1].as<double>(), result[row][2].as<double>());
-			TopologyVertex* p_vertex = new TopologyVertex(result[row][0].as<int>(), p);
-			rTopologyVertices.push_back(p_vertex);
+		for(size_t row = 0; row < result.size(); ++row)
+		{
+			VertexId	id(result[row][0].as<int>());
+			Point 		p(result[row][1].as<double>(), result[row][2].as<double>());
+			rTopology.addVertex(id, p);
 		}
 	}
 	catch(const std::exception& e)
@@ -163,10 +164,80 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 	}
 }
 
+//void
+//DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
+//									 std::vector<TopologyVertex*>& rTopologyVertices)
+//{
+//	try
+//	{
+//		if(!mConnection.is_open())
+//		{
+//			throw DatabaseException(
+//					std::string("Could not open ") + mDbConfig.mDatabase);
+//		}
+//
+//		// NON-TRANSACTION START
+//		pqxx::nontransaction non_trans(mConnection);
+//
+//		std::string temp_schema = TEMP_SCHEMA_PREFIX + non_trans.esc(rTopoName);
+//
+//		pqxx::result result = non_trans.exec(
+//				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
+//				"FROM " + temp_schema + ".node "
+//				"ORDER BY node_id ASC;"
+//		);
+//
+//		for(size_t row = 0; row < result.size(); ++row) {
+//			Point p(result[row][1].as<double>(), result[row][2].as<double>());
+//			TopologyVertex* p_vertex = new TopologyVertex(result[row][0].as<int>(), p);
+//			rTopologyVertices.push_back(p_vertex);
+//		}
+//	}
+//	catch(const std::exception& e)
+//	{
+//		throw DatabaseException(std::string("Database error: ") + e.what());
+//	}
+//}
+//void
+//DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
+//								  std::vector<TopologyEdge*>& rTopologyEdges)
+//{
+//	try
+//	{
+//		if(!mConnection.is_open())
+//		{
+//			throw DatabaseException(
+//					std::string("Could not open ") + mDbConfig.mDatabase);
+//		}
+//
+//		// NON-TRANSACTION START
+//		pqxx::nontransaction non_trans(mConnection);
+//
+//		std::string temp_schema = TEMP_SCHEMA_PREFIX + non_trans.esc(rTopoName);
+//
+//		pqxx::result result = non_trans.exec(
+//				"SELECT edge_id, start_node, end_node "
+//				"FROM " + temp_schema + ".edge_data "
+//				"ORDER BY edge_id ASC;"
+//		);
+//
+//		for(size_t row = 0; row < result.size(); ++row) {
+//			Point p(result[row][1].as<double>(), result[row][2].as<double>());
+//			TopologyEdge* p_edge = new TopologyEdge(result[row][0].as<int>(),
+//					result[row][1].as<int>(),
+//					result[row][2].as<int>());
+//			rTopologyEdges.push_back(p_edge);
+//		}
+//	}
+//	catch(const std::exception& e)
+//	{
+//		throw DatabaseException(std::string("Database error: ") + e.what());
+//	}
+//}
 
 void
 DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
-								  std::vector<TopologyEdge*>& rTopologyEdges)
+								  Topology& rTopology)
 {
 	try
 	{
@@ -187,12 +258,12 @@ DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
 				"ORDER BY edge_id ASC;"
 		);
 
-		for(size_t row = 0; row < result.size(); ++row) {
-			Point p(result[row][1].as<double>(), result[row][2].as<double>());
-			TopologyEdge* p_edge = new TopologyEdge(result[row][0].as<int>(),
-					result[row][1].as<int>(),
-					result[row][2].as<int>());
-			rTopologyEdges.push_back(p_edge);
+		for(size_t row = 0; row < result.size(); ++row)
+		{
+			EdgeId 		edge_id(result[row][0].as<int>());
+			VertexId 	source_id(result[row][1].as<int>());
+			VertexId 	target_id(result[row][2].as<int>());
+			rTopology.addEdge(edge_id, source_id, target_id);
 		}
 	}
 	catch(const std::exception& e)

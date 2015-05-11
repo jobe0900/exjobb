@@ -23,6 +23,7 @@
 #include "DatabaseException.h"
 #include "../graph/TopologyVertex.h"
 #include "../graph/TopologyEdge.h"
+#include "../graph/Topology.h"
 
 // FORWARD REFERENCES
 //
@@ -73,16 +74,29 @@ public:
 	 * @param	rTopologyVertices	Vector to store the vertices in.
 	 * @throws	DatabaseException
 	 */
-	void	getTopologyVertices(const std::string& rTopoName,
-								std::vector<TopologyVertex*>& rTopologyVertices);
+	void	getTopologyVertices(const std::string& rTopoName, Topology& rTopology);
+//	/** Get topology vertices from the db and put them in the vector.
+//		 * @param	rTopoName			Name for the topology to query.
+//		 * @param	rTopologyVertices	Vector to store the vertices in.
+//		 * @throws	DatabaseException
+//		 */
+//		void	getTopologyVertices(const std::string& rTopoName,
+//									std::vector<TopologyVertex*>& rTopologyVertices);
 
 	/** Get topology edges from the db and put them in the vector.
 	 * @param	rTopoName			Name for the topology to query.
 	 * @param	rTopologyEdges		Vector to store the edges in.
 	 * @throws	DatabaseException
 	 */
-	void	getTopologyEdges(const std::string& rTopoName,
-							 std::vector<TopologyEdge*>& rTopologyEdges);
+	void	getTopologyEdges(const std::string& rTopoName, Topology& rTopology);
+
+//	/** Get topology edges from the db and put them in the vector.
+//	 * @param	rTopoName			Name for the topology to query.
+//	 * @param	rTopologyEdges		Vector to store the edges in.
+//	 * @throws	DatabaseException
+//	 */
+//	void	getTopologyEdges(const std::string& rTopoName,
+//							 std::vector<TopologyEdge*>& rTopologyEdges);
 
 	// ACCESS
 	// INQUIRY

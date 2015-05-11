@@ -55,6 +55,17 @@ Topology::getVertex(VertexId id) const
 }
 
 //============================= ACESS      ===================================
+size_t
+Topology::nrVertices() const
+{
+	return mVertexMap.size();
+}
+
+size_t
+Topology::nrEdges() const
+{
+	return mEdgeMap.size();
+}
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

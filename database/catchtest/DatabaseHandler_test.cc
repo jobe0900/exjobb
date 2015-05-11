@@ -103,19 +103,14 @@ SCENARIO ("PostGis queries", "[query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology vertices")
 			{
-				std::vector<TopologyVertex*> topo_vertices;
-				db_handler.getTopologyVertices(topo_name, topo_vertices);
-				size_t nr_vertices = topo_vertices.size();
+				Topology topo;
+				db_handler.getTopologyVertices(topo_name, topo);
+				size_t nr_vertices = topo.nrVertices();
 
-				if(nr_vertices > 0) {
-					INFO ("First vertex " << *topo_vertices.at(0));
-					REQUIRE (true); // force output
-				}
-
-				// clean up
-				for(TopologyVertex* p_tv : topo_vertices) {
-					delete p_tv;
-				}
+//				if(nr_vertices > 0) {
+//					INFO ("First vertex " << *topo_vertices.at(0));
+//					REQUIRE (true); // force output
+//				}
 
 				THEN ("we should receive a list of TopologyVertex")
 				{
@@ -126,20 +121,14 @@ SCENARIO ("PostGis queries", "[query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology edges")
 			{
-				// TODO should perhaps handle pointers instead.
-				std::vector<TopologyEdge*> topo_edges;
-				db_handler.getTopologyEdges(topo_name, topo_edges);
-				size_t nr_edges = topo_edges.size();
+				Topology topo;
+				db_handler.getTopologyEdges(topo_name, topo);
+				size_t nr_edges = topo.nrEdges();
 
-				if(nr_edges > 0) {
-					INFO ("First edge " << *topo_edges.at(0));
-					REQUIRE (true); // force output
-				}
-
-				// clean up
-				for(TopologyEdge* p_te : topo_edges) {
-					delete p_te;
-				}
+//				if(nr_edges > 0) {
+//					INFO ("First edge " << *topo_edges.at(0));
+//					REQUIRE (true); // force output
+//				}
 
 				THEN ("we should receive a list of TopologyEdge")
 				{

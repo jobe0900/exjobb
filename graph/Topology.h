@@ -79,13 +79,24 @@ public:
 	 * @throws	TopologyException if vertex does not exist.
 	 */
 	const TopologyVertex&	getVertex(VertexId id) const;
+
 	// ACCESS
+	/**
+	 * @return	the Number of vertices in topology.
+	 */
+	size_t					nrVertices() const;
+
+	/**
+	 * @return	the Number of vertices in topology.
+	 */
+	size_t					nrEdges() const;
+
 	// INQUIRY
 
 protected:
 private:
-	std::map<TopologyId, TopologyVertex> mVertexMap;
-	std::map<TopologyId, TopologyEdge> mEdgeMap;
+	std::map<TopologyId, TopologyVertex> 	mVertexMap;
+	std::map<TopologyId, TopologyEdge> 		mEdgeMap;
 
 };
 
