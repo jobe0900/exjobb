@@ -35,6 +35,26 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 	}
 
 	// -----------------------------------------------------------------------
+	GIVEN ("a Topology object and data for 2 vertices with same id")
+	{
+		Topology topo;
+		const VertexId v1(1);
+		const Point p1(2,3);
+		const Point p2(4,5);
+
+		WHEN ("we try to add second vertex to Topology")
+		{
+			const TopologyVertex& r_v1 = topo.addVertex(v1, p1);
+			const TopologyVertex& r_v2 = topo.addVertex(v1, p2);
+
+			THEN ("we should get a reference to first TopologyVertex object")
+			{
+				REQUIRE (r_v2 == r_v1);
+			}
+		}
+	}
+
+	// -----------------------------------------------------------------------
 	GIVEN ("a Topology object and data for two vertices and an edge")
 	{
 		Topology topo;
