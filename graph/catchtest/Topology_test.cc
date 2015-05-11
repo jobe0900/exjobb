@@ -58,22 +58,19 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 	GIVEN ("a Topology object and data for two vertices and an edge")
 	{
 		Topology topo;
+
 		const VertexId v1(1);
-		const double x = 2;
-		const double y = 3;
-		const Point p1(x, y);
+		const Point p1(2,3);
 
 		const VertexId v2(2);
 		const Point p2(4,5);
 
 		const EdgeId e1(1);
-		const VertexId source(1);
-		const VertexId target(2);
 
 		WHEN ("we try to add edge to Topology with existing vertices")
 		{
 			const TopologyVertex& r_v1 = topo.addVertex(v1, p1);
-			const TopologyVertex& r_v2 =topo.addVertex(v2, p2);
+			const TopologyVertex& r_v2 = topo.addVertex(v2, p2);
 
 			const TopologyEdge& r_edge = topo.addEdge(e1, v1, v2);
 
@@ -82,6 +79,34 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 				REQUIRE (r_edge.id() == e1);
 				REQUIRE (r_edge.source() == r_v1);
 				REQUIRE (r_edge.target() == r_v2);
+			}
+		}
+	}
+
+	// -----------------------------------------------------------------------
+	GIVEN ("a Topology object and data for two vertices and an edge")
+	{
+		Topology topo;
+
+		const VertexId v1(1);
+		const Point p1(2,3);
+
+		const VertexId v2(2);
+		const Point p2(4,5);
+
+		const EdgeId e1(1);
+
+		WHEN ("we try to add edge to Topology with non-existing vertices")
+		{
+			//const TopologyVertex& r_v1 = topo.addVertex(v1, p1);
+			//const TopologyVertex& r_v2 =topo.addVertex(v2, p2);
+
+			THEN ("we should get a TopologyException")
+			{
+				REQUIRE_THROWS_AS(
+						const TopologyEdge& r_edge = topo.addEdge(e1, v1, v2),
+						TopologyException&
+				);
 			}
 		}
 	}
