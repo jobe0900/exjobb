@@ -38,6 +38,11 @@ SCENARIO ("Building a sample BGL graph", "[graph]")
                 auto edge_it = boost::edges(topo_graph);
                 for(; edge_it.first != edge_it.second; ++edge_it.first)
                 {
+//                    std::cout << "edge: source:"
+//                              << boost::source(*edge_it.first, topo_graph)
+//                              << ", target: "
+//                              << boost::target(*edge_it.first, topo_graph)
+//                              << std::endl;
                     std::cout << "edge: source:"
                               << boost::source(*edge_it.first, topo_graph)
                               << ", target: "
