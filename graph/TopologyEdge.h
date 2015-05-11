@@ -37,12 +37,21 @@ struct TopologyEdge
 	TopologyEdge() = delete;
 	TopologyEdge(const TopologyEdge&) = delete;
 
-	friend std::ostream& operator<<(std::ostream& os, const TopologyEdge& rEdge)
+// OPERATORS
+	friend
+	std::ostream&	operator<<(std::ostream& os, const TopologyEdge& rEdge)
 	{
 		os  << "TopologyEdge [id: " << rEdge.mId
 			<< ", source: " << rEdge.mSource
 			<< ", target: " << rEdge.mTarget << "]";
 		return os;
+	}
+
+	bool			operator==(const TopologyEdge& rhs) const
+	{
+		return (rhs.mId == mId)
+				&& (rhs.mSource == mSource)
+				&& (rhs.mTarget == mTarget);
 	}
 };
 

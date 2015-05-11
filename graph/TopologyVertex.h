@@ -36,11 +36,18 @@ struct TopologyVertex
 	TopologyVertex() = delete;
 //	TopologyVertex(const TopologyVertex&) = delete;
 
-	friend std::ostream& operator<<(std::ostream& os, const TopologyVertex& rVertex)
+// OPERATORS
+	friend
+	std::ostream&	operator<<(std::ostream& os, const TopologyVertex& rVertex)
 	{
 		os  << "TopologyVertex [id: " << rVertex.mId
 			<< ", point: " << rVertex.mPoint << "]";
 		return os;
+	}
+
+	bool			operator==(const TopologyVertex& rhs) const
+	{
+		return (rhs.mId == mId) && (rhs.mPoint == mPoint);
 	}
 };
 
