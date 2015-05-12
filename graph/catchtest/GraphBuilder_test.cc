@@ -35,22 +35,34 @@ SCENARIO ("Building a sample BGL graph", "[graph]")
             THEN ("we should get a reference to a Graph object")
             {
                 const TopologyGraph::GraphType& r_graph = graph.getRepresentation();
-                auto edge_it = boost::edges(r_graph);
-                for(; edge_it.first != edge_it.second; ++edge_it.first)
+
+                auto vertex_it = boost::vertices(r_graph);
+                auto vid_map = boost::get(&VertexData::topo_id, r_graph);
+                auto x_map  = boost::get(&VertexData::x, r_graph);
+                auto y_map  = boost::get(&VertexData::y, r_graph);
+                for(; vertex_it.first != vertex_it.second; ++vertex_it.first)
                 {
-//                    std::cout << "edge: source:"
-//                              << boost::source(*edge_it.first, topo_graph)
-//                              << ", target: "
-//                              << boost::target(*edge_it.first, topo_graph)
-//                              << std::endl;
-                    std::cout << "edge: source:"
-                              << boost::source(*edge_it.first, r_graph)
-                              << ", target: "
-                              << boost::target(*edge_it.first, r_graph)
+                    auto ix = *vertex_it.first;
+                    std::cout << "vertex:" << ix
+                              << "\tid: " << vid_map[ix]
+                              << "\tx: " << x_map[ix]
+                              << "\ty: " << y_map[ix]
                               << std::endl;
                 }
-//                size_t edge_cnt = edge_it.second - edge_it.first;
-//                REQUIRE (edge_cnt == nr_edges);
+
+                auto edge_it = boost::edges(r_graph);
+                auto eid_map    = boost::get(&EdgeData::topo_id, r_graph);
+                auto source_map = boost::get(&EdgeData::source, r_graph);
+                auto target_map = boost::get(&EdgeData::target, r_graph);
+                for(; edge_it.first != edge_it.second; ++edge_it.first)
+                {
+                    auto ix = *edge_it.first;
+                    std::cout << "edge:" << ix
+                              << "\tid: " << eid_map[ix]
+                              << "\tx: " << source_map[ix]
+                              << "\ty: " << target_map[ix]
+                              << std::endl;
+                }
             }
         }
     }
@@ -62,8 +74,6 @@ void loadSampleData(TopologyGraph& graph)
 
     std::string     sample_json("graph/catchtest/test-topology.json");
     ptree           pt;
-    TopologyVertex* p_v;
-    TopologyEdge*   p_e;
 
     try
     {
@@ -79,10 +89,8 @@ void loadSampleData(TopologyGraph& graph)
                 v_row[i] = item.second.get_value<int>();
                 ++i;
             }
-            delete p_v;
-            p_v = new TopologyVertex(v_row[0], Point(v_row[1], v_row[2]));
-            graph.addVertex(p_v);
-//            topo.addVertex(v_row[0], Point(v_row[1], v_row[2]));
+            VertexData v(v_row[0], v_row[1], v_row[2]);
+            graph.addVertex(v);
             std::cout << "vertex [id: " << v_row[0]
                       << ", x: " << v_row[1]
                       << ", y: " << v_row[2] << "]" << std::endl;
@@ -98,13 +106,11 @@ void loadSampleData(TopologyGraph& graph)
                 e_row[i] = item.second.get_value<int>();
                 ++i;
             }
-            delete p_e;
-            p_e = new TopologyEdge(e_row[0], e_row[1], e_row[2]); // not working
-            graph.addEdge(p_e);
-//            topo.addEdge(e_row[0], e_row[1], e_row[2]);
+            EdgeData e(e_row[0], e_row[1], e_row[2]);
+            graph.addEdge(e);
             std::cout << "edge [id: " << e_row[0]
-                      << ", x: " << e_row[1]
-                      << ", y: " << e_row[2] << "]" << std::endl;
+                      << ", s: " << e_row[1]
+                      << ", t: " << e_row[2] << "]" << std::endl;
         }
     }
     catch (boost::property_tree::ptree_error& e)
@@ -112,93 +118,3 @@ void loadSampleData(TopologyGraph& graph)
         throw TopologyException("Could not read file " + sample_json);
     }
 }
-Vjjjjj
-//SCENARIO ("Building a sample BGL graph", "[graph]")
-//{
-//    // -----------------------------------------------------------------------
-//    GIVEN ("a Topology object with sample data")
-//    {
-//        Topology topo;
-//        loadSampleData(topo);
-//        const int nr_vertices = 13;
-//        const int nr_edges = 16;
-//
-//        REQUIRE (topo.nrVertices() == nr_vertices);
-//        REQUIRE (topo.nrEdges() == nr_edges);
-//
-//        WHEN ("we try to build a graph")
-//        {
-//            TopologyGraph topo_graph;
-//            topo.buildTopologyGraph(topo_graph);
-//
-//            THEN ("we should get a reference to a Graph object")
-//            {
-//                auto edge_it = boost::edges(topo_graph);
-//                for(; edge_it.first != edge_it.second; ++edge_it.first)
-//                {
-////                    std::cout << "edge: source:"
-////                              << boost::source(*edge_it.first, topo_graph)
-////                              << ", target: "
-////                              << boost::target(*edge_it.first, topo_graph)
-////                              << std::endl;
-//                    std::cout << "edge: source:"
-//                              << boost::source(*edge_it.first, topo_graph)
-//                              << ", target: "
-//                              << boost::target(*edge_it.first, topo_graph)
-//                              << std::endl;
-//                }
-////                size_t edge_cnt = edge_it.second - edge_it.first;
-////                REQUIRE (edge_cnt == nr_edges);
-//            }
-//        }
-//    }
-//}
-//
-//void loadSampleData(Topology& topo)
-//{
-//    using namespace boost::property_tree;
-//
-//    std::string sample_json("graph/catchtest/test-topology.json");
-//    ptree       pt;
-//
-//    try
-//    {
-//        read_json(sample_json, pt);
-//
-//        // vertices
-//        int v_row[3];
-//        for(auto& row : pt.get_child("vertices"))
-//        {
-//            int i = 0;
-//            for(auto& item : row.second)
-//            {
-//                v_row[i] = item.second.get_value<int>();
-//                ++i;
-//            }
-//            topo.addVertex(v_row[0], Point(v_row[1], v_row[2]));
-//            std::cout << "vertex [id: " << v_row[0]
-//                      << ", x: " << v_row[1]
-//                      << ", y: " << v_row[2] << "]" << std::endl;
-//        }
-//
-//        // edges
-//        int e_row[3];
-//        for(auto& row : pt.get_child("edges"))
-//        {
-//            int i = 0;
-//            for(auto& item : row.second)
-//            {
-//                e_row[i] = item.second.get_value<int>();
-//                ++i;
-//            }
-//            topo.addEdge(e_row[0], e_row[1], e_row[2]);
-//            std::cout << "edge [id: " << e_row[0]
-//                      << ", x: " << e_row[1]
-//                      << ", y: " << e_row[2] << "]" << std::endl;
-//        }
-//    }
-//    catch (boost::property_tree::ptree_error& e)
-//    {
-//        throw TopologyException("Could not read file " + sample_json);
-//    }
-//}

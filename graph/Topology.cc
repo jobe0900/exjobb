@@ -29,18 +29,18 @@ Topology::addVertex(TopologyId id, Point point)
 const TopologyEdge&
 Topology::addEdge(EdgeId id, VertexId source, VertexId target)
 {
-    try
-    {
-        const TopologyVertex& r_source = getVertex(source);
-        const TopologyVertex& r_target = getVertex(target);
-        auto res = mEdgeMap.emplace(id, TopologyEdge(id, r_source, r_target));
-        return res.first->second;
-    }
-    catch (TopologyException& e)
-    {
-        throw TopologyException("Cannot add edge: " + std::to_string(id) +
-            ". " + e.what());
-    }
+ 	try
+	{
+	    getVertex(source);
+	    getVertex(target);
+		auto res = mEdgeMap.emplace(id, TopologyEdge(id, source, target));
+		return res.first->second;
+	}
+	catch (TopologyException& e)
+	{
+		throw TopologyException("Cannot add edge: " + std::to_string(id) +
+				". " + e.what());
+	}
 }
 
 
@@ -54,14 +54,6 @@ Topology::getVertex(VertexId id) const
     return it->second;
 }
 
-
-void
-Topology::buildTopologyGraph(TopologyGraph& rGraph)
-{
-    for(auto& edge_it : mEdgeMap) {
-        boost::add_edge(edge_it.second.source().id(), edge_it.second.target().id(), rGraph);
-    }
-}
 
 //============================= ACESS      ===================================
 size_t

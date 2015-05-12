@@ -23,57 +23,59 @@ TopologyGraph::TopologyGraph(size_t nrVertices)
 
 TopologyGraph::~TopologyGraph()
 {
-    // need to delete pointers here
+    // need to delete pointers here?
 }
 
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
+
+//void
+//TopologyGraph::addVertex(TopologyVertex vertex)
+//{
+//    VertexType v = boost::add_vertex(vertex, mGraph);
+//    mVertexMap.emplace(vertex.id(), v);
+//}
+
 void
-TopologyGraph::addVertex(const TopologyVertex* pVertex)
+TopologyGraph::addVertex(VertexData vertex)
 {
-    VertexType v = boost::add_vertex(*pVertex, mGraph);
-    auto& res = mVertexMap.emplace(pVertex->id(), v);
-//    if(res.second == true)
-//    {
-//        ++mNrVertices;
-//    }
-    delete pVertex;
+    VertexType v = boost::add_vertex(vertex, mGraph);
+    mGraph[v].topo_id   = vertex.topo_id;
+    mGraph[v].x         = vertex.x;
+    mGraph[v].y         = vertex.y;
+    mVertexMap.emplace(vertex.topo_id, v);
 }
 
 void
-TopologyGraph::addEdge(const TopologyEdge* pEdge)
+TopologyGraph::addEdge(EdgeData edge)
 {
     try
     {
-        auto source_it = mVertexMap.find(pEdge->source().id());
+        auto source_it = mVertexMap.find(edge.source);
         if(source_it == mVertexMap.end())
         {
             throw TopologyException("Source vertex missing.");
         }
-        auto target_it = mVertexMap.find(pEdge->target().id());
+        auto target_it = mVertexMap.find(edge.target);
         if(target_it == mVertexMap.end())
         {
             throw TopologyException("Target vertex missing.");
         }
-        auto& edge_add = boost::add_edge(*source_it, *target_it, *pEdge, mGraph);
+        auto edge_add = boost::add_edge(source_it->second, target_it->second, edge, mGraph);
         if(edge_add.second == true)
         {
-            auto& res = mEdgeMap.emplace(pEdge->id(), edge_add.first);
-//            if(res.second == true)
-//            {
-//                ++mNrEdges
-//            }
+            mGraph[edge_add.first].topo_id = edge.topo_id;
+            mGraph[edge_add.first].source  = edge.source;
+            mGraph[edge_add.first].target  = edge.target;
+            mEdgeMap.emplace(edge.topo_id, edge_add.first);
         }
-        delete pEdge;
     }
     catch (TopologyException& e)
     {
-        delete pEdge;
-        throw TopologyException("Cannot add edge: " + std::to_string(pEdge->id()) +
+        throw TopologyException("Cannot add edge: " + std::to_string(edge.topo_id) +
             ". " + e.what());
     }
-
 }
 
 
@@ -100,7 +102,7 @@ TopologyGraph::getRepresentation() const
 bool
 TopologyGraph::hasVertex(VertexId vertexId) const
 {
-    auto& it = mVertexMap.find(vertexId);
+    const auto& it = mVertexMap.find(vertexId);
     return (it != mVertexMap.end());
 }
 
