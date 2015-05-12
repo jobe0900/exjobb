@@ -40,13 +40,15 @@ public:
 // LIFECYCLE
     TopologyGraph();
     TopologyGraph(size_t nrVertices);
+    ~TopologyGraph();
 // OPERATORS
 // OPERATIONS
-    void    addVertex(const TopologyVertex& rVertex);
-    void    addEdge(const TopologyEdge& rEdge);
+    void    addVertex(const TopologyVertex* pVertex);
+    void    addEdge(const TopologyEdge* pEdge);
 // ACCESS
-    size_t  nrVertices() const;
-    size_t  nrEdges() const;
+    size_t              nrVertices() const;
+    size_t              nrEdges() const;
+    const GraphType&    getRepresentation() const;
 // INQUIRY
     bool    hasVertex(VertexId vertexId) const;
 

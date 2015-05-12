@@ -21,50 +21,59 @@ TopologyGraph::TopologyGraph(size_t nrVertices)
 {
 }
 
+TopologyGraph::~TopologyGraph()
+{
+    // need to delete pointers here
+}
+
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
 void
-TopologyGraph::addVertex(const TopologyVertex& rVertex)
+TopologyGraph::addVertex(const TopologyVertex* pVertex)
 {
-    VertexType v = boost::add_vertex(rVertex, mGraph);
-    auto& res = mVertexMap.emplace(rVertex.id(), v);
+    VertexType v = boost::add_vertex(*pVertex, mGraph);
+    auto& res = mVertexMap.emplace(pVertex->id(), v);
 //    if(res.second == true)
 //    {
 //        ++mNrVertices;
 //    }
+    delete pVertex;
 }
 
 void
-TopologyGraph::addEdge(const TopologyEdge& rEdge)
+TopologyGraph::addEdge(const TopologyEdge* pEdge)
 {
     try
     {
-        auto source_it = mVertexMap.find(rEdge.source().id());
+        auto source_it = mVertexMap.find(pEdge->source().id());
         if(source_it == mVertexMap.end())
         {
             throw TopologyException("Source vertex missing.");
         }
-        auto target_it = mVertexMap.find(rEdge.target().id());
+        auto target_it = mVertexMap.find(pEdge->target().id());
         if(target_it == mVertexMap.end())
         {
             throw TopologyException("Target vertex missing.");
         }
-        auto& edge_add = boost::add_edge(*source_it, *target_it, rEdge, mGraph);
+        auto& edge_add = boost::add_edge(*source_it, *target_it, *pEdge, mGraph);
         if(edge_add.second == true)
         {
-            auto& res = mEdgeMap.emplace(rEdge.id(), edge_add.first);
+            auto& res = mEdgeMap.emplace(pEdge->id(), edge_add.first);
 //            if(res.second == true)
 //            {
 //                ++mNrEdges
 //            }
         }
+        delete pEdge;
     }
     catch (TopologyException& e)
     {
-        throw TopologyException("Cannot add edge: " + std::to_string(rEdge.id()) +
+        delete pEdge;
+        throw TopologyException("Cannot add edge: " + std::to_string(pEdge->id()) +
             ". " + e.what());
     }
+
 }
 
 
@@ -80,6 +89,13 @@ TopologyGraph::nrEdges() const
 {
     return mEdgeMap.size();
 }
+
+const TopologyGraph::GraphType&
+TopologyGraph::getRepresentation() const
+{
+    return mGraph;
+}
+
 //============================= INQUIRY    ===================================
 bool
 TopologyGraph::hasVertex(VertexId vertexId) const
