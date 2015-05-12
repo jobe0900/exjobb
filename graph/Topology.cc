@@ -57,21 +57,21 @@ Topology::getVertex(VertexId id) const
 }
 
 
-void
-Topology::buildTopologyGraph(TopologyGraph& rGraph)
-{
-    for(auto& it : mVertexMap)
-    {
-        BoostVertex v = boost::add_vertex(it.second.id(), rGraph);
-        mBoostVertexMap.emplace(it.second.id(), v);
-    }
-    for(auto& edge_it : mEdgeMap)
-    {
-        VertexId s = edge_it.second.source();
-        VertexId t = edge_it.second.target();
-        boost::add_edge(mBoostVertexMap[s], mBoostVertexMap[t], rGraph);
-    }
-}
+//void
+//Topology::buildTopologyGraph(TopologyGraph& rGraph)
+//{
+//    for(auto& it : mVertexMap)
+//    {
+//        BoostVertex v = boost::add_vertex(it.second.id(), rGraph);
+//        mBoostVertexMap.emplace(it.second.id(), v);
+//    }
+//    for(auto& edge_it : mEdgeMap)
+//    {
+//        VertexId s = edge_it.second.source();
+//        VertexId t = edge_it.second.target();
+//        boost::add_edge(mBoostVertexMap[s], mBoostVertexMap[t], rGraph);
+//    }
+//}
 
 //============================= ACESS      ===================================
 size_t

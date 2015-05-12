@@ -31,14 +31,14 @@
 //
 
 typedef int TopologyId;
-typedef boost::adjacency_list
-    <   boost::listS,
-        boost::vecS,
-        boost::bidirectionalS,
-        VertexId
-    > TopologyGraph;
-typedef boost::graph_traits<TopologyGraph>::vertex_descriptor BoostVertex;
-typedef boost::graph_traits<TopologyGraph>::edge_descriptor BoostEdge;
+//typedef boost::adjacency_list
+//    <   boost::listS,
+//        boost::vecS,
+//        boost::bidirectionalS,
+//        VertexId
+//    > TopologyGraph;
+//typedef boost::graph_traits<TopologyGraph>::vertex_descriptor BoostVertex;
+//typedef boost::graph_traits<TopologyGraph>::edge_descriptor BoostEdge;
 
 class Topology
 {
@@ -87,7 +87,7 @@ public:
 	/** Build a simple graph over the topology.
 	 * @param   rGraph  Reference to TopologyGraph to build
 	 */
-	void                    buildTopologyGraph(TopologyGraph& rGraph);
+//	void                    buildTopologyGraph(TopologyGraph& rGraph);
 
 // ACCESS
 	/**
@@ -108,7 +108,7 @@ private:
 	std::map<TopologyId, TopologyVertex> 	mVertexMap;
 	std::map<TopologyId, TopologyEdge> 		mEdgeMap;
 
-	std::map<VertexId, BoostVertex>         mBoostVertexMap;
+//	std::map<VertexId, BoostVertex>         mBoostVertexMap;
 
 };
 

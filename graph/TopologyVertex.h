@@ -36,7 +36,7 @@ public:
 	 * @param	point	The Point (geometry).
 	 */
 	TopologyVertex(int id, Point point);
-	TopologyVertex() = delete;
+	TopologyVertex();
 	TopologyVertex(const TopologyVertex&) = default;
 
 // OPERATORS

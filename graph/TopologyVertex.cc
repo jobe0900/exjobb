@@ -15,6 +15,11 @@ TopologyVertex::TopologyVertex(int id, Point point)
 	: mId(id), mPoint(point)
 {}
 
+TopologyVertex::TopologyVertex()
+    : mId(0), mPoint(Point(0,0))
+{
+}
+
 //============================= OPERATORS ====================================
 std::ostream&
 operator<<(std::ostream& os, const TopologyVertex& rVertex)

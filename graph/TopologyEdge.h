@@ -36,7 +36,7 @@ public:
 	 * @param	target	Target vertex
 	 */
 	TopologyEdge(EdgeId id, VertexId source, VertexId target);
-	TopologyEdge() = delete;
+//	TopologyEdge() = delete;
 	TopologyEdge(const TopologyEdge&) = default;
 
 // OPERATORS
