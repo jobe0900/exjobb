@@ -36,31 +36,34 @@ SCENARIO ("Building a sample BGL graph", "[graph]")
             THEN ("we should get a reference to a Graph object")
             {
                 const TopologyGraph::GraphType& r_graph = graph.getRepresentation();
+
                 auto vertex_it = boost::vertices(r_graph);
+                auto vid_map = boost::get(&VertexData::topo_id, r_graph);
+                auto x_map  = boost::get(&VertexData::x, r_graph);
+                auto y_map  = boost::get(&VertexData::y, r_graph);
                 for(; vertex_it.first != vertex_it.second; ++vertex_it.first)
                 {
-                    std::cout << "vertex:"
-                              << *(vertex_it.first)
-                              << " content: "
-                              << boost::vertex(*(vertex_it.first), r_graph)
-//                              << ", target: "
-//                              << boost::target(*edge_it.first, r_graph)
+                    auto ix = *vertex_it.first;
+                    std::cout << "vertex:" << ix
+                              << "\tid: " << vid_map[ix]
+                              << "\tx: " << x_map[ix]
+                              << "\ty: " << y_map[ix]
                               << std::endl;
                 }
-//                auto edge_it = boost::edges(r_graph);
-//                for(; edge_it.first != edge_it.second; ++edge_it.first)
-//                {
-//                    //                    std::cout << "edge: source:"
-//                    //                              << boost::source(*edge_it.first, topo_graph)
-//                    //                              << ", target: "
-//                    //                              << boost::target(*edge_it.first, topo_graph)
-//                    //                              << std::endl;
-//                    std::cout << "edge: source:"
-//                        << boost::source(*edge_it.first, r_graph)
-//                    << ", target: "
-//                    << boost::target(*edge_it.first, r_graph)
-//                    << std::endl;
-//                }
+
+                auto edge_it = boost::edges(r_graph);
+                auto eid_map    = boost::get(&EdgeData::topo_id, r_graph);
+                auto source_map = boost::get(&EdgeData::source, r_graph);
+                auto target_map = boost::get(&EdgeData::target, r_graph);
+                for(; edge_it.first != edge_it.second; ++edge_it.first)
+                {
+                    auto ix = *edge_it.first;
+                    std::cout << "edge:" << ix
+                              << "\tid: " << eid_map[ix]
+                              << "\tx: " << source_map[ix]
+                              << "\ty: " << target_map[ix]
+                              << std::endl;
+                }
 //                size_t edge_cnt = edge_it.second - edge_it.first;
 //                REQUIRE (edge_cnt == nr_edges);
             }
@@ -94,7 +97,8 @@ void loadSampleData(TopologyGraph& graph)
 //            delete p_v;
 //            p_v = new TopologyVertex(v_row[0], Point(v_row[1], v_row[2]));
 //            graph.addVertex(p_v);
-            TopologyVertex v(v_row[0], Point(v_row[1], v_row[2]));
+//            TopologyVertex v(v_row[0], Point(v_row[1], v_row[2]));
+            VertexData v(v_row[0], v_row[1], v_row[2]);
             graph.addVertex(v);
 //            topo.addVertex(v_row[0], Point(v_row[1], v_row[2]));
             std::cout << "vertex [id: " << v_row[0]
@@ -115,7 +119,8 @@ void loadSampleData(TopologyGraph& graph)
 //            delete p_e;
 //            p_e = new TopologyEdge(e_row[0], e_row[1], e_row[2]);
 //            graph.addEdge(p_e);
-            TopologyEdge e(e_row[0], e_row[1], e_row[2]);
+//            TopologyEdge e(e_row[0], e_row[1], e_row[2]);
+            EdgeData e(e_row[0], e_row[1], e_row[2]);
             graph.addEdge(e);
 //            topo.addEdge(e_row[0], e_row[1], e_row[2]);
             std::cout << "edge [id: " << e_row[0]

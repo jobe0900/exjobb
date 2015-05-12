@@ -26,6 +26,27 @@
 // FORWARD REFERENCES
 //
 
+struct VertexData
+{
+    VertexId    topo_id;
+    double      x;
+    double      y;
+
+    VertexData() : topo_id(0), x(0.0), y(0.0) {}
+    VertexData(VertexId id, double x, double y) : topo_id(id), x(x), y(y) {}
+};
+
+struct EdgeData
+{
+    EdgeId      topo_id;
+    VertexId    source;
+    VertexId    target;
+
+    EdgeData() : topo_id(0), source(0), target(0) {}
+    EdgeData(EdgeId id, VertexId source, VertexId target)
+        : topo_id(id), source(source), target(target) {}
+};
+
 
 /**
  * A class for a graph representing the topology.
@@ -35,7 +56,7 @@ class TopologyGraph
 public:
     typedef boost::adjacency_list
         < boost::listS, boost::vecS, boost::bidirectionalS,
-          TopologyVertex, TopologyEdge >                        GraphType;
+          VertexData, EdgeData >                                GraphType;
     typedef boost::graph_traits<GraphType>::vertex_descriptor   VertexType;
     typedef boost::graph_traits<GraphType>::edge_descriptor     EdgeType;
 // LIFECYCLE
@@ -44,10 +65,10 @@ public:
     ~TopologyGraph();
 // OPERATORS
 // OPERATIONS
-//    void                addVertex(const TopologyVertex* pVertex);
-    void                addVertex(TopologyVertex vertex);
-//    void    addEdge(const TopologyEdge* pEdge);
-    void                addEdge(TopologyEdge edge);
+//    void                addVertex(TopologyVertex vertex);
+    void                addVertex(VertexData vertex);
+//    void                addEdge(TopologyEdge edge);
+    void                addEdge(EdgeData edge);
 // ACCESS
     size_t              nrVertices() const;
     size_t              nrEdges() const;
@@ -63,8 +84,6 @@ private:
     GraphType                       mGraph;
     std::map<VertexId, VertexType>  mVertexMap;     // map original id to Vertex
     std::map<EdgeId, EdgeType>      mEdgeMap;       // map original id to Edge
-//    size_t                          mNrVertices;
-//    size_t                          mNrEdges;
 // CONSTANTS
 };
 

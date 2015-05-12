@@ -29,98 +29,81 @@ TopologyGraph::~TopologyGraph()
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
+
 //void
-//TopologyGraph::addVertex(const TopologyVertex* pVertex)
+//TopologyGraph::addVertex(TopologyVertex vertex)
 //{
-//    VertexType v = boost::add_vertex(*pVertex, mGraph);
-//    /*auto& res =*/ mVertexMap.emplace(pVertex->id(), v);
-////    if(res.second == true)
-////    {
-////        ++mNrVertices;
-////    }
-////    delete pVertex;
+//    VertexType v = boost::add_vertex(vertex, mGraph);
+//    mVertexMap.emplace(vertex.id(), v);
 //}
 
 void
-TopologyGraph::addVertex(TopologyVertex vertex)
+TopologyGraph::addVertex(VertexData vertex)
 {
     VertexType v = boost::add_vertex(vertex, mGraph);
-    /*auto& res =*/ mVertexMap.emplace(vertex.id(), v);
-//    if(res.second == true)
-//    {
-//        ++mNrVertices;
-//    }
-//    delete pVertex;
+    mGraph[v].topo_id   = vertex.topo_id;
+    mGraph[v].x         = vertex.x;
+    mGraph[v].y         = vertex.y;
+    mVertexMap.emplace(vertex.topo_id, v);
 }
 
 //void
-//TopologyGraph::addEdge(const TopologyEdge* pEdge)
+//TopologyGraph::addEdge(TopologyEdge edge)
 //{
 //    try
 //    {
-//        auto source_it = mVertexMap.find(pEdge->source());
+//        auto source_it = mVertexMap.find(edge.source());
 //        if(source_it == mVertexMap.end())
 //        {
 //            throw TopologyException("Source vertex missing.");
 //        }
-//        auto target_it = mVertexMap.find(pEdge->target());
+//        auto target_it = mVertexMap.find(edge.target());
 //        if(target_it == mVertexMap.end())
 //        {
 //            throw TopologyException("Target vertex missing.");
 //        }
-//        auto& edge_add = boost::add_edge(*source_it, *target_it, mGraph);
-////        auto& edge_add = boost::add_edge(*source_it, *target_it, *pEdge, mGraph);
+//        auto edge_add = boost::add_edge(source_it->second, target_it->second, edge, mGraph);
 //        if(edge_add.second == true)
 //        {
-//            auto& res = mEdgeMap.emplace(pEdge->id(), edge_add.first);
-////            if(res.second == true)
-////            {
-////                ++mNrEdges
-////            }
+//            mEdgeMap.emplace(edge.id(), edge_add.first);
 //        }
-//        delete pEdge;
 //    }
 //    catch (TopologyException& e)
 //    {
-//        delete pEdge;
-//        throw TopologyException("Cannot add edge: " + std::to_string(pEdge->id()) +
+//        throw TopologyException("Cannot add edge: " + std::to_string(edge.id()) +
 //            ". " + e.what());
 //    }
-//
 //}
 
 void
-TopologyGraph::addEdge(TopologyEdge edge)
+TopologyGraph::addEdge(EdgeData edge)
 {
     try
     {
-        auto source_it = mVertexMap.find(edge.source());
+        auto source_it = mVertexMap.find(edge.source);
         if(source_it == mVertexMap.end())
         {
             throw TopologyException("Source vertex missing.");
         }
-        auto target_it = mVertexMap.find(edge.target());
+        auto target_it = mVertexMap.find(edge.target);
         if(target_it == mVertexMap.end())
         {
             throw TopologyException("Target vertex missing.");
         }
-//        auto edge_add = boost::add_edge(source_it->second, target_it->second, mGraph);
         auto edge_add = boost::add_edge(source_it->second, target_it->second, edge, mGraph);
         if(edge_add.second == true)
         {
-            /*auto res =*/ mEdgeMap.emplace(edge.id(), edge_add.first);
-//            if(res.second == true)
-//            {
-//                ++mNrEdges
-//            }
+            mGraph[edge_add.first].topo_id = edge.topo_id;
+            mGraph[edge_add.first].source  = edge.source;
+            mGraph[edge_add.first].target  = edge.target;
+            mEdgeMap.emplace(edge.topo_id, edge_add.first);
         }
     }
     catch (TopologyException& e)
     {
-        throw TopologyException("Cannot add edge: " + std::to_string(edge.id()) +
+        throw TopologyException("Cannot add edge: " + std::to_string(edge.topo_id) +
             ". " + e.what());
     }
-
 }
 
 
