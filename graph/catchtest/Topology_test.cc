@@ -77,8 +77,8 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 			THEN ("we should get a reference to a TopologyEdge object")
 			{
 				REQUIRE (r_edge.id() == e1);
-				REQUIRE (r_edge.source() == r_v1);
-				REQUIRE (r_edge.target() == r_v2);
+				REQUIRE (r_edge.source() == r_v1.id());
+				REQUIRE (r_edge.target() == r_v2.id());
 			}
 		}
 	}
