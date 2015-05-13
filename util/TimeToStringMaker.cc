@@ -1,33 +1,31 @@
 /*
- * EpochMsTimeToString.cc
+ * TimeToStringMaker.cc
  *
- *  Created on: 2015-05-08
- *      Author: Jonas Bergman
+ *  Created on: 2015-05-13
+ *      Author: jonas
  */
 
-#include "EpochMsTimeToString.h"  // class implemented
+
+#include "TimeToStringMaker.h"  // class implemented
+
+#include <chrono>
 
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-EpochMsTimeToString::EpochMsTimeToString()
-{}
-
-EpochMsTimeToString::~EpochMsTimeToString()
-{}
 
 //============================= OPERATORS ====================================
 
 //============================= OPERATIONS ===================================
 //static
 std::string
-EpochMsTimeToString::getCurrentTimeString()
+TimeToStringMaker::getEpochMsTimeString()
 {
-	using namespace std::chrono;
-	milliseconds ms = duration_cast< milliseconds >(
-	    system_clock::now().time_since_epoch());
-	return std::to_string(ms.count());
+    using namespace std::chrono;
+    milliseconds ms = duration_cast< milliseconds >(
+        system_clock::now().time_since_epoch());
+    return std::to_string(ms.count());
 }
 
 //============================= ACESS      ===================================
@@ -35,6 +33,9 @@ EpochMsTimeToString::getCurrentTimeString()
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
+
+
+
 
 
 

@@ -31,11 +31,11 @@ public:
 
 	/** Default constructor.
 	 */
-	TimeToStringMaker() {};
+	TimeToStringMaker() = delete;
 
 	/** Destructor.
 	 */
-	virtual ~TimeToStringMaker() {};
+//	~TimeToStringMaker() {};
 
 // OPERATORS
 // OPERATIONS
@@ -44,7 +44,7 @@ public:
 	 *
 	 * @return	A string representation of the time.
 	 */
-	virtual	std::string		getCurrentTimeString() = 0;
+	static std::string		getEpochMsTimeString();
 
 // ACCESS
 // INQUIRY
