@@ -1,6 +1,7 @@
-/**  A one line description of the class.
+/**  Abstract base class giving the interface for different sources of
+ * topology map data.
  *
- * #include "GraphBuilder.h"
+ * #include "MapProvider.h"
  *
  * @author Jonas Bergman
  */
@@ -25,7 +26,7 @@
 //
 
 /**
- * Interface for getting map data from file or database
+ * Interface for getting map data from file or database.
  */
 class MapProvider
 {
@@ -54,12 +55,14 @@ public:
     /** Get edges from the provider of map data.
      * @param   rEdgeMap    Reference to a map with edge id => edge.
      */
-    virtual void    getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap) = 0;
+    virtual void    getTopologyEdges(
+                        std::map<EdgeId, TopologyEdge>& rEdgeMap) = 0;
 
     /** Get vertices from the provider of map data.
      * @param   rVertexMap    Reference to a map with vertex id => vertex.
      */
-    virtual void    getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertexMap) = 0;
+    virtual void    getTopologyVertices(
+                        std::map<VertexId, TopologyVertex>& rVertexMap) = 0;
 // ACCESS
 // INQUIRY
 

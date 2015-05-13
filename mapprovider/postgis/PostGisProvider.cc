@@ -30,8 +30,8 @@ try		// catch error when initializing connection
 					std::string("Could not open ") + mDbConfig.database);
 		}
 		pqxx::nontransaction nt(mConnection);
-		mTableName = (TEMP_TABLE_PREFIX + nt.esc(mTopoName));
-		mSchemaName = (TEMP_SCHEMA_PREFIX + nt.esc(mTopoName));
+		mTableName  = TEMP_TABLE_PREFIX + nt.esc(mTopoName);
+		mSchemaName = TEMP_SCHEMA_PREFIX + nt.esc(mTopoName);
 	}
 	catch(const std::exception& e)
 	{
@@ -151,7 +151,6 @@ PostGisProvider::getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertex
 		{
 			VertexId	id(result[row][0].as<int>());
 			Point 		p(result[row][1].as<double>(), result[row][2].as<double>());
-			// TODO check if emplace is succesful?
 			rVertexMap.emplace(id, TopologyVertex(id, p));
 		}
 	}

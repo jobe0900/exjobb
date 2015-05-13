@@ -1,4 +1,4 @@
-/**  Handle connections with database.
+/**  Handle connections with PostGis database to get map data.
  *
  * #include "PostGisProvider.h"
  *
@@ -30,7 +30,10 @@
 //
 
 /**
- * A class to handle the reading of data from a json configuration file.
+ * A class to handle the reading of data from the PostGis database.
+ * The configurations for the connection and the base name of the
+ * topology name is given.
+ * from a json configuration file.
  */
 class PostGisProvider : public MapProvider
 {
@@ -44,12 +47,12 @@ public:
     /** Constructor.
      * Establish connection to database.
      *
-     * @param   rTopoName           The name for the topography.
-     * @param	rDatabaseConfig		The configuration for connections
-     * @throws	DatabaseException	If connection could not be established.
+     * @param   rTopoName               The name for the topology.
+     * @param	rDatabaseConfig		    The configuration for connections.
+     * @throws	MapProviderException    If connection could not be established.
      */
     PostGisProvider(const std::string&    rTopoName,
-                    const DatabaseConfig& rDatabaseConfig);
+        const DatabaseConfig& rDatabaseConfig);
 
     /** Destructor.
      * Close connection to database
@@ -60,40 +63,20 @@ public:
 // OPERATORS
 // OPERATIONS
 
-    /** Build a PostGIS topology.
-     * @param	rTopoName	Name to use for temporary tables and topo schema.
-     * @param	srid		The SRID for the projection to use
-     * @param	tolerance	The distance to look for merging vertices, unit of srid.
-     * @throws	DatabaseException
-     */
-//    void	buildTopology(const std::string& rTopoName,
-//                          int srid,
-//                          double tolerance);
-    void	buildTopology(int srid, double tolerance);
-
-    /** Remove a PostGIS topology (tables and schema) from the database.
-     * @param	rTopoName	Name base used when creating topo table and schema.
-     * @throws	DatabaseException
-     */
-//    void	removeTopology(const std::string& rTopoName);
-    void	removeTopology();
-
-//    /** Get topology vertices from the db and put them in the vector.
-//     * @param	rTopoName			Name for the topology to query.
-//     * @param	rTopologyVertices	Vector to store the vertices in.
-//     * @throws	DatabaseException
-//     */
-//    void	getTopologyVertices(const std::string& rTopoName, Topology& rTopology);
-//
-//    /** Get topology edges from the db and put them in the vector.
-//     * @param	rTopoName			Name for the topology to query.
-//     * @param	rTopologyEdges		Vector to store the edges in.
-//     * @throws	DatabaseException
-//     */
-//    void	getTopologyEdges(const std::string& rTopoName, Topology& rTopology);
-
     virtual void    getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap);
     virtual void    getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertexMap);
+
+    /** Build a PostGIS topology with name given in constructor.
+     * @param	srid		The SRID for the projection to use
+     * @param	tolerance	The distance to look for merging vertices, unit of srid.
+     * @throws	MapProviderException
+     */
+    void	        buildTopology(int srid, double tolerance);
+
+    /** Remove PostGIS topology (tables and schema) from the database.
+     * @throws	MapProviderException
+     */
+    void	        removeTopology();
 
 // ACCESS
 // INQUIRY
@@ -131,8 +114,8 @@ private:
     const std::string   mTopoName;
     DatabaseConfig      mDbConfig;
     pqxx::connection    mConnection;
-    std::string   mTableName;
-    std::string   mSchemaName;
+    std::string         mTableName;
+    std::string         mSchemaName;
 
     // CONSTANTS
     const std::string TEMP_SCHEMA_PREFIX = "topo_";

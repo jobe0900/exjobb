@@ -17,7 +17,7 @@
 #include "../../../graph/TopologyEdge.h"
 #include "../../../graph/TopologyVertex.h"
 
-SCENARIO ("PostGis topology handling", "[.topology]") // DISABLED TEST BY .
+SCENARIO ("PostGis topology handling", "[topology]") // DISABLED TEST BY .
 {
 	try
 	{
@@ -91,16 +91,9 @@ SCENARIO ("PostGis queries", "[query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology vertices")
 			{
-//				Topology topo;
 				std::map<VertexId, TopologyVertex> vertex_map;
 				db_handler.getTopologyVertices(vertex_map);
-//				size_t nr_vertices = topo.nrVertices();
 				size_t nr_vertices = vertex_map.size();
-
-//				if(nr_vertices > 0) {
-//					INFO ("First vertex " << *topo_vertices.at(0));
-//					REQUIRE (true); // force output
-//				}
 
 				THEN ("we should receive a list of TopologyVertex")
 				{
@@ -111,16 +104,9 @@ SCENARIO ("PostGis queries", "[query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology edges")
 			{
-//				Topology topo;
 				std::map<EdgeId, TopologyEdge> edge_map;
 				db_handler.getTopologyEdges(edge_map);
-//				size_t nr_edges = topo.nrEdges();
 				size_t nr_edges = edge_map.size();
-
-//				if(nr_edges > 0) {
-//					INFO ("First edge " << *topo_edges.at(0));
-//					REQUIRE (true); // force output
-//				}
 
 				THEN ("we should receive a list of TopologyEdge")
 				{
