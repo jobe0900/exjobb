@@ -5,18 +5,22 @@
  *      Author: Jonas Bergman
  */
 
+#include "DatabaseHandler.h"  // class implemented
+
 #include <iostream>
 #include <sstream>
 
-#include "DatabaseHandler.h"  // class implemented
 
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-DatabaseHandler::DatabaseHandler(const DatabaseConfig& rDatabaseConfig)
+DatabaseHandler::DatabaseHandler(const std::string& rTopoName,
+                                 const DatabaseConfig& rDatabaseConfig)
 try		// catch error when initializing connection
-	: mDbConfig(rDatabaseConfig), mConnection(mDbConfig.getConnectionString())
+	:   mTopoName(rTopoName),
+        mDbConfig(rDatabaseConfig),
+        mConnection(mDbConfig.getConnectionString())
 {
 	try
 	{
@@ -25,6 +29,9 @@ try		// catch error when initializing connection
 			throw DatabaseException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
+		pqxx::nontransaction nt(mConnection);
+		mTableName = (TEMP_TABLE_PREFIX + nt.esc(mTopoName));
+		mSchemaName = (TEMP_SCHEMA_PREFIX + nt.esc(mTopoName));
 	}
 	catch(const std::exception& e)
 	{
@@ -59,9 +66,7 @@ DatabaseHandler::~DatabaseHandler()
 //============================= OPERATIONS ===================================
 
 void
-DatabaseHandler::buildTopology(const std::string& rTopoName,
-							   int srid,
-							   double tolerance)
+DatabaseHandler::buildTopology(int srid, double tolerance)
 {
 	try
 	{
@@ -74,16 +79,13 @@ DatabaseHandler::buildTopology(const std::string& rTopoName,
 
 		// TRANSACTION START
 		pqxx::work transaction(mConnection);
-
-		std::string temp_schema = TEMP_SCHEMA_PREFIX + transaction.esc(rTopoName);
-		std::string temp_table = TEMP_TABLE_PREFIX + transaction.esc(rTopoName);
 
 		installPostgisTopology(transaction);
 		setSearchPath(transaction);
-		createTemporaryTable(transaction, temp_table);
-		createTemporarySchema(transaction, temp_schema, srid);
-		addTopoGeometryColumn(transaction, temp_schema, temp_table);
-		fillTopoGeometryColumn(transaction, temp_schema, temp_table, tolerance);
+		createTemporaryTable(transaction, mTableName);
+		createTemporarySchema(transaction, mSchemaName, srid);
+		addTopoGeometryColumn(transaction, mSchemaName, mTableName);
+		fillTopoGeometryColumn(transaction, mSchemaName, mTableName, tolerance);
 
 		// TRANSACTION END
 		transaction.commit();
@@ -96,7 +98,7 @@ DatabaseHandler::buildTopology(const std::string& rTopoName,
 
 
 void
-DatabaseHandler::removeTopology(const std::string& rTopoName)
+DatabaseHandler::removeTopology()
 {
 	try
 	{
@@ -109,13 +111,10 @@ DatabaseHandler::removeTopology(const std::string& rTopoName)
 		// TRANSACTION START
 		pqxx::work transaction(mConnection);
 
-		std::string temp_schema = TEMP_SCHEMA_PREFIX + transaction.esc(rTopoName);
-		std::string temp_table = TEMP_TABLE_PREFIX + transaction.esc(rTopoName);
-
-		dropTemporaryTable(transaction, temp_table);
-		dropTemporarySchema(transaction, temp_schema);
-		deleteTemporaryLayerRecord(transaction, temp_table);
-		deleteTemporaryTopoRecord(transaction, temp_schema);
+		dropTemporaryTable(transaction, mTableName);
+		dropTemporarySchema(transaction, mSchemaName);
+		deleteTemporaryLayerRecord(transaction, mTableName);
+		deleteTemporaryTopoRecord(transaction, mSchemaName);
 
 		// TRANSACTION END
 		transaction.commit();
@@ -129,8 +128,7 @@ DatabaseHandler::removeTopology(const std::string& rTopoName)
 
 
 void
-DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
-									 Topology& rTopology)
+DatabaseHandler::getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertexMap)
 {
 	try
 	{
@@ -143,11 +141,9 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 		// NON-TRANSACTION START
 		pqxx::nontransaction non_trans(mConnection);
 
-		std::string temp_schema = TEMP_SCHEMA_PREFIX + non_trans.esc(rTopoName);
-
 		pqxx::result result = non_trans.exec(
 				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
-				"FROM " + temp_schema + ".node "
+				"FROM " + mSchemaName + ".node "
 				"ORDER BY node_id ASC;"
 		);
 
@@ -155,7 +151,8 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 		{
 			VertexId	id(result[row][0].as<int>());
 			Point 		p(result[row][1].as<double>(), result[row][2].as<double>());
-			rTopology.addVertex(id, p);
+			// TODO check if emplace is succesful?
+			rVertexMap.emplace(id, TopologyVertex(id, p));
 		}
 	}
 	catch(const std::exception& e)
@@ -164,80 +161,9 @@ DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
 	}
 }
 
-//void
-//DatabaseHandler::getTopologyVertices(const std::string& rTopoName,
-//									 std::vector<TopologyVertex*>& rTopologyVertices)
-//{
-//	try
-//	{
-//		if(!mConnection.is_open())
-//		{
-//			throw DatabaseException(
-//					std::string("Could not open ") + mDbConfig.database);
-//		}
-//
-//		// NON-TRANSACTION START
-//		pqxx::nontransaction non_trans(mConnection);
-//
-//		std::string temp_schema = TEMP_SCHEMA_PREFIX + non_trans.esc(rTopoName);
-//
-//		pqxx::result result = non_trans.exec(
-//				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
-//				"FROM " + temp_schema + ".node "
-//				"ORDER BY node_id ASC;"
-//		);
-//
-//		for(size_t row = 0; row < result.size(); ++row) {
-//			Point p(result[row][1].as<double>(), result[row][2].as<double>());
-//			TopologyVertex* p_vertex = new TopologyVertex(result[row][0].as<int>(), p);
-//			rTopologyVertices.push_back(p_vertex);
-//		}
-//	}
-//	catch(const std::exception& e)
-//	{
-//		throw DatabaseException(std::string("Database error: ") + e.what());
-//	}
-//}
-//void
-//DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
-//								  std::vector<TopologyEdge*>& rTopologyEdges)
-//{
-//	try
-//	{
-//		if(!mConnection.is_open())
-//		{
-//			throw DatabaseException(
-//					std::string("Could not open ") + mDbConfig.database);
-//		}
-//
-//		// NON-TRANSACTION START
-//		pqxx::nontransaction non_trans(mConnection);
-//
-//		std::string temp_schema = TEMP_SCHEMA_PREFIX + non_trans.esc(rTopoName);
-//
-//		pqxx::result result = non_trans.exec(
-//				"SELECT edge_id, start_node, end_node "
-//				"FROM " + temp_schema + ".edge_data "
-//				"ORDER BY edge_id ASC;"
-//		);
-//
-//		for(size_t row = 0; row < result.size(); ++row) {
-//			Point p(result[row][1].as<double>(), result[row][2].as<double>());
-//			TopologyEdge* p_edge = new TopologyEdge(result[row][0].as<int>(),
-//					result[row][1].as<int>(),
-//					result[row][2].as<int>());
-//			rTopologyEdges.push_back(p_edge);
-//		}
-//	}
-//	catch(const std::exception& e)
-//	{
-//		throw DatabaseException(std::string("Database error: ") + e.what());
-//	}
-//}
 
 void
-DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
-								  Topology& rTopology)
+DatabaseHandler::getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap)
 {
 	try
 	{
@@ -250,11 +176,9 @@ DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
 		// NON-TRANSACTION START
 		pqxx::nontransaction non_trans(mConnection);
 
-		std::string temp_schema = TEMP_SCHEMA_PREFIX + non_trans.esc(rTopoName);
-
 		pqxx::result result = non_trans.exec(
 				"SELECT edge_id, start_node, end_node "
-				"FROM " + temp_schema + ".edge_data "
+				"FROM " + mSchemaName + ".edge_data "
 				"ORDER BY edge_id ASC;"
 		);
 
@@ -263,7 +187,7 @@ DatabaseHandler::getTopologyEdges(const std::string& rTopoName,
 			EdgeId 		edge_id(result[row][0].as<int>());
 			VertexId 	source_id(result[row][1].as<int>());
 			VertexId 	target_id(result[row][2].as<int>());
-			rTopology.addEdge(edge_id, source_id, target_id);
+			rEdgeMap.emplace(edge_id, TopologyEdge(edge_id, source_id, target_id));
 		}
 	}
 	catch(const std::exception& e)

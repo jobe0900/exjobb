@@ -17,9 +17,9 @@
 
 // LOCAL INCLUDES
 //
-#include "TopologyEdge.h"
-#include "TopologyTypes.h"
-#include "TopologyVertex.h"
+#include "../graph/TopologyEdge.h"
+#include "../graph/TopologyTypes.h"
+#include "../graph/TopologyVertex.h"
 
 // FORWARD REFERENCES
 //

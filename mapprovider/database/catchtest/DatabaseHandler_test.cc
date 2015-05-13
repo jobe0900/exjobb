@@ -5,16 +5,17 @@
  *      Author: Jonas Bergman
  */
 
+#include "../DatabaseHandler.h"
+
 #include <string>
 #include <vector>
 
-#include "../../catchtest/catch.hpp"
-#include "../../config/ConfigurationReader.h"
-#include "../../config/DatabaseConfig.h"
-#include "../DatabaseHandler.h"
-#include "../../util/EpochMsTimeToString.h"
-#include "../../graph/TopologyEdge.h"
-#include "../../graph/TopologyVertex.h"
+#include "../../../catchtest/catch.hpp"
+#include "../../../config/ConfigurationReader.h"
+#include "../../../config/DatabaseConfig.h"
+#include "../../../util/TimeToStringMaker.h"
+#include "../../../graph/TopologyEdge.h"
+#include "../../../graph/TopologyVertex.h"
 
 SCENARIO ("PostGis topology handling", "[.topology]") // DISABLED TEST BY .
 {
@@ -27,43 +28,30 @@ SCENARIO ("PostGis topology handling", "[.topology]") // DISABLED TEST BY .
 		{
 			DatabaseConfig db_config;
 			config_reader.getDatabaseConfiguration(db_config);
-			TimeToStringMaker* p_tts = new EpochMsTimeToString();
-			std::string temp_topo = p_tts->getCurrentTimeString();
-			delete p_tts;
+			std::string temp_topo(TimeToStringMaker::getEpochMsTimeString());
 
 			// ...............................................................
 			WHEN ("we try to create postgis topology with a temp name and srid")
 			{
-				DatabaseHandler db_handler(db_config);
+				DatabaseHandler db_handler(temp_topo, db_config);
 				int srid = 900913;
 				double tolerance = 1.0;
 
 				THEN ("we should not receive an exception")
 				{
 					REQUIRE_NOTHROW (
-						db_handler.buildTopology(temp_topo, srid, tolerance));
+						db_handler.buildTopology(srid, tolerance));
 				}
 			}
 
 			// ...............................................................
 			WHEN ("we try to remove postgis topology with valid arguments")
 			{
-				DatabaseHandler db_handler(db_config);
+				DatabaseHandler db_handler(temp_topo, db_config);
 
 				THEN ("we should not receive an exception")
 				{
-					REQUIRE_NOTHROW (db_handler.removeTopology(temp_topo));
-				}
-			}
-
-			// ...............................................................
-			WHEN ("we try to remove postgis topology with invalid arguments")
-			{
-				DatabaseHandler db_handler(db_config);
-
-				THEN ("we should not receive an exception")
-				{
-					REQUIRE_NOTHROW (db_handler.removeTopology("foo"));
+					REQUIRE_NOTHROW (db_handler.removeTopology());
 				}
 			}
 		}
@@ -89,11 +77,11 @@ SCENARIO ("PostGis queries", "[query]")
 			config_reader.getDatabaseConfiguration(db_config);
 			std::string topo_name("test");
 
-			DatabaseHandler db_handler(db_config);
+			DatabaseHandler db_handler(topo_name, db_config);
 
 			try
 			{
-				db_handler.buildTopology(topo_name, 900913, 1.0);
+				db_handler.buildTopology(900913, 1.0);
 			}
 			catch(DatabaseException& e)
 			{
@@ -103,9 +91,11 @@ SCENARIO ("PostGis queries", "[query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology vertices")
 			{
-				Topology topo;
-				db_handler.getTopologyVertices(topo_name, topo);
-				size_t nr_vertices = topo.nrVertices();
+//				Topology topo;
+				std::map<VertexId, TopologyVertex> vertex_map;
+				db_handler.getTopologyVertices(vertex_map);
+//				size_t nr_vertices = topo.nrVertices();
+				size_t nr_vertices = vertex_map.size();
 
 //				if(nr_vertices > 0) {
 //					INFO ("First vertex " << *topo_vertices.at(0));
@@ -121,9 +111,11 @@ SCENARIO ("PostGis queries", "[query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology edges")
 			{
-				Topology topo;
-				db_handler.getTopologyEdges(topo_name, topo);
-				size_t nr_edges = topo.nrEdges();
+//				Topology topo;
+				std::map<EdgeId, TopologyEdge> edge_map;
+				db_handler.getTopologyEdges(edge_map);
+//				size_t nr_edges = topo.nrEdges();
+				size_t nr_edges = edge_map.size();
 
 //				if(nr_edges > 0) {
 //					INFO ("First edge " << *topo_edges.at(0));
