@@ -67,7 +67,7 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 		INFO(e.what());
 		REQUIRE (false);	// force output of error and failure
 	}
-	catch (PostGisProviderException& dbe)
+	catch (MapProviderException& dbe)
 	{
 		INFO(dbe.what());
 		REQUIRE (false);	// force output of error and failure

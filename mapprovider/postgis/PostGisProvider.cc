@@ -26,7 +26,7 @@ try		// catch error when initializing connection
 	{
 		if(!mConnection.is_open())
 		{
-			throw PostGisProviderException(
+			throw MapProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 		pqxx::nontransaction nt(mConnection);
@@ -35,13 +35,13 @@ try		// catch error when initializing connection
 	}
 	catch(const std::exception& e)
 	{
-		throw PostGisProviderException(std::string("Database error, open: ") + e.what());
+		throw MapProviderException(std::string("Database error, open: ") + e.what());
 	}
 }
 // catch error in initializer list (opening connection)
 catch(const std::exception& e)
 {
-	throw PostGisProviderException(std::string("Database error, open: ") + e.what());
+	throw MapProviderException(std::string("Database error, open: ") + e.what());
 }
 
 
@@ -57,7 +57,7 @@ PostGisProvider::~PostGisProvider()
 	catch(const std::exception& e)
 	{
 		//swallow errors
-//		throw PostGisProviderException(std::string("Database error, closing: ") + e.what());
+//		throw MapProviderException(std::string("Database error, closing: ") + e.what());
 	}
 }
 
@@ -72,7 +72,7 @@ PostGisProvider::buildTopology(int srid, double tolerance)
 	{
 		if(!mConnection.is_open())
 		{
-			throw PostGisProviderException(
+			throw MapProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 
@@ -92,7 +92,7 @@ PostGisProvider::buildTopology(int srid, double tolerance)
 	}
 	catch(const std::exception& e)
 	{
-		throw PostGisProviderException(std::string("Database error: ") + e.what());
+		throw MapProviderException(std::string("Database error: ") + e.what());
 	}
 }
 
@@ -104,7 +104,7 @@ PostGisProvider::removeTopology()
 	{
 		if(!mConnection.is_open())
 		{
-			throw PostGisProviderException(
+			throw MapProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 
@@ -121,7 +121,7 @@ PostGisProvider::removeTopology()
 	}
 	catch(const std::exception& e)
 	{
-		throw PostGisProviderException(std::string("Database error: ") + e.what());
+		throw MapProviderException(std::string("Database error: ") + e.what());
 	}
 
 }
@@ -134,7 +134,7 @@ PostGisProvider::getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertex
 	{
 		if(!mConnection.is_open())
 		{
-			throw PostGisProviderException(
+			throw MapProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 
@@ -157,7 +157,7 @@ PostGisProvider::getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertex
 	}
 	catch(const std::exception& e)
 	{
-		throw PostGisProviderException(std::string("Database error: ") + e.what());
+		throw MapProviderException(std::string("Database error: ") + e.what());
 	}
 }
 
@@ -169,7 +169,7 @@ PostGisProvider::getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap)
 	{
 		if(!mConnection.is_open())
 		{
-			throw PostGisProviderException(
+			throw MapProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 
@@ -192,7 +192,7 @@ PostGisProvider::getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap)
 	}
 	catch(const std::exception& e)
 	{
-		throw PostGisProviderException(std::string("Database error: ") + e.what());
+		throw MapProviderException(std::string("Database error: ") + e.what());
 	}
 }
 //============================= ACESS      ===================================

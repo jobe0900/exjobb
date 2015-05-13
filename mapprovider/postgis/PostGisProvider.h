@@ -24,7 +24,7 @@
 #include "../../graph/TopologyEdge.h"
 #include "../../graph/Topology.h"
 #include "../MapProvider.h"
-#include "../postgis/PostGisProviderException.h"
+#include "../MapProviderException.h"
 
 // FORWARD REFERENCES
 //

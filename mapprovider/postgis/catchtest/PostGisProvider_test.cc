@@ -83,7 +83,7 @@ SCENARIO ("PostGis queries", "[query]")
 			{
 				db_handler.buildTopology(900913, 1.0);
 			}
-			catch(PostGisProviderException& e)
+			catch(MapProviderException& e)
 			{
 //				INFO ("Topology" << topo_name << " exists.");
 			}
@@ -134,7 +134,7 @@ SCENARIO ("PostGis queries", "[query]")
 		INFO(e.what());
 		REQUIRE (false);	// force output of error and failure
 	}
-	catch (PostGisProviderException& dbe)
+	catch (MapProviderException& dbe)
 	{
 		INFO(dbe.what());
 		REQUIRE (false);	// force output of error and failure

@@ -1,6 +1,6 @@
-/**  Exception thrown by the Database package.
+/**  Exception thrown by the MapProvider package.
  *
- * #include "PostGisProviderException.h"
+ * #include "MapProviderException.h"
  *
  * A longer description.
  *
@@ -8,8 +8,8 @@
  * @author Jonas Bergman
  */
 
-#ifndef MAPPROVIDER_POSTGIS_POSTGISPROVIDEREXCEPTION_H_
-#define MAPPROVIDER_POSTGIS_POSTGISPROVIDEREXCEPTION_H_
+#ifndef MAPPROVIDER_MAPPROVIDEREXCEPTION_H_
+#define MAPPROVIDER_MAPPROVIDEREXCEPTION_H_
 
 // SYSTEM INCLUDES
 //
@@ -26,23 +26,23 @@
 //
 
 /**
- * Exception to throw from the 'database' package.
+ * Exception to throw from the 'MapProvider' package.
  * More information of the type of exception is given in the 'what()' message.
  */
-class PostGisProviderException : public std::exception
+class MapProviderException : public std::exception
 {
 public:
 // LIFECYCLE
 
 	/** Default constructor.
 	 */
-	PostGisProviderException() = delete;
+	MapProviderException() = delete;
 
 	/** Constructor taking a message to display.
 	 *
 	 * @param	message		The message to prepend when 'what()' is called.
 	 */
-	PostGisProviderException(const std::string& rMessage) noexcept
+	MapProviderException(const std::string& rMessage) noexcept
 		: std::exception(), mMessage(rMessage)
 	{}
 
@@ -65,4 +65,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* MAPPROVIDER_POSTGIS_POSTGISPROVIDEREXCEPTION_H_ */
+#endif /* MAPPROVIDER_MAPPROVIDEREXCEPTION_H_ */
