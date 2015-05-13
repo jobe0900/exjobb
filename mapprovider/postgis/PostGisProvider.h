@@ -1,12 +1,12 @@
 /**  Handle connections with database.
  *
- * #include "DatabaseHandler.h"
+ * #include "PostGisProvider.h"
  *
  * @author Jonas Bergman
  */
 
-#ifndef MAPPROVIDER_DATABASE_DATABASEHANDLER_H_
-#define MAPPROVIDER_DATABASE_DATABASEHANDLER_H_
+#ifndef MAPPROVIDER_POSTGIS_POSTGISPROVIDER_H_
+#define MAPPROVIDER_POSTGIS_POSTGISPROVIDER_H_
 
 // SYSTEM INCLUDES
 //
@@ -23,8 +23,8 @@
 #include "../../graph/TopologyVertex.h"
 #include "../../graph/TopologyEdge.h"
 #include "../../graph/Topology.h"
-#include "DatabaseException.h"
 #include "../MapProvider.h"
+#include "../postgis/PostGisProviderException.h"
 
 // FORWARD REFERENCES
 //
@@ -32,14 +32,14 @@
 /**
  * A class to handle the reading of data from a json configuration file.
  */
-class DatabaseHandler : public MapProvider
+class PostGisProvider : public MapProvider
 {
 public:
 // LIFECYCLE
 
     /** Default constructor.
      */
-    DatabaseHandler() = delete;
+    PostGisProvider() = delete;
 
     /** Constructor.
      * Establish connection to database.
@@ -48,13 +48,13 @@ public:
      * @param	rDatabaseConfig		The configuration for connections
      * @throws	DatabaseException	If connection could not be established.
      */
-    DatabaseHandler(const std::string&    rTopoName,
+    PostGisProvider(const std::string&    rTopoName,
                     const DatabaseConfig& rDatabaseConfig);
 
     /** Destructor.
      * Close connection to database
      */
-    virtual ~DatabaseHandler();
+    virtual ~PostGisProvider();
 
 
 // OPERATORS
@@ -145,4 +145,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* MAPPROVIDER_DATABASE_DATABASEHANDLER_H_ */
+#endif /* MAPPROVIDER_POSTGIS_POSTGISPROVIDER_H_ */

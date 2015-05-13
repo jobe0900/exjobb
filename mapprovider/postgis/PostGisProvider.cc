@@ -1,11 +1,11 @@
 /*
- * DatabaseHandler.cc
+ * PostGisProvider.cc
  *
  *  Created on: 2015-05-07
  *      Author: Jonas Bergman
  */
 
-#include "DatabaseHandler.h"  // class implemented
+#include "../postgis/PostGisProvider.h"  // class implemented
 
 #include <iostream>
 #include <sstream>
@@ -15,7 +15,7 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-DatabaseHandler::DatabaseHandler(const std::string& rTopoName,
+PostGisProvider::PostGisProvider(const std::string& rTopoName,
                                  const DatabaseConfig& rDatabaseConfig)
 try		// catch error when initializing connection
 	:   mTopoName(rTopoName),
@@ -26,7 +26,7 @@ try		// catch error when initializing connection
 	{
 		if(!mConnection.is_open())
 		{
-			throw DatabaseException(
+			throw PostGisProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 		pqxx::nontransaction nt(mConnection);
@@ -35,17 +35,17 @@ try		// catch error when initializing connection
 	}
 	catch(const std::exception& e)
 	{
-		throw DatabaseException(std::string("Database error, open: ") + e.what());
+		throw PostGisProviderException(std::string("Database error, open: ") + e.what());
 	}
 }
 // catch error in initializer list (opening connection)
 catch(const std::exception& e)
 {
-	throw DatabaseException(std::string("Database error, open: ") + e.what());
+	throw PostGisProviderException(std::string("Database error, open: ") + e.what());
 }
 
 
-DatabaseHandler::~DatabaseHandler()
+PostGisProvider::~PostGisProvider()
 {
 	try
 	{
@@ -57,7 +57,7 @@ DatabaseHandler::~DatabaseHandler()
 	catch(const std::exception& e)
 	{
 		//swallow errors
-//		throw DatabaseException(std::string("Database error, closing: ") + e.what());
+//		throw PostGisProviderException(std::string("Database error, closing: ") + e.what());
 	}
 }
 
@@ -66,13 +66,13 @@ DatabaseHandler::~DatabaseHandler()
 //============================= OPERATIONS ===================================
 
 void
-DatabaseHandler::buildTopology(int srid, double tolerance)
+PostGisProvider::buildTopology(int srid, double tolerance)
 {
 	try
 	{
 		if(!mConnection.is_open())
 		{
-			throw DatabaseException(
+			throw PostGisProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 
@@ -92,19 +92,19 @@ DatabaseHandler::buildTopology(int srid, double tolerance)
 	}
 	catch(const std::exception& e)
 	{
-		throw DatabaseException(std::string("Database error: ") + e.what());
+		throw PostGisProviderException(std::string("Database error: ") + e.what());
 	}
 }
 
 
 void
-DatabaseHandler::removeTopology()
+PostGisProvider::removeTopology()
 {
 	try
 	{
 		if(!mConnection.is_open())
 		{
-			throw DatabaseException(
+			throw PostGisProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 
@@ -121,20 +121,20 @@ DatabaseHandler::removeTopology()
 	}
 	catch(const std::exception& e)
 	{
-		throw DatabaseException(std::string("Database error: ") + e.what());
+		throw PostGisProviderException(std::string("Database error: ") + e.what());
 	}
 
 }
 
 
 void
-DatabaseHandler::getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertexMap)
+PostGisProvider::getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertexMap)
 {
 	try
 	{
 		if(!mConnection.is_open())
 		{
-			throw DatabaseException(
+			throw PostGisProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 
@@ -157,19 +157,19 @@ DatabaseHandler::getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertex
 	}
 	catch(const std::exception& e)
 	{
-		throw DatabaseException(std::string("Database error: ") + e.what());
+		throw PostGisProviderException(std::string("Database error: ") + e.what());
 	}
 }
 
 
 void
-DatabaseHandler::getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap)
+PostGisProvider::getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap)
 {
 	try
 	{
 		if(!mConnection.is_open())
 		{
-			throw DatabaseException(
+			throw PostGisProviderException(
 					std::string("Could not open ") + mDbConfig.database);
 		}
 
@@ -192,7 +192,7 @@ DatabaseHandler::getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap)
 	}
 	catch(const std::exception& e)
 	{
-		throw DatabaseException(std::string("Database error: ") + e.what());
+		throw PostGisProviderException(std::string("Database error: ") + e.what());
 	}
 }
 //============================= ACESS      ===================================
@@ -201,7 +201,7 @@ DatabaseHandler::getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap)
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
 void
-DatabaseHandler::installPostgisTopology(pqxx::transaction_base& rTrans)
+PostGisProvider::installPostgisTopology(pqxx::transaction_base& rTrans)
 {
 	rTrans.exec(
 			"CREATE EXTENSION IF NOT EXISTS postgis_topology"
@@ -209,7 +209,7 @@ DatabaseHandler::installPostgisTopology(pqxx::transaction_base& rTrans)
 }
 
 void
-DatabaseHandler::setSearchPath(pqxx::transaction_base& rTrans)
+PostGisProvider::setSearchPath(pqxx::transaction_base& rTrans)
 {
 	rTrans.exec(
 			"SET search_path = topology, public"
@@ -217,7 +217,7 @@ DatabaseHandler::setSearchPath(pqxx::transaction_base& rTrans)
 }
 
 void
-DatabaseHandler::createTemporaryTable(pqxx::transaction_base& rTrans,
+PostGisProvider::createTemporaryTable(pqxx::transaction_base& rTrans,
 									  const std::string& rTableName)
 {
 	rTrans.exec(
@@ -229,7 +229,7 @@ DatabaseHandler::createTemporaryTable(pqxx::transaction_base& rTrans,
 }
 
 void
-DatabaseHandler::createTemporarySchema(pqxx::transaction_base& rTrans,
+PostGisProvider::createTemporarySchema(pqxx::transaction_base& rTrans,
 									  const std::string& rSchemaName, int srid)
 {
 	rTrans.exec(
@@ -240,7 +240,7 @@ DatabaseHandler::createTemporarySchema(pqxx::transaction_base& rTrans,
 }
 
 void
-DatabaseHandler::addTopoGeometryColumn(pqxx::transaction_base& rTrans,
+PostGisProvider::addTopoGeometryColumn(pqxx::transaction_base& rTrans,
 									   const std::string& rSchemaName,
 									   const std::string& rTableName)
 {
@@ -254,7 +254,7 @@ DatabaseHandler::addTopoGeometryColumn(pqxx::transaction_base& rTrans,
 }
 
 void
-DatabaseHandler::fillTopoGeometryColumn(pqxx::transaction_base& rTrans,
+PostGisProvider::fillTopoGeometryColumn(pqxx::transaction_base& rTrans,
 									    const std::string& rSchemaName,
 									    const std::string& rTableName,
 										double tolerance)
@@ -270,7 +270,7 @@ DatabaseHandler::fillTopoGeometryColumn(pqxx::transaction_base& rTrans,
 }
 
 void
-DatabaseHandler::dropTemporaryTable(pqxx::transaction_base& rTrans,
+PostGisProvider::dropTemporaryTable(pqxx::transaction_base& rTrans,
 									const std::string& rTableName)
 {
 	rTrans.exec(
@@ -279,7 +279,7 @@ DatabaseHandler::dropTemporaryTable(pqxx::transaction_base& rTrans,
 }
 
 void
-DatabaseHandler::dropTemporarySchema(pqxx::transaction_base& rTrans,
+PostGisProvider::dropTemporarySchema(pqxx::transaction_base& rTrans,
 									 const std::string& rSchemaName)
 {
 	rTrans.exec(
@@ -288,7 +288,7 @@ DatabaseHandler::dropTemporarySchema(pqxx::transaction_base& rTrans,
 }
 
 void
-DatabaseHandler::deleteTemporaryLayerRecord(pqxx::transaction_base& rTrans,
+PostGisProvider::deleteTemporaryLayerRecord(pqxx::transaction_base& rTrans,
 									 	 	 const std::string& rTableName)
 {
 	rTrans.exec(
@@ -298,7 +298,7 @@ DatabaseHandler::deleteTemporaryLayerRecord(pqxx::transaction_base& rTrans,
 }
 
 void
-DatabaseHandler::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
+PostGisProvider::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
 									 	 	 const std::string& rSchemaName)
 {
 	rTrans.exec(

@@ -5,7 +5,7 @@
  *      Author: Jonas Bergman
  */
 
-#include "../DatabaseHandler.h"
+#include "../../postgis/PostGisProvider.h"
 
 #include <string>
 #include <vector>
@@ -33,7 +33,7 @@ SCENARIO ("PostGis topology handling", "[.topology]") // DISABLED TEST BY .
 			// ...............................................................
 			WHEN ("we try to create postgis topology with a temp name and srid")
 			{
-				DatabaseHandler db_handler(temp_topo, db_config);
+				PostGisProvider db_handler(temp_topo, db_config);
 				int srid = 900913;
 				double tolerance = 1.0;
 
@@ -47,7 +47,7 @@ SCENARIO ("PostGis topology handling", "[.topology]") // DISABLED TEST BY .
 			// ...............................................................
 			WHEN ("we try to remove postgis topology with valid arguments")
 			{
-				DatabaseHandler db_handler(temp_topo, db_config);
+				PostGisProvider db_handler(temp_topo, db_config);
 
 				THEN ("we should not receive an exception")
 				{
@@ -77,13 +77,13 @@ SCENARIO ("PostGis queries", "[query]")
 			config_reader.getDatabaseConfiguration(db_config);
 			std::string topo_name("test");
 
-			DatabaseHandler db_handler(topo_name, db_config);
+			PostGisProvider db_handler(topo_name, db_config);
 
 			try
 			{
 				db_handler.buildTopology(900913, 1.0);
 			}
-			catch(DatabaseException& e)
+			catch(PostGisProviderException& e)
 			{
 //				INFO ("Topology" << topo_name << " exists.");
 			}
@@ -134,7 +134,7 @@ SCENARIO ("PostGis queries", "[query]")
 		INFO(e.what());
 		REQUIRE (false);	// force output of error and failure
 	}
-	catch (DatabaseException& dbe)
+	catch (PostGisProviderException& dbe)
 	{
 		INFO(dbe.what());
 		REQUIRE (false);	// force output of error and failure
