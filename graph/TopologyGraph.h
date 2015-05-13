@@ -21,6 +21,7 @@
 #include "TopologyVertex.h"
 #include "TopologyEdge.h"
 #include "TopologyException.h"
+#include "TopologyTypes.h"
 //#include "Topology.h"
 
 // FORWARD REFERENCES

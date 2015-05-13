@@ -17,11 +17,11 @@
 // LOCAL INCLUDES
 //
 #include "TopologyVertex.h"
+#include "TopologyTypes.h"
 
 // FORWARD REFERENCES
 //
 
-typedef int EdgeId;
 
 /**
  * Data structure for edges in the topology.

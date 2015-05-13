@@ -11,7 +11,7 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-TopologyVertex::TopologyVertex(int id, Point point)
+TopologyVertex::TopologyVertex(VertexId id, Point point)
 	: mId(id), mPoint(point)
 {}
 
