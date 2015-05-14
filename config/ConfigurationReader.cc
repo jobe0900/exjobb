@@ -32,6 +32,7 @@ void
 ConfigurationReader::fillConfiguration(Configuration& rConfig) const
 {
     fillDatabaseConfiguration(rConfig.mDbConfig);
+    fillTopologyConfiguration(rConfig.mTopoConfig);
     fillVehicleConfiguration(rConfig.mVehicleConfig);
 }
 
@@ -53,6 +54,42 @@ ConfigurationReader::fillDatabaseConfiguration(DatabaseConfig& rDbConfig) const
         rDbConfig.username = mPropertyTree.get<std::string>(prefix + "username");
         rDbConfig.password = mPropertyTree.get<std::string>(prefix + "password");
         rDbConfig.database = mPropertyTree.get<std::string>(prefix + "database");
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
+
+void
+ConfigurationReader::fillTopologyConfiguration(TopologyConfig& rTopoConfig) const
+{
+    std::string prefix("topology.");
+
+    try
+    {
+        rTopoConfig.roadsTableName =
+            mPropertyTree.get<std::string>(prefix + "roads_table");
+        rTopoConfig.topologySchemaName =
+            mPropertyTree.get<std::string>(prefix + "schema");
+
+        rTopoConfig.edgeTableName =
+            mPropertyTree.get<std::string>(prefix + "edge_table");
+        rTopoConfig.edgeIdColumnName =
+            mPropertyTree.get<std::string>(prefix + "e_id_col");
+        rTopoConfig.sourceColumnName =
+            mPropertyTree.get<std::string>(prefix + "source_col");
+        rTopoConfig.targetColumnName=
+            mPropertyTree.get<std::string>(prefix + "target_col");
+        rTopoConfig.edgeGeomColumnName =
+            mPropertyTree.get<std::string>(prefix + "e_geom_col");
+
+        rTopoConfig.vertexTableName =
+            mPropertyTree.get<std::string>(prefix + "vertex_table");
+        rTopoConfig.vertexIdColumnName =
+            mPropertyTree.get<std::string>(prefix + "v_id_col");
+        rTopoConfig.vertexGeomColumnName =
+            mPropertyTree.get<std::string>(prefix + "v_geom_col");
     }
     catch (boost::property_tree::ptree_error& e)
     {

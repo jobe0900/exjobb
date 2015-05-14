@@ -30,6 +30,12 @@ Configuration::getDatabaseConfig() const
     return mDbConfig;
 }
 
+const TopologyConfig&
+Configuration::getTopologyConfig() const
+{
+    return mTopoConfig;
+}
+
 const VehicleConfig&
 Configuration::getVehicleConfig() const
 {

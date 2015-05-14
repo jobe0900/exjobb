@@ -20,6 +20,7 @@
 
 // LOCAL INCLUDES
 //
+#include "TopologyConfig.h"
 
 // FORWARD REFERENCES
 //
@@ -32,6 +33,7 @@ struct DatabaseConfig
 	std::string		username;
 	std::string		password;
 	std::string		database;
+
 
 // OPERATIONS
 	/** Construct a connection string from the attributes.

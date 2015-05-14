@@ -19,8 +19,9 @@
 // LOCAL INCLUDES
 //
 #include "Configuration.h"
-#include "DatabaseConfig.h"
 #include "ConfigurationException.h"
+#include "DatabaseConfig.h"
+#include "TopologyConfig.h"
 #include "VehicleConfig.h"
 
 // FORWARD REFERENCES
@@ -86,6 +87,13 @@ private:
 	 * @throw	ConfigurationException	If missing configuration.
 	 */
 	void    fillDatabaseConfiguration(DatabaseConfig& rDatabaseConfig) const;
+
+	/** Read the topology part of the configuration and populate config struct.
+	 * @param	The Topology configuration
+	 * @throw	ConfigurationException	If missing configuration.
+	 */
+	void    fillTopologyConfiguration(TopologyConfig& rTopologyConfig) const;
+
 	/** Read the vehicle part of the configuration and populate config struct.
 	 * @param  The Vehicle configuration
 	 * @throw   ConfigurationException  If missing configuration.

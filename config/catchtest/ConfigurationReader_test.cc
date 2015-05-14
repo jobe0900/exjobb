@@ -74,6 +74,34 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 	{
 		std::string filename("config/catchtest/testsettings.json");
 
+		WHEN ("asking for topology configuration")
+		{
+			ConfigurationReader config_reader(filename);
+			Configuration config;
+			config_reader.fillConfiguration(config);
+			const TopologyConfig& r_topo_config = config.getTopologyConfig();
+
+			THEN ("we get a topology configuration filled out")
+			{
+				REQUIRE (r_topo_config.roadsTableName == "highways_test");
+				REQUIRE (r_topo_config.topologySchemaName == "topo_test");
+				REQUIRE (r_topo_config.edgeTableName == "edge_data");
+				REQUIRE (r_topo_config.edgeIdColumnName == "edge_id");
+				REQUIRE (r_topo_config.sourceColumnName == "start_node");
+				REQUIRE (r_topo_config.targetColumnName == "end_node");
+				REQUIRE (r_topo_config.edgeGeomColumnName == "geom");
+				REQUIRE (r_topo_config.vertexTableName == "node");
+				REQUIRE (r_topo_config.vertexIdColumnName == "node_id");
+				REQUIRE (r_topo_config.vertexGeomColumnName == "geom");
+			}
+		}
+	}
+
+	//------------------------------------------------------------------------
+	GIVEN ("a filename to a valid configuration file")
+	{
+		std::string filename("config/catchtest/testsettings.json");
+
 		WHEN ("asking for vehicle configuration")
 		{
 			ConfigurationReader config_reader(filename);

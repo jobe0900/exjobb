@@ -57,6 +57,11 @@ public:
      */
     const DatabaseConfig& getDatabaseConfig() const;
 
+    /** Get the topology related parts of the configuration.
+     * @return  Reference to a TopologyConfig.
+     */
+    const TopologyConfig& getTopologyConfig() const;
+
     /** Get the vehicle related parts of the configuration.
      * @return  Reference to a VehicleConfig.
      */
@@ -79,6 +84,7 @@ protected:
 private:
 // ATTRIBUTES
     DatabaseConfig mDbConfig;
+    TopologyConfig mTopoConfig;
     VehicleConfig  mVehicleConfig;
 };
 
