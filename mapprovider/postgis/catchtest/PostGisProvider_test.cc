@@ -17,7 +17,7 @@
 #include "../../../graph/TopologyEdge.h"
 #include "../../../graph/TopologyVertex.h"
 
-SCENARIO ("PostGis topology handling", "[topology]") // DISABLED TEST BY .
+SCENARIO ("PostGis topology handling", "[topology]")
 {
 	try
 	{
@@ -26,8 +26,9 @@ SCENARIO ("PostGis topology handling", "[topology]") // DISABLED TEST BY .
 
 		GIVEN ("a valid database configuration structure and a temporary name")
 		{
-			DatabaseConfig db_config;
-//			config_reader.getDatabaseConfiguration(db_config);
+		    Configuration config;
+		    config_reader.fillConfiguration(config);
+			const DatabaseConfig& db_config = config.getDatabaseConfig();
 			std::string temp_topo(TimeToStringMaker::getEpochMsTimeString());
 
 			// ...............................................................
@@ -73,8 +74,9 @@ SCENARIO ("PostGis queries", "[query]")
 		GIVEN ("a valid database configuration structure and "
 				"name to existing topology")
 		{
-			DatabaseConfig db_config;
-//			config_reader.getDatabaseConfiguration(db_config);
+		    Configuration config;
+		    config_reader.fillConfiguration(config);
+			const DatabaseConfig& db_config = config.getDatabaseConfig();
 			std::string topo_name("test");
 
 			PostGisProvider db_handler(topo_name, db_config);

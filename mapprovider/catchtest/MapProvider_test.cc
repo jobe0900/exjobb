@@ -12,6 +12,7 @@
 
 #include "../../catchtest/catch.hpp"
 #include "../../config/ConfigurationReader.h"
+#include "../../config/Configuration.h"
 #include "../../config/DatabaseConfig.h"
 #include "../postgis/PostGisProvider.h"
 #include "../../graph/TopologyEdge.h"
@@ -28,8 +29,9 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 		GIVEN ("a valid database configuration structure and "
 				"name to existing topology")
 		{
-			DatabaseConfig db_config;
-//			config_reader.getDatabaseConfiguration(db_config);
+		    Configuration config;
+		    config_reader.fillConfiguration(config);
+			const DatabaseConfig& db_config = config.getDatabaseConfig();
 			std::string topo_name("test");
 
 			MapProvider* p_mp = new PostGisProvider(topo_name, db_config);
