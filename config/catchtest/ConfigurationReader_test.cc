@@ -21,18 +21,17 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		WHEN ("asking for database configuration")
 		{
 			ConfigurationReader config_reader(filename);
-			const Configuration* p_config = config_reader.getConfiguration();
-			DatabaseConfig db_config = *p_config->getDatabaseConfig();
-			delete p_config;
-//			config_reader.getDatabaseConfiguration(db_config);
+			Configuration config;
+			config_reader.fillConfiguration(config);
+			const DatabaseConfig& r_db_config = config.getDatabaseConfig();
 
 			THEN ("we get a  database configuration filled out")
 			{
-				REQUIRE (db_config.hostname == "127.0.0.1");
-				REQUIRE (db_config.port == 5432);
-				REQUIRE (db_config.username == "tester");
-				REQUIRE (db_config.password == "tester");
-				REQUIRE (db_config.database == "mikh_style");
+				REQUIRE (r_db_config.hostname == "127.0.0.1");
+				REQUIRE (r_db_config.port == 5432);
+				REQUIRE (r_db_config.username == "tester");
+				REQUIRE (r_db_config.password == "tester");
+				REQUIRE (r_db_config.database == "mikh_style");
 			}
 		}
 	}
@@ -45,14 +44,12 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		WHEN ("asking for database configuration")
 		{
 			ConfigurationReader config_reader(filename);
-			DatabaseConfig db_config;
 
 			THEN ("we get an exception")
 			{
-			    const Configuration* p_config = nullptr;
-				REQUIRE_THROWS_AS (p_config = config_reader.getConfiguration(),
+			    Configuration config;
+				REQUIRE_THROWS_AS (config_reader.fillConfiguration(config),
 						ConfigurationException&);
-				delete p_config;
 			}
 		}
 	}
@@ -80,17 +77,17 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		WHEN ("asking for vehicle configuration")
 		{
 			ConfigurationReader config_reader(filename);
-			const Configuration* p_config = config_reader.getConfiguration();
-			VehicleConfig vehicle_config = *p_config->getVehicleConfig();
-			delete p_config;
+			Configuration config;
+			config_reader.fillConfiguration(config);
+			const VehicleConfig& r_vehicle_config = config.getVehicleConfig();
 
 			THEN ("we get a vehicle configuration filled out")
 			{
-				REQUIRE (vehicle_config.category == "motorcar");
-				REQUIRE (vehicle_config.height == Approx(1.6));
-				REQUIRE (vehicle_config.length == Approx(4.5));
-				REQUIRE (vehicle_config.weight == Approx(2.0));
-				REQUIRE (vehicle_config.width == Approx(1.9));
+				REQUIRE (r_vehicle_config.category == "motorcar");
+				REQUIRE (r_vehicle_config.height == Approx(1.6));
+				REQUIRE (r_vehicle_config.length == Approx(4.5));
+				REQUIRE (r_vehicle_config.weight == Approx(2.0));
+				REQUIRE (r_vehicle_config.width == Approx(1.9));
 			}
 		}
 	}

@@ -12,41 +12,41 @@
 
 //============================= LIFECYCLE ====================================
 Configuration::Configuration()
-    : mpDbConfig(nullptr), mpVehicleConfig(nullptr)
+    : mDbConfig(), mVehicleConfig()
 {}
 
-Configuration::~Configuration()
-{
-    delete mpDbConfig;
-    delete mpVehicleConfig;
-}
+//Configuration::~Configuration()
+//{
+//    delete mpDbConfig;
+//    delete mpVehicleConfig;
+//}
 
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
-const DatabaseConfig*
+const DatabaseConfig&
 Configuration::getDatabaseConfig() const
 {
-    return mpDbConfig;
+    return mDbConfig;
 }
 
-const VehicleConfig*
+const VehicleConfig&
 Configuration::getVehicleConfig() const
 {
-    return mpVehicleConfig;
+    return mVehicleConfig;
 }
 
-void
-Configuration::setDatabaseConfig(const DatabaseConfig* pDbConfig)
-{
-    mpDbConfig = pDbConfig;
-}
-
-void
-Configuration::setVehicleConfig(const VehicleConfig* pVehicleConfig)
-{
-    mpVehicleConfig = pVehicleConfig;
-}
+//void
+//Configuration::setDatabaseConfig(const DatabaseConfig* pDbConfig)
+//{
+//    mpDbConfig = pDbConfig;
+//}
+//
+//void
+//Configuration::setVehicleConfig(const VehicleConfig* pVehicleConfig)
+//{
+//    mpVehicleConfig = pVehicleConfig;
+//}
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

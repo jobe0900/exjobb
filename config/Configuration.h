@@ -24,10 +24,12 @@
 
 /**
  * This class holds configurations for different parts of the utility.
- * It stores them in pointer, and is responsible for deleting them.
+ * The ConfigurationReader is friend so it can populate the different
+ * configurations.
  */
 class Configuration
 {
+    friend class ConfigurationReader;
 public:
 // LIFECYCLE
 
@@ -45,30 +47,30 @@ public:
 
     /** Destructor.
      */
-    ~Configuration(void);
+    ~Configuration(void) = default;
 
 
 // OPERATORS
 // OPERATIONS
     /** Get the database related parts of the configuration.
-     * @return  Pointer to a DatabaseConfig.
+     * @return  Reference to a DatabaseConfig.
      */
-    const DatabaseConfig* getDatabaseConfig() const;
+    const DatabaseConfig& getDatabaseConfig() const;
 
     /** Get the vehicle related parts of the configuration.
-     * @return  Pointer to a VehicleConfig.
+     * @return  Reference to a VehicleConfig.
      */
-    const VehicleConfig*  getVehicleConfig() const;
+    const VehicleConfig&  getVehicleConfig() const;
 
     /** Set the DatabaseConfig.
      * @param   pDbConfig   Pointer to a database configuration
      */
-    void                  setDatabaseConfig(const DatabaseConfig* pDbConfig);
+//    void                  setDatabaseConfig(const DatabaseConfig* pDbConfig);
 
     /** Set the VehicleConfig.
      * @param   pVehicleConfig   Pointer to a vehicle configuration
      */
-    void                  setVehicleConfig(const VehicleConfig* pVehicleConfig);
+//    void                  setVehicleConfig(const VehicleConfig* pVehicleConfig);
 
 // ACCESS
 // INQUIRY
@@ -76,8 +78,8 @@ public:
 protected:
 private:
 // ATTRIBUTES
-    const DatabaseConfig* mpDbConfig;
-    const VehicleConfig*  mpVehicleConfig;
+    DatabaseConfig mDbConfig;
+    VehicleConfig  mVehicleConfig;
 };
 
 // INLINE METHODS

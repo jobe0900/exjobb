@@ -28,25 +28,12 @@ ConfigurationReader::ConfigurationReader(const std::string& rFilename)
 //============================= OPERATORS ====================================
 
 //============================= OPERATIONS ===================================
-const Configuration*
-ConfigurationReader::getConfiguration() const
+void
+ConfigurationReader::fillConfiguration(Configuration& rConfig) const
 {
-    Configuration* p_config = new Configuration();
-    try
-    {
-        p_config->setDatabaseConfig(this->getDatabaseConfiguration());
-        p_config->setVehicleConfig(this->getVehicleConfiguration());
-
-        return p_config;
-    }
-    catch (ConfigurationException& e)
-    {
-        delete p_config;
-        throw e;
-    }
+    fillDatabaseConfiguration(rConfig.mDbConfig);
+    fillVehicleConfiguration(rConfig.mVehicleConfig);
 }
-
-
 
 
 //============================= ACESS      ===================================
@@ -54,47 +41,41 @@ ConfigurationReader::getConfiguration() const
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-const DatabaseConfig*
-ConfigurationReader::getDatabaseConfiguration() const
+void
+ConfigurationReader::fillDatabaseConfiguration(DatabaseConfig& rDbConfig) const
 {
-    DatabaseConfig* p_db_config = new DatabaseConfig();
     std::string prefix("database.");
 
     try
     {
-        p_db_config->hostname = mPropertyTree.get<std::string>(prefix + "host");
-        p_db_config->port = mPropertyTree.get<int>(prefix + "port");
-        p_db_config->username = mPropertyTree.get<std::string>(prefix + "username");
-        p_db_config->password = mPropertyTree.get<std::string>(prefix + "password");
-        p_db_config->database = mPropertyTree.get<std::string>(prefix + "database");
-        return p_db_config;
+        rDbConfig.hostname = mPropertyTree.get<std::string>(prefix + "host");
+        rDbConfig.port = mPropertyTree.get<int>(prefix + "port");
+        rDbConfig.username = mPropertyTree.get<std::string>(prefix + "username");
+        rDbConfig.password = mPropertyTree.get<std::string>(prefix + "password");
+        rDbConfig.database = mPropertyTree.get<std::string>(prefix + "database");
     }
     catch (boost::property_tree::ptree_error& e)
     {
-        delete p_db_config;
         throw ConfigurationException(std::string("Could not read config ") + e.what());
     }
 }
 
 
-const VehicleConfig*
-ConfigurationReader::getVehicleConfiguration() const
+void
+ConfigurationReader::fillVehicleConfiguration(VehicleConfig& rVehicleConfig) const
 {
-    VehicleConfig* p_v_config = new VehicleConfig();
     std::string prefix("vehicle.");
 
     try
     {
-        p_v_config->category = mPropertyTree.get<std::string>(prefix + "category");
-        p_v_config->height = mPropertyTree.get<double>(prefix + "height");
-        p_v_config->length = mPropertyTree.get<double>(prefix + "length");
-        p_v_config->weight = mPropertyTree.get<double>(prefix + "weight");
-        p_v_config->width = mPropertyTree.get<double>(prefix + "width");
-        return p_v_config;
+        rVehicleConfig.category = mPropertyTree.get<std::string>(prefix + "category");
+        rVehicleConfig.height = mPropertyTree.get<double>(prefix + "height");
+        rVehicleConfig.length = mPropertyTree.get<double>(prefix + "length");
+        rVehicleConfig.weight = mPropertyTree.get<double>(prefix + "weight");
+        rVehicleConfig.width = mPropertyTree.get<double>(prefix + "width");
     }
     catch (boost::property_tree::ptree_error& e)
     {
-        delete p_v_config;
         throw ConfigurationException(std::string("Could not read config ") + e.what());
     }
 }

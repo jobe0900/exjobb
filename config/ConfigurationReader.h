@@ -51,10 +51,10 @@ public:
 // OPERATIONS
 
 	/** Get the configurations from the file.
-	 * @return Pointer to a Configuration.
-	 * @throws ConfigurationException
+	 * @param   Reference to a Configuration to populate.
+	 * @throws  ConfigurationException
 	 */
-	const Configuration* getConfiguration() const;
+	void    fillConfiguration(Configuration& rConfig) const;
 
 	/** Read the database part of the configuration and populate config struct.
 	 *
@@ -82,15 +82,15 @@ private:
 
 // HELPERS
 	/** Read the database part of the configuration and populate config struct.
-	 * @return	The Database configuration
+	 * @param	The Database configuration
 	 * @throw	ConfigurationException	If missing configuration.
 	 */
-	const DatabaseConfig*   getDatabaseConfiguration() const;
+	void    fillDatabaseConfiguration(DatabaseConfig& rDatabaseConfig) const;
 	/** Read the vehicle part of the configuration and populate config struct.
-	 * @return  The Vehicle configuration
+	 * @param  The Vehicle configuration
 	 * @throw   ConfigurationException  If missing configuration.
 	 */
-	const VehicleConfig*    getVehicleConfiguration() const;
+	void    fillVehicleConfiguration(VehicleConfig& rVehicleConfig) const;
 
 };
 
