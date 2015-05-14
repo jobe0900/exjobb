@@ -6,6 +6,7 @@
  */
 
 #include "../../catchtest/catch.hpp"
+#include "../Configuration.h"
 #include "../ConfigurationReader.h"
 #include "../ConfigurationException.h"
 
@@ -20,8 +21,10 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		WHEN ("asking for database configuration")
 		{
 			ConfigurationReader config_reader(filename);
-			DatabaseConfig db_config;
-			config_reader.getDatabaseConfiguration(db_config);
+			const Configuration* p_config = config_reader.getConfiguration();
+			DatabaseConfig db_config = *p_config->getDatabaseConfig();
+			delete p_config;
+//			config_reader.getDatabaseConfiguration(db_config);
 
 			THEN ("we get a  database configuration filled out")
 			{
@@ -46,8 +49,10 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 
 			THEN ("we get an exception")
 			{
-				REQUIRE_THROWS_AS (config_reader.getDatabaseConfiguration(db_config),
+			    const Configuration* p_config = nullptr;
+				REQUIRE_THROWS_AS (p_config = config_reader.getConfiguration(),
 						ConfigurationException&);
+				delete p_config;
 			}
 		}
 	}
@@ -75,16 +80,17 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		WHEN ("asking for vehicle configuration")
 		{
 			ConfigurationReader config_reader(filename);
-			VehicleConfig config;
-			config_reader.getVehicleConfiguration(config);
+			const Configuration* p_config = config_reader.getConfiguration();
+			VehicleConfig vehicle_config = *p_config->getVehicleConfig();
+			delete p_config;
 
 			THEN ("we get a vehicle configuration filled out")
 			{
-				REQUIRE (config.category == "motorcar");
-				REQUIRE (config.height == Approx(1.6));
-				REQUIRE (config.length == Approx(4.5));
-				REQUIRE (config.weight == Approx(2.0));
-				REQUIRE (config.width == Approx(1.9));
+				REQUIRE (vehicle_config.category == "motorcar");
+				REQUIRE (vehicle_config.height == Approx(1.6));
+				REQUIRE (vehicle_config.length == Approx(4.5));
+				REQUIRE (vehicle_config.weight == Approx(2.0));
+				REQUIRE (vehicle_config.width == Approx(1.9));
 			}
 		}
 	}

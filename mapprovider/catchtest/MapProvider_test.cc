@@ -29,7 +29,7 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 				"name to existing topology")
 		{
 			DatabaseConfig db_config;
-			config_reader.getDatabaseConfiguration(db_config);
+//			config_reader.getDatabaseConfiguration(db_config);
 			std::string topo_name("test");
 
 			MapProvider* p_mp = new PostGisProvider(topo_name, db_config);

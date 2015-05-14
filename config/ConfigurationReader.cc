@@ -19,7 +19,8 @@ ConfigurationReader::ConfigurationReader(const std::string& rFilename)
 	{
 		boost::property_tree::read_json(mFilename, mPropertyTree);
 	}
-	catch (boost::property_tree::json_parser_error& e) {
+	catch (boost::property_tree::json_parser_error& e)
+	{
 		throw ConfigurationException("Could not read file " + mFilename);
 	}
 }
@@ -27,48 +28,73 @@ ConfigurationReader::ConfigurationReader(const std::string& rFilename)
 //============================= OPERATORS ====================================
 
 //============================= OPERATIONS ===================================
-
-void
-ConfigurationReader::getDatabaseConfiguration(DatabaseConfig& rDatabaseConfig)
+const Configuration*
+ConfigurationReader::getConfiguration() const
 {
-	std::string prefix("database.");
+    Configuration* p_config = new Configuration();
+    try
+    {
+        p_config->setDatabaseConfig(this->getDatabaseConfiguration());
+        p_config->setVehicleConfig(this->getVehicleConfiguration());
 
-	try
-	{
-		rDatabaseConfig.hostname = mPropertyTree.get<std::string>(prefix + "host");
-		rDatabaseConfig.port = mPropertyTree.get<int>(prefix + "port");
-		rDatabaseConfig.username = mPropertyTree.get<std::string>(prefix + "username");
-		rDatabaseConfig.password = mPropertyTree.get<std::string>(prefix + "password");
-		rDatabaseConfig.database = mPropertyTree.get<std::string>(prefix + "database");
-	}
-	catch (boost::property_tree::ptree_error& e)
-	{
-		throw ConfigurationException(std::string("Could not read config ") + e.what());
-	}
+        return p_config;
+    }
+    catch (ConfigurationException& e)
+    {
+        delete p_config;
+        throw e;
+    }
 }
 
 
-void
-ConfigurationReader::getVehicleConfiguration(VehicleConfig& rVehicleConfig)
-{
-	std::string prefix("vehicle.");
 
-	try
-	{
-		rVehicleConfig.category = mPropertyTree.get<std::string>(prefix + "category");
-		rVehicleConfig.height = mPropertyTree.get<double>(prefix + "height");
-		rVehicleConfig.length = mPropertyTree.get<double>(prefix + "length");
-		rVehicleConfig.weight = mPropertyTree.get<double>(prefix + "weight");
-		rVehicleConfig.width = mPropertyTree.get<double>(prefix + "width");
-	}
-	catch (boost::property_tree::ptree_error& e)
-	{
-		throw ConfigurationException(std::string("Could not read config ") + e.what());
-	}
-}
 
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
+const DatabaseConfig*
+ConfigurationReader::getDatabaseConfiguration() const
+{
+    DatabaseConfig* p_db_config = new DatabaseConfig();
+    std::string prefix("database.");
+
+    try
+    {
+        p_db_config->hostname = mPropertyTree.get<std::string>(prefix + "host");
+        p_db_config->port = mPropertyTree.get<int>(prefix + "port");
+        p_db_config->username = mPropertyTree.get<std::string>(prefix + "username");
+        p_db_config->password = mPropertyTree.get<std::string>(prefix + "password");
+        p_db_config->database = mPropertyTree.get<std::string>(prefix + "database");
+        return p_db_config;
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        delete p_db_config;
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
+
+
+const VehicleConfig*
+ConfigurationReader::getVehicleConfiguration() const
+{
+    VehicleConfig* p_v_config = new VehicleConfig();
+    std::string prefix("vehicle.");
+
+    try
+    {
+        p_v_config->category = mPropertyTree.get<std::string>(prefix + "category");
+        p_v_config->height = mPropertyTree.get<double>(prefix + "height");
+        p_v_config->length = mPropertyTree.get<double>(prefix + "length");
+        p_v_config->weight = mPropertyTree.get<double>(prefix + "weight");
+        p_v_config->width = mPropertyTree.get<double>(prefix + "width");
+        return p_v_config;
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        delete p_v_config;
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
