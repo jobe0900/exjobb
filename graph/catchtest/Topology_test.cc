@@ -22,7 +22,7 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 
 		WHEN ("we try to add vertex to Topology")
 		{
-			const TopologyVertex& r_vertex = topo.addVertex(id, point);
+			const Vertex& r_vertex = topo.addVertex(id, point);
 
 			THEN ("we should get a reference to a TopologyVertex object")
 			{
@@ -44,8 +44,8 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 
 		WHEN ("we try to add second vertex to Topology")
 		{
-			const TopologyVertex& r_v1 = topo.addVertex(v1, p1);
-			const TopologyVertex& r_v2 = topo.addVertex(v1, p2);
+			const Vertex& r_v1 = topo.addVertex(v1, p1);
+			const Vertex& r_v2 = topo.addVertex(v1, p2);
 
 			THEN ("we should get a reference to first TopologyVertex object")
 			{
@@ -69,10 +69,10 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 
 		WHEN ("we try to add edge to Topology with existing vertices")
 		{
-			const TopologyVertex& r_v1 = topo.addVertex(v1, p1);
-			const TopologyVertex& r_v2 = topo.addVertex(v2, p2);
+			const Vertex& r_v1 = topo.addVertex(v1, p1);
+			const Vertex& r_v2 = topo.addVertex(v2, p2);
 
-			const TopologyEdge& r_edge = topo.addEdge(e1, v1, v2);
+			const Edge& r_edge = topo.addEdge(e1, v1, v2);
 
 			THEN ("we should get a reference to a TopologyEdge object")
 			{
@@ -98,13 +98,13 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 
 		WHEN ("we try to add edge to Topology with non-existing vertices")
 		{
-			//const TopologyVertex& r_v1 = topo.addVertex(v1, p1);
-			//const TopologyVertex& r_v2 =topo.addVertex(v2, p2);
+			//const Vertex& r_v1 = topo.addVertex(v1, p1);
+			//const Vertex& r_v2 =topo.addVertex(v2, p2);
 
 			THEN ("we should get a TopologyException")
 			{
 				REQUIRE_THROWS_AS(
-						const TopologyEdge& r_edge = topo.addEdge(e1, v1, v2),
+						const Edge& r_edge = topo.addEdge(e1, v1, v2),
 						TopologyException&
 				);
 			}

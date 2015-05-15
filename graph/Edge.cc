@@ -1,51 +1,55 @@
 /*
- * TopologyVertex.cc
+ * Edge.cc
  *
  *  Created on: 2015-05-11
  *      Author: Jonas Bergman
  */
 
-#include "TopologyVertex.h"  // class implemented
+#include "Edge.h"  // class implemented
 
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-TopologyVertex::TopologyVertex(VertexId id, Point point)
-	: mId(id), mPoint(point)
+Edge::Edge(EdgeId id, VertexId source, VertexId target)
+	: mId(id), mSource(source), mTarget(target)
 {}
 
 //============================= OPERATORS ====================================
 std::ostream&
-operator<<(std::ostream& os, const TopologyVertex& rVertex)
+operator<<(std::ostream& os, const Edge& rEdge)
 {
-	os  << "TopologyVertex [id: " << rVertex.mId
-		<< ", point: " << rVertex.mPoint << "]";
+	os  << "TopologyEdge [id: " << rEdge.id()
+		<< ", source: " << rEdge.source()
+		<< ", target: " << rEdge.target() << "]";
 	return os;
 }
 
 bool
-TopologyVertex::operator==(const TopologyVertex& rhs) const
+Edge::operator==(const Edge& rhs) const
 {
-	return (rhs.mId == mId) && (rhs.mPoint == mPoint);
+	return (rhs.id() == id())
+			&& (rhs.source() == source())
+			&& (rhs.target() == target());
 }
 
 //============================= OPERATIONS ===================================
 //============================= ACESS      ===================================
-VertexId
-TopologyVertex::id() const
+EdgeId
+Edge::id() const
 { return mId; }
 
-Point
-TopologyVertex::point() const
-{ return mPoint; }
+VertexId
+Edge::source() const
+{ return mSource; }
 
+VertexId
+Edge::target() const
+{ return mTarget; }
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
-
 
 
 

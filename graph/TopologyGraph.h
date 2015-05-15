@@ -16,12 +16,12 @@
 //
 #include <boost/graph/adjacency_list.hpp>
 
+#include "Edge.h"
 // LOCAL INCLUDES
 //
-#include "TopologyVertex.h"
-#include "TopologyEdge.h"
 #include "TopologyException.h"
 #include "TopologyTypes.h"
+#include "Vertex.h"
 //#include "Topology.h"
 
 // FORWARD REFERENCES

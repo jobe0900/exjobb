@@ -22,10 +22,10 @@ Topology::Topology(const TopoVertexMapType& rVertexMap,
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
-//const TopologyVertex&
+//const Vertex&
 //Topology::addVertex(TopologyId id, Point point)
 //{
-//    auto res = mVertexMap.emplace(id, TopologyVertex(id, point));
+//    auto res = mVertexMap.emplace(id, Vertex(id, point));
 //    return res.first->second;
 //}
 
@@ -48,7 +48,7 @@ Topology::Topology(const TopoVertexMapType& rVertexMap,
 //}
 
 
-const TopologyVertex&
+const Vertex&
 Topology::getVertex(VertexId id) const
 {
     auto it = mrVertexMap.find(id);

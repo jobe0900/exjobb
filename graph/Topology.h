@@ -23,10 +23,10 @@
 //
 #include "TopologyTypes.h"
 #include "TopologyException.h"
-#include "TopologyEdge.h"
-#include "TopologyVertex.h"
 #include "../util/Point.h"
 #include "../mapprovider/MapProvider.h"
+#include "Edge.h"
+#include "Vertex.h"
 
 
 // FORWARD REFERENCES
@@ -69,7 +69,7 @@ public:
 	 * @param	point	The position of the vertex
 	 * @return	A reference to a vertex with given id
 	 */
-//	const TopologyVertex&	addVertex(TopologyId id, Point point);
+//	const Vertex&	addVertex(TopologyId id, Point point);
 
 	/** Try to add an edge to the topology.
 	 * If an edge with the id already exists: return old value.
@@ -86,7 +86,7 @@ public:
 	 * @return	Reference to the found vertex
 	 * @throws	TopologyException if vertex does not exist.
 	 */
-	const TopologyVertex&	getVertex(VertexId id) const;
+	const Vertex&	getVertex(VertexId id) const;
 
 	/** Build a simple graph over the topology.
 	 * @param   rGraph  Reference to TopologyGraph to build
@@ -109,7 +109,7 @@ public:
 protected:
 private:
 //// ATTRIBUTES
-//	const std::map<TopologyId, TopologyVertex>& 	mVertexMap;
+//	const std::map<TopologyId, Vertex>& 	mVertexMap;
 //	const std::map<TopologyId, TopologyEdge>& 		mEdgeMap;
 
 //	const MapProvider&                              mrMapProvider;

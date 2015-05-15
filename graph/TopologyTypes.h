@@ -15,9 +15,9 @@ typedef int TopologyId;
 typedef int VertexId;
 typedef int EdgeId;
 
-typedef std::map<TopologyId, TopologyVertex>           TopoVertexMapType;
+typedef std::map<TopologyId, Vertex>           TopoVertexMapType;
 
-typedef std::map<TopologyId, TopologyEdge>             TopoEdgeMapType;
+typedef std::map<TopologyId, Edge>                     TopoEdgeMapType;
 
 typedef boost::adjacency_list
     <boost::listS, boost::vecS, boost::undirectedS>    UndirectedGraphType;

@@ -45,7 +45,7 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology vertices")
 			{
-				std::map<VertexId, TopologyVertex> vertex_map;
+				std::map<VertexId, Vertex> vertex_map;
 				p_mp->getTopologyVertices(vertex_map);
 				size_t nr_vertices = vertex_map.size();
 
@@ -58,7 +58,7 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology edges")
 			{
-				std::map<EdgeId, TopologyEdge> edge_map;
+				std::map<EdgeId, Edge> edge_map;
 				p_mp->getTopologyEdges(edge_map);
 				size_t nr_edges = edge_map.size();
 

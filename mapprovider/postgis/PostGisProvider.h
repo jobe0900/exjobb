@@ -20,9 +20,9 @@
 // LOCAL INCLUDES
 //
 #include "../../config/DatabaseConfig.h"
-#include "../../graph/TopologyVertex.h"
 #include "../../graph/TopologyEdge.h"
 #include "../../graph/Topology.h"
+#include "../../graph/Vertex.h"
 #include "../MapProvider.h"
 #include "../MapProviderException.h"
 #include "../../util/TimeToStringMaker.h"
@@ -65,12 +65,12 @@ public:
     /** Get edges from topology.
      * @throws	MapProviderException
      */
-    virtual void    getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap);
+    virtual void    getTopologyEdges(std::map<EdgeId, Edge>& rEdgeMap);
 
     /** Get vertices from topology.
      * @throws	MapProviderException
      */
-    virtual void    getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertexMap);
+    virtual void    getTopologyVertices(std::map<VertexId, Vertex>& rVertexMap);
 
 
 

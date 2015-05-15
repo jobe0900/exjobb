@@ -5,8 +5,8 @@
  * @author Jonas Bergman
  */
 
-#ifndef GRAPH_TOPOLOGYVERTEX_H_
-#define GRAPH_TOPOLOGYVERTEX_H_
+#ifndef GRAPH_VERTEX_H_
+#define GRAPH_VERTEX_H_
 
 // SYSTEM INCLUDES
 //
@@ -26,7 +26,7 @@
 /**
  * Data structure for vertices in the topology.
  */
-class TopologyVertex
+class Vertex
 {
 public:
 // LIFECYCLE
@@ -34,15 +34,15 @@ public:
 	 * @param	id		Id for this vertex.
 	 * @param	point	The Point (geometry).
 	 */
-	TopologyVertex(VertexId id, Point point);
-	TopologyVertex() = delete;
-	TopologyVertex(const TopologyVertex&) = default;
+	Vertex(VertexId id, Point point);
+	Vertex() = delete;
+	Vertex(const Vertex&) = default;
 
 // OPERATORS
 	friend
-	std::ostream&	operator<<(std::ostream& os, const TopologyVertex& rVertex);
+	std::ostream&	operator<<(std::ostream& os, const Vertex& rVertex);
 
-	bool			operator==(const TopologyVertex& rhs) const;
+	bool			operator==(const Vertex& rhs) const;
 
 // OPERATIONS
 // ACCESS
@@ -63,4 +63,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* GRAPH_TOPOLOGYVERTEX_H_ */
+#endif /* GRAPH_VERTEX_H_ */

@@ -1,12 +1,12 @@
 /**  Data structure for edges in Topology.
  *
- * #include "TopologyEdge.h"
+ * #include "Edge.h"
  *
  * @author Jonas Bergman
  */
 
-#ifndef GRAPH_TOPOLOGYEDGE_H_
-#define GRAPH_TOPOLOGYEDGE_H_
+#ifndef GRAPH_EDGE_H_
+#define GRAPH_EDGE_H_
 
 // SYSTEM INCLUDES
 //
@@ -16,8 +16,8 @@
 
 // LOCAL INCLUDES
 //
-#include "TopologyVertex.h"
 #include "TopologyTypes.h"
+#include "Vertex.h"
 
 // FORWARD REFERENCES
 //
@@ -26,7 +26,7 @@
 /**
  * Data structure for edges in the topology.
  */
-class TopologyEdge
+class Edge
 {
 public:
 // LIFECYCLE
@@ -35,15 +35,15 @@ public:
 	 * @param	source	Source vertex
 	 * @param	target	Target vertex
 	 */
-	TopologyEdge(EdgeId id, VertexId source, VertexId target);
-//	TopologyEdge() = delete;
-	TopologyEdge(const TopologyEdge&) = default;
+	Edge(EdgeId id, VertexId source, VertexId target);
+//	Edge() = delete;
+	Edge(const Edge&) = default;
 
 // OPERATORS
 	friend
-	std::ostream&	operator<<(std::ostream& os, const TopologyEdge& rEdge);
+	std::ostream&	operator<<(std::ostream& os, const Edge& rEdge);
 
-	bool			operator==(const TopologyEdge& rhs) const;
+	bool			operator==(const Edge& rhs) const;
 
 // OPERATIONS
 // ACCESSORS
@@ -65,4 +65,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* GRAPH_TOPOLOGYEDGE_H_ */
+#endif /* GRAPH_EDGE_H_ */
