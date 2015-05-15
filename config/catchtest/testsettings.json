@@ -15,7 +15,7 @@
 	    
 	    "postgis": 
 	    {
-	        "build_topo":     "",
+	        "temp_topo":      "",
             "topo_name":      "test",
             "roads_prefix":   "highways",
             "schema_prefix":  "topo",

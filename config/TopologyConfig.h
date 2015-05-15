@@ -27,8 +27,13 @@
 struct TopologyConfig
 {
 // ATTRIBUTES
-    std::string     roadsTableName;
-    std::string     topologySchemaName;
+    std::string     providerName;
+
+    std::string     tempTopoName;
+    std::string     topoName;
+
+    std::string     roadsPrefix;
+    std::string     topologySchemaPrefix;
 
     std::string     edgeTableName;
     std::string     edgeIdColumnName;
@@ -39,6 +44,15 @@ struct TopologyConfig
     std::string     vertexTableName;
     std::string     vertexIdColumnName;
     std::string     vertexGeomColumnName;
+
+    std::string     testFile;
+
+// CONSTANTS
+    static const std::string PROVIDER_POSTGIS = "postgis";
+    static const std::string PROVIDER_PGROUTING = "pgrouting";
+    static const std::string PROVIDER_JSONTEST = "jsontest";
+
+
 };
 
 // INLINE METHODS

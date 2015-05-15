@@ -40,7 +40,7 @@ Configurations for building or reading topology from a database. Might have diff
         - `"jsontest"` for simple json test topology.
 
 - **"postgis"**:  
-    - **"build_topo**:
+    - **"temp_topo**:
         - `""` (*empty*) if not building temporary topologies.
         - `"epoch_ms"` for adding a string with the count of milliseconds since "Epoch" as the `topo_name`.
     

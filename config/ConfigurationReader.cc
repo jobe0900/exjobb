@@ -68,28 +68,46 @@ ConfigurationReader::fillTopologyConfiguration(TopologyConfig& rTopoConfig) cons
 
     try
     {
-        rTopoConfig.roadsTableName =
-            mPropertyTree.get<std::string>(prefix + "roads_table");
-        rTopoConfig.topologySchemaName =
-            mPropertyTree.get<std::string>(prefix + "schema");
+        rTopoConfig.providerName =
+            mPropertyTree.get<std::string>(prefix + "provider");
 
-        rTopoConfig.edgeTableName =
-            mPropertyTree.get<std::string>(prefix + "edge_table");
-        rTopoConfig.edgeIdColumnName =
-            mPropertyTree.get<std::string>(prefix + "e_id_col");
-        rTopoConfig.sourceColumnName =
-            mPropertyTree.get<std::string>(prefix + "source_col");
-        rTopoConfig.targetColumnName=
-            mPropertyTree.get<std::string>(prefix + "target_col");
-        rTopoConfig.edgeGeomColumnName =
-            mPropertyTree.get<std::string>(prefix + "e_geom_col");
+        if(rTopoConfig.providerName == TopologyConfig::PROVIDER_JSONTEST)
+        {
+            rTopoConfig.testFile =
+                mPropertyTree.get<std::string>(prefix + "jsontest.test_file");
+        }
+        else if(rTopoConfig.providerName == TopologyConfig::PROVIDER_POSTGIS
+             || rTopoConfig.providerName == TopologyConfig::PROVIDER_PGROUTING)
+        {
+            prefix += rTopoConfig.providerName + ".";
+            rTopoConfig.tempTopoName =
+                mPropertyTree.get<std::string>(prefix + "temp_topo");
+            rTopoConfig.topoName =
+                mPropertyTree.get<std::string>(prefix + "topo_name");
 
-        rTopoConfig.vertexTableName =
-            mPropertyTree.get<std::string>(prefix + "vertex_table");
-        rTopoConfig.vertexIdColumnName =
-            mPropertyTree.get<std::string>(prefix + "v_id_col");
-        rTopoConfig.vertexGeomColumnName =
-            mPropertyTree.get<std::string>(prefix + "v_geom_col");
+            rTopoConfig.roadsPrefix =
+                mPropertyTree.get<std::string>(prefix + "roads_prefix");
+            rTopoConfig.topologySchemaPrefix =
+                mPropertyTree.get<std::string>(prefix + "schema_prefix");
+
+            rTopoConfig.edgeTableName =
+                mPropertyTree.get<std::string>(prefix + "edge.table");
+            rTopoConfig.edgeIdColumnName =
+                mPropertyTree.get<std::string>(prefix + "edge.id_col");
+            rTopoConfig.sourceColumnName =
+                mPropertyTree.get<std::string>(prefix + "edge.source_col");
+            rTopoConfig.targetColumnName=
+                mPropertyTree.get<std::string>(prefix + "edge.target_col");
+            rTopoConfig.edgeGeomColumnName =
+                mPropertyTree.get<std::string>(prefix + "edge.geom_col");
+
+            rTopoConfig.vertexTableName =
+                mPropertyTree.get<std::string>(prefix + "vertex.table");
+            rTopoConfig.vertexIdColumnName =
+                mPropertyTree.get<std::string>(prefix + "vertex.id_col");
+            rTopoConfig.vertexGeomColumnName =
+                mPropertyTree.get<std::string>(prefix + "vertex.geom_col");
+        }
     }
     catch (boost::property_tree::ptree_error& e)
     {
