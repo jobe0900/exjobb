@@ -18,6 +18,7 @@
 
 // LOCAL INCLUDES
 //
+#include "../config/Configuration.h"
 #include "../graph/TopologyEdge.h"
 #include "../graph/TopologyTypes.h"
 #include "../graph/TopologyVertex.h"
@@ -35,8 +36,14 @@ public:
 
     /** Default constructor.
      */
-    MapProvider() = default;
+    MapProvider() = delete;
 
+    /** Constructor.
+     * Construct a MapProvider based on the configurations given.
+     */
+    MapProvider(const Configuration& rConfig)
+        : mrConfig(rConfig)
+    {}
 
     /** Copy constructor.
      *
@@ -68,6 +75,7 @@ public:
 
 protected:
 private:
+    const Configuration& mrConfig;
 };
 
 // INLINE METHODS

@@ -40,15 +40,21 @@ struct DatabaseConfig
 	 * @return	A valid connection string for 'pqxx::conn()'
 	 */
 	std::string
-	getConnectionString() {
-		std::ostringstream oss;
-		oss << "host=" << hostname
-			<< " port=" << port
-			<< " user=" << username
-			<< " password=" << password
-			<< " dbname=" << database;
-		return oss.str();
+	getConnectionString() const {
+//	    if(connectionString.length() == 0) {
+	        std::ostringstream oss;
+	        oss << "host=" << hostname
+	            << " port=" << port
+	            << " user=" << username
+	            << " password=" << password
+	            << " dbname=" << database;
+	        return  oss.str();
+//	    }
+//		return connectionString;
 	}
+
+private:
+//	std::string connectionString;
 };
 
 // INLINE METHODS

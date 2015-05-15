@@ -25,6 +25,7 @@
 #include "../../graph/Topology.h"
 #include "../MapProvider.h"
 #include "../MapProviderException.h"
+#include "../../util/TimeToStringMaker.h"
 
 // FORWARD REFERENCES
 //
@@ -47,12 +48,10 @@ public:
     /** Constructor.
      * Establish connection to database.
      *
-     * @param   rTopoName               The name for the topology.
-     * @param	rDatabaseConfig		    The configuration for connections.
+     * @param	rConfig		            The configuration.
      * @throws	MapProviderException    If connection could not be established.
      */
-    PostGisProvider(const std::string&    rTopoName,
-        const DatabaseConfig& rDatabaseConfig);
+    PostGisProvider(const Configuration& rConfig);
 
     /** Destructor.
      * Close connection to database
@@ -63,7 +62,14 @@ public:
 // OPERATORS
 // OPERATIONS
 
+    /** Get edges from topology.
+     * @throws	MapProviderException
+     */
     virtual void    getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap);
+
+    /** Get vertices from topology.
+     * @throws	MapProviderException
+     */
     virtual void    getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertexMap);
 
     /** Build a PostGIS topology with name given in constructor.
@@ -85,6 +91,9 @@ protected:
 
 private:
 // HELPERS
+    // Helpers for constructor
+    void    setTopoBaseName(std::string& rTopoBaseName);
+
     // Helpers for 'buildTopology()'
     void	installPostgisTopology(pqxx::transaction_base& rTrans);
     void	setSearchPath(pqxx::transaction_base& rTrans);
@@ -111,15 +120,13 @@ private:
                                       const std::string& rSchemaName);
 
     // ATTRIBUTES
-    const std::string   mTopoName;
-    DatabaseConfig      mDbConfig;
-    pqxx::connection    mConnection;
-    std::string         mTableName;
-    std::string         mSchemaName;
+    const DatabaseConfig&   mDbConfig;
+    const TopologyConfig&   mTopoConfig;
+    pqxx::connection        mConnection;
+    std::string             mTableName;
+    std::string             mSchemaName;
 
     // CONSTANTS
-    const std::string TEMP_SCHEMA_PREFIX = "topo_";
-    const std::string TEMP_TABLE_PREFIX = "highways_";
 };
 
 // INLINE METHODS

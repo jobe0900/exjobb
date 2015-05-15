@@ -124,6 +124,7 @@ ConfigurationReader::fillVehicleConfiguration(VehicleConfig& rVehicleConfig) con
     try
     {
         rVehicleConfig.category = mPropertyTree.get<std::string>(prefix + "category");
+        prefix += rVehicleConfig.category + ".";
         rVehicleConfig.height = mPropertyTree.get<double>(prefix + "height");
         rVehicleConfig.length = mPropertyTree.get<double>(prefix + "length");
         rVehicleConfig.weight = mPropertyTree.get<double>(prefix + "weight");

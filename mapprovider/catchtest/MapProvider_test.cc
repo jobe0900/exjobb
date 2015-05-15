@@ -34,7 +34,13 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 			const DatabaseConfig& db_config = config.getDatabaseConfig();
 			std::string topo_name("test");
 
-			MapProvider* p_mp = new PostGisProvider(topo_name, db_config);
+			MapProvider* p_mp(nullptr);
+			if(config.getTopologyConfig().providerName == TopologyConfig::PROVIDER_POSTGIS)
+			{
+			    p_mp = new PostGisProvider(config);
+			}
+
+			REQUIRE (p_mp != nullptr);
 
 			// ...............................................................
 			WHEN ("we try to fetch topology vertices")

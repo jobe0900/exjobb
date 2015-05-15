@@ -83,8 +83,11 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 
 			THEN ("we get a topology configuration filled out")
 			{
-				REQUIRE (r_topo_config.roadsTableName == "highways_test");
-				REQUIRE (r_topo_config.topologySchemaName == "topo_test");
+				REQUIRE (r_topo_config.providerName == "postgis");
+				REQUIRE (r_topo_config.tempTopoName == "");
+				REQUIRE (r_topo_config.topoName == "test");
+				REQUIRE (r_topo_config.roadsPrefix == "highways");
+				REQUIRE (r_topo_config.topologySchemaPrefix == "topo");
 				REQUIRE (r_topo_config.edgeTableName == "edge_data");
 				REQUIRE (r_topo_config.edgeIdColumnName == "edge_id");
 				REQUIRE (r_topo_config.sourceColumnName == "start_node");

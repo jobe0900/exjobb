@@ -17,24 +17,23 @@
 #include "../../../graph/TopologyEdge.h"
 #include "../../../graph/TopologyVertex.h"
 
-SCENARIO ("PostGis topology handling", "[topology]")
+SCENARIO ("PostGis topology handling", "[postgis][topology]")
 {
 	try
 	{
-		std::string config_file("config/catchtest/testsettings.json");
-		ConfigurationReader config_reader(config_file);
-
-		GIVEN ("a valid database configuration structure and a temporary name")
+		// ===================================================================
+		GIVEN ("a valid configuration structure with a temporary name")
 		{
+		    std::string config_file("mapprovider/postgis"
+		        "/catchtest/temptable-testsettings.json");
+		    ConfigurationReader config_reader(config_file);
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
-			const DatabaseConfig& db_config = config.getDatabaseConfig();
-			std::string temp_topo(TimeToStringMaker::getEpochMsTimeString());
 
 			// ...............................................................
 			WHEN ("we try to create postgis topology with a temp name and srid")
 			{
-				PostGisProvider db_handler(temp_topo, db_config);
+				PostGisProvider db_handler(config);
 				int srid = 900913;
 				double tolerance = 1.0;
 
@@ -48,13 +47,32 @@ SCENARIO ("PostGis topology handling", "[topology]")
 			// ...............................................................
 			WHEN ("we try to remove postgis topology with valid arguments")
 			{
-				PostGisProvider db_handler(temp_topo, db_config);
+				PostGisProvider db_handler(config);
 
 				THEN ("we should not receive an exception")
 				{
 					REQUIRE_NOTHROW (db_handler.removeTopology());
 				}
 			}
+		}
+
+		// ===================================================================
+		GIVEN ("a configuration file with NO topology name")
+		{
+		    WHEN ("we try to read in topology")
+            {
+		        std::string config_file("mapprovider/postgis"
+		            "/catchtest/missing-topo-testsettings.json");
+		        ConfigurationReader config_reader(config_file);
+		        Configuration config;
+		        config_reader.fillConfiguration(config);
+
+		        THEN ("we should get an exception")
+		        {
+		            REQUIRE_THROWS_AS (PostGisProvider pgp(config),
+		                MapProviderException&);
+		        }
+            }
 		}
 	}
 	catch (ConfigurationException& e) {
@@ -64,22 +82,21 @@ SCENARIO ("PostGis topology handling", "[topology]")
 }
 
 
-SCENARIO ("PostGis queries", "[query]")
+SCENARIO ("PostGis queries", "[postgis][query]")
 {
 	try
 	{
 		std::string config_file("config/catchtest/testsettings.json");
 		ConfigurationReader config_reader(config_file);
 
+		// ===================================================================
 		GIVEN ("a valid database configuration structure and "
 				"name to existing topology")
 		{
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
-			const DatabaseConfig& db_config = config.getDatabaseConfig();
-			std::string topo_name("test");
 
-			PostGisProvider db_handler(topo_name, db_config);
+			PostGisProvider db_handler(config);
 
 			try
 			{

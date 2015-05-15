@@ -15,34 +15,44 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-PostGisProvider::PostGisProvider(const std::string& rTopoName,
-                                 const DatabaseConfig& rDatabaseConfig)
-try		// catch error when initializing connection
-	:   mTopoName(rTopoName),
-        mDbConfig(rDatabaseConfig),
-        mConnection(mDbConfig.getConnectionString())
+PostGisProvider::PostGisProvider(const Configuration& rConfig)
+try
+    : MapProvider(rConfig),
+      mDbConfig(rConfig.getDatabaseConfig()),
+      mTopoConfig(rConfig.getTopologyConfig()),
+      mConnection(mDbConfig.getConnectionString())
 {
-	try
-	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
-		pqxx::nontransaction nt(mConnection);
-		mTableName  = TEMP_TABLE_PREFIX + nt.esc(mTopoName);
-		mSchemaName = TEMP_SCHEMA_PREFIX + nt.esc(mTopoName);
-	}
-	catch(const std::exception& e)
-	{
-		throw MapProviderException(std::string("Database error, open: ") + e.what());
-	}
+    try
+    {
+        if(!mConnection.is_open())
+        {
+            throw MapProviderException(
+                std::string("Could not open ") + mDbConfig.database);
+        }
+
+        std::string topoBaseName;
+        setTopoBaseName(topoBaseName);
+
+        if(topoBaseName == "")
+        {
+            throw MapProviderException("No topology specified.");
+        }
+
+        pqxx::nontransaction nt(mConnection);
+        mTableName  = nt.esc(mTopoConfig.roadsPrefix + "_" + topoBaseName);
+        mSchemaName = nt.esc(mTopoConfig.topologySchemaPrefix + "_" + topoBaseName);
+    }
+    catch(const std::exception& e)
+    {
+        throw MapProviderException(std::string("Database error, open: ") + e.what());
+    }
 }
 // catch error in initializer list (opening connection)
 catch(const std::exception& e)
 {
-	throw MapProviderException(std::string("Database error, open: ") + e.what());
+    throw MapProviderException(std::string("Database error, open: ") + e.what());
 }
+
 
 
 PostGisProvider::~PostGisProvider()
@@ -199,6 +209,19 @@ PostGisProvider::getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap)
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
+void
+PostGisProvider::setTopoBaseName(std::string& rTopoBaseName)
+{
+    if(mTopoConfig.tempTopoName == TopologyConfig::TEMP_TOPO_NAMEBASE)
+    {
+        rTopoBaseName = TimeToStringMaker::getEpochMsTimeString();
+    }
+    else
+    {
+        rTopoBaseName = mTopoConfig.topoName;
+    }
+}
+
 void
 PostGisProvider::installPostgisTopology(pqxx::transaction_base& rTrans)
 {

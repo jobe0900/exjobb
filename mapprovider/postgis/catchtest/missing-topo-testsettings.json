@@ -1,0 +1,61 @@
+{
+	"database":	
+	{
+		"host":        "127.0.0.1",
+		"port":         5432,
+		"username":    "tester",
+		"password":    "tester",
+		"database":    "mikh_style"
+	},
+	
+	
+	"topology": 
+	{
+	    "provider":      "postgis",
+	    
+	    "postgis": 
+	    {
+	        "temp_topo":      "",
+            "topo_name":      "",
+            "roads_prefix":   "highways",
+            "schema_prefix":  "topo",
+            "edge": 
+            {
+                "table":      "edge_data",
+                "id_col":     "edge_id",
+                "source_col": "start_node",
+                "target_col": "end_node",
+                "geom_col":   "geom"
+            },
+            "vertex": 
+            {
+                "table":     "node",
+                "id_col":    "node_id",
+                "geom_col":  "geom"
+            }
+	    },
+	    
+	    "pgrouting": 
+	    {
+	    },
+	    
+	    "jsontest": 
+        {
+            "test_file": ""
+        }
+	    
+	},
+	
+	
+	"vehicle": 
+	{
+		"category":   "motorcar",
+		"motorcar": 
+		{
+		   "height":  1.6,
+		   "length":  4.5,
+		   "width":   1.9,
+		   "weight":  2.0
+		}
+	}
+}   

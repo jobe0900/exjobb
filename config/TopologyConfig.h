@@ -48,9 +48,10 @@ struct TopologyConfig
     std::string     testFile;
 
 // CONSTANTS
-    static const std::string PROVIDER_POSTGIS = "postgis";
-    static const std::string PROVIDER_PGROUTING = "pgrouting";
-    static const std::string PROVIDER_JSONTEST = "jsontest";
+    static constexpr const char* PROVIDER_POSTGIS = "postgis";
+    static constexpr const char* PROVIDER_PGROUTING = "pgrouting";
+    static constexpr const char* PROVIDER_JSONTEST = "jsontest";
+    static constexpr const char* TEMP_TOPO_NAMEBASE = "epoch_ms";
 
 
 };
