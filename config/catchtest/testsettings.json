@@ -1,28 +1,61 @@
 {
-	"database":	{
+	"database":	
+	{
 		"host":        "127.0.0.1",
 		"port":         5432,
 		"username":    "tester",
 		"password":    "tester",
 		"database":    "mikh_style"
 	},
-	"topology": {
-	    "roads_table":  "highways_test",
-	    "schema":       "topo_test",
-	    "edge_table":   "edge_data",
-	    "e_id_col":     "edge_id",
-	    "source_col":   "start_node",
-	    "target_col":   "end_node",
-	    "e_geom_col":   "geom",
-	    "vertex_table": "node",
-	    "v_id_col":     "node_id",
-	    "v_geom_col":   "geom"
+	
+	
+	"topology": 
+	{
+	    "provider":      "postgis",
+	    
+	    "postgis": 
+	    {
+	        "build_topo":     "",
+            "topo_name":      "test",
+            "roads_prefix":   "highways",
+            "schema_prefix":  "topo",
+            "edge": 
+            {
+                "table":      "edge_data",
+                "id_col":     "edge_id",
+                "source_col": "start_node",
+                "target_col": "end_node",
+                "geom_col":   "geom"
+            },
+            "vertex": 
+            {
+                "table":     "node",
+                "id_col":    "node_id",
+                "geom_col":  "geom"
+            }
+	    },
+	    
+	    "pgrouting": 
+	    {
+	    },
+	    
+	    "jsontest": 
+        {
+            "test_file": ""
+        }
+	    
 	},
-	"vehicle": {
-		"category":    "motorcar",
-		"height":       1.6,
-		"length":       4.5,
-		"weight":       2.0,
-		"width":        1.9
+	
+	
+	"vehicle": 
+	{
+		"category":   "motorcar",
+		"motorcar": 
+		{
+		   "height":  1.6,
+		   "length":  4.5,
+		   "width":   1.9,
+		   "weight":  2.0
+		}
 	}
-}
+}   
