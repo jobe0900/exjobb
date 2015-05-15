@@ -35,6 +35,9 @@ struct TopologyConfig
     std::string     roadsPrefix;
     std::string     topologySchemaPrefix;
 
+    int             srid;
+    double          tolerance;
+
     std::string     edgeTableName;
     std::string     edgeIdColumnName;
     std::string     sourceColumnName;

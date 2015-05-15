@@ -41,6 +41,11 @@ try
         pqxx::nontransaction nt(mConnection);
         mTableName  = nt.esc(mTopoConfig.roadsPrefix + "_" + topoBaseName);
         mSchemaName = nt.esc(mTopoConfig.topologySchemaPrefix + "_" + topoBaseName);
+
+        if(mBuildTempTopology)
+        {
+            buildTopology(mTopoConfig.srid, mTopoConfig.tolerance);
+        }
     }
     catch(const std::exception& e)
     {
@@ -59,6 +64,10 @@ PostGisProvider::~PostGisProvider()
 {
 	try
 	{
+	    if(mBuildTempTopology)
+	    {
+	        removeTopology();
+	    }
 		if(mConnection.is_open())
 		{
 			mConnection.disconnect();
@@ -66,8 +75,7 @@ PostGisProvider::~PostGisProvider()
 	}
 	catch(const std::exception& e)
 	{
-		//swallow errors
-//		throw MapProviderException(std::string("Database error, closing: ") + e.what());
+		throw MapProviderException(std::string("Database error, closing: ") + e.what());
 	}
 }
 
@@ -215,6 +223,7 @@ PostGisProvider::setTopoBaseName(std::string& rTopoBaseName)
     if(mTopoConfig.tempTopoName == TopologyConfig::TEMP_TOPO_NAMEBASE)
     {
         rTopoBaseName = TimeToStringMaker::getEpochMsTimeString();
+        mBuildTempTopology = true;
     }
     else
     {

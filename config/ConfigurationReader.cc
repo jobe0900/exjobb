@@ -80,8 +80,7 @@ ConfigurationReader::fillTopologyConfiguration(TopologyConfig& rTopoConfig) cons
              || rTopoConfig.providerName == TopologyConfig::PROVIDER_PGROUTING)
         {
             prefix += rTopoConfig.providerName + ".";
-            rTopoConfig.tempTopoName =
-                mPropertyTree.get<std::string>(prefix + "temp_topo");
+
             rTopoConfig.topoName =
                 mPropertyTree.get<std::string>(prefix + "topo_name");
 
@@ -89,6 +88,13 @@ ConfigurationReader::fillTopologyConfiguration(TopologyConfig& rTopoConfig) cons
                 mPropertyTree.get<std::string>(prefix + "roads_prefix");
             rTopoConfig.topologySchemaPrefix =
                 mPropertyTree.get<std::string>(prefix + "schema_prefix");
+
+            rTopoConfig.tempTopoName =
+                mPropertyTree.get<std::string>(prefix + "build.temp_topo_name");
+            rTopoConfig.srid =
+                mPropertyTree.get<int>(prefix + "build.srid");
+            rTopoConfig.tolerance =
+                mPropertyTree.get<double>(prefix + "build.tolerance");
 
             rTopoConfig.edgeTableName =
                 mPropertyTree.get<std::string>(prefix + "edge.table");

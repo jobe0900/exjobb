@@ -40,10 +40,6 @@ Configurations for building or reading topology from a database. Might have diff
         - `"jsontest"` for simple json test topology.
 
 - **"postgis"**:  
-    - **"temp_topo**:
-        - `""` (*empty*) if not building temporary topologies.
-        - `"epoch_ms"` for adding a string with the count of milliseconds since "Epoch" as the `topo_name`.
-    
     - **"topo_name"**:
         - *basename* for prebuilt topologies (e.g. `"test"`), combined with `roads_prefix` and `topo_prefix` for actual names such as `"highways_test"` and `"topo_test"`.
     
@@ -52,6 +48,19 @@ Configurations for building or reading topology from a database. Might have diff
 
     - **"schema_prefix"**:
         - *prefix* to add to `topo_name` (e.g. `"topo"`) for schema with topology data when using `postgis_topology`, see above.
+        
+    - **"build"**:
+        - **"temp_topo_name**:
+            - `""` (*empty*) if not building temporary topologies.
+            - `"epoch_ms"` for adding a string with the count of milliseconds since "Epoch" as the `topo_name`.
+        
+        - **"srid"**:
+            - *number* identifying which projection to use.
+                - `900913` for geometric metrical projection, unit meters.
+                - `4326` for geographic spherical projection, unit degrees.
+    
+        - **"tolerance"**:
+            - *snapping* of nodes in unit of projection when building topology, e.g. 1.0 for srid 900913, or 0.001 for srid 4326.
         
     - **"edge"**:
     

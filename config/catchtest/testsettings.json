@@ -15,10 +15,15 @@
 	    
 	    "postgis": 
 	    {
-	        "temp_topo":      "",
+	        
             "topo_name":      "test",
             "roads_prefix":   "highways",
             "schema_prefix":  "topo",
+            "build": {
+                "temp_topo_name": "",
+                "srid":           900913,
+                "tolerance":      1.0 
+            },
             "edge": 
             {
                 "table":      "edge_data",

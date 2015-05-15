@@ -42,7 +42,7 @@ public:
      * Construct a MapProvider based on the configurations given.
      */
     MapProvider(const Configuration& rConfig)
-        : mrConfig(rConfig), mBuildTempTopology(false)
+        : mBuildTempTopology(false), mrConfig(rConfig)
     {}
 
     /** Copy constructor.
@@ -74,9 +74,9 @@ public:
 // INQUIRY
 
 protected:
+    bool                 mBuildTempTopology;
 private:
     const Configuration& mrConfig;
-    const bool           mBuildTempTopology;
 };
 
 // INLINE METHODS
