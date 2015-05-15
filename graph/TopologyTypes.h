@@ -11,11 +11,11 @@
 #include <map>
 #include <boost/graph/adjacency_list.hpp>
 
-typedef int TopologyId;
-typedef int VertexId;
-typedef int EdgeId;
+typedef unsigned TopologyId;
+typedef unsigned VertexId;
+typedef unsigned EdgeId;
 
-typedef std::map<TopologyId, Vertex>           TopoVertexMapType;
+typedef std::map<TopologyId, Vertex>                   TopoVertexMapType;
 
 typedef std::map<TopologyId, Edge>                     TopoEdgeMapType;
 
