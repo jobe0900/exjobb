@@ -44,7 +44,12 @@ public:
 
 	/** Default constructor.
 	 */
-	Topology();
+	Topology() = default;
+
+	/** Constructor.
+	 * @param rMapProvder   The provider of the map data topology.
+	 */
+//	Topology(const MapProvider& rMapProvider);
 
 
 	/** Copy constructor.

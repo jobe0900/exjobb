@@ -30,30 +30,30 @@ SCENARIO ("PostGis topology handling", "[postgis][topology]")
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
 
-			// ...............................................................
-			WHEN ("we try to create postgis topology with a temp name and srid")
-			{
-				PostGisProvider db_handler(config);
-				int srid = 900913;
-				double tolerance = 1.0;
+//			// ...............................................................
+//			WHEN ("we try to create postgis topology with a temp name and srid")
+//			{
+//				PostGisProvider db_handler(config);
+//				int srid = 900913;
+//				double tolerance = 1.0;
+//
+//				THEN ("we should not receive an exception")
+//				{
+//					REQUIRE_NOTHROW (
+//						db_handler.buildTopology(srid, tolerance));
+//				}
+//			}
 
-				THEN ("we should not receive an exception")
-				{
-					REQUIRE_NOTHROW (
-						db_handler.buildTopology(srid, tolerance));
-				}
-			}
-
-			// ...............................................................
-			WHEN ("we try to remove postgis topology with valid arguments")
-			{
-				PostGisProvider db_handler(config);
-
-				THEN ("we should not receive an exception")
-				{
-					REQUIRE_NOTHROW (db_handler.removeTopology());
-				}
-			}
+//			// ...............................................................
+//			WHEN ("we try to remove postgis topology with valid arguments")
+//			{
+//				PostGisProvider db_handler(config);
+//
+//				THEN ("we should not receive an exception")
+//				{
+//					REQUIRE_NOTHROW (db_handler.removeTopology());
+//				}
+//			}
 		}
 
 		// ===================================================================
@@ -97,15 +97,6 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 		    config_reader.fillConfiguration(config);
 
 			PostGisProvider db_handler(config);
-
-			try
-			{
-				db_handler.buildTopology(900913, 1.0);
-			}
-			catch(MapProviderException& e)
-			{
-//				INFO ("Topology" << topo_name << " exists.");
-			}
 
 			// ...............................................................
 			WHEN ("we try to fetch topology vertices")

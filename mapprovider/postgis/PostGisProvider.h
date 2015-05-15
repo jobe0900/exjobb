@@ -72,6 +72,18 @@ public:
      */
     virtual void    getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertexMap);
 
+
+
+// ACCESS
+// INQUIRY
+
+protected:
+
+private:
+// HELPERS
+    // Helpers for constructor
+    void    setTopoBaseName(std::string& rTopoBaseName);
+
     /** Build a PostGIS topology with name given in constructor.
      * @param	srid		The SRID for the projection to use
      * @param	tolerance	The distance to look for merging vertices, unit of srid.
@@ -83,16 +95,6 @@ public:
      * @throws	MapProviderException
      */
     void	        removeTopology();
-
-// ACCESS
-// INQUIRY
-
-protected:
-
-private:
-// HELPERS
-    // Helpers for constructor
-    void    setTopoBaseName(std::string& rTopoBaseName);
 
     // Helpers for 'buildTopology()'
     void	installPostgisTopology(pqxx::transaction_base& rTrans);

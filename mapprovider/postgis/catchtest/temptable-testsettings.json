@@ -1,24 +1,29 @@
 {
-	"database":	
-	{
-		"host":        "127.0.0.1",
-		"port":         5432,
-		"username":    "tester",
-		"password":    "tester",
-		"database":    "mikh_style"
-	},
-	
-	
-	"topology": 
-	{
-	    "provider":      "postgis",
-	    
-	    "postgis": 
-	    {
-	        "temp_topo":      "epoch_ms",
-            "topo_name":      "",
+    "database": 
+    {
+        "host":        "127.0.0.1",
+        "port":         5432,
+        "username":    "tester",
+        "password":    "tester",
+        "database":    "mikh_style"
+    },
+    
+    
+    "topology": 
+    {
+        "provider":      "postgis",
+        
+        "postgis": 
+        {
+            
+            "topo_name":      "test",
             "roads_prefix":   "highways",
             "schema_prefix":  "topo",
+            "build": {
+                "temp_topo_name": "epoch_ms",
+                "srid":           900913,
+                "tolerance":      1.0 
+            },
             "edge": 
             {
                 "table":      "edge_data",
@@ -33,29 +38,29 @@
                 "id_col":    "node_id",
                 "geom_col":  "geom"
             }
-	    },
-	    
-	    "pgrouting": 
-	    {
-	    },
-	    
-	    "jsontest": 
+        },
+        
+        "pgrouting": 
+        {
+        },
+        
+        "jsontest": 
         {
             "test_file": ""
         }
-	    
-	},
-	
-	
-	"vehicle": 
-	{
-		"category":   "motorcar",
-		"motorcar": 
-		{
-		   "height":  1.6,
-		   "length":  4.5,
-		   "width":   1.9,
-		   "weight":  2.0
-		}
-	}
+        
+    },
+    
+    
+    "vehicle": 
+    {
+        "category":   "motorcar",
+        "motorcar": 
+        {
+           "height":  1.6,
+           "length":  4.5,
+           "width":   1.9,
+           "weight":  2.0
+        }
+    }
 }   

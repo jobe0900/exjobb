@@ -82,69 +82,6 @@ PostGisProvider::~PostGisProvider()
 //============================= OPERATORS ====================================
 
 //============================= OPERATIONS ===================================
-
-void
-PostGisProvider::buildTopology(int srid, double tolerance)
-{
-	try
-	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
-
-
-		// TRANSACTION START
-		pqxx::work transaction(mConnection);
-
-		installPostgisTopology(transaction);
-		setSearchPath(transaction);
-		createTemporaryTable(transaction, mTableName);
-		createTemporarySchema(transaction, mSchemaName, srid);
-		addTopoGeometryColumn(transaction, mSchemaName, mTableName);
-		fillTopoGeometryColumn(transaction, mSchemaName, mTableName, tolerance);
-
-		// TRANSACTION END
-		transaction.commit();
-	}
-	catch(const std::exception& e)
-	{
-		throw MapProviderException(std::string("Database error: ") + e.what());
-	}
-}
-
-
-void
-PostGisProvider::removeTopology()
-{
-	try
-	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
-
-		// TRANSACTION START
-		pqxx::work transaction(mConnection);
-
-		dropTemporaryTable(transaction, mTableName);
-		dropTemporarySchema(transaction, mSchemaName);
-		deleteTemporaryLayerRecord(transaction, mTableName);
-		deleteTemporaryTopoRecord(transaction, mSchemaName);
-
-		// TRANSACTION END
-		transaction.commit();
-	}
-	catch(const std::exception& e)
-	{
-		throw MapProviderException(std::string("Database error: ") + e.what());
-	}
-
-}
-
-
 void
 PostGisProvider::getTopologyVertices(std::map<VertexId, TopologyVertex>& rVertexMap)
 {
@@ -212,11 +149,74 @@ PostGisProvider::getTopologyEdges(std::map<EdgeId, TopologyEdge>& rEdgeMap)
 		throw MapProviderException(std::string("Database error: ") + e.what());
 	}
 }
+
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
+
+void
+PostGisProvider::buildTopology(int srid, double tolerance)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw MapProviderException(
+					std::string("Could not open ") + mDbConfig.database);
+		}
+
+
+		// TRANSACTION START
+		pqxx::work transaction(mConnection);
+
+		installPostgisTopology(transaction);
+		setSearchPath(transaction);
+		createTemporaryTable(transaction, mTableName);
+		createTemporarySchema(transaction, mSchemaName, srid);
+		addTopoGeometryColumn(transaction, mSchemaName, mTableName);
+		fillTopoGeometryColumn(transaction, mSchemaName, mTableName, tolerance);
+
+		// TRANSACTION END
+		transaction.commit();
+	}
+	catch(const std::exception& e)
+	{
+		throw MapProviderException(std::string("Database error: ") + e.what());
+	}
+}
+
+
+void
+PostGisProvider::removeTopology()
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw MapProviderException(
+					std::string("Could not open ") + mDbConfig.database);
+		}
+
+		// TRANSACTION START
+		pqxx::work transaction(mConnection);
+
+		dropTemporaryTable(transaction, mTableName);
+		dropTemporarySchema(transaction, mSchemaName);
+		deleteTemporaryLayerRecord(transaction, mTableName);
+		deleteTemporaryTopoRecord(transaction, mSchemaName);
+
+		// TRANSACTION END
+		transaction.commit();
+	}
+	catch(const std::exception& e)
+	{
+		throw MapProviderException(std::string("Database error: ") + e.what());
+	}
+
+}
+
 void
 PostGisProvider::setTopoBaseName(std::string& rTopoBaseName)
 {
