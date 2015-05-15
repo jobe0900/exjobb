@@ -21,6 +21,7 @@
 
 // LOCAL INCLUDES
 //
+#include "TopologyTypes.h"
 #include "TopologyException.h"
 #include "TopologyEdge.h"
 #include "TopologyVertex.h"
@@ -31,13 +32,6 @@
 // FORWARD REFERENCES
 //
 
-typedef int TopologyId;
-typedef boost::adjacency_list
-    < boost::listS,
-      boost::vecS,
-      boost::bidirectionalS
-    > TopologyGraph;
-
 class Topology
 {
 public:
@@ -45,12 +39,15 @@ public:
 
 	/** Default constructor.
 	 */
-	Topology() = default;
+	Topology() = delete;
 
 	/** Constructor.
 	 * @param rMapProvder   The provider of the map data topology.
 	 */
-	Topology(const MapProvider& rMapProvider);
+//	Topology(const MapProvider& rMapProvider);
+
+    Topology(const TopoVertexMapType& rVertexMap,
+             const TopoEdgeMapType& rEdgeMap);
 
 
 	/** Copy constructor.
@@ -58,6 +55,10 @@ public:
 	 * @param from The value to copy to this object.
 	 */
 	Topology(const Topology& from) = delete;
+
+// ATTRIBUTES
+	const TopoVertexMapType& 	mrVertexMap;
+	const TopoEdgeMapType& 		mrEdgeMap;
 
 // OPERATORS
 // OPERATIONS
@@ -68,7 +69,7 @@ public:
 	 * @param	point	The position of the vertex
 	 * @return	A reference to a vertex with given id
 	 */
-	const TopologyVertex&	addVertex(TopologyId id, Point point);
+//	const TopologyVertex&	addVertex(TopologyId id, Point point);
 
 	/** Try to add an edge to the topology.
 	 * If an edge with the id already exists: return old value.
@@ -78,7 +79,7 @@ public:
 	 * @return	A reference to an edge with given id
 	 * @throw	Topology Exception if vertices are not in topology.
 	 */
-	const TopologyEdge&		addEdge(EdgeId id, VertexId source, VertexId target);
+//	const TopologyEdge&		addEdge(EdgeId id, VertexId source, VertexId target);
 
 	/** Fetch the vertex with given id.
 	 * @param	id		Id of the vertex to get
@@ -90,7 +91,7 @@ public:
 	/** Build a simple graph over the topology.
 	 * @param   rGraph  Reference to TopologyGraph to build
 	 */
-	void                    buildTopologyGraph(TopologyGraph& rGraph);
+//	void                    buildTopologyGraph(TopologyGraph& rGraph);
 
 // ACCESS
 	/**
@@ -107,11 +108,11 @@ public:
 
 protected:
 private:
-// ATTRIBUTES
-	std::map<TopologyId, TopologyVertex> 	mVertexMap;
-	std::map<TopologyId, TopologyEdge> 		mEdgeMap;
+//// ATTRIBUTES
+//	const std::map<TopologyId, TopologyVertex>& 	mVertexMap;
+//	const std::map<TopologyId, TopologyEdge>& 		mEdgeMap;
 
-	const MapProvider&                      mrMapProvider;
+//	const MapProvider&                              mrMapProvider;
 
 
 };
