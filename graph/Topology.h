@@ -25,16 +25,17 @@
 #include "TopologyEdge.h"
 #include "TopologyVertex.h"
 #include "../util/Point.h"
+#include "../mapprovider/MapProvider.h"
 
 
 // FORWARD REFERENCES
 //
 
 typedef int TopologyId;
-typedef boost::adjacency_list<
-            boost::listS,
-            boost::vecS,
-            boost::bidirectionalS
+typedef boost::adjacency_list
+    < boost::listS,
+      boost::vecS,
+      boost::bidirectionalS
     > TopologyGraph;
 
 class Topology
@@ -49,7 +50,7 @@ public:
 	/** Constructor.
 	 * @param rMapProvder   The provider of the map data topology.
 	 */
-//	Topology(const MapProvider& rMapProvider);
+	Topology(const MapProvider& rMapProvider);
 
 
 	/** Copy constructor.
@@ -109,6 +110,9 @@ private:
 // ATTRIBUTES
 	std::map<TopologyId, TopologyVertex> 	mVertexMap;
 	std::map<TopologyId, TopologyEdge> 		mEdgeMap;
+
+	const MapProvider&                      mrMapProvider;
+
 
 };
 
