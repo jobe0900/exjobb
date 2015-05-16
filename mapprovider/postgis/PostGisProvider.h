@@ -62,25 +62,35 @@ public:
 // OPERATORS
 // OPERATIONS
 
-    /** Get edges from topology.
-     * @throws	MapProviderException
+    /** Get the topology from the database.
+     * @throws MapProviderException, TopologyException
      */
-    virtual void    getTopologyEdges(std::map<EdgeIdType, Edge>& rEdgeMap);
-
-    /** Get vertices from topology.
-     * @throws	MapProviderException
-     */
-    virtual void    getTopologyVertices(std::map<VertexIdType, Vertex>& rVertexMap);
-
-
-
-// ACCESS
+    virtual void    getTopology(Topology& rTopology);
 // INQUIRY
 
 protected:
 
 private:
 // HELPERS
+    // Helpers for 'getTopology()'
+    /** Get edges from database.
+     * @throws	MapProviderException
+     */
+    void    getTopologyEdges(pqxx::result& rEdgeResult);
+    /** Add edges to topology.
+     * @throws  TopologyException
+     */
+    void    addEdgeResultToTopology(const pqxx::result&, Topology& rTopology);
+
+    /** Get vertices from database.
+     * @throws	MapProviderException
+     */
+    void    getTopologyVertices(pqxx::result& rVertexResult);
+    /** Add vertices to topology.
+     * @throws  TopologyException
+     */
+    void    addVertexResultToTopology(const pqxx::result&, Topology& rTopology);
+
     // Helpers for constructor
     void    setTopoBaseName(std::string& rTopoBaseName);
 

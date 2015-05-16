@@ -54,7 +54,7 @@ public:
     Graph() = delete;
     Graph(const Topology& rTopology);
 //    Graph(size_t nrVertices);
-    ~Graph();
+    ~Graph() = default;
 // OPERATORS
 // OPERATIONS
 //    void                addVertex(const Vertex& vertex);

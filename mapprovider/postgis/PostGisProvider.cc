@@ -83,78 +83,102 @@ PostGisProvider::~PostGisProvider()
 
 //============================= OPERATIONS ===================================
 void
-PostGisProvider::getTopologyVertices(std::map<VertexIdType, Vertex>& rVertexMap)
+PostGisProvider::getTopology(Topology& rTopology)
 {
-	try
-	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+    pqxx::result vertex_result;
+    getTopologyVertices(vertex_result);
+    addVertexResultToTopology(vertex_result, rTopology);
 
-		// NON-TRANSACTION START
-		pqxx::nontransaction non_trans(mConnection);
-
-		pqxx::result result = non_trans.exec(
-				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
-				"FROM " + mSchemaName + ".node "
-				"ORDER BY node_id ASC;"
-		);
-
-		for(size_t row = 0; row < result.size(); ++row)
-		{
-			VertexIdType	id(result[row][0].as<int>());
-			Point 		p(result[row][1].as<double>(), result[row][2].as<double>());
-			rVertexMap.emplace(id, Vertex(id, p));
-		}
-	}
-	catch(const std::exception& e)
-	{
-		throw MapProviderException(std::string("Database error: ") + e.what());
-	}
+    pqxx::result edge_result;
+    getTopologyEdges(edge_result);
+    addEdgeResultToTopology(edge_result, rTopology);
 }
 
-
-void
-PostGisProvider::getTopologyEdges(std::map<EdgeIdType, Edge>& rEdgeMap)
-{
-	try
-	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
-
-		// NON-TRANSACTION START
-		pqxx::nontransaction non_trans(mConnection);
-
-		pqxx::result result = non_trans.exec(
-				"SELECT edge_id, start_node, end_node "
-				"FROM " + mSchemaName + ".edge_data "
-				"ORDER BY edge_id ASC;"
-		);
-
-		for(size_t row = 0; row < result.size(); ++row)
-		{
-			EdgeIdType 		edge_id(result[row][0].as<int>());
-			VertexIdType 	source_id(result[row][1].as<int>());
-			VertexIdType 	target_id(result[row][2].as<int>());
-			rEdgeMap.emplace(edge_id, Edge(edge_id, source_id, target_id));
-		}
-	}
-	catch(const std::exception& e)
-	{
-		throw MapProviderException(std::string("Database error: ") + e.what());
-	}
-}
 
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
+
+void
+PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw MapProviderException(
+					std::string("Could not open ") + mDbConfig.database);
+		}
+
+		// NON-TRANSACTION START
+		pqxx::nontransaction non_trans(mConnection);
+
+		rVertexResult = non_trans.exec(
+				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
+				"FROM " + mSchemaName + ".node "
+				"ORDER BY node_id ASC;"
+		);
+	}
+	catch(const std::exception& e)
+	{
+		throw MapProviderException(std::string("Database error: ") + e.what());
+	}
+}
+
+void
+PostGisProvider::addVertexResultToTopology(const pqxx::result& result,
+                                           Topology& rTopology)
+{
+    for(size_t row = 0; row < result.size(); ++row)
+    {
+        VertexIdType	id(result[row][0].as<int>());
+        Point 		    point(result[row][1].as<double>(),
+                              result[row][2].as<double>());
+        rTopology.addVertex(id, point);
+    }
+}
+
+
+void
+PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw MapProviderException(
+					std::string("Could not open ") + mDbConfig.database);
+		}
+
+		// NON-TRANSACTION START
+		pqxx::nontransaction non_trans(mConnection);
+
+		rEdgeResult = non_trans.exec(
+				"SELECT edge_id, start_node, end_node "
+				"FROM " + mSchemaName + ".edge_data "
+				"ORDER BY edge_id ASC;"
+		);
+	}
+	catch(const std::exception& e)
+	{
+		throw MapProviderException(std::string("Database error: ") + e.what());
+	}
+}
+
+void
+PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
+                                         Topology& rTopology)
+{
+    for(size_t row = 0; row < result.size(); ++row)
+    {
+        EdgeIdType      edge_id(result[row][0].as<int>());
+        VertexIdType    source_id(result[row][1].as<int>());
+        VertexIdType    target_id(result[row][2].as<int>());;
+        rTopology.addEdge(edge_id, source_id, target_id);
+    }
+}
 
 void
 PostGisProvider::buildTopology(int srid, double tolerance)

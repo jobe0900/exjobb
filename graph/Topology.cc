@@ -35,6 +35,13 @@ Topology::addVertex(VertexIdType id, Point point)
     return res.first->second;
 }
 
+const Vertex&
+Topology::addVertex(Vertex vertex)
+{
+    auto res = vertexMap.emplace(vertex.id(), vertex);
+    return res.first->second;
+}
+
 
 const Edge&
 Topology::addEdge(EdgeIdType id, VertexIdType source, VertexIdType target)
@@ -51,6 +58,23 @@ Topology::addEdge(EdgeIdType id, VertexIdType source, VertexIdType target)
 		throw TopologyException("Cannot add edge: " + std::to_string(id) +
 				". " + e.what());
 	}
+}
+
+const Edge&
+Topology::addEdge(Edge edge)
+{
+    try
+    {
+        getVertex(edge.source());
+        getVertex(edge.target());
+        auto res = edgeMap.emplace(edge.id(), edge);
+        return res.first->second;
+    }
+    catch (TopologyException& e)
+    {
+        throw TopologyException("Cannot add edge: " + std::to_string(edge.id()) +
+                ". " + e.what());
+    }
 }
 
 

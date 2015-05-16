@@ -18,9 +18,10 @@
 
 // LOCAL INCLUDES
 //
+#include "../graph/Topology.h"
 #include "../config/Configuration.h"
 #include "../graph/Edge.h"
-#include "../graph/TopologyTypes.h"
+//#include "../graph/TopologyTypes.h"
 #include "../graph/Vertex.h"
 
 // FORWARD REFERENCES
@@ -59,17 +60,20 @@ public:
 
 // OPERATORS
 // OPERATIONS
+    virtual void    getTopology(Topology& rTopology) = 0;
+
+
     /** Get edges from the provider of map data.
      * @param   rEdgeMap    Reference to a map with edge id => edge.
      */
-    virtual void    getTopologyEdges(
-                        std::map<EdgeIdType, Edge>& rEdgeMap) = 0;
+//    virtual void    getTopologyEdges(
+//                        std::map<EdgeIdType, Edge>& rEdgeMap) = 0;
 
     /** Get vertices from the provider of map data.
      * @param   rVertexMap    Reference to a map with vertex id => vertex.
      */
-    virtual void    getTopologyVertices(
-                        std::map<VertexIdType, Vertex>& rVertexMap) = 0;
+//    virtual void    getTopologyVertices(
+//                        std::map<VertexIdType, Vertex>& rVertexMap) = 0;
 // ACCESS
 // INQUIRY
 

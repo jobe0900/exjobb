@@ -22,10 +22,6 @@ Graph::Graph(const Topology& rTopology)
       mEdgeMap(),
       mrTopology(rTopology)
 {
-    for(Vertex& vertex : rTopology.mrVertexMap)
-    {
-        addVertex(vertex);
-    }
 }
 
 //TopologyGraph::~TopologyGraph()

@@ -15,9 +15,9 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 	GIVEN ("a Topology object and data for a vertex")
 	{
 		Topology topo;
-		const TopoIdType id(1);
-		const double x = 2;
-		const double y = 3;
+		const VertexIdType id(1);
+		const double x(2);
+		const double y(3);
 		const Point point(x, y);
 
 		WHEN ("we try to add vertex to Topology")

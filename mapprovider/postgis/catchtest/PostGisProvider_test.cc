@@ -99,28 +99,26 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			PostGisProvider db_handler(config);
 
 			// ...............................................................
-			WHEN ("we try to fetch topology vertices")
+			WHEN ("we try to fetch a topology")
 			{
-				std::map<VertexIdType, Vertex> vertex_map;
-				db_handler.getTopologyVertices(vertex_map);
-				size_t nr_vertices = vertex_map.size();
+			    Topology topology;
 
-				THEN ("we should receive a list of TopologyVertex")
+				THEN ("we should not get an exception")
 				{
-					REQUIRE (nr_vertices > 0);
+					REQUIRE_NOTHROW (db_handler.getTopology(topology););
 				}
 			}
 
 			// ...............................................................
-			WHEN ("we try to fetch topology edges")
+			WHEN ("we try to fetch topology ")
 			{
-				std::map<EdgeIdType, Edge> edge_map;
-				db_handler.getTopologyEdges(edge_map);
-				size_t nr_edges = edge_map.size();
+			    Topology topology;
+			    db_handler.getTopology(topology);
 
-				THEN ("we should receive a list of TopologyEdge")
+				THEN ("we should receive a vertices and edges")
 				{
-					REQUIRE (nr_edges > 0);
+					REQUIRE (topology.nrVertices() > 0);
+					REQUIRE (topology.nrEdges() > 0);
 				}
 			}
 		}

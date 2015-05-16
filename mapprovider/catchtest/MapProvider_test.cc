@@ -43,28 +43,15 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 			REQUIRE (p_mp != nullptr);
 
 			// ...............................................................
-			WHEN ("we try to fetch topology vertices")
+			WHEN ("we try to fetch topology")
 			{
-				std::map<VertexIdType, Vertex> vertex_map;
-				p_mp->getTopologyVertices(vertex_map);
-				size_t nr_vertices = vertex_map.size();
+			    Topology topology;
+				p_mp->getTopology(topology);
 
-				THEN ("we should receive a list of TopologyVertex")
+				THEN ("we should receive topology vertices and edges")
 				{
-					REQUIRE (nr_vertices > 0);
-				}
-			}
-
-			// ...............................................................
-			WHEN ("we try to fetch topology edges")
-			{
-				std::map<EdgeIdType, Edge> edge_map;
-				p_mp->getTopologyEdges(edge_map);
-				size_t nr_edges = edge_map.size();
-
-				THEN ("we should receive a list of TopologyEdge")
-				{
-					REQUIRE (nr_edges > 0);
+					REQUIRE (topology.nrVertices() > 0);
+					REQUIRE (topology.nrEdges() > 0);
 				}
 			}
 			delete p_mp;

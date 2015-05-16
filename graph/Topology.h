@@ -21,10 +21,10 @@
 
 // LOCAL INCLUDES
 //
-#include "TopologyTypes.h"
+//#include "TopologyTypes.h"
 #include "TopologyException.h"
 #include "../util/Point.h"
-#include "../mapprovider/MapProvider.h"
+//#include "../mapprovider/MapProvider.h"
 #include "Edge.h"
 #include "Vertex.h"
 
@@ -32,8 +32,8 @@
 // FORWARD REFERENCES
 //
 
-typedef std::map<TopoIdType, Vertex>  TopoVertexMapType;
-typedef std::map<TopoIdType, Edge>    TopoEdgeMapType;
+typedef std::map<VertexIdType, Vertex>  TopoVertexMapType;
+typedef std::map<EdgeIdType, Edge>      TopoEdgeMapType;
 
 class Topology
 {
@@ -70,6 +70,8 @@ public:
 	 * @return	A reference to a vertex with given id
 	 */
 	const Vertex&   addVertex(VertexIdType id, Point point);
+	const Vertex&   addVertex(Vertex vertex);
+
 
 	/** Try to add an edge to the topology.
 	 * If an edge with the id already exists: return old value.
@@ -80,6 +82,7 @@ public:
 	 * @throw	Topology Exception if vertices are not in topology.
 	 */
 	const Edge&     addEdge(EdgeIdType id, VertexIdType source, VertexIdType target);
+	const Edge&     addEdge(Edge edge);
 
 	/** Fetch the vertex with given id.
 	 * @param	id		Id of the vertex to get
