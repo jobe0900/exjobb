@@ -8,28 +8,7 @@
 #ifndef GRAPH_TOPOLOGYTYPES_H_
 #define GRAPH_TOPOLOGYTYPES_H_
 
-#include <map>
-#include <boost/graph/adjacency_list.hpp>
-
-#include "Vertex.h"
-#include "Edge.h"
-
 typedef unsigned        TopoIdType;
 typedef unsigned long   OsmIdType;
-
-typedef std::map<TopoIdType, Vertex>                   TopoVertexMapType;
-
-typedef std::map<TopoIdType, Edge>                     TopoEdgeMapType;
-
-//typedef std::map<TopoIdType, Edge>                     TopoEdgeMapType;
-
-typedef boost::adjacency_list
-    <boost::listS, boost::vecS, boost::undirectedS>    UndirectedGraphType;
-
-typedef boost::adjacency_list
-    <boost::listS, boost::vecS, boost::directedS>      DirectedGraphType;
-
-typedef boost::adjacency_list
-    <boost::listS, boost::vecS, boost::bidirectionalS> BidirectedGraphType;
 
 #endif /* GRAPH_TOPOLOGYTYPES_H_ */

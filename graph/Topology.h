@@ -32,6 +32,9 @@
 // FORWARD REFERENCES
 //
 
+typedef std::map<TopoIdType, Vertex>  TopoVertexMapType;
+typedef std::map<TopoIdType, Edge>    TopoEdgeMapType;
+
 class Topology
 {
 public:
