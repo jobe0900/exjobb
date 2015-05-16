@@ -11,17 +11,34 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Edge::Edge(EdgeIdType id, VertexIdType source, VertexIdType target)
-	: mId(id), mSource(source), mTarget(target)
+Edge::Edge(EdgeIdType   id,
+           VertexIdType source,
+           VertexIdType target,
+           Direction    direction)
+	: mId(id), mSource(source), mTarget(target), mDirection(direction)
 {}
 
 //============================= OPERATORS ====================================
 std::ostream&
 operator<<(std::ostream& os, const Edge& rEdge)
 {
-	os  << "TopologyEdge [id: " << rEdge.id()
+	os  << "Edge [id: " << rEdge.id()
 		<< ", source: " << rEdge.source()
-		<< ", target: " << rEdge.target() << "]";
+		<< ", target: " << rEdge.target()
+		<< ", direction: ";
+
+	switch(rEdge.mDirection)
+	{
+	    case Edge::BOTH:
+	        os << "BOTH"; break;
+	    case Edge::FROM_TO:
+	        os << "FROM_TO"; break;
+	    case Edge::TO_FROM:
+	        os << "TO_FROM"; break;
+	}
+
+	os  << "]";
+
 	return os;
 }
 
@@ -46,6 +63,10 @@ Edge::source() const
 VertexIdType
 Edge::target() const
 { return mTarget; }
+
+Edge::Direction
+Edge::direction() const
+{ return mDirection; }
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

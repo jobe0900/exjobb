@@ -28,13 +28,23 @@ typedef unsigned        EdgeIdType;
 class Edge
 {
 public:
+    enum Direction
+    {
+        BOTH,       // bidirectional
+        TO_FROM,    // one-way: from Source to Target
+        FROM_TO     // one-way: from Target to Source
+    };
+
 // LIFECYCLE
 	/** Constructor.
 	 * @param	id		Id for this Edge
 	 * @param	source	Source vertex
 	 * @param	target	Target vertex
 	 */
-	Edge(EdgeIdType id, VertexIdType source, VertexIdType target);
+	Edge(EdgeIdType   id,
+	     VertexIdType source,
+	     VertexIdType target,
+	     Direction    direction = BOTH);
 //	Edge() = delete;
 	Edge(const Edge&) = default;
 
@@ -49,6 +59,7 @@ public:
 	EdgeIdType		id() const;
 	VertexIdType	source() const;
 	VertexIdType	target() const;
+	Direction       direction() const;
 // INQUIRY
 
 private:
@@ -56,6 +67,7 @@ private:
 	EdgeIdType		mId;
 	VertexIdType	mSource;
 	VertexIdType	mTarget;
+	Direction       mDirection;
 };
 
 // INLINE METHODS
