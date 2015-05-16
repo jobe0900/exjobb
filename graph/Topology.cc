@@ -11,48 +11,54 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Topology::Topology(const TopoVertexMapType& rVertexMap,
-                   const TopoEdgeMapType& rEdgeMap)
-    : mrVertexMap(rVertexMap),
-      mrEdgeMap(rEdgeMap)
-{ }
+Topology::Topology()
+    : vertexMap(), edgeMap()
+{
+}
+
+//Topology::Topology(const TopoVertexMapType& rVertexMap,
+//                   const TopoEdgeMapType& rEdgeMap)
+//    : mrVertexMap(rVertexMap),
+//      mrEdgeMap(rEdgeMap)
+//{
+//}
 //Topology::Topology(const MapProvider& rMapProvider)
 //    : mrMapProvider(rMapProvider)
 //{ }
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
-//const Vertex&
-//Topology::addVertex(TopologyId id, Point point)
-//{
-//    auto res = mVertexMap.emplace(id, Vertex(id, point));
-//    return res.first->second;
-//}
+const Vertex&
+Topology::addVertex(VertexIdType id, Point point)
+{
+    auto res = vertexMap.emplace(id, Vertex(id, point));
+    return res.first->second;
+}
 
 
-//const TopologyEdge&
-//Topology::addEdge(EdgeId id, VertexIdType source, VertexIdType target)
-//{
-// 	try
-//	{
-//	    getVertex(source);
-//	    getVertex(target);
-//		auto res = mEdgeMap.emplace(id, TopologyEdge(id, source, target));
-//		return res.first->second;
-//	}
-//	catch (TopologyException& e)
-//	{
-//		throw TopologyException("Cannot add edge: " + std::to_string(id) +
-//				". " + e.what());
-//	}
-//}
+const Edge&
+Topology::addEdge(EdgeIdType id, VertexIdType source, VertexIdType target)
+{
+ 	try
+	{
+	    getVertex(source);
+	    getVertex(target);
+		auto res = edgeMap.emplace(id, Edge(id, source, target));
+		return res.first->second;
+	}
+	catch (TopologyException& e)
+	{
+		throw TopologyException("Cannot add edge: " + std::to_string(id) +
+				". " + e.what());
+	}
+}
 
 
 const Vertex&
 Topology::getVertex(VertexIdType id) const
 {
-    auto it = mrVertexMap.find(id);
-    if(it == mrVertexMap.end()) {
+    auto it = vertexMap.find(id);
+    if(it == vertexMap.end()) {
         throw TopologyException("Vertex not found: " + std::to_string(id));
     }
     return it->second;
@@ -63,13 +69,13 @@ Topology::getVertex(VertexIdType id) const
 size_t
 Topology::nrVertices() const
 {
-    return mrVertexMap.size();
+    return vertexMap.size();
 }
 
 size_t
 Topology::nrEdges() const
 {
-    return mrEdgeMap.size();
+    return edgeMap.size();
 }
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

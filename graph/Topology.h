@@ -42,15 +42,15 @@ public:
 
 	/** Default constructor.
 	 */
-	Topology() = delete;
+	Topology();
 
 	/** Constructor.
 	 * @param rMapProvder   The provider of the map data topology.
 	 */
 //	Topology(const MapProvider& rMapProvider);
 
-    Topology(const TopoVertexMapType& rVertexMap,
-             const TopoEdgeMapType& rEdgeMap);
+//    Topology(const TopoVertexMapType& rVertexMap,
+//             const TopoEdgeMapType& rEdgeMap);
 
 
 	/** Copy constructor.
@@ -59,9 +59,6 @@ public:
 	 */
 	Topology(const Topology& from) = delete;
 
-// ATTRIBUTES
-	const TopoVertexMapType& 	mrVertexMap;
-	const TopoEdgeMapType& 		mrEdgeMap;
 
 // OPERATORS
 // OPERATIONS
@@ -72,7 +69,7 @@ public:
 	 * @param	point	The position of the vertex
 	 * @return	A reference to a vertex with given id
 	 */
-//	const Vertex&	addVertex(TopologyId id, Point point);
+	const Vertex&   addVertex(VertexIdType id, Point point);
 
 	/** Try to add an edge to the topology.
 	 * If an edge with the id already exists: return old value.
@@ -82,14 +79,14 @@ public:
 	 * @return	A reference to an edge with given id
 	 * @throw	Topology Exception if vertices are not in topology.
 	 */
-//	const TopologyEdge&		addEdge(EdgeId id, VertexIdType source, VertexIdType target);
+	const Edge&     addEdge(EdgeIdType id, VertexIdType source, VertexIdType target);
 
 	/** Fetch the vertex with given id.
 	 * @param	id		Id of the vertex to get
 	 * @return	Reference to the found vertex
 	 * @throws	TopologyException if vertex does not exist.
 	 */
-	const Vertex&	getVertex(VertexIdType id) const;
+	const Vertex&   getVertex(VertexIdType id) const;
 
 	/** Build a simple graph over the topology.
 	 * @param   rGraph  Reference to TopologyGraph to build
@@ -111,6 +108,9 @@ public:
 
 protected:
 private:
+// ATTRIBUTES
+	TopoVertexMapType  vertexMap;
+	TopoEdgeMapType    edgeMap;
 //// ATTRIBUTES
 //	const std::map<TopologyId, Vertex>& 	mVertexMap;
 //	const std::map<TopologyId, TopologyEdge>& 		mEdgeMap;
