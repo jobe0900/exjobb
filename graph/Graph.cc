@@ -11,11 +11,6 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-//GGraph::Graph()
-//    : mGraph()//, mNrVertices(0), mNrEdges(0)
-//{
-//}
-
 Graph::Graph(const Topology& rTopology)
     : mGraph(rTopology.nrVertices()),
       mVertexMap(),
@@ -24,24 +19,8 @@ Graph::Graph(const Topology& rTopology)
 {
 }
 
-//TopologyGraph::~TopologyGraph()
-//{
-//    // need to delete pointers here?
-//}
-
-
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
-
-//void
-//TopologyGraph::addVertex(TopologyVertex vertex)
-//{
-//    VertexType v = boost::add_vertex(vertex, mGraph);
-//    mVertexMap.emplace(vertex.id(), v);
-//}
-
-
-
 //============================= ACESS      ===================================
 size_t
 Graph::nrVertices() const
@@ -72,39 +51,4 @@ Graph::hasVertex(VertexIdType vertexId) const
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
-void
-Graph::addVerticesToGraph(const Vertex& rVertex)
-{
-    VertexType v = boost::add_vertex(mGraph);
-    mVertexMap.emplace(rVertex.id(), v);
-}
-
-void
-Graph::addEdgesToGraph(const Edge& rEdge)
-{
-    try
-    {
-        auto source_it = mVertexMap.find(rEdge.source());
-        if(source_it == mVertexMap.end())
-        {
-            throw GraphException("Source vertex missing.");
-        }
-        auto target_it = mVertexMap.find(rEdge.target());
-        if(target_it == mVertexMap.end())
-        {
-            throw GraphException("Target vertex missing.");
-        }
-        auto edge_add = boost::add_edge(source_it->second, target_it->second, mGraph);
-        if(edge_add.second == true)
-        {
-            mEdgeMap.emplace(rEdge.id(), edge_add.first);
-        }
-    }
-    catch (GraphException& e)
-    {
-        throw TopologyException("Cannot add edge: " + std::to_string(rEdge.id()) +
-            ". " + e.what());
-    }
-}
 

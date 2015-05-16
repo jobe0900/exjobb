@@ -61,11 +61,8 @@ public:
 
 // OPERATORS
 // OPERATIONS
-
-    /** Get the topology from the database.
-     * @throws MapProviderException, TopologyException
-     */
     virtual void    getTopology(Topology& rTopology);
+
 // INQUIRY
 
 protected:
@@ -99,12 +96,12 @@ private:
      * @param	tolerance	The distance to look for merging vertices, unit of srid.
      * @throws	MapProviderException
      */
-    void	        buildTopology(int srid, double tolerance);
+    void	buildTopology(int srid, double tolerance);
 
     /** Remove PostGIS topology (tables and schema) from the database.
      * @throws	MapProviderException
      */
-    void	        removeTopology();
+    void	removeTopology();
 
     // Helpers for 'buildTopology()'
     void	installPostgisTopology(pqxx::transaction_base& rTrans);

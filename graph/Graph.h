@@ -53,12 +53,9 @@ public:
 // LIFECYCLE
     Graph() = delete;
     Graph(const Topology& rTopology);
-//    Graph(size_t nrVertices);
     ~Graph() = default;
 // OPERATORS
 // OPERATIONS
-//    void                addVertex(const Vertex& vertex);
-//    void                addEdge(const Edge& edge);
 // ACCESS
     size_t              nrVertices() const;
     size_t              nrEdges() const;
@@ -70,8 +67,6 @@ protected:
 
 private:
 // HELPERS
-    void                addVerticesToGraph(const Vertex& rVertex);
-    void                addEdgesToGraph(const Edge& rEdge);
 // ATTRIBUTES
     GraphType           mGraph;
     GraphVertexMapType  mVertexMap;     // map original id to Vertex

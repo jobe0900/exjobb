@@ -15,17 +15,6 @@ Topology::Topology()
     : vertexMap(), edgeMap()
 {
 }
-
-//Topology::Topology(const TopoVertexMapType& rVertexMap,
-//                   const TopoEdgeMapType& rEdgeMap)
-//    : mrVertexMap(rVertexMap),
-//      mrEdgeMap(rEdgeMap)
-//{
-//}
-//Topology::Topology(const MapProvider& rMapProvider)
-//    : mrMapProvider(rMapProvider)
-//{ }
-
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
 const Vertex&
@@ -105,7 +94,4 @@ Topology::nrEdges() const
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
-
-
 

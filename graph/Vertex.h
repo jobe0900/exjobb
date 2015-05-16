@@ -47,7 +47,7 @@ public:
 // OPERATIONS
 // ACCESS
 	VertexIdType	id() const;
-	Point		point() const;
+	Point		    point() const;
 
 //INQUIRY
 

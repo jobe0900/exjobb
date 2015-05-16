@@ -21,10 +21,8 @@
 
 // LOCAL INCLUDES
 //
-//#include "TopologyTypes.h"
 #include "TopologyException.h"
 #include "../util/Point.h"
-//#include "../mapprovider/MapProvider.h"
 #include "Edge.h"
 #include "Vertex.h"
 
@@ -43,15 +41,6 @@ public:
 	/** Default constructor.
 	 */
 	Topology();
-
-	/** Constructor.
-	 * @param rMapProvder   The provider of the map data topology.
-	 */
-//	Topology(const MapProvider& rMapProvider);
-
-//    Topology(const TopoVertexMapType& rVertexMap,
-//             const TopoEdgeMapType& rEdgeMap);
-
 
 	/** Copy constructor.
 	 *
@@ -91,21 +80,16 @@ public:
 	 */
 	const Vertex&   getVertex(VertexIdType id) const;
 
-	/** Build a simple graph over the topology.
-	 * @param   rGraph  Reference to TopologyGraph to build
-	 */
-//	void                    buildTopologyGraph(TopologyGraph& rGraph);
-
 // ACCESS
 	/**
 	 * @return	the Number of vertices in topology.
 	 */
-	size_t					nrVertices() const;
+	size_t			nrVertices() const;
 
 	/**
 	 * @return	the Number of vertices in topology.
 	 */
-	size_t					nrEdges() const;
+	size_t			nrEdges() const;
 
 // INQUIRY
 
@@ -114,13 +98,6 @@ private:
 // ATTRIBUTES
 	TopoVertexMapType  vertexMap;
 	TopoEdgeMapType    edgeMap;
-//// ATTRIBUTES
-//	const std::map<TopologyId, Vertex>& 	mVertexMap;
-//	const std::map<TopologyId, TopologyEdge>& 		mEdgeMap;
-
-//	const MapProvider&                              mrMapProvider;
-
-
 };
 
 // INLINE METHODS

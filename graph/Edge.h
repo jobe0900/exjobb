@@ -45,7 +45,6 @@ public:
 	     VertexIdType source,
 	     VertexIdType target,
 	     Direction    direction = BOTH);
-//	Edge() = delete;
 	Edge(const Edge&) = default;
 
 // OPERATORS

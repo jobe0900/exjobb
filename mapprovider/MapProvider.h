@@ -21,7 +21,6 @@
 #include "../graph/Topology.h"
 #include "../config/Configuration.h"
 #include "../graph/Edge.h"
-//#include "../graph/TopologyTypes.h"
 #include "../graph/Vertex.h"
 
 // FORWARD REFERENCES
@@ -60,20 +59,12 @@ public:
 
 // OPERATORS
 // OPERATIONS
+    /** Fill the topology with data from the MapProvider.
+     * @param   rTopology   The Topology to fill with data.
+     * @throws  MapProviderException, TopologyException
+     */
     virtual void    getTopology(Topology& rTopology) = 0;
 
-
-    /** Get edges from the provider of map data.
-     * @param   rEdgeMap    Reference to a map with edge id => edge.
-     */
-//    virtual void    getTopologyEdges(
-//                        std::map<EdgeIdType, Edge>& rEdgeMap) = 0;
-
-    /** Get vertices from the provider of map data.
-     * @param   rVertexMap    Reference to a map with vertex id => vertex.
-     */
-//    virtual void    getTopologyVertices(
-//                        std::map<VertexIdType, Vertex>& rVertexMap) = 0;
 // ACCESS
 // INQUIRY
 

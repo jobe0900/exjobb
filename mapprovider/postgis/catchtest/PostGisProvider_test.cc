@@ -29,31 +29,27 @@ SCENARIO ("PostGis topology handling", "[postgis][topology]")
 		    ConfigurationReader config_reader(config_file);
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
+//		    PostGisProvider* p_pgp(nullptr);
 
-//			// ...............................................................
-//			WHEN ("we try to create postgis topology with a temp name and srid")
-//			{
-//				PostGisProvider db_handler(config);
-//				int srid = 900913;
-//				double tolerance = 1.0;
-//
-//				THEN ("we should not receive an exception")
-//				{
-//					REQUIRE_NOTHROW (
-//						db_handler.buildTopology(srid, tolerance));
-//				}
-//			}
+			// ...............................................................
+			WHEN ("we try to create postgis topology")
+			{
+				THEN ("we should not receive an exception")
+				{
+//					REQUIRE_NOTHROW ( p_pgp = new PostGisProvider(config));
+					REQUIRE_NOTHROW ( PostGisProvider p(config));
+				}
+			}
 
 //			// ...............................................................
 //			WHEN ("we try to remove postgis topology with valid arguments")
 //			{
-//				PostGisProvider db_handler(config);
-//
 //				THEN ("we should not receive an exception")
 //				{
-//					REQUIRE_NOTHROW (db_handler.removeTopology());
+//					REQUIRE_NOTHROW (delete p_pgp);
 //				}
 //			}
+//			delete p_pgp;
 		}
 
 		// ===================================================================

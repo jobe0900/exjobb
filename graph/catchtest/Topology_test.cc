@@ -98,9 +98,6 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 
 		WHEN ("we try to add edge to Topology with non-existing vertices")
 		{
-			//const Vertex& r_v1 = topo.addVertex(v1, p1);
-			//const Vertex& r_v2 =topo.addVertex(v2, p2);
-
 			THEN ("we should get a TopologyException")
 			{
 				REQUIRE_THROWS_AS(
