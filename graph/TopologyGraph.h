@@ -29,22 +29,22 @@
 
 struct VertexData
 {
-    VertexId    topo_id;
+    VertexIdType    topo_id;
     double      x;
     double      y;
 
     VertexData() : topo_id(0), x(0.0), y(0.0) {}
-    VertexData(VertexId id, double x, double y) : topo_id(id), x(x), y(y) {}
+    VertexData(VertexIdType id, double x, double y) : topo_id(id), x(x), y(y) {}
 };
 
 struct EdgeData
 {
-    EdgeId      topo_id;
-    VertexId    source;
-    VertexId    target;
+    EdgeIdType      topo_id;
+    VertexIdType    source;
+    VertexIdType    target;
 
     EdgeData() : topo_id(0), source(0), target(0) {}
-    EdgeData(EdgeId id, VertexId source, VertexId target)
+    EdgeData(EdgeIdType id, VertexIdType source, VertexIdType target)
         : topo_id(id), source(source), target(target) {}
 };
 
@@ -73,7 +73,7 @@ public:
     size_t              nrEdges() const;
     const GraphType&    getRepresentation() const;
 // INQUIRY
-    bool                hasVertex(VertexId vertexId) const;
+    bool                hasVertex(VertexIdType vertexId) const;
 
 protected:
 
@@ -81,8 +81,8 @@ private:
 // HELPERS
 // ATTRIBUTES
     GraphType                       mGraph;
-    std::map<VertexId, VertexType>  mVertexMap;     // map original id to Vertex
-    std::map<EdgeId, EdgeType>      mEdgeMap;       // map original id to Edge
+    std::map<VertexIdType, VertexType>  mVertexMap;     // map original id to Vertex
+    std::map<EdgeIdType, EdgeType>      mEdgeMap;       // map original id to Edge
 // CONSTANTS
 };
 

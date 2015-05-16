@@ -18,10 +18,10 @@
 // LOCAL INCLUDES
 //
 #include "../util/Point.h"
-#include "TopologyTypes.h"
 
 // FORWARD REFERENCES
 //
+typedef unsigned        VertexIdType;
 
 /**
  * Data structure for vertices in the topology.
@@ -34,7 +34,7 @@ public:
 	 * @param	id		Id for this vertex.
 	 * @param	point	The Point (geometry).
 	 */
-	Vertex(VertexId id, Point point);
+	Vertex(VertexIdType id, Point point);
 	Vertex() = delete;
 	Vertex(const Vertex&) = default;
 
@@ -46,14 +46,14 @@ public:
 
 // OPERATIONS
 // ACCESS
-	VertexId	id() const;
+	VertexIdType	id() const;
 	Point		point() const;
 
 //INQUIRY
 
 private:
 // ATTRIBUTES
-	VertexId	mId;
+	VertexIdType	mId;
 	Point		mPoint;
 };
 

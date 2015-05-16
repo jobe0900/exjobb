@@ -83,7 +83,7 @@ PostGisProvider::~PostGisProvider()
 
 //============================= OPERATIONS ===================================
 void
-PostGisProvider::getTopologyVertices(std::map<VertexId, Vertex>& rVertexMap)
+PostGisProvider::getTopologyVertices(std::map<VertexIdType, Vertex>& rVertexMap)
 {
 	try
 	{
@@ -104,7 +104,7 @@ PostGisProvider::getTopologyVertices(std::map<VertexId, Vertex>& rVertexMap)
 
 		for(size_t row = 0; row < result.size(); ++row)
 		{
-			VertexId	id(result[row][0].as<int>());
+			VertexIdType	id(result[row][0].as<int>());
 			Point 		p(result[row][1].as<double>(), result[row][2].as<double>());
 			rVertexMap.emplace(id, Vertex(id, p));
 		}
@@ -117,7 +117,7 @@ PostGisProvider::getTopologyVertices(std::map<VertexId, Vertex>& rVertexMap)
 
 
 void
-PostGisProvider::getTopologyEdges(std::map<EdgeId, Edge>& rEdgeMap)
+PostGisProvider::getTopologyEdges(std::map<EdgeIdType, Edge>& rEdgeMap)
 {
 	try
 	{
@@ -138,9 +138,9 @@ PostGisProvider::getTopologyEdges(std::map<EdgeId, Edge>& rEdgeMap)
 
 		for(size_t row = 0; row < result.size(); ++row)
 		{
-			EdgeId 		edge_id(result[row][0].as<int>());
-			VertexId 	source_id(result[row][1].as<int>());
-			VertexId 	target_id(result[row][2].as<int>());
+			EdgeIdType 		edge_id(result[row][0].as<int>());
+			VertexIdType 	source_id(result[row][1].as<int>());
+			VertexIdType 	target_id(result[row][2].as<int>());
 			rEdgeMap.emplace(edge_id, Edge(edge_id, source_id, target_id));
 		}
 	}

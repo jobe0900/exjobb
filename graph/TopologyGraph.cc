@@ -100,7 +100,7 @@ TopologyGraph::getRepresentation() const
 
 //============================= INQUIRY    ===================================
 bool
-TopologyGraph::hasVertex(VertexId vertexId) const
+TopologyGraph::hasVertex(VertexIdType vertexId) const
 {
     const auto& it = mVertexMap.find(vertexId);
     return (it != mVertexMap.end());

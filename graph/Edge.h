@@ -16,12 +16,11 @@
 
 // LOCAL INCLUDES
 //
-#include "TopologyTypes.h"
 #include "Vertex.h"
 
 // FORWARD REFERENCES
 //
-
+typedef unsigned        EdgeIdType;
 
 /**
  * Data structure for edges in the topology.
@@ -35,7 +34,7 @@ public:
 	 * @param	source	Source vertex
 	 * @param	target	Target vertex
 	 */
-	Edge(EdgeId id, VertexId source, VertexId target);
+	Edge(EdgeIdType id, VertexIdType source, VertexIdType target);
 //	Edge() = delete;
 	Edge(const Edge&) = default;
 
@@ -47,16 +46,16 @@ public:
 
 // OPERATIONS
 // ACCESSORS
-	EdgeId		id() const;
-	VertexId	source() const;
-	VertexId	target() const;
+	EdgeIdType		id() const;
+	VertexIdType	source() const;
+	VertexIdType	target() const;
 // INQUIRY
 
 private:
 // ATTRIBUTES
-	EdgeId		mId;
-	VertexId	mSource;
-	VertexId	mTarget;
+	EdgeIdType		mId;
+	VertexIdType	mSource;
+	VertexIdType	mTarget;
 };
 
 // INLINE METHODS

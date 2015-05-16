@@ -11,13 +11,17 @@
 #include <map>
 #include <boost/graph/adjacency_list.hpp>
 
-typedef unsigned TopologyId;
-typedef unsigned VertexId;
-typedef unsigned EdgeId;
+#include "Vertex.h"
+#include "Edge.h"
 
-typedef std::map<TopologyId, Vertex>                   TopoVertexMapType;
+typedef unsigned        TopoIdType;
+typedef unsigned long   OsmIdType;
 
-typedef std::map<TopologyId, Edge>                     TopoEdgeMapType;
+typedef std::map<TopoIdType, Vertex>                   TopoVertexMapType;
+
+typedef std::map<TopoIdType, Edge>                     TopoEdgeMapType;
+
+//typedef std::map<TopoIdType, Edge>                     TopoEdgeMapType;
 
 typedef boost::adjacency_list
     <boost::listS, boost::vecS, boost::undirectedS>    UndirectedGraphType;

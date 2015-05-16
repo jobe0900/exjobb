@@ -15,8 +15,8 @@
 #include "../../config/Configuration.h"
 #include "../../config/DatabaseConfig.h"
 #include "../postgis/PostGisProvider.h"
-#include "../../graph/TopologyEdge.h"
-#include "../../graph/TopologyVertex.h"
+#include "../../graph/Edge.h"
+#include "../../graph/Vertex.h"
 
 
 SCENARIO ("MapProvider queries", "[mp-query]")
@@ -45,7 +45,7 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology vertices")
 			{
-				std::map<VertexId, Vertex> vertex_map;
+				std::map<VertexIdType, Vertex> vertex_map;
 				p_mp->getTopologyVertices(vertex_map);
 				size_t nr_vertices = vertex_map.size();
 
@@ -58,7 +58,7 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology edges")
 			{
-				std::map<EdgeId, Edge> edge_map;
+				std::map<EdgeIdType, Edge> edge_map;
 				p_mp->getTopologyEdges(edge_map);
 				size_t nr_edges = edge_map.size();
 

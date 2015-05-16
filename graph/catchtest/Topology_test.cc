@@ -15,7 +15,7 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 	GIVEN ("a Topology object and data for a vertex")
 	{
 		Topology topo;
-		const TopologyId id(1);
+		const TopoIdType id(1);
 		const double x = 2;
 		const double y = 3;
 		const Point point(x, y);
@@ -38,7 +38,7 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 	GIVEN ("a Topology object and data for 2 vertices with same id")
 	{
 		Topology topo;
-		const VertexId v1(1);
+		const VertexIdType v1(1);
 		const Point p1(2,3);
 		const Point p2(4,5);
 
@@ -59,13 +59,13 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 	{
 		Topology topo;
 
-		const VertexId v1(1);
+		const VertexIdType v1(1);
 		const Point p1(2,3);
 
-		const VertexId v2(2);
+		const VertexIdType v2(2);
 		const Point p2(4,5);
 
-		const EdgeId e1(1);
+		const EdgeIdType e1(1);
 
 		WHEN ("we try to add edge to Topology with existing vertices")
 		{
@@ -88,13 +88,13 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 	{
 		Topology topo;
 
-		const VertexId v1(1);
+		const VertexIdType v1(1);
 		const Point p1(2,3);
 
-		const VertexId v2(2);
+		const VertexIdType v2(2);
 		const Point p2(4,5);
 
-		const EdgeId e1(1);
+		const EdgeIdType e1(1);
 
 		WHEN ("we try to add edge to Topology with non-existing vertices")
 		{

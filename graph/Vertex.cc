@@ -11,7 +11,7 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Vertex::Vertex(VertexId id, Point point)
+Vertex::Vertex(VertexIdType id, Point point)
 	: mId(id), mPoint(point)
 {}
 
@@ -32,7 +32,7 @@ Vertex::operator==(const Vertex& rhs) const
 
 //============================= OPERATIONS ===================================
 //============================= ACESS      ===================================
-VertexId
+VertexIdType
 Vertex::id() const
 { return mId; }
 

@@ -14,8 +14,8 @@
 #include "../../../config/ConfigurationReader.h"
 #include "../../../config/DatabaseConfig.h"
 #include "../../../util/TimeToStringMaker.h"
-#include "../../../graph/TopologyEdge.h"
-#include "../../../graph/TopologyVertex.h"
+#include "../../../graph/Edge.h"
+#include "../../../graph/Vertex.h"
 
 SCENARIO ("PostGis topology handling", "[postgis][topology]")
 {
@@ -101,7 +101,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology vertices")
 			{
-				std::map<VertexId, Vertex> vertex_map;
+				std::map<VertexIdType, Vertex> vertex_map;
 				db_handler.getTopologyVertices(vertex_map);
 				size_t nr_vertices = vertex_map.size();
 
@@ -114,7 +114,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			// ...............................................................
 			WHEN ("we try to fetch topology edges")
 			{
-				std::map<EdgeId, Edge> edge_map;
+				std::map<EdgeIdType, Edge> edge_map;
 				db_handler.getTopologyEdges(edge_map);
 				size_t nr_edges = edge_map.size();
 

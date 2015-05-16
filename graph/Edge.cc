@@ -11,7 +11,7 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Edge::Edge(EdgeId id, VertexId source, VertexId target)
+Edge::Edge(EdgeIdType id, VertexIdType source, VertexIdType target)
 	: mId(id), mSource(source), mTarget(target)
 {}
 
@@ -35,15 +35,15 @@ Edge::operator==(const Edge& rhs) const
 
 //============================= OPERATIONS ===================================
 //============================= ACESS      ===================================
-EdgeId
+EdgeIdType
 Edge::id() const
 { return mId; }
 
-VertexId
+VertexIdType
 Edge::source() const
 { return mSource; }
 
-VertexId
+VertexIdType
 Edge::target() const
 { return mTarget; }
 //============================= INQUIRY    ===================================

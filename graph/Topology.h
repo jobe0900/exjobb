@@ -79,14 +79,14 @@ public:
 	 * @return	A reference to an edge with given id
 	 * @throw	Topology Exception if vertices are not in topology.
 	 */
-//	const TopologyEdge&		addEdge(EdgeId id, VertexId source, VertexId target);
+//	const TopologyEdge&		addEdge(EdgeId id, VertexIdType source, VertexIdType target);
 
 	/** Fetch the vertex with given id.
 	 * @param	id		Id of the vertex to get
 	 * @return	Reference to the found vertex
 	 * @throws	TopologyException if vertex does not exist.
 	 */
-	const Vertex&	getVertex(VertexId id) const;
+	const Vertex&	getVertex(VertexIdType id) const;
 
 	/** Build a simple graph over the topology.
 	 * @param   rGraph  Reference to TopologyGraph to build

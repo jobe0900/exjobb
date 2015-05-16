@@ -31,7 +31,7 @@ Topology::Topology(const TopoVertexMapType& rVertexMap,
 
 
 //const TopologyEdge&
-//Topology::addEdge(EdgeId id, VertexId source, VertexId target)
+//Topology::addEdge(EdgeId id, VertexIdType source, VertexIdType target)
 //{
 // 	try
 //	{
@@ -49,7 +49,7 @@ Topology::Topology(const TopoVertexMapType& rVertexMap,
 
 
 const Vertex&
-Topology::getVertex(VertexId id) const
+Topology::getVertex(VertexIdType id) const
 {
     auto it = mrVertexMap.find(id);
     if(it == mrVertexMap.end()) {
