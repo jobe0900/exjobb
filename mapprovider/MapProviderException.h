@@ -51,7 +51,8 @@ public:
 // ACCESS
 // INQUIRY
 	const char* what() const noexcept
-	{return (mMessage + " " + std::exception::what()).c_str();}
+	{return mMessage.c_str();}
+//	{return (mMessage + " " + std::exception::what()).c_str();}
 
 protected:
 private:

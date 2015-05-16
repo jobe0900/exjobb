@@ -41,6 +41,7 @@ try
         pqxx::nontransaction nt(mConnection);
         mTableName  = nt.esc(mTopoConfig.roadsPrefix + "_" + topoBaseName);
         mSchemaName = nt.esc(mTopoConfig.topologySchemaPrefix + "_" + topoBaseName);
+        nt.abort();
 
         if(mBuildTempTopology)
         {
@@ -49,13 +50,17 @@ try
     }
     catch(const std::exception& e)
     {
-        throw MapProviderException(std::string("Database error, open: ") + e.what());
+//        throw MapProviderException(std::string("Database error, "
+//            "PostGisProvider in constructor: ") + e.what());
+        throw MapProviderException(std::string("PGP:i:ctor: ") + e.what());
     }
 }
 // catch error in initializer list (opening connection)
 catch(const std::exception& e)
 {
-    throw MapProviderException(std::string("Database error, open: ") + e.what());
+        throw MapProviderException(std::string("PGP:o:ctor: ") + e.what());
+//    throw MapProviderException(std::string("Database error, "
+//        "PostGisProvider outside constructor: ") + e.what());
 }
 
 
@@ -75,7 +80,9 @@ PostGisProvider::~PostGisProvider()
 	}
 	catch(const std::exception& e)
 	{
-		throw MapProviderException(std::string("Database error, closing: ") + e.what());
+        throw MapProviderException(std::string("PGP:dtor: ") + e.what());
+//		throw MapProviderException(std::string("Database error, "
+//		    "PostGisProvider destructor: ") + e.what());
 	}
 }
 
@@ -123,7 +130,9 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 	}
 	catch(const std::exception& e)
 	{
-		throw MapProviderException(std::string("Database error: ") + e.what());
+        throw MapProviderException(std::string("PGP:getTopoV: ") + e.what());
+//		throw MapProviderException(std::string(""
+//		    "PostGisProvider::getTopologyVertices: ") + e.what());
 	}
 }
 
@@ -163,7 +172,9 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 	}
 	catch(const std::exception& e)
 	{
-		throw MapProviderException(std::string("Database error: ") + e.what());
+        throw MapProviderException(std::string("PGP:getTopoE: ") + e.what());
+//		throw MapProviderException(std::string(
+//		    "PostGisProvider::getTopologyEdges: ") + e.what());
 	}
 }
 
@@ -195,19 +206,29 @@ PostGisProvider::buildTopology(int srid, double tolerance)
 		// TRANSACTION START
 		pqxx::work transaction(mConnection);
 
-		installPostgisTopology(transaction);
-		setSearchPath(transaction);
-		createTemporaryTable(transaction, mTableName);
-		createTemporarySchema(transaction, mSchemaName, srid);
-		addTopoGeometryColumn(transaction, mSchemaName, mTableName);
-		fillTopoGeometryColumn(transaction, mSchemaName, mTableName, tolerance);
+		try
+		{
+		    installPostgisTopology(transaction);
+		    setSearchPath(transaction);
+		    createTemporaryTable(transaction, mTableName);
+		    createTemporarySchema(transaction, mSchemaName, srid);
+		    addTopoGeometryColumn(transaction, mSchemaName, mTableName);
+		    fillTopoGeometryColumn(transaction, mSchemaName, mTableName, tolerance);
 
-		// TRANSACTION END
-		transaction.commit();
+		    // TRANSACTION END
+		    transaction.commit();
+		}
+		catch (const std::exception& e)
+		{
+		    transaction.abort();
+		    throw e;
+		}
 	}
 	catch(const std::exception& e)
 	{
-		throw MapProviderException(std::string("Database error: ") + e.what());
+        throw MapProviderException(std::string("PGP:buildTopo: ") + e.what());
+//		throw MapProviderException(std::string(
+//		    "PostGisProvider::buildTopology: ") + e.what());
 	}
 }
 
@@ -226,17 +247,27 @@ PostGisProvider::removeTopology()
 		// TRANSACTION START
 		pqxx::work transaction(mConnection);
 
-		dropTemporaryTable(transaction, mTableName);
-		dropTemporarySchema(transaction, mSchemaName);
-		deleteTemporaryLayerRecord(transaction, mTableName);
-		deleteTemporaryTopoRecord(transaction, mSchemaName);
+		try
+		{
+		    dropTemporaryTable(transaction, mTableName);
+		    dropTemporarySchema(transaction, mSchemaName);
+		    deleteTemporaryLayerRecord(transaction, mTableName);
+		    deleteTemporaryTopoRecord(transaction, mSchemaName);
 
-		// TRANSACTION END
-		transaction.commit();
+		    // TRANSACTION END
+		    transaction.commit();
+		}
+		catch (const std::exception& e)
+		{
+		    transaction.abort();
+		    throw e;
+		}
 	}
 	catch(const std::exception& e)
 	{
-		throw MapProviderException(std::string("Database error: ") + e.what());
+        throw MapProviderException(std::string("PGP:removeTopo: ") + e.what());
+//		throw MapProviderException(std::string(
+//		    "PostGisProvider::removeTopology: ") + e.what());
 	}
 
 }
