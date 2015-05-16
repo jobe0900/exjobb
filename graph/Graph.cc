@@ -22,6 +22,10 @@ Graph::Graph(const Topology& rTopology)
       mEdgeMap(),
       mrTopology(rTopology)
 {
+    for(Vertex& vertex : rTopology.mrVertexMap)
+    {
+        addVertex(vertex);
+    }
 }
 
 //TopologyGraph::~TopologyGraph()
@@ -40,40 +44,6 @@ Graph::Graph(const Topology& rTopology)
 //    mVertexMap.emplace(vertex.id(), v);
 //}
 
-void
-Graph::addVertex(const Vertex& vertex)
-{
-    VertexType v = boost::add_vertex(mGraph);
-    mVertexMap.emplace(vertex.id(), v);
-}
-
-void
-Graph::addEdge(const Edge& edge)
-{
-    try
-    {
-        auto source_it = mVertexMap.find(edge.source());
-        if(source_it == mVertexMap.end())
-        {
-            throw GraphException("Source vertex missing.");
-        }
-        auto target_it = mVertexMap.find(edge.target());
-        if(target_it == mVertexMap.end())
-        {
-            throw GraphException("Target vertex missing.");
-        }
-        auto edge_add = boost::add_edge(source_it->second, target_it->second, mGraph);
-        if(edge_add.second == true)
-        {
-            mEdgeMap.emplace(edge.id(), edge_add.first);
-        }
-    }
-    catch (GraphException& e)
-    {
-        throw TopologyException("Cannot add edge: " + std::to_string(edge.id()) +
-            ". " + e.what());
-    }
-}
 
 
 //============================= ACESS      ===================================
@@ -107,4 +77,38 @@ Graph::hasVertex(VertexIdType vertexId) const
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
 
+void
+Graph::addVerticesToGraph(const Vertex& rVertex)
+{
+    VertexType v = boost::add_vertex(mGraph);
+    mVertexMap.emplace(rVertex.id(), v);
+}
+
+void
+Graph::addEdgesToGraph(const Edge& rEdge)
+{
+    try
+    {
+        auto source_it = mVertexMap.find(rEdge.source());
+        if(source_it == mVertexMap.end())
+        {
+            throw GraphException("Source vertex missing.");
+        }
+        auto target_it = mVertexMap.find(rEdge.target());
+        if(target_it == mVertexMap.end())
+        {
+            throw GraphException("Target vertex missing.");
+        }
+        auto edge_add = boost::add_edge(source_it->second, target_it->second, mGraph);
+        if(edge_add.second == true)
+        {
+            mEdgeMap.emplace(rEdge.id(), edge_add.first);
+        }
+    }
+    catch (GraphException& e)
+    {
+        throw TopologyException("Cannot add edge: " + std::to_string(rEdge.id()) +
+            ". " + e.what());
+    }
+}
 
