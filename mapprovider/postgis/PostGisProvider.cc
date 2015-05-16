@@ -50,17 +50,15 @@ try
     }
     catch(const std::exception& e)
     {
-//        throw MapProviderException(std::string("Database error, "
-//            "PostGisProvider in constructor: ") + e.what());
-        throw MapProviderException(std::string("PGP:i:ctor: ") + e.what());
+        throw MapProviderException(
+            std::string("PostGisProvider:ctor(in): ") + e.what());
     }
 }
 // catch error in initializer list (opening connection)
 catch(const std::exception& e)
 {
-        throw MapProviderException(std::string("PGP:o:ctor: ") + e.what());
-//    throw MapProviderException(std::string("Database error, "
-//        "PostGisProvider outside constructor: ") + e.what());
+        throw MapProviderException(
+            std::string("PostGisProvider:ctor(out): ") + e.what());
 }
 
 
@@ -80,9 +78,8 @@ PostGisProvider::~PostGisProvider()
 	}
 	catch(const std::exception& e)
 	{
-        throw MapProviderException(std::string("PGP:dtor: ") + e.what());
-//		throw MapProviderException(std::string("Database error, "
-//		    "PostGisProvider destructor: ") + e.what());
+        throw MapProviderException(
+            std::string("PostGisProvider:dtor: ") + e.what());
 	}
 }
 
@@ -130,9 +127,8 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 	}
 	catch(const std::exception& e)
 	{
-        throw MapProviderException(std::string("PGP:getTopoV: ") + e.what());
-//		throw MapProviderException(std::string(""
-//		    "PostGisProvider::getTopologyVertices: ") + e.what());
+        throw MapProviderException(
+            std::string("PostGisProvider:getTopoVertices: ") + e.what());
 	}
 }
 
@@ -172,9 +168,8 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 	}
 	catch(const std::exception& e)
 	{
-        throw MapProviderException(std::string("PGP:getTopoE: ") + e.what());
-//		throw MapProviderException(std::string(
-//		    "PostGisProvider::getTopologyEdges: ") + e.what());
+        throw MapProviderException(
+            std::string("PostGisProvider:getTopoEdges: ") + e.what());
 	}
 }
 
@@ -226,9 +221,8 @@ PostGisProvider::buildTopology(int srid, double tolerance)
 	}
 	catch(const std::exception& e)
 	{
-        throw MapProviderException(std::string("PGP:buildTopo: ") + e.what());
-//		throw MapProviderException(std::string(
-//		    "PostGisProvider::buildTopology: ") + e.what());
+        throw MapProviderException(
+            std::string("PostGisProvider:buildTopology: ") + e.what());
 	}
 }
 
@@ -265,9 +259,8 @@ PostGisProvider::removeTopology()
 	}
 	catch(const std::exception& e)
 	{
-        throw MapProviderException(std::string("PGP:removeTopo: ") + e.what());
-//		throw MapProviderException(std::string(
-//		    "PostGisProvider::removeTopology: ") + e.what());
+        throw MapProviderException(std::string(
+            "PostGisProvider:removeTopology: ") + e.what());
 	}
 
 }

@@ -36,10 +36,7 @@ SCENARIO ("PostGis topology handling", "[postgis][topology]")
 			{
 				THEN ("we should not receive an exception")
 				{
-//				    INFO (config.getTopologyConfig().tempTopoName);
-//				    INFO (config.getDatabaseConfig().getConnectionString());
 					REQUIRE_NOTHROW ( p_pgp = new PostGisProvider(config));
-//					REQUIRE_NOTHROW ( PostGisProvider p(config));
 				}
 			}
 
@@ -80,56 +77,56 @@ SCENARIO ("PostGis topology handling", "[postgis][topology]")
 }
 
 
-//SCENARIO ("PostGis queries", "[postgis][query]")
-//{
-//	try
-//	{
-//		std::string config_file("config/catchtest/testsettings.json");
-//		ConfigurationReader config_reader(config_file);
-//
-//		// ===================================================================
-//		GIVEN ("a valid database configuration structure and "
-//				"name to existing topology")
-//		{
-//		    Configuration config;
-//		    config_reader.fillConfiguration(config);
-//
-//			PostGisProvider db_handler(config);
-//
-//			// ...............................................................
-//			WHEN ("we try to fetch a topology")
-//			{
-//			    Topology topology;
-//
-//				THEN ("we should not get an exception")
-//				{
-//					REQUIRE_NOTHROW (db_handler.getTopology(topology););
-//				}
-//			}
-//
-//			// ...............................................................
-//			WHEN ("we try to fetch topology ")
-//			{
-//			    Topology topology;
-//			    db_handler.getTopology(topology);
-//
-//				THEN ("we should receive a vertices and edges")
-//				{
-//					REQUIRE (topology.nrVertices() > 0);
-//					REQUIRE (topology.nrEdges() > 0);
-//				}
-//			}
-//		}
-//	}
-//	catch (ConfigurationException& e)
-//	{
-//		INFO(e.what());
-//		REQUIRE (false);	// force output of error and failure
-//	}
-//	catch (MapProviderException& dbe)
-//	{
-//		INFO(dbe.what());
-//		REQUIRE (false);	// force output of error and failure
-//
-//	}
-//}
+SCENARIO ("PostGis queries", "[postgis][query]")
+{
+	try
+	{
+		std::string config_file("config/catchtest/testsettings.json");
+		ConfigurationReader config_reader(config_file);
+
+		// ===================================================================
+		GIVEN ("a valid database configuration structure and "
+				"name to existing topology")
+		{
+		    Configuration config;
+		    config_reader.fillConfiguration(config);
+
+			PostGisProvider db_handler(config);
+
+			// ...............................................................
+			WHEN ("we try to fetch a topology")
+			{
+			    Topology topology;
+
+				THEN ("we should not get an exception")
+				{
+					REQUIRE_NOTHROW (db_handler.getTopology(topology););
+				}
+			}
+
+			// ...............................................................
+			WHEN ("we try to fetch topology ")
+			{
+			    Topology topology;
+			    db_handler.getTopology(topology);
+
+				THEN ("we should receive a vertices and edges")
+				{
+					REQUIRE (topology.nrVertices() > 0);
+					REQUIRE (topology.nrEdges() > 0);
+				}
+			}
+		}
+	}
+	catch (ConfigurationException& e)
+	{
+		INFO(e.what());
+		REQUIRE (false);	// force output of error and failure
+	}
+	catch (MapProviderException& dbe)
+	{
+		INFO(dbe.what());
+		REQUIRE (false);	// force output of error and failure
+
+	}
+}
