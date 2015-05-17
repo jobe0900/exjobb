@@ -6,7 +6,14 @@ graph
 
 The `graph` package constist of classes for representing graphs.
 
-### Topology
-Topology is a class holding Edges and Vertices for the topology that `postgis_topology` has built.
+### Vertex
+The Vertex class is simple with just an `id` and a `point` location.
 
-Edges and Vertices will be handled by the `Topology` to ensure that only unique instances of them exists.
+### Edge
+The Edge class simply has an `id`, and id to `source` Vertex and id to `target` Vertex.
+
+### Topology
+Topology is a class holding Edges and Vertices for the topology fetched from the `MapProvider`. It simply states which Vertices are connected by which Edges, without any costs or restrictions or directions. When created it validates that the `source` and `target` Vertices of the Edges actually exists in the topology.
+
+### Graph
+A Graph consists of a `Topology` and `Costs` (TODO) and `Restrictions` (TODO). The Graph is directed, so when one adds a topology it creates a directed Boost graph as the representation. The Graph maps "Graph Edges" and "Graph Vertices" to id's to the Edge class and the Vertex class, so one can have a look up to find all relevant information in the original Edges and Vertices in the Topology.
