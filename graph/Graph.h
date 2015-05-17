@@ -11,6 +11,7 @@
 // SYSTEM INCLUDES
 //
 #include <map>
+//#include <unordered_map>
 
 // PROJECT INCLUDES
 //
@@ -27,14 +28,14 @@
 // FORWARD REFERENCES
 //
 
-typedef boost::adjacency_list
-    <boost::listS, boost::vecS, boost::undirectedS>    UndirectedGraphType;
+//typedef boost::adjacency_list
+//    <boost::listS, boost::vecS, boost::undirectedS>    UndirectedGraphType;
 
 typedef boost::adjacency_list
     <boost::listS, boost::vecS, boost::directedS>      DirectedGraphType;
 
-typedef boost::adjacency_list
-    <boost::listS, boost::vecS, boost::bidirectionalS> BidirectedGraphType;
+//typedef boost::adjacency_list
+//    <boost::listS, boost::vecS, boost::bidirectionalS> BidirectedGraphType;
 
 
 /**
@@ -47,11 +48,19 @@ public:
     typedef DirectedGraphType                                   GraphType;
     typedef boost::graph_traits<GraphType>::vertex_descriptor   VertexType;
     typedef boost::graph_traits<GraphType>::edge_descriptor     EdgeType;
+
     typedef std::map<VertexIdType, VertexType>                  GraphVertexMapType;
-    typedef std::map<EdgeIdType, EdgeType>                      GraphEdgeMapType;
+//    typedef std::unordered_multimap<VertexIdType, VertexType>   GraphVertexMapType;
+//    typedef std::multimap<VertexIdType, VertexType>             GraphVertexMapType;
+//    typedef std::map<EdgeIdType, EdgeType>                      GraphEdgeMapType;
+//    typedef std::unordered_multimap<EdgeIdType, EdgeType>       GraphEdgeMapType;
+    typedef std::multimap<EdgeIdType, EdgeType>                 GraphEdgeMapType;
 
 // LIFECYCLE
     Graph() = delete;
+    /**
+     * @throws GraphException if something is wrong with topology.
+     */
     Graph(const Topology& rTopology);
     ~Graph() = default;
 // OPERATORS
@@ -67,6 +76,9 @@ protected:
 
 private:
 // HELPERS
+    void                addTopoVerticesToGraph();
+    void                addTopoEdgesToGraph();
+    const VertexType&   getGraphVertex(VertexIdType id) const;
 // ATTRIBUTES
     GraphType           mGraph;
     GraphVertexMapType  mVertexMap;     // map original id to Vertex

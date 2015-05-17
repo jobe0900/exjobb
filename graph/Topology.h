@@ -35,6 +35,8 @@ typedef std::map<EdgeIdType, Edge>      TopoEdgeMapType;
 
 class Topology
 {
+    friend class Graph;
+
 public:
 // LIFECYCLE
 
