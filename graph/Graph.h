@@ -49,12 +49,8 @@ public:
     typedef boost::graph_traits<GraphType>::vertex_descriptor   VertexType;
     typedef boost::graph_traits<GraphType>::edge_descriptor     EdgeType;
 
-    typedef std::map<VertexIdType, VertexType>                  GraphVertexMapType;
-//    typedef std::unordered_multimap<VertexIdType, VertexType>   GraphVertexMapType;
-//    typedef std::multimap<VertexIdType, VertexType>             GraphVertexMapType;
-//    typedef std::map<EdgeIdType, EdgeType>                      GraphEdgeMapType;
-//    typedef std::unordered_multimap<EdgeIdType, EdgeType>       GraphEdgeMapType;
-    typedef std::multimap<EdgeIdType, EdgeType>                 GraphEdgeMapType;
+    typedef std::map<VertexIdType, VertexType>                  IdToGraphVertexMapType;
+    typedef std::multimap<EdgeIdType, EdgeType>                 IdToGraphEdgeMapType;
 
 // LIFECYCLE
     Graph() = delete;
@@ -80,10 +76,10 @@ private:
     void                addTopoEdgesToGraph();
     const VertexType&   getGraphVertex(VertexIdType id) const;
 // ATTRIBUTES
-    GraphType           mGraph;
-    GraphVertexMapType  mVertexMap;     // map original id to Vertex
-    GraphEdgeMapType    mEdgeMap;       // map original id to Edge
-    const Topology&     mrTopology;
+    GraphType               mGraph;
+    IdToGraphVertexMapType  mIdToVertexMap;     // map original id to Vertex
+    IdToGraphEdgeMapType    mIdToEdgeMap;       // map original id to Edge
+    const Topology&         mrTopology;
 // CONSTANTS
 };
 

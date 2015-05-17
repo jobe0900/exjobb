@@ -13,8 +13,8 @@
 //============================= LIFECYCLE ====================================
 Graph::Graph(const Topology& rTopology)
     : mGraph(rTopology.nrVertices()),
-      mVertexMap(),
-      mEdgeMap(),
+      mIdToVertexMap(),
+      mIdToEdgeMap(),
       mrTopology(rTopology)
 {
     addTopoVerticesToGraph();
@@ -27,13 +27,13 @@ Graph::Graph(const Topology& rTopology)
 size_t
 Graph::nrVertices() const
 {
-    return mVertexMap.size();
+    return mIdToVertexMap.size();
 }
 
 size_t
 Graph::nrEdges() const
 {
-    return mEdgeMap.size();
+    return mIdToEdgeMap.size();
 }
 
 const Graph::GraphType&
@@ -46,8 +46,8 @@ Graph::getRepresentation() const
 bool
 Graph::hasVertex(VertexIdType vertexId) const
 {
-    const auto& it = mVertexMap.find(vertexId);
-    return (it != mVertexMap.end());
+    const auto& it = mIdToVertexMap.find(vertexId);
+    return (it != mIdToVertexMap.end());
 }
 
 /////////////////////////////// PROTECTED  ///////////////////////////////////
@@ -59,7 +59,7 @@ Graph::addTopoVerticesToGraph()
     for(const auto& vertexpair : mrTopology.vertexMap)
     {
         VertexType v = boost::add_vertex(mGraph);
-        mVertexMap.insert({vertexpair.second.id(), v});
+        mIdToVertexMap.insert({vertexpair.second.id(), v});
     }
 }
 
@@ -77,7 +77,7 @@ Graph::addTopoEdgesToGraph()
             const auto& res = boost::add_edge(s, t, mGraph);
             if(res.second == true)
             {
-                mEdgeMap.insert({edgepair.second.id(), res.first});
+                mIdToEdgeMap.insert({edgepair.second.id(), res.first});
             }
         }
 
@@ -87,7 +87,7 @@ Graph::addTopoEdgesToGraph()
             const auto& res = boost::add_edge(s, t, mGraph);
             if(res.second == true)
             {
-                mEdgeMap.insert({edgepair.second.id(), res.first});
+                mIdToEdgeMap.insert({edgepair.second.id(), res.first});
             }
         }
     }
@@ -96,8 +96,8 @@ Graph::addTopoEdgesToGraph()
 const Graph::VertexType&
 Graph::getGraphVertex(VertexIdType id) const
 {
-    const auto& res = mVertexMap.find(id);
-    if(res == mVertexMap.end())
+    const auto& res = mIdToVertexMap.find(id);
+    if(res == mIdToVertexMap.end())
     {
         throw GraphException("Graph:getGraphVertex: Missing vertex: "
             + std::to_string(id));
