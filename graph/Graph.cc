@@ -60,6 +60,7 @@ Graph::addTopoVerticesToGraph()
     {
         VertexType v = boost::add_vertex(mGraph);
         mIdToVertexMap.insert({vertexpair.second.id(), v});
+        mVertexToIdMap.insert({v, vertexpair.second.id()});
     }
 }
 
@@ -74,23 +75,34 @@ Graph::addTopoEdgesToGraph()
         if(edgepair.second.direction() == Edge::Direction::FROM_TO
         || edgepair.second.direction() == Edge::Direction::BOTH)
         {
-            const auto& res = boost::add_edge(s, t, mGraph);
-            if(res.second == true)
-            {
-                mIdToEdgeMap.insert({edgepair.second.id(), res.first});
-            }
+            addDirectedEdge(edgepair.second.id(), s, t);
         }
 
         if(edgepair.second.direction() == Edge::Direction::TO_FROM
         || edgepair.second.direction() == Edge::Direction::BOTH)
         {
-            const auto& res = boost::add_edge(s, t, mGraph);
-            if(res.second == true)
-            {
-                mIdToEdgeMap.insert({edgepair.second.id(), res.first});
-            }
+            addDirectedEdge(edgepair.second.id(), t, s);
         }
     }
+}
+
+void
+Graph::addDirectedEdge(EdgeIdType id,
+                       const VertexType& source,
+                       const VertexType& target)
+{
+    const auto& res = boost::add_edge(source, target, mGraph);
+    if(res.second == true)
+    {
+        mIdToEdgeMap.insert({id, res.first});
+        mEdgeToIdMap.insert({res.first, id});
+    }
+    else
+    {
+        throw GraphException("Graph:addDirectedEdge: cannot add edge: "
+            + std::to_string(id));
+    }
+
 }
 
 const Graph::VertexType&

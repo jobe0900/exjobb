@@ -50,7 +50,9 @@ public:
     typedef boost::graph_traits<GraphType>::edge_descriptor     EdgeType;
 
     typedef std::map<VertexIdType, VertexType>                  IdToGraphVertexMapType;
+    typedef std::map<VertexType, VertexIdType>                  GraphVertexToIdMapType;
     typedef std::multimap<EdgeIdType, EdgeType>                 IdToGraphEdgeMapType;
+    typedef std::map<EdgeType, EdgeIdType>                      GraphEdgeToIdMapType;
 
 // LIFECYCLE
     Graph() = delete;
@@ -74,14 +76,18 @@ private:
 // HELPERS
     void                addTopoVerticesToGraph();
     void                addTopoEdgesToGraph();
+    void                addDirectedEdge(EdgeIdType id,
+                                        const VertexType& source,
+                                        const VertexType& target);
     const VertexType&   getGraphVertex(VertexIdType id) const;
 // ATTRIBUTES
     GraphType               mGraph;
     IdToGraphVertexMapType  mIdToVertexMap;     // map original id to Vertex
     IdToGraphEdgeMapType    mIdToEdgeMap;       // map original id to Edge
+    GraphVertexToIdMapType  mVertexToIdMap;     // map Vertex to original id
+    GraphEdgeToIdMapType    mEdgeToIdMap;       // map Edge to original id
     const Topology&         mrTopology;
 // CONSTANTS
-};
 
 // INLINE METHODS
 //
