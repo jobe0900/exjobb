@@ -82,6 +82,8 @@ public:
 	 */
 	const Vertex&   getVertex(VertexIdType id) const;
 
+	const Edge&     getEdge(EdgeIdType id) const;
+
 // ACCESS
 	/**
 	 * @return	the Number of vertices in topology.

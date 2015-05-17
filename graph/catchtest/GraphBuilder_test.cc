@@ -15,7 +15,7 @@
 
 void loadSampleData(TopologyGraph& topo);
 
-SCENARIO ("Building a sample BGL graph", "[graph]")
+SCENARIO ("Building a sample BGL graph", "[.graph]")
 {
     // -----------------------------------------------------------------------
     GIVEN ("a sample data")

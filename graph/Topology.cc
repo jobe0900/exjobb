@@ -77,6 +77,15 @@ Topology::getVertex(VertexIdType id) const
     return it->second;
 }
 
+const Edge&
+Topology::getEdge(EdgeIdType id) const
+{
+    auto it = edgeMap.find(id);
+    if(it == edgeMap.end()) {
+        throw TopologyException("Edge not found: " + std::to_string(id));
+    }
+    return it->second;
+}
 
 //============================= ACESS      ===================================
 size_t

@@ -12,7 +12,7 @@
 
 //============================= LIFECYCLE ====================================
 Graph::Graph(const Topology& rTopology)
-    : mGraph(rTopology.nrVertices()),
+    : mGraph(),
       mIdToVertexMap(),
       mIdToEdgeMap(),
       mrTopology(rTopology)
@@ -22,6 +22,36 @@ Graph::Graph(const Topology& rTopology)
 }
 
 //============================= OPERATORS ====================================
+std::ostream&
+operator<<(std::ostream& os, const Graph& rGraph)
+{
+    os << "Graph: #vertices: " << rGraph.nrVertices()
+       << ", #edges: " << rGraph.nrEdges() << std::endl
+       << std::endl
+       << "\tVertices: " << std::endl;
+
+    for(auto v_it = boost::vertices(rGraph.mGraph);
+        v_it.first != v_it.second;
+        ++v_it.first)
+    {
+        const auto& v = *(v_it.first);
+        VertexIdType v_id = rGraph.mVertexToIdMap.at(v);
+        const Vertex& vertex = rGraph.mrTopology.getVertex(v_id);
+        os << "\t\t v: " << v << "\t: " << vertex << std::endl;
+    }
+
+    for(auto e_it = boost::edges(rGraph.mGraph);
+        e_it.first != e_it.second;
+        ++e_it.first)
+    {
+        const auto& e = *(e_it.first);
+        EdgeIdType e_id = rGraph.mEdgeToIdMap.at(e);
+        const Edge& edge = rGraph.mrTopology.getEdge(e_id);
+        os << "\t\t e: " << e << "\t: " << edge << std::endl;
+    }
+
+    return os;
+}
 //============================= OPERATIONS ===================================
 //============================= ACESS      ===================================
 size_t
@@ -56,6 +86,15 @@ Graph::hasVertex(VertexIdType vertexId) const
 void
 Graph::addTopoVerticesToGraph()
 {
+//    for(auto it = mrTopology.vertexMap.begin();
+//        it != mrTopology.vertexMap.end();
+//        ++it)
+//    {
+//        VertexType v = boost::add_vertex(mGraph);
+//        mIdToVertexMap.insert({it->second.id(), v});
+//        mVertexToIdMap.insert({v, it->second.id()});
+//    }
+
     for(const auto& vertexpair : mrTopology.vertexMap)
     {
         VertexType v = boost::add_vertex(mGraph);

@@ -11,6 +11,7 @@
 // SYSTEM INCLUDES
 //
 #include <map>
+#include <ostream>
 //#include <unordered_map>
 
 // PROJECT INCLUDES
@@ -62,6 +63,8 @@ public:
     Graph(const Topology& rTopology);
     ~Graph() = default;
 // OPERATORS
+    friend
+    std::ostream&       operator<<(std::ostream& os, const Graph& rGraph);
 // OPERATIONS
 // ACCESS
     size_t              nrVertices() const;
@@ -88,6 +91,7 @@ private:
     GraphEdgeToIdMapType    mEdgeToIdMap;       // map Edge to original id
     const Topology&         mrTopology;
 // CONSTANTS
+};
 
 // INLINE METHODS
 //
