@@ -1,11 +1,11 @@
 /*
- * GraphBuilder.cc
+ * GraphTransformer.cc
  *
  *  Created on: 2015-05-18
  *      Author: Jonas Bergman
  */
 
-#include "GraphBuilder.h"  // class implemented
+#include "GraphTransformer.h"  // class implemented
 
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
@@ -16,12 +16,12 @@
 
 //static
 Graph*
-GraphBuilder::buildGraph(const MapProvider& rMapProvider)
+GraphTransformer::toLineGraph(const Graph* pGraph)
 {
-    Graph* p_graph(nullptr);
+    Graph* p_line_graph(nullptr);
 
 
-    return p_graph;
+    return p_line_graph;
 }
 
 //============================= ACESS      ===================================
