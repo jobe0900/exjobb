@@ -13,7 +13,6 @@
 #include "../../../catchtest/catch.hpp"
 #include "../../../config/ConfigurationReader.h"
 #include "../../../config/DatabaseConfig.h"
-#include "../../../util/TimeToStringMaker.h"
 #include "../../../graph/Edge.h"
 #include "../../../graph/Vertex.h"
 #include "../../../graph/Graph.h"
@@ -33,13 +32,11 @@ SCENARIO ("JsonTest topology handling", "[jsontest]")
             JsonTestProvider* p_jt(nullptr);
 
             // ...............................................................
-            WHEN ("we try to create  topology")
+            WHEN ("we try to create topology")
             {
                 THEN ("we should not receive an exception")
                 {
                     REQUIRE_NOTHROW ( p_jt = new JsonTestProvider(config));
-                    delete p_jt;
-                    p_jt = nullptr;
                 }
             }
 
@@ -47,22 +44,28 @@ SCENARIO ("JsonTest topology handling", "[jsontest]")
             WHEN ("we try to fetch topology ")
             {
                 Topology topology;
-                p_jt = new JsonTestProvider(config);
+                JsonTestProvider jtp(config);
+
+                // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+                THEN ("we should not receive an exception")
+                {
+                    REQUIRE_NOTHROW (jtp.getTopology(topology));
+                }
+            }
+            // ...............................................................
+            WHEN ("using topology")
+            {
+                Topology topology;
+                JsonTestProvider jtp(config);
+                jtp.getTopology(topology);
 
                 size_t nr_vertices = 13;
                 size_t nr_edges = 16;
 
                 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-                THEN ("we should not receive an exception")
-                {
-                    REQUIRE_NOTHROW (p_jt->getTopology(topology));
-                }
-
-                // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 THEN ("we should have the right number of edges and vertices"
                     " in the topology")
                 {
-                    p_jt->getTopology(topology);
                     REQUIRE (topology.nrVertices() == nr_vertices);
                     REQUIRE (topology.nrEdges() == nr_edges);
                 }
@@ -70,14 +73,13 @@ SCENARIO ("JsonTest topology handling", "[jsontest]")
                 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 THEN ("we should be able to create a graph from topology")
                 {
-                    p_jt->getTopology(topology);
                     REQUIRE_NOTHROW (Graph graph(topology));
                 }
+
                 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 THEN ("we should be able to create a graph from topology"
-                    " and print out")
+                    " and print out the graph")
                 {
-                    p_jt->getTopology(topology);
                     Graph graph(topology);
                     INFO (graph);
                     REQUIRE (true);
