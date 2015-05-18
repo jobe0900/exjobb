@@ -47,7 +47,7 @@ public:
 // ACCESS
 // INQUIRY
     const char* what() const noexcept
-    { return (mMessage); }
+    { return (mMessage.c_str()); }
 
 protected:
 private:

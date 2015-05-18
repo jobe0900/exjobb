@@ -7,9 +7,8 @@
 
 #include "LineGraphUtility.h"  // class implemented
 
-#include "../mapprovider/MapProvider.h";
-#include "../mapprovider/postgis/PostGisProvider.h";
-#include "../mapprovider/jsontest/JsonTestProvider.h";
+#include "../mapprovider/postgis/PostGisProvider.h"
+#include "../mapprovider/jsontest/JsonTestProvider.h"
 
 #include <string>
 
@@ -54,7 +53,7 @@ LineGraphUtility::init()
     initConfiguration();
     initMapProvider();
     buildGraph();
-    transformGraph();
+//    transformGraph();
 }
 
 void
@@ -106,6 +105,27 @@ LineGraphUtility::initMapProvider()
     }
 }
 
+void
+LineGraphUtility::initTopology()
+{
+    mpMapProvider->getTopology(mTopology);
+}
+
+void
+LineGraphUtility::buildGraph()
+{
+    try
+    {
+        initTopology();
+        mpGraph = new Graph(mTopology);
+    }
+    catch (const std::exception& e)
+    {
+        delete mpGraph;
+        throw LineGraphUtilityException(
+            std::string("Error when building Graph: ") + e.what());
+    }
+}
 
 
 

@@ -19,6 +19,7 @@
 #include "LineGraphUtilityException.h"
 #include "../config/ConfigurationReader.h"
 #include "../graph/Graph.h"
+#include "../mapprovider/MapProvider.h"
 
 // FORWARD REFERENCES
 //
@@ -65,8 +66,9 @@ private:
     void    init();
     void    initConfiguration();
     void    initMapProvider();
+    void    initTopology();
     void    buildGraph();
-    void    transformGraph();
+//    void    transformGraph();
 
 // ATTRIBUTES
     const std::string&  mrSettingsfile;
