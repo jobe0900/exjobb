@@ -29,14 +29,42 @@
 // FORWARD REFERENCES
 //
 
+// TYPES
+/**
+ * Map the GraphEdges to the original Edge id in the Topology.
+ */
+struct GraphEdge
+{
+    EdgeIdType  graphEdgeId;
+    EdgeIdType  topoEdgeId;
+};
+
+/**
+ * Map the GraphVertices to the original Vertex id in the Topology.
+ */
+struct GraphVertex
+{
+    VertexIdType  graphVertexId;
+    VertexIdType  topoVertexId;
+};
+
 //typedef boost::adjacency_list
 //    <boost::listS, boost::vecS, boost::undirectedS>    UndirectedGraphType;
 
+//typedef boost::adjacency_list
+//    <boost::listS, boost::vecS, boost::directedS>      DirectedGraphType;
+
 typedef boost::adjacency_list
-    <boost::listS, boost::vecS, boost::directedS>      DirectedGraphType;
+    < boost::listS,
+      boost::vecS,
+      boost::directedS,
+      GraphVertex,
+      GraphEdge
+    > DirectedGraphType;
 
 //typedef boost::adjacency_list
 //    <boost::listS, boost::vecS, boost::bidirectionalS> BidirectedGraphType;
+
 
 
 /**
@@ -51,9 +79,9 @@ public:
     typedef boost::graph_traits<GraphType>::edge_descriptor     EdgeType;
 
     typedef std::map<VertexIdType, VertexType>                  IdToGraphVertexMapType;
-    typedef std::map<VertexType, VertexIdType>                  GraphVertexToIdMapType;
+//    typedef std::map<VertexType, VertexIdType>                  GraphVertexToIdMapType;
     typedef std::multimap<EdgeIdType, EdgeType>                 IdToGraphEdgeMapType;
-    typedef std::map<EdgeType, EdgeIdType>                      GraphEdgeToIdMapType;
+//    typedef std::map<EdgeType, EdgeIdType>                      GraphEdgeToIdMapType;
 
 // LIFECYCLE
     Graph() = delete;
@@ -81,15 +109,17 @@ private:
     void                addTopoEdgesToGraph();
     void                addDirectedEdge(EdgeIdType id,
                                         const VertexType& source,
-                                        const VertexType& target);
+                                        const VertexType& target,
+                                        EdgeIdType ix);
     const VertexType&   getGraphVertex(VertexIdType id) const;
 // ATTRIBUTES
     GraphType               mGraph;
     IdToGraphVertexMapType  mIdToVertexMap;     // map original id to Vertex
     IdToGraphEdgeMapType    mIdToEdgeMap;       // map original id to Edge
-    GraphVertexToIdMapType  mVertexToIdMap;     // map Vertex to original id
-    GraphEdgeToIdMapType    mEdgeToIdMap;       // map Edge to original id
+//    GraphVertexToIdMapType  mVertexToIdMap;     // map Vertex to original id
+//    GraphEdgeToIdMapType    mEdgeToIdMap;       // map Edge to original id
     const Topology&         mrTopology;
+
 // CONSTANTS
 };
 

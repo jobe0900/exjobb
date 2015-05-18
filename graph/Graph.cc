@@ -33,20 +33,32 @@ operator<<(std::ostream& os, const Graph& rGraph)
         v_it.first != v_it.second;
         ++v_it.first)
     {
-        const auto& v = *(v_it.first);
-        VertexIdType v_id = rGraph.mVertexToIdMap.at(v);
-        const Vertex& vertex = rGraph.mrTopology.getVertex(v_id);
-        os << "\t\t v: " << v << "\t: " << vertex << std::endl;
+        const auto& v = *v_it.first;
+        VertexIdType v_graph_id = boost::get(&GraphVertex::graphVertexId, rGraph.mGraph, v);
+        VertexIdType v_topo_id  = boost::get(&GraphVertex::topoVertexId, rGraph.mGraph, v);
+//        VertexIdType v_id = rGraph.mVertexToIdMap.at(v);
+        const Vertex& vertex = rGraph.mrTopology.getVertex(v_topo_id);
+        os << "   v_graph_id: " << v_graph_id
+           << ", v_topo_id: " << v_topo_id
+           << "\n      v: " << v
+           << "  " << vertex << std::endl;
     }
+
+    os << std::endl;
 
     for(auto e_it = boost::edges(rGraph.mGraph);
         e_it.first != e_it.second;
         ++e_it.first)
     {
         const auto& e = *(e_it.first);
-        EdgeIdType e_id = rGraph.mEdgeToIdMap.at(e);
-        const Edge& edge = rGraph.mrTopology.getEdge(e_id);
-        os << "\t\t e: " << e << "\t: " << edge << std::endl;
+        EdgeIdType e_graph_id = boost::get(&GraphEdge::graphEdgeId, rGraph.mGraph, e);
+        EdgeIdType e_topo_id  = boost::get(&GraphEdge::topoEdgeId, rGraph.mGraph, e);
+//        EdgeIdType e_id = rGraph.mEdgeToIdMap.at(e);
+        const Edge& edge = rGraph.mrTopology.getEdge(e_topo_id);
+        os << "   e_graph_id: " << e_graph_id
+           << ", e_topo_id: " << e_topo_id
+           << "\n      e: " << e
+           << "  " << edge << std::endl;
     }
 
     return os;
@@ -85,26 +97,22 @@ Graph::hasVertex(VertexIdType vertexId) const
 void
 Graph::addTopoVerticesToGraph()
 {
-//    for(auto it = mrTopology.vertexMap.begin();
-//        it != mrTopology.vertexMap.end();
-//        ++it)
-//    {
-//        VertexType v = boost::add_vertex(mGraph);
-//        mIdToVertexMap.insert({it->second.id(), v});
-//        mVertexToIdMap.insert({v, it->second.id()});
-//    }
-
+    VertexIdType ix = 0;
     for(const auto& vertexpair : mrTopology.vertexMap)
     {
         VertexType v = boost::add_vertex(mGraph);
         mIdToVertexMap.insert({vertexpair.second.id(), v});
-        mVertexToIdMap.insert({v, vertexpair.second.id()});
+        mGraph[v].graphVertexId = ix;
+        mGraph[v].topoVertexId = vertexpair.second.id();
+        ++ix;
+//        mVertexToIdMap.insert({v, vertexpair.second.id()});
     }
 }
 
 void
 Graph::addTopoEdgesToGraph()
 {
+    EdgeIdType ix = 0;
     for(const auto& edgepair : mrTopology.edgeMap)
     {
         const VertexType& s = getGraphVertex(edgepair.second.source());
@@ -113,13 +121,15 @@ Graph::addTopoEdgesToGraph()
         if(edgepair.second.direction() == Edge::Direction::FROM_TO
         || edgepair.second.direction() == Edge::Direction::BOTH)
         {
-            addDirectedEdge(edgepair.second.id(), s, t);
+            addDirectedEdge(edgepair.second.id(), s, t, ix);
+            ++ix;
         }
 
         if(edgepair.second.direction() == Edge::Direction::TO_FROM
         || edgepair.second.direction() == Edge::Direction::BOTH)
         {
-            addDirectedEdge(edgepair.second.id(), t, s);
+            addDirectedEdge(edgepair.second.id(), t, s, ix);
+            ++ix;
         }
     }
 }
@@ -127,13 +137,16 @@ Graph::addTopoEdgesToGraph()
 void
 Graph::addDirectedEdge(EdgeIdType id,
                        const VertexType& source,
-                       const VertexType& target)
+                       const VertexType& target,
+                       EdgeIdType ix)
 {
     const auto& res = boost::add_edge(source, target, mGraph);
     if(res.second == true)
     {
         mIdToEdgeMap.insert({id, res.first});
-        mEdgeToIdMap.insert({res.first, id});
+        mGraph[res.first].graphEdgeId = ix;
+        mGraph[res.first].topoEdgeId = id;
+//        mEdgeToIdMap.insert({res.first, id});
     }
     else
     {
