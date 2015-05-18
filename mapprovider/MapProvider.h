@@ -70,8 +70,8 @@ public:
 
 protected:
     bool                 mBuildTempTopology;
-private:
     const Configuration& mrConfig;
+private:
 };
 
 // INLINE METHODS

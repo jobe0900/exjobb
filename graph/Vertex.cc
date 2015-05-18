@@ -19,7 +19,7 @@ Vertex::Vertex(VertexIdType id, Point point)
 std::ostream&
 operator<<(std::ostream& os, const Vertex& rVertex)
 {
-	os  << "TopologyVertex [id: " << rVertex.mId
+	os  << "Vertex [id: " << rVertex.mId
 		<< ", point: " << rVertex.mPoint << "]";
 	return os;
 }

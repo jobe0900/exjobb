@@ -27,8 +27,7 @@ operator<<(std::ostream& os, const Graph& rGraph)
 {
     os << "Graph: #vertices: " << rGraph.nrVertices()
        << ", #edges: " << rGraph.nrEdges() << std::endl
-       << std::endl
-       << "\tVertices: " << std::endl;
+       << std::endl;
 
     for(auto v_it = boost::vertices(rGraph.mGraph);
         v_it.first != v_it.second;
