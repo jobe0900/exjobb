@@ -101,7 +101,7 @@ void
 Graph::addTopoVerticesToGraph()
 {
     VertexIdType v_ix = 0;
-    for(const auto& vertexpair : mrTopology.vertexMap)
+    for(const auto& vertexpair : mrTopology.mVertexMap)
     {
         VertexType v = boost::add_vertex(mGraph);
         mIdToVertexMap.insert({vertexpair.second.id(), v});
@@ -116,7 +116,7 @@ void
 Graph::addTopoEdgesToGraph()
 {
     EdgeIdType e_ix = 0;
-    for(const auto& edgepair : mrTopology.edgeMap)
+    for(const auto& edgepair : mrTopology.mEdgeMap)
     {
         const Edge& e = edgepair.second;
         const VertexType& s = getGraphVertex(e.source());
