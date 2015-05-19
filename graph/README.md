@@ -17,3 +17,6 @@ Topology is a class holding Edges and Vertices for the topology fetched from the
 
 ### Graph
 A Graph consists of a `Topology` and `Costs` (TODO) and `Restrictions` (TODO). The Graph is directed, so when one adds a topology it creates a directed Boost graph as the representation. The Graph maps "Graph Edges" and "Graph Vertices" to id's to the Edge class and the Vertex class, so one can have a look up to find all relevant information in the original Edges and Vertices in the Topology.
+
+
+To enable both ordinary graphs and line graphs to use the same graph class, both types uses the same classes for graph, topology and vertices and edges. All differing data is found in `EdgeData` and `VertexData`. Those classes are abstract, and the actual specialization is found in the sub-classes `TopoEdgeData`, `LineGraphEdgeData` and `TopoVertexData` and `LineGraphVertexData`.
