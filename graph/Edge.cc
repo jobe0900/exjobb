@@ -18,7 +18,6 @@
 Edge::Edge(EdgeIdType   id,
            VertexIdType source,
            VertexIdType target)
-//           Direction    direction)
 	: mId(id), mSource(source), mTarget(target), mpEdgeData(nullptr)
 {}
 
@@ -27,7 +26,11 @@ Edge::Edge(const Edge& from)
     mId = from.mId;
     mSource = from.mSource;
     mTarget = from.mTarget;
+
+    // TODO use shared_ptr instead?
     mpEdgeData = nullptr;
+
+    // make a copy of the
     if((from.mpEdgeData != nullptr)
     && (typeid(TopoEdgeData) == typeid(*from.edgeData())))
     {
@@ -53,16 +56,6 @@ operator<<(std::ostream& os, const Edge& rEdge)
 	{
 		os << ", edgeData: " << *rEdge.mpEdgeData;
 	}
-
-//	switch(rEdge.mDirection)
-//	{
-//	    case Edge::BOTH:
-//	        os << "BOTH"; break;
-//	    case Edge::FROM_TO:
-//	        os << "FROM_TO"; break;
-//	    case Edge::TO_FROM:
-//	        os << "TO_FROM"; break;
-//	}
 
 	os  << "]";
 
@@ -102,9 +95,6 @@ EdgeData*
 Edge::edgeData() const
 { return mpEdgeData; }
 
-//Edge::Direction
-//Edge::direction() const
-//{ return mDirection; }
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

@@ -41,27 +41,52 @@ public:
 	     VertexIdType target);
 //	     Direction    direction = BOTH);
 
-	/**
-	 * Create a copy, except for the Edgedata!
+	/** Copy constructor.
+	 * @param   from    The Edge to make a copy of.
 	 */
-	Edge(const Edge&);
+	Edge(const Edge& from);
 
 	~Edge();
 
 // OPERATORS
+	/** Textual output of Edge.
+	 */
 	friend
 	std::ostream&	operator<<(std::ostream& os, const Edge& rEdge);
 
+	/** Compare it two edges share the same id, sourc and target.
+	 * @param   rhs     The edge to compare to.
+	 * @return  True if they are equal, false if not.
+	 */
 	bool			operator==(const Edge& rhs) const;
 
 // OPERATIONS
+	/** Set the EdgeData of this Edge.
+	 * @param   pEdgeData   Pointer to EdgeData.
+	 */
 	void            setEdgeData(EdgeData* pEdgeData);
+
 // ACCESSORS
+	/**
+	 * @return  The id of this edge.
+	 */
 	EdgeIdType		id()        const;
+
+	/**
+	 * @return  The source vertex for this edge.
+	 */
 	VertexIdType	source()    const;
+
+	/**
+	 * @return  The target vertex of this edge.
+	 */
 	VertexIdType	target()    const;
+
+	/**
+	 * @return  Pointer to the EdgeData for this edge, or 'nullptr' if none.
+	 */
 	EdgeData*       edgeData()  const;
-//	Direction       direction() const;
+
 // INQUIRY
 
 private:
@@ -71,7 +96,6 @@ private:
 	VertexIdType	mTarget;
 	EdgeData*       mpEdgeData;
 
-//	Direction       mDirection;
 };
 
 // INLINE METHODS
