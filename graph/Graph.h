@@ -12,7 +12,6 @@
 //
 #include <map>
 #include <ostream>
-//#include <unordered_map>
 
 // PROJECT INCLUDES
 //
@@ -48,23 +47,6 @@ struct GraphVertex
     VertexIdType  topoVertexId;
 };
 
-//typedef boost::adjacency_list
-//    <boost::listS, boost::vecS, boost::undirectedS>    UndirectedGraphType;
-
-//typedef boost::adjacency_list
-//    <boost::listS, boost::vecS, boost::directedS>      DirectedGraphType;
-
-typedef boost::adjacency_list
-    < boost::listS,
-      boost::vecS,
-      boost::directedS,
-      GraphVertex,
-      GraphEdge
-    > DirectedGraphType;
-
-//typedef boost::adjacency_list
-//    <boost::listS, boost::vecS, boost::bidirectionalS> BidirectedGraphType;
-
 
 
 /**
@@ -74,50 +56,90 @@ typedef boost::adjacency_list
 class Graph
 {
 public:
+// TYPES
+    typedef boost::adjacency_list
+        < boost::listS, boost::vecS, boost::directedS,
+          GraphVertex, GraphEdge >                              DirectedGraphType;
     typedef DirectedGraphType                                   GraphType;
     typedef boost::graph_traits<GraphType>::vertex_descriptor   VertexType;
     typedef boost::graph_traits<GraphType>::edge_descriptor     EdgeType;
 
     typedef std::map<VertexIdType, VertexType>                  IdToGraphVertexMapType;
-//    typedef std::map<VertexType, VertexIdType>                  GraphVertexToIdMapType;
     typedef std::multimap<EdgeIdType, EdgeType>                 IdToGraphEdgeMapType;
-//    typedef std::map<EdgeType, EdgeIdType>                      GraphEdgeToIdMapType;
 
 // LIFECYCLE
+    /** Constructor.
+     * Disabled.
+     */
     Graph() = delete;
-    /**
-     * @throws GraphException if something is wrong with topology.
+
+    /** Constructor.
+     * Build a graph from the supplied topology.
+     * @param   rTopology   The topology to use as basis for the graph.
+     * @throws  GraphException if something is wrong with topology.
      */
     Graph(const Topology& rTopology);
+
+    /** Copy constructor.
+     * Disabled.
+     */
+    Graph(const Graph& from) = delete;
+
+    /** Destructor.
+     */
     ~Graph() = default;
+
 // OPERATORS
+    /** Output operator to print to a stream.
+     */
     friend
     std::ostream&       operator<<(std::ostream& os, const Graph& rGraph);
+
 // OPERATIONS
 // ACCESS
+    /**
+     * @return  The number of vertices in the graph.
+     */
     size_t              nrVertices() const;
+
+    /**
+     * @return  The number of edges in the graph.
+     */
     size_t              nrEdges() const;
+
+    /**
+     * @return  The Boost Graph representation of the Graph.
+     */
     const GraphType&    getRepresentation() const;
+
 // INQUIRY
+    /**
+     * @return  true    If graph has a vertex with given index.
+     */
     bool                hasVertex(VertexIdType vertexId) const;
 
 protected:
 
 private:
 // HELPERS
+    // Used when constructing the internal Boost graph representation
+    // from the Topology.
     void                addTopoVerticesToGraph();
     void                addTopoEdgesToGraph();
     void                addDirectedEdge(EdgeIdType id,
                                         const VertexType& source,
                                         const VertexType& target,
                                         EdgeIdType ix);
+
     const VertexType&   getGraphVertex(VertexIdType id) const;
+
+    void                printVertices(std::ostream& os) const;
+    void                printEdges(std::ostream& os)    const;
+
 // ATTRIBUTES
     GraphType               mGraph;
     IdToGraphVertexMapType  mIdToVertexMap;     // map original id to Vertex
     IdToGraphEdgeMapType    mIdToEdgeMap;       // map original id to Edge
-//    GraphVertexToIdMapType  mVertexToIdMap;     // map Vertex to original id
-//    GraphEdgeToIdMapType    mEdgeToIdMap;       // map Edge to original id
     const Topology&         mrTopology;
 
 // CONSTANTS
