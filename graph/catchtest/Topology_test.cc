@@ -111,18 +111,18 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
     // -----------------------------------------------------------------------
     GIVEN ("Three points and to edges for a topology")
     {
-        Vertex v1(1, Point(0,0));
-        Vertex v2(2, Point(1,2));
-        Vertex v3(3, Point(3,4));
-        Edge e1(1,1,2);
-        Edge e2(2,2,3);
+//        Vertex v1(1, Point(0,0));
+//        Vertex v2(2, Point(1,2));
+//        Vertex v3(3, Point(3,4));
+//        Edge e1(1,1,2);
+//        Edge e2(2,2,3);
 
         Topology topology;
-        topology.addVertex(v1);
-        topology.addVertex(v2);
-        topology.addVertex(v3);
-        topology.addEdge(e1);
-        topology.addEdge(e2);
+        topology.addVertex(1, Point(0,0));
+        topology.addVertex(2, Point(1,2));
+        topology.addVertex(3, Point(3,4));
+        topology.addEdge(1,1,2);
+        topology.addEdge(2,2,3);
 
         // ...................................................................
         WHEN ("counting nr of edges")

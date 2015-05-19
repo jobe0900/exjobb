@@ -17,6 +17,7 @@
 // LOCAL INCLUDES
 //
 #include "Vertex.h"
+#include "EdgeData.h"
 
 // FORWARD REFERENCES
 //
@@ -28,12 +29,6 @@ typedef unsigned        EdgeIdType;
 class Edge
 {
 public:
-    enum Direction
-    {
-        BOTH,       // bidirectional
-        TO_FROM,    // one-way: from Source to Target
-        FROM_TO     // one-way: from Target to Source
-    };
 
 // LIFECYCLE
 	/** Constructor.
@@ -43,9 +38,15 @@ public:
 	 */
 	Edge(EdgeIdType   id,
 	     VertexIdType source,
-	     VertexIdType target,
-	     Direction    direction = BOTH);
-	Edge(const Edge&) = default;
+	     VertexIdType target);
+//	     Direction    direction = BOTH);
+
+	/**
+	 * Create a copy, except for the Edgedata!
+	 */
+	Edge(const Edge&);
+
+	~Edge();
 
 // OPERATORS
 	friend
@@ -54,11 +55,13 @@ public:
 	bool			operator==(const Edge& rhs) const;
 
 // OPERATIONS
+	void            setEdgeData(EdgeData* pEdgeData);
 // ACCESSORS
-	EdgeIdType		id() const;
-	VertexIdType	source() const;
-	VertexIdType	target() const;
-	Direction       direction() const;
+	EdgeIdType		id()        const;
+	VertexIdType	source()    const;
+	VertexIdType	target()    const;
+	EdgeData*       edgeData()  const;
+//	Direction       direction() const;
 // INQUIRY
 
 private:
@@ -66,7 +69,9 @@ private:
 	EdgeIdType		mId;
 	VertexIdType	mSource;
 	VertexIdType	mTarget;
-	Direction       mDirection;
+	EdgeData*       mpEdgeData;
+
+//	Direction       mDirection;
 };
 
 // INLINE METHODS

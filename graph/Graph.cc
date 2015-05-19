@@ -6,6 +6,9 @@
  */
 
 #include "Graph.h"  // class implemented
+#include "TopoEdgeData.h"
+
+#include <typeinfo>
 
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
@@ -97,14 +100,14 @@ Graph::hasVertex(VertexIdType vertexId) const
 void
 Graph::addTopoVerticesToGraph()
 {
-    VertexIdType ix = 0;
+    VertexIdType v_ix = 0;
     for(const auto& vertexpair : mrTopology.vertexMap)
     {
         VertexType v = boost::add_vertex(mGraph);
         mIdToVertexMap.insert({vertexpair.second.id(), v});
-        mGraph[v].graphVertexId = ix;
+        mGraph[v].graphVertexId = v_ix;
         mGraph[v].topoVertexId = vertexpair.second.id();
-        ++ix;
+        ++v_ix;
 //        mVertexToIdMap.insert({v, vertexpair.second.id()});
     }
 }
@@ -112,24 +115,37 @@ Graph::addTopoVerticesToGraph()
 void
 Graph::addTopoEdgesToGraph()
 {
-    EdgeIdType ix = 0;
+    EdgeIdType e_ix = 0;
     for(const auto& edgepair : mrTopology.edgeMap)
     {
-        const VertexType& s = getGraphVertex(edgepair.second.source());
-        const VertexType& t = getGraphVertex(edgepair.second.target());
+        const Edge& e = edgepair.second;
+        const VertexType& s = getGraphVertex(e.source());
+        const VertexType& t = getGraphVertex(e.target());
 
-        if(edgepair.second.direction() == Edge::Direction::FROM_TO
-        || edgepair.second.direction() == Edge::Direction::BOTH)
+
+        if((e.edgeData() != nullptr)
+        && (typeid(TopoEdgeData) == typeid(*e.edgeData())))
         {
-            addDirectedEdge(edgepair.second.id(), s, t, ix);
-            ++ix;
+            TopoEdgeData* p_ed = static_cast<TopoEdgeData*>(e.edgeData());
+
+            if(p_ed->direction() == TopoEdgeData::Direction::FROM_TO
+            || p_ed->direction() == TopoEdgeData::Direction::BOTH)
+            {
+                addDirectedEdge(e.id(), s, t, e_ix);
+                ++e_ix;
+            }
+
+            if(p_ed->direction() == TopoEdgeData::Direction::TO_FROM
+            || p_ed->direction() == TopoEdgeData::Direction::BOTH)
+            {
+                addDirectedEdge(e.id(), t, s, e_ix);
+                ++e_ix;
+            }
         }
-
-        if(edgepair.second.direction() == Edge::Direction::TO_FROM
-        || edgepair.second.direction() == Edge::Direction::BOTH)
+        else
         {
-            addDirectedEdge(edgepair.second.id(), t, s, ix);
-            ++ix;
+            addDirectedEdge(e.id(), s, t, e_ix);
+            ++e_ix;
         }
     }
 }
@@ -138,13 +154,13 @@ void
 Graph::addDirectedEdge(EdgeIdType id,
                        const VertexType& source,
                        const VertexType& target,
-                       EdgeIdType ix)
+                       EdgeIdType e_ix)
 {
     const auto& res = boost::add_edge(source, target, mGraph);
     if(res.second == true)
     {
         mIdToEdgeMap.insert({id, res.first});
-        mGraph[res.first].graphEdgeId = ix;
+        mGraph[res.first].graphEdgeId = e_ix;
         mGraph[res.first].topoEdgeId = id;
 //        mEdgeToIdMap.insert({res.first, id});
     }
