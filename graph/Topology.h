@@ -65,13 +65,32 @@ public:
 
 	/** Try to add an edge to the topology.
 	 * If an edge with the id already exists: return old value.
-	 * @param	id		Id for the edge
-	 * @param	source	Id for source vertex
-	 * @param	target	Id for target vertex
+	 * @param	id		    Id for the edge
+	 * @param	source	    Id for source vertex
+	 * @param	target	    Id for target vertex
+	 * @param   geomData    Geometric data for the edge
+	 * @param   roadData    Road data for the edge
 	 * @return	A reference to an edge with given id
 	 * @throw	Topology Exception if vertices are not in topology.
 	 */
-	Edge&           addEdge(EdgeIdType id, VertexIdType source, VertexIdType target);
+	Edge&           addEdge(EdgeIdType      id,
+	                        VertexIdType    source,
+	                        VertexIdType    target,
+	                        Edge::GeomData  geomData,
+	                        Edge::RoadData  roadData);
+
+	/** Try to add an edge to the topology.
+	 * Using default values for geometric and road data.
+	 * If an edge with the id already exists: return old value.
+	 * @param	id		    Id for the edge
+	 * @param	source	    Id for source vertex
+	 * @param	target	    Id for target vertex
+	 * @return	A reference to an edge with given id
+	 * @throw	Topology Exception if vertices are not in topology.
+	 */
+	Edge&           addEdge(EdgeIdType      id,
+	                        VertexIdType    source,
+	                        VertexIdType    target);
 
 	/** Fetch the vertex with given id.
 	 * @param	id		Id of the vertex to get

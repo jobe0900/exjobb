@@ -8,7 +8,7 @@
 #include "JsonTestProvider.h"  // class implemented
 #include "../../graph/Vertex.h"
 #include "../../graph/Edge.h"
-#include "../../graph/TopoEdgeData.h"
+//#include "../../graph/TopoEdgeData.h"
 
 #include <iostream>
 #include <sstream>
@@ -73,23 +73,22 @@ JsonTestProvider::getTopology(Topology& rTopology)
                 e_row[i] = item.second.get_value<int>();
                 ++i;
             }
-            TopoEdgeData::Direction direction;
+            Edge::DirectionType direction;
             switch(e_row[3])
             {
                 case 0:
-                    direction = TopoEdgeData::Direction::BOTH; break;
+                    direction = Edge::DirectionType::BOTH; break;
                 case 1:
-                    direction = TopoEdgeData::Direction::FROM_TO; break;
+                    direction = Edge::DirectionType::FROM_TO; break;
                 case 2:
-                    direction = TopoEdgeData::Direction::TO_FROM; break;
+                    direction = Edge::DirectionType::TO_FROM; break;
                 default:
-                    direction = TopoEdgeData::Direction::BOTH;
+                    direction = Edge::DirectionType::BOTH;
             }
             Edge& e = rTopology.addEdge(e_row[0], e_row[1], e_row[2]);
-            TopoEdgeData* p_ed = new TopoEdgeData();
-            p_ed->setDirection(direction);
-            e.setEdgeData(p_ed);
-//            rTopology.addEdge(e);
+            Edge::RoadData rd;
+            rd.direction = direction;
+            e.setRoadData(rd);
         }
     }
     catch (boost::property_tree::ptree_error& e)

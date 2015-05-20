@@ -26,11 +26,11 @@
 struct Point
 {
 // ATTRIBUTES
-	double	x;
-	double	y;
+	double	x {0.0};
+	double	y {0.0};
 
 	Point(double x, double y) : x(x), y(y) {}
-	Point() = delete;
+	Point() = default;
 	Point(const Point&) = default;
 
 // OPERATORS

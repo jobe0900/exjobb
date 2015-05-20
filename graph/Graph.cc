@@ -6,7 +6,6 @@
  */
 
 #include "Graph.h"  // class implemented
-#include "TopoEdgeData.h"
 
 #include <typeinfo>
 
@@ -93,29 +92,17 @@ Graph::addTopoEdgesToGraph()
         const VertexType& s = getGraphVertex(e.source());
         const VertexType& t = getGraphVertex(e.target());
 
-
-        if((e.edgeData() != nullptr)
-        && (typeid(TopoEdgeData) == typeid(*e.edgeData())))
-        {
-            TopoEdgeData* p_ed = static_cast<TopoEdgeData*>(e.edgeData());
-
-            if(p_ed->direction() == TopoEdgeData::Direction::FROM_TO
-            || p_ed->direction() == TopoEdgeData::Direction::BOTH)
-            {
-                addDirectedEdge(e.id(), s, t, e_ix);
-                ++e_ix;
-            }
-
-            if(p_ed->direction() == TopoEdgeData::Direction::TO_FROM
-            || p_ed->direction() == TopoEdgeData::Direction::BOTH)
-            {
-                addDirectedEdge(e.id(), t, s, e_ix);
-                ++e_ix;
-            }
-        }
-        else
+        if(e.roadData().direction == Edge::DirectionType::FROM_TO
+        || e.roadData().direction == Edge::DirectionType::BOTH)
         {
             addDirectedEdge(e.id(), s, t, e_ix);
+            ++e_ix;
+        }
+
+        if(e.roadData().direction == Edge::DirectionType::TO_FROM
+        || e.roadData().direction == Edge::DirectionType::BOTH)
+        {
+            addDirectedEdge(e.id(), t, s, e_ix);
             ++e_ix;
         }
     }
