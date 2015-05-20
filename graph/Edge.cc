@@ -7,11 +7,43 @@
 
 #include "Edge.h"  // class implemented
 
-//#include "TopoEdgeData.h"
+//============================= TYPES     ====================================
+// Edge::GeomData ------------------------------------------------------------
+Edge::GeomData::GeomData(double length,
+                         Point  centerPoint,
+                         double sourceBearing,
+                         double targetBearing)
+    : length(length),
+      centerPoint(centerPoint),
+      sourceBearing(sourceBearing),
+      targetBearing(targetBearing)
+{}
 
-//#include <typeinfo>
+// Edge::RoadData ------------------------------------------------------------
+Edge::RoadData::RoadData(DirectionType direction, size_t nrLanes)
+    : direction(direction), nrLanes(nrLanes)
+{}
+
+void
+Edge::RoadData::print(std::ostream& os) const
+{
+    os  << "direction: ";
+
+    switch(direction)
+    {
+        case Edge::DirectionType::BOTH:
+            os << "BOTH"; break;
+        case Edge::DirectionType::FROM_TO:
+            os << "FROM_TO"; break;
+        case Edge::DirectionType::TO_FROM:
+            os << "TO_FROM"; break;
+    }
+
+    os << ", #lanes: " << nrLanes;
+}
 
 
+// Edge ----------------------------------------------------------------------
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
@@ -36,34 +68,6 @@ Edge::Edge(EdgeIdType       id,
       mGeomData(),
       mRoadData()
 { }
-//Edge::Edge(EdgeIdType   id,
-//           VertexIdType source,
-//           VertexIdType target)
-//	: mId(id), mSource(source), mTarget(target), mpEdgeData(nullptr)
-//{}
-
-//Edge::Edge(const Edge& from)
-//{
-//    mId = from.mId;
-//    mSource = from.mSource;
-//    mTarget = from.mTarget;
-//
-//    // TODO use shared_ptr instead?
-//    mpEdgeData = nullptr;
-//
-//    // make a copy of the
-//    if((from.mpEdgeData != nullptr)
-//    && (typeid(TopoEdgeData) == typeid(*from.edgeData())))
-//    {
-//        const TopoEdgeData& ted = *(static_cast<TopoEdgeData*>(from.edgeData()));
-//        mpEdgeData = new TopoEdgeData(ted);
-//    }
-//}
-//
-//Edge::~Edge()
-//{
-//    delete mpEdgeData;
-//}
 
 //============================= OPERATORS ====================================
 std::ostream&
@@ -75,25 +79,11 @@ operator<<(std::ostream& os, const Edge& rEdge)
 		<< "\n   road data: ";
 	rEdge.roadData().print(os);
 
-//	if(rEdge.mpEdgeData != nullptr)
-//	{
-//		os << ", edgeData: " << *rEdge.mpEdgeData;
-//	}
-
 	os  << "]";
 
 	return os;
 }
 
-//bool
-//Edge::operator==(const Edge& rhs) const
-//{
-//	return (rhs.id() == id())
-//			&& (rhs.source() == source())
-//			&& (rhs.target() == target())
-//			&& (rhs.geomData() == geomData())
-//			&& (rhs.roadData() == roadData());
-//}
 
 //============================= OPERATIONS ===================================
 
@@ -126,30 +116,7 @@ const Edge::RoadData&
 Edge::roadData() const
 { return mRoadData; }
 
-//EdgeData*
-//Edge::edgeData() const
-//{ return mpEdgeData; }
-
 //============================= INQUIRY    ===================================
-
-//============================= TYPES      ===================================
-void
-Edge::RoadData::print(std::ostream& os) const
-{
-    os  << "direction: ";
-
-    switch(direction)
-    {
-        case Edge::DirectionType::BOTH:
-            os << "BOTH"; break;
-        case Edge::DirectionType::FROM_TO:
-            os << "FROM_TO"; break;
-        case Edge::DirectionType::TO_FROM:
-            os << "TO_FROM"; break;
-    }
-
-    os << ", #lanes: " << nrLanes;
-}
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////

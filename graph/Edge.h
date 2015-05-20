@@ -30,6 +30,7 @@ class Edge
 {
 public:
 // TYPES
+    //------------------------------------------------------------------------
     enum DirectionType
     {
         BOTH,       // bidirectional
@@ -37,7 +38,9 @@ public:
         FROM_TO     // one-way: from Target to Source
     };
 
+    //------------------------------------------------------------------------
     /** A data structure for geometric information for the Edge.
+     * Bearing is the compass direction in degrees at source and at target.
      */
     struct GeomData
     {
@@ -53,14 +56,10 @@ public:
         GeomData(double length,
                  Point  centerPoint,
                  double sourceBearing,
-                 double targetBearing)
-            : length(length),
-              centerPoint(centerPoint),
-              sourceBearing(sourceBearing),
-              targetBearing(targetBearing)
-        {}
+                 double targetBearing);
     };
 
+    //------------------------------------------------------------------------
     /** A data structure for road related information for the Edge.
      */
     struct RoadData
@@ -72,9 +71,7 @@ public:
         RoadData() = default;
 
         /** Constructor. */
-        RoadData(DirectionType direction, size_t nrLanes)
-            : direction(direction), nrLanes(nrLanes)
-        {}
+        RoadData(DirectionType direction, size_t nrLanes);
 
         /** Print this information. */
         void print(std::ostream& os) const;
@@ -123,12 +120,6 @@ public:
     friend
     std::ostream&	operator<<(std::ostream& os, const Edge& rEdge);
 
-//    /** Compare it two edges share the same id, sourc and target.
-//     * @param   rhs     The edge to compare to.
-//     * @return  True if they are equal, false if not.
-//     */
-//    bool			operator==(const Edge& rhs) const;
-
 // OPERATIONS
     /** Set the Geometric data for this edge.
      * @param   geomData    The GeomData to use.
@@ -165,27 +156,6 @@ public:
      * @return The road data for this edge.
      */
     const RoadData&   roadData()  const;
-
-//    /**
-//     * @return  The length of this edge.
-//     */
-//    double          length()    const;
-//
-//    /**
-//     * @return  The center point of this edge.
-//     */
-//    Point           centerPoint() const;
-//
-//    /**
-//     * @return  The directionality of the edge.
-//     */
-//    DirectionType   direction() const;
-//
-//    /**
-//     * @return  The number of lanes this edge has.
-//     */
-//    size_t          nrLanes()   const;
-
 
 // INQUIRY
 
