@@ -11,8 +11,8 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Vertex::Vertex(VertexIdType id, Point point)
-	: mId(id), mPoint(point)
+Vertex::Vertex(VertexIdType id, Point point, bool hasRestrictions)
+	: mId(id), mPoint(point), mHasRestrictions(hasRestrictions)
 {}
 
 //============================= OPERATORS ====================================
@@ -31,6 +31,12 @@ Vertex::operator==(const Vertex& rhs) const
 }
 
 //============================= OPERATIONS ===================================
+void
+Vertex::setHasRestrictions(bool restrictions)
+{
+    mHasRestrictions = restrictions;
+}
+
 //============================= ACESS      ===================================
 VertexIdType
 Vertex::id() const
@@ -41,6 +47,10 @@ Vertex::point() const
 { return mPoint; }
 
 //============================= INQUIRY    ===================================
+bool
+Vertex::hasRestrictions() const
+{ return mHasRestrictions; }
+
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////

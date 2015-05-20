@@ -31,10 +31,11 @@ class Vertex
 public:
 // LIFECYCLE
 	/** Constructor.
-	 * @param	id		Id for this vertex.
-	 * @param	point	The Point (geometry).
+	 * @param	id		         Id for this vertex.
+	 * @param	point	         The Point (geometry).
+	 * @param   hasRestrictions  false by default
 	 */
-	Vertex(VertexIdType id, Point point);
+	Vertex(VertexIdType id, Point point, bool hasRestrictions = false);
 	Vertex() = delete;
 	Vertex(const Vertex&) = default;
 
@@ -45,16 +46,20 @@ public:
 	bool			operator==(const Vertex& rhs) const;
 
 // OPERATIONS
+	void            setHasRestrictions(bool restrictions);
+
 // ACCESS
 	VertexIdType	id() const;
 	Point		    point() const;
 
 //INQUIRY
+	bool            hasRestrictions() const;
 
 private:
 // ATTRIBUTES
 	VertexIdType	mId;
-	Point		mPoint;
+	Point		    mPoint;
+	bool            mHasRestrictions;
 };
 
 // INLINE METHODS
