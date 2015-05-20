@@ -29,13 +29,14 @@
 //
 
 // TYPES
+typedef EdgeIdType  NodeIdType;
 /**
  * Map the GraphEdges to the original Edge id in the Topology.
  */
 struct GraphEdge
 {
-    EdgeIdType  graphEdgeId;
-    EdgeIdType  topoEdgeId;
+    EdgeIdType      graphEdgeId;
+    EdgeIdType      topoEdgeId;
 };
 
 /**
@@ -43,8 +44,36 @@ struct GraphEdge
  */
 struct GraphVertex
 {
-    VertexIdType  graphVertexId;
-    VertexIdType  topoVertexId;
+    VertexIdType    graphVertexId;
+    VertexIdType    topoVertexId;
+};
+
+/**
+ * A LineGraphLine corresponds to a travel along an incoming edge,
+ * via a vertex and out an outgoing edge.
+ * The cost is the cost of travel on the incoming edge and the turn cost
+ * at the vertex.
+ * The Line connects two edges in the graph with an allowed turn in between.
+ */
+struct LineGraphLine
+{
+    EdgeIdType      lineGraphLineId;
+    double          cost;
+    VertexIdType    graphViaVertex;
+};
+
+/**
+ * A Node in the LineGraph corresponds directly to an Edge in the original
+ * Graph and topology. It is connected to another Node (Edge) if both the
+ * edges are adjacent and there is no restriction in the Vertex for travel
+ * along them.
+ * Perhaps should lineGraphNodeId === graphEdgeId
+ */
+struct LineGraphNode
+{
+    NodeIdType      lineGraphNodeId;
+    EdgeIdType      topoEdgeId; // unnecessary but cheap?
+
 };
 
 
@@ -59,13 +88,25 @@ public:
 // TYPES
     typedef boost::adjacency_list
         < boost::listS, boost::vecS, boost::directedS,
-          GraphVertex, GraphEdge >                              DirectedGraphType;
-    typedef DirectedGraphType                                   GraphType;
-    typedef boost::graph_traits<GraphType>::vertex_descriptor   VertexType;
-    typedef boost::graph_traits<GraphType>::edge_descriptor     EdgeType;
+          GraphVertex, GraphEdge >                      GraphType;
+    typedef boost::adjacency_list
+        < boost::listS, boost::vecS, boost::directedS,
+          LineGraphNode, LineGraphLine >                LineGraphType;
 
-    typedef std::map<VertexIdType, VertexType>                  IdToGraphVertexMapType;
-    typedef std::multimap<EdgeIdType, EdgeType>                 IdToGraphEdgeMapType;
+    typedef boost::graph_traits<GraphType>
+                                ::vertex_descriptor     VertexType;
+    typedef boost::graph_traits<GraphType>
+                                ::edge_descriptor       EdgeType;
+
+    typedef boost::graph_traits<LineGraphType>
+                                ::vertex_descriptor     NodeType;
+    typedef boost::graph_traits<LineGraphType>
+                                ::edge_descriptor       LineType;
+
+    typedef std::map<VertexIdType, VertexType>          IdToGraphVertexMapType;
+    typedef std::multimap<EdgeIdType, EdgeType>         IdToGraphEdgeMapType;
+    typedef std::map<EdgeIdType, NodeType>              EdgeIdToNodeMapType;
+
 
 // LIFECYCLE
     /** Constructor.
@@ -110,36 +151,52 @@ public:
     /**
      * @return  The Boost Graph representation of the Graph.
      */
-    const GraphType&    getRepresentation() const;
+    const GraphType&    getGraph() const;
 
 // INQUIRY
     /**
-     * @return  true    If graph has a vertex with given index.
+     * @return  true    If graph has a vertex with given id.
      */
     bool                hasVertex(VertexIdType vertexId) const;
+
+    /**
+     * @return  true    If LineGraph has a node with given id.
+     */
+    bool                hasNode(EdgeIdType nodeId) const;
 
 protected:
 
 private:
 // HELPERS
+
+    // buildGraph() ----------------------------------------------------------
     // Used when constructing the internal Boost graph representation
     // from the Topology.
+    void                buildGraph();
     void                addTopoVerticesToGraph();
     void                addTopoEdgesToGraph();
     void                addDirectedEdge(EdgeIdType id,
                                         const VertexType& source,
                                         const VertexType& target,
                                         EdgeIdType ix);
-
     const VertexType&   getGraphVertex(VertexIdType id) const;
+
+    // buidlLineGraph() ------------------------------------------------------
+    // Used when transforming the Graph to a LineGraph
+    void                buildLineGraph();
+    void                addGraphEdgesToLineGraph();
+    const NodeType&     getLineGraphNode(NodeIdType id) const;
+
 
     void                printVertices(std::ostream& os) const;
     void                printEdges(std::ostream& os)    const;
 
 // ATTRIBUTES
     GraphType               mGraph;
+    LineGraphType           mLineGraph;
     IdToGraphVertexMapType  mIdToVertexMap;     // map original id to Vertex
     IdToGraphEdgeMapType    mIdToEdgeMap;       // map original id to Edge
+    EdgeIdToNodeMapType     mEdgeIdToNodeMap;   // map graph edge id to Node
     const Topology&         mrTopology;
 
 // CONSTANTS
