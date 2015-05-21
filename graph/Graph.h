@@ -30,6 +30,7 @@
 
 // TYPES
 typedef EdgeIdType  NodeIdType;
+typedef EdgeIdType  LineIdType;
 /**
  * Map the GraphEdges to the original Edge id in the Topology.
  */
@@ -57,9 +58,11 @@ struct GraphVertex
  */
 struct LineGraphLine
 {
-    EdgeIdType      lineGraphLineId;
+//    LineIdType      lgLineId;
+    NodeIdType      lgSourceNodeId;
+    NodeIdType      lgTargetNodeId;
+    VertexIdType    topoViaVertexId;
     double          cost;
-    VertexIdType    graphViaVertex;
 };
 
 /**
@@ -67,13 +70,12 @@ struct LineGraphLine
  * Graph and topology. It is connected to another Node (Edge) if both the
  * edges are adjacent and there is no restriction in the Vertex for travel
  * along them.
- * Perhaps should lineGraphNodeId === graphEdgeId
+ * lgNodeId === graphEdgeId
  */
 struct LineGraphNode
 {
-    NodeIdType      lineGraphNodeId;
-    EdgeIdType      topoEdgeId; // unnecessary but cheap?
-
+    NodeIdType      lgNodeId;
+    EdgeIdType      topoEdgeId;
 };
 
 
@@ -103,9 +105,9 @@ public:
     typedef boost::graph_traits<LineGraphType>
                                 ::edge_descriptor       LineType;
 
-    typedef std::map<VertexIdType, VertexType>          IdToGraphVertexMapType;
-    typedef std::multimap<EdgeIdType, EdgeType>         IdToGraphEdgeMapType;
-    typedef std::map<EdgeIdType, NodeType>              EdgeIdToNodeMapType;
+    typedef std::map<VertexIdType, VertexType>          TopoVertexIdToGraphVertexMapType;
+    typedef std::multimap<EdgeIdType, EdgeType>         TopoEdgeIdToGraphEdgeMapType;
+    typedef std::map<EdgeIdType, NodeType>              GraphEdgeIdToNodeMapType;
 
 
 // LIFECYCLE
@@ -139,19 +141,29 @@ public:
 // OPERATIONS
 // ACCESS
     /**
-     * @return  The number of vertices in the graph.
+     * @return  The number of Vertices in the Graph.
      */
     size_t              nrVertices() const;
 
     /**
-     * @return  The number of edges in the graph.
+     * @return  The number of Edges in the Graph.
      */
     size_t              nrEdges() const;
 
     /**
+     * @return  The number of Nodes in the LineGraph.
+     */
+    size_t              nrNodes() const;
+
+    /**
+     * @return  The number of Nodes in the LineGraph.
+     */
+    size_t              nrLines() const;
+
+    /**
      * @return  The Boost Graph representation of the Graph.
      */
-    const GraphType&    getGraph() const;
+    const GraphType&    getBGLGraph() const;
 
 // INQUIRY
     /**
@@ -186,18 +198,25 @@ private:
     void                buildLineGraph();
     void                addGraphEdgesToLineGraph();
     const NodeType&     getLineGraphNode(NodeIdType id) const;
+    void                addGraphEdgeAsLineGraphNode(
+                            const EdgeType& rGraphEdge, NodeType& rNode);
+    void                connectSourceNodeToTargetNodesViaVertex(
+                            const NodeType& rSourceNode,
+                            const VertexType& rViaVertex);
 
 
     void                printVertices(std::ostream& os) const;
     void                printEdges(std::ostream& os)    const;
+    void                printNodes(std::ostream& os)    const;
+    void                printLines(std::ostream& os)    const;
 
 // ATTRIBUTES
-    GraphType               mGraph;
-    LineGraphType           mLineGraph;
-    IdToGraphVertexMapType  mIdToVertexMap;     // map original id to Vertex
-    IdToGraphEdgeMapType    mIdToEdgeMap;       // map original id to Edge
-    EdgeIdToNodeMapType     mEdgeIdToNodeMap;   // map graph edge id to Node
-    const Topology&         mrTopology;
+    GraphType                         mGraph;
+    LineGraphType                     mLineGraph;
+    TopoVertexIdToGraphVertexMapType  mIdToVertexMap;     // map original id to GraphVertex
+    TopoEdgeIdToGraphEdgeMapType      mIdToEdgeMap;       // map original id to GraphEdge
+    GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode
+    const Topology&                   mrTopology;
 
 // CONSTANTS
 };

@@ -23,7 +23,7 @@ SCENARIO ("Building a small graph", "[graph]")
 	    Topology topology;
 	    const Vertex& v1 = topology.addVertex(1, Point(0,0));
 	    const Vertex& v2 = topology.addVertex(2, Point(1,2));
-	    const Vertex& v3 = topology.addVertex(3, Point(3,4));
+	    const Vertex& v3 = topology.addVertex(3, Point(3,1));
 	    const Edge& e1 = topology.addEdge(1,1,2);
 	    const Edge& e2 = topology.addEdge(2,2,3);
 
@@ -44,7 +44,7 @@ SCENARIO ("Building a small graph", "[graph]")
 			    " should be as in the topology"
 			    " and the # edges the double") // default is bidirectional
 			{
-			    const auto& boost_graph = g.getRepresentation();
+			    const auto& boost_graph = g.getBGLGraph();
 			    REQUIRE (boost::num_vertices(boost_graph) == nr_vertices);
 			    REQUIRE (boost::num_edges(boost_graph) == nr_edges * 2);
 			}
@@ -72,7 +72,7 @@ SCENARIO ("Building a small graph", "[graph]")
 		    Topology topo2;
 		    const Vertex& v1 = topo2.addVertex(1, Point(0,0));
 		    const Vertex& v2 = topo2.addVertex(2, Point(1,2));
-		    const Vertex& v3 = topo2.addVertex(3, Point(3,4));
+		    const Vertex& v3 = topo2.addVertex(3, Point(3,1));
 
 		    Edge::RoadData rd1;
 		    rd1.direction = Edge::DirectionType::FROM_TO;
@@ -95,7 +95,7 @@ SCENARIO ("Building a small graph", "[graph]")
 		          " should as many as in the topology")
 		    {
 		        INFO (g2)
-		        const auto& boost_graph = g2.getRepresentation();
+		        const auto& boost_graph = g2.getBGLGraph();
 		        REQUIRE (boost::num_edges(boost_graph) == topo2.nrEdges());
 		    }
 		}
