@@ -24,8 +24,8 @@ SCENARIO ("Building a small graph", "[graph]")
 	    const Vertex& v1 = topology.addVertex(1, Point(0,0));
 	    const Vertex& v2 = topology.addVertex(2, Point(1,2));
 	    const Vertex& v3 = topology.addVertex(3, Point(3,1));
-	    const Edge& e1 = topology.addEdge(1,1,2);
-	    const Edge& e2 = topology.addEdge(2,2,3);
+	    Edge& e1 = topology.addEdge(1,1,2);
+	    Edge& e2 = topology.addEdge(2,2,3);
 
 	    // ...................................................................
 		WHEN ("we try create a Graph from the Topology")
@@ -40,13 +40,25 @@ SCENARIO ("Building a small graph", "[graph]")
 		WHEN ("building a graph from the topology")
 		{
 		    Graph g(topology);
+		    const auto& boost_graph = g.getBoostGraph();
+		    const auto& boost_line_graph = g.getBoostLineGraph();
+
+		    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 			THEN ("the # of vertices in the graph representation"
 			    " should be as in the topology"
 			    " and the # edges the double") // default is bidirectional
 			{
-			    const auto& boost_graph = g.getBGLGraph();
 			    REQUIRE (boost::num_vertices(boost_graph) == nr_vertices);
 			    REQUIRE (boost::num_edges(boost_graph) == nr_edges * 2);
+			}
+
+		    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+			THEN ("the number of nodes in the LineGraph"
+			      " should be as many as edges in the graph")
+			{
+			    REQUIRE (boost::num_vertices(boost_line_graph) ==
+			             boost::num_edges(boost_graph));
+
 			}
 		}
 
@@ -66,37 +78,23 @@ SCENARIO ("Building a small graph", "[graph]")
 		WHEN ("adding unidirectional information to edges before"
 		      " building graph")
 		{
-		    size_t nr_vertices = 3;
-		    size_t nr_edges = 2 * 2; // with bidirectional information
-
-		    Topology topo2;
-		    const Vertex& v1 = topo2.addVertex(1, Point(0,0));
-		    const Vertex& v2 = topo2.addVertex(2, Point(1,2));
-		    const Vertex& v3 = topo2.addVertex(3, Point(3,1));
 
 		    Edge::RoadData rd1;
 		    rd1.direction = Edge::DirectionType::FROM_TO;
-		    Edge& e1 = topo2.addEdge(1,1,2);
 		    e1.setRoadData(rd1);
 
 		    Edge::RoadData rd2;
-		    rd2.direction = Edge::DirectionType::TO_FROM;
-		    Edge& e2 = topo2.addEdge(2,2,3);
+		    rd2.direction = Edge::DirectionType::FROM_TO;
 		    e2.setRoadData(rd2);
 
-		    INFO (e1);
-		    INFO (e2);
-		    REQUIRE (topo2.nrVertices() == 3);
-		    REQUIRE (topo2.nrEdges() == 2);
-
-		    Graph g2(topo2);
+		    Graph g2(topology);
 
 		    THEN ("the # of edges in the graph representation"
 		          " should as many as in the topology")
 		    {
 		        INFO (g2)
-		        const auto& boost_graph = g2.getBGLGraph();
-		        REQUIRE (boost::num_edges(boost_graph) == topo2.nrEdges());
+		        const auto& boost_graph = g2.getBoostGraph();
+		        REQUIRE (boost::num_edges(boost_graph) == topology.nrEdges());
 		    }
 		}
 	}

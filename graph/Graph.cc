@@ -71,9 +71,15 @@ Graph::nrLines() const
 }
 
 const Graph::GraphType&
-Graph::getBGLGraph() const
+Graph::getBoostGraph() const
 {
     return mGraph;
+}
+
+const Graph::LineGraphType&
+Graph::getBoostLineGraph() const
+{
+    return mLineGraph;
 }
 
 //============================= INQUIRY    ===================================

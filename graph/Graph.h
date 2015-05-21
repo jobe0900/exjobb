@@ -136,45 +136,50 @@ public:
     /** Output operator to print to a stream.
      */
     friend
-    std::ostream&       operator<<(std::ostream& os, const Graph& rGraph);
+    std::ostream&         operator<<(std::ostream& os, const Graph& rGraph);
 
 // OPERATIONS
 // ACCESS
     /**
      * @return  The number of Vertices in the Graph.
      */
-    size_t              nrVertices() const;
+    size_t                nrVertices() const;
 
     /**
      * @return  The number of Edges in the Graph.
      */
-    size_t              nrEdges() const;
+    size_t                nrEdges() const;
 
     /**
      * @return  The number of Nodes in the LineGraph.
      */
-    size_t              nrNodes() const;
+    size_t                nrNodes() const;
 
     /**
      * @return  The number of Nodes in the LineGraph.
      */
-    size_t              nrLines() const;
+    size_t                nrLines() const;
 
     /**
      * @return  The Boost Graph representation of the Graph.
      */
-    const GraphType&    getBGLGraph() const;
+    const GraphType&      getBoostGraph() const;
+
+    /**
+     * @return  The Boost Graph representation of the LineGraph.
+     */
+    const LineGraphType&  getBoostLineGraph() const;
 
 // INQUIRY
     /**
      * @return  true    If graph has a vertex with given id.
      */
-    bool                hasVertex(VertexIdType vertexId) const;
+    bool                  hasVertex(VertexIdType vertexId) const;
 
     /**
      * @return  true    If LineGraph has a node with given id.
      */
-    bool                hasNode(EdgeIdType nodeId) const;
+    bool                  hasNode(EdgeIdType nodeId) const;
 
 protected:
 
