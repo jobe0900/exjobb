@@ -41,6 +41,15 @@ struct GraphEdge
 };
 
 /**
+ * A Node in the LineGraph corresponds directly to an Edge in the original
+ * Graph and topology. It is connected to another Node (Edge) if both the
+ * edges are adjacent and there is no restriction in the Vertex for travel
+ * along them.
+ * lgNodeId === graphEdgeId
+ */
+typedef GraphEdge   LineGraphNode;
+
+/**
  * Map the GraphVertices to the original Vertex id in the Topology.
  */
 struct GraphVertex
@@ -58,26 +67,11 @@ struct GraphVertex
  */
 struct LineGraphLine
 {
-//    LineIdType      lgLineId;
     NodeIdType      lgSourceNodeId;
     NodeIdType      lgTargetNodeId;
     VertexIdType    topoViaVertexId;
     double          cost;
 };
-
-/**
- * A Node in the LineGraph corresponds directly to an Edge in the original
- * Graph and topology. It is connected to another Node (Edge) if both the
- * edges are adjacent and there is no restriction in the Vertex for travel
- * along them.
- * lgNodeId === graphEdgeId
- */
-struct LineGraphNode
-{
-    NodeIdType      lgNodeId;
-    EdgeIdType      topoEdgeId;
-};
-
 
 
 /**

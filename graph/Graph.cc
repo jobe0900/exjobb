@@ -229,7 +229,7 @@ Graph::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
     if(!hasNode(e_graph_id))
     {
         rNode = boost::add_vertex(mLineGraph);
-        mLineGraph[rNode].lgNodeId = e_graph_id;
+        mLineGraph[rNode].graphEdgeId = e_graph_id;
         mLineGraph[rNode].topoEdgeId = e_topo_id;
         mEdgeIdToNodeMap.insert({e_graph_id, rNode});
     }
@@ -268,9 +268,9 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
         if(!restricted)
         {
             NodeIdType source_id =
-                boost::get(&LineGraphNode::lgNodeId, mLineGraph, rSourceNode);
+                boost::get(&LineGraphNode::graphEdgeId, mLineGraph, rSourceNode);
             NodeIdType target_id =
-                boost::get(&LineGraphNode::lgNodeId, mLineGraph, target_node);
+                boost::get(&LineGraphNode::graphEdgeId, mLineGraph, target_node);
 
             // add Line between Nodes
             const auto& line_add =
@@ -341,9 +341,9 @@ Graph::printNodes(std::ostream& os) const
     {
         const NodeType& node = *(n_it.first);
         NodeIdType lg_node_id =
-            boost::get(&LineGraphNode::lgNodeId, mLineGraph, node);
+            boost::get(&LineGraphNode::graphEdgeId, mLineGraph, node);
         EdgeIdType topo_edge_id  =
-            boost::get(&LineGraphNode::topoEdgeId, mLineGraph, node);
+            boost::get(&LineGraphNode::graphEdgeId, mLineGraph, node);
 
         os << "   lg_node_id (graph_edge_id): " << lg_node_id
            << ", topo_edge_id: " << topo_edge_id << std::endl;
