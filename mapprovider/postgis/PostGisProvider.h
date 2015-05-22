@@ -39,6 +39,24 @@
 class PostGisProvider : public MapProvider
 {
 public:
+// TYPES
+    enum EdgeResultColumns
+    {
+        EDGE_ID,
+        START_NODE,
+        END_NODE,
+        EDGE_LENGTH,
+        CENTER_X,
+        CENTER_Y,
+        SOURCE_BEARING,
+        TARGET_BEARING,
+        OSM_ID,
+        ELEMENT_ID,
+        HIGHWAY,
+        JUNCTION,
+        LANES,
+        ONEWAY
+    };
 // LIFECYCLE
 
     /** Default constructor.

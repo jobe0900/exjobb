@@ -178,44 +178,44 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "           osm.* "
 "FROM       topo_test.edge_data "
 "JOIN ( "
-"   SELECT  osm_id, element_id, "
+"   SELECT  osm_id, element_id "
 //-- road data
-"           highway, "
-"           junction, "
-"           lanes, "
-"           oneway, "
+"           , highway "
+"           , junction "
+"           , lanes "
+"           , oneway "
 //-- access
-"           access, "
-"           barrier, "
-"           disused, "
-"           emergency, "
+//"           , access "
+//"           , barrier "
+//"           , disused "
+//"           , emergency "
 //-- restrictions
-"           maxheight, "
-"           maxlength, "
-"           maxspeed, "
-"           maxweight,"
-"           maxwidth, "
-"           minspeed, "
-"           noexit, "
-"           restriction, "
+//"           , maxheight "
+//"           , maxlength "
+//"           , maxspeed "
+//"           , maxweight "
+//"           , maxwidth "
+//"           , minspeed "
+//"           , noexit "
+//"           , restriction "
 //-- vehicle access restrictions
-"           goods, "
-"           hgv, "
-"           lhv, "
-"           motorcar, "
-"           motor_vehicle, "
-"           psv, "
-"           vehicle, "
+//"           , goods "
+//"           , hgv "
+//"           , lhv "
+//"           , motorcar "
+//"           , motor_vehicle "
+//"           , psv "
+//"           , vehicle "
 //-- costs
-"           incline, "
-"           public_transport, "
-"           railway, "
-"           surface, "
-"           tracktype, "
-"           traffic_calming, "
-"           traffic_sign "
-"   FROM    topo_test.relation "
-"   JOIN    public.highways_test"
+//"           , incline "
+//"           , public_transport "
+//"           , railway "
+//"           , surface "
+//"           , tracktype "
+//"           , traffic_calming "
+//"           , traffic_sign "
+"   FROM    " + mSchemaName + ".relation "
+"   JOIN    " + mTableName +
 "   ON      topogeo_id = (topo_geom).id "
 ") AS osm "
 "ON edge_id = element_id "
@@ -239,12 +239,42 @@ void
 PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
                                          Topology& rTopology)
 {
-    for(size_t row = 0; row < result.size(); ++row)
+    for(const pqxx::tuple& row : result)
+//    for(size_t row = 0; row < result.size(); ++row)
     {
-        EdgeIdType      edge_id(result[row][0].as<int>());
-        VertexIdType    source_id(result[row][1].as<int>());
-        VertexIdType    target_id(result[row][2].as<int>());;
-        rTopology.addEdge(edge_id, source_id, target_id);
+        EdgeIdType      edge_id(row[EDGE_ID].as<int>(
+            std::numeric_limits<EdgeIdType>::max()));
+//        EdgeIdType      edge_id(result[row][EDGE_ID].as<int>());
+//        VertexIdType    source_id(result[row][START_NODE].as<int>());
+        VertexIdType    source_id(row[START_NODE].as<int>(
+            std::numeric_limits<VertexIdType>::max()));
+        VertexIdType    target_id(row[END_NODE].as<int>(
+            std::numeric_limits<VertexIdType>::max()));
+//        VertexIdType    target_id(result[row][END_NODE].as<int>());
+        Edge&           edge = rTopology.addEdge(edge_id, source_id, target_id);
+
+        edge.setOsmId(row[OSM_ID].as<OsmIdType>(std::numeric_limits<OsmIdType>::max()));
+
+        Edge::GeomData  gd(row[EDGE_LENGTH].as<double>(0),
+                           Point(row[CENTER_X].as<double>(0),
+                                 row[CENTER_Y].as<double>(0)),
+                           row[SOURCE_BEARING].as<double>(0),
+                           row[TARGET_BEARING].as<double>(0));
+        edge.setGeomData(gd);
+
+        Edge::RoadData rd;
+        const std::string onewayStr(row[ONEWAY].as<std::string>("no"));
+        if(onewayStr == "yes")
+        {
+            rd.direction = Edge::DirectionType::FROM_TO;
+        }
+        else if(onewayStr == "-1")
+        {
+            rd.direction = Edge::DirectionType::TO_FROM;
+        }
+
+        rd.nrLanes = row[LANES].as<size_t>(1);
+
     }
 }
 

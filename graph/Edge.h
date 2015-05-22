@@ -22,7 +22,8 @@
 
 // FORWARD REFERENCES
 //
-typedef unsigned  EdgeIdType;
+typedef unsigned            EdgeIdType;
+typedef unsigned long int   OsmIdType;
 
 /**
  * Data structure for edges in the topology.
