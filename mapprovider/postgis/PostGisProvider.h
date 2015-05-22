@@ -89,13 +89,38 @@ private:
 // HELPERS
     // Helpers for 'getTopology()'
     /** Get edges from database.
+     * @param   rEdgeResult   Result of db query for Edges.
      * @throws	MapProviderException
      */
     void    getTopologyEdges(pqxx::result& rEdgeResult);
+
     /** Add edges to topology.
+     * @param   rEdgeResult    Result of db query for edges.
+     * @param   rTopology      Topology to fill with edges.
      * @throws  TopologyException
      */
-    void    addEdgeResultToTopology(const pqxx::result&, Topology& rTopology);
+    void    addEdgeResultToTopology(const pqxx::result& rEdgeResult,
+                                    Topology& rTopology);
+
+    /** Helper to add basic data from db to Edge.
+     * @param   rRow        Row with data for an Edge.
+     * @param   rTopology   Topology to add edge to.
+     * @return  Reference to the newly added Edge.
+     * @throws  TopologyException
+     */
+    Edge&   addBasicResultToEdge(const pqxx::tuple& rRow, Topology& rTopology);
+
+    /** Add geometric result from query to an Edge.
+     * @param   rEdge   Reference to Edge to set Geom data on.
+     * @param   rRow    Reference to Row with Geom data in it.
+     */
+    void    addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow);
+
+    /** Add road related result from query to an Edge.
+     * @param   rEdge   Reference to Edge to set road data on.
+     * @param   rRow    Reference to Row with road data in it.
+     */
+    void    addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow);
 
     /** Get vertices from database.
      * @throws	MapProviderException

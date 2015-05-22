@@ -240,42 +240,59 @@ PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
                                          Topology& rTopology)
 {
     for(const pqxx::tuple& row : result)
-//    for(size_t row = 0; row < result.size(); ++row)
     {
-        EdgeIdType      edge_id(row[EDGE_ID].as<int>(
-            std::numeric_limits<EdgeIdType>::max()));
-//        EdgeIdType      edge_id(result[row][EDGE_ID].as<int>());
-//        VertexIdType    source_id(result[row][START_NODE].as<int>());
-        VertexIdType    source_id(row[START_NODE].as<int>(
-            std::numeric_limits<VertexIdType>::max()));
-        VertexIdType    target_id(row[END_NODE].as<int>(
-            std::numeric_limits<VertexIdType>::max()));
-//        VertexIdType    target_id(result[row][END_NODE].as<int>());
-        Edge&           edge = rTopology.addEdge(edge_id, source_id, target_id);
-
-        edge.setOsmId(row[OSM_ID].as<OsmIdType>(std::numeric_limits<OsmIdType>::max()));
-
-        Edge::GeomData  gd(row[EDGE_LENGTH].as<double>(0),
-                           Point(row[CENTER_X].as<double>(0),
-                                 row[CENTER_Y].as<double>(0)),
-                           row[SOURCE_BEARING].as<double>(0),
-                           row[TARGET_BEARING].as<double>(0));
-        edge.setGeomData(gd);
-
-        Edge::RoadData rd;
-        const std::string onewayStr(row[ONEWAY].as<std::string>("no"));
-        if(onewayStr == "yes")
-        {
-            rd.direction = Edge::DirectionType::FROM_TO;
-        }
-        else if(onewayStr == "-1")
-        {
-            rd.direction = Edge::DirectionType::TO_FROM;
-        }
-
-        rd.nrLanes = row[LANES].as<size_t>(1);
-
+        Edge& edge = addBasicResultToEdge(row, rTopology);
+    // TODO add multimap to topology osm_id => topo_id
+        addGeomDataResultToEdge(edge, row);
+        addRoadDataResultToEdge(edge, row);
     }
+}
+
+Edge&
+PostGisProvider::addBasicResultToEdge(const pqxx::tuple& rRow,
+                                      Topology& rTopology)
+{
+    EdgeIdType    edge_id(rRow[EDGE_ID].as<int>(
+                        std::numeric_limits<EdgeIdType>::max()));
+    VertexIdType  source_id(rRow[START_NODE].as<int>(
+                        std::numeric_limits<VertexIdType>::max()));
+    VertexIdType  target_id(rRow[END_NODE].as<int>(
+                        std::numeric_limits<VertexIdType>::max()));
+    Edge&         edge = rTopology.addEdge(edge_id, source_id, target_id);
+
+    edge.setOsmId(rRow[OSM_ID].as<OsmIdType>(
+                        std::numeric_limits<OsmIdType>::max()));
+    return edge;
+}
+
+void
+PostGisProvider::addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
+{
+    Edge::GeomData  gd(rRow[EDGE_LENGTH].as<double>(0),
+                       Point(rRow[CENTER_X].as<double>(0),
+                             rRow[CENTER_Y].as<double>(0)),
+                       rRow[SOURCE_BEARING].as<double>(0),
+                       rRow[TARGET_BEARING].as<double>(0));
+    rEdge.setGeomData(gd);
+}
+
+void
+PostGisProvider::addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
+{
+    Edge::RoadData rd;
+    const std::string onewayStr(rRow[ONEWAY].as<std::string>("no"));
+    if(onewayStr == "yes")
+    {
+        rd.direction = Edge::DirectionType::FROM_TO;
+    }
+    else if(onewayStr == "-1")
+    {
+        rd.direction = Edge::DirectionType::TO_FROM;
+    }
+
+    rd.nrLanes = rRow[LANES].as<size_t>(1);
+
+    rEdge.setRoadData(rd);
 }
 
 void
