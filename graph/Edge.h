@@ -10,6 +10,7 @@
 
 // SYSTEM INCLUDES
 //
+#include <limits>
 
 // PROJECT INCLUDES
 //
@@ -90,10 +91,10 @@ public:
      * @param   roadData    Road data for the edge.
      */
     Edge(EdgeIdType     id,
-        VertexIdType    source,
-        VertexIdType    target,
-        GeomData        geomData,
-        RoadData        roadData);
+         VertexIdType    source,
+         VertexIdType    target,
+         GeomData        geomData,
+         RoadData        roadData);
 
     /** Constructor.
      * Using default values for geometry and road.
@@ -102,8 +103,8 @@ public:
      * @param	target	Target vertex
      */
     Edge(EdgeIdType     id,
-        VertexIdType    source,
-        VertexIdType    target);
+         VertexIdType    source,
+         VertexIdType    target);
 
     /** Copy constructor.
      * @param   from    The Edge to make a copy of.
@@ -131,6 +132,8 @@ public:
      */
     void              setRoadData(RoadData geomData);
 
+    void              setOsmId(OsmIdType osmId);
+
 // ACCESSORS
     /**
      * @return  The id of this edge.
@@ -148,6 +151,11 @@ public:
     VertexIdType	  target()    const;
 
     /**
+     * @return  The original OSM id for this edge.
+     */
+    OsmIdType         osmId()     const;
+
+    /**
      * @return The geometric data for this edge.
      */
     const GeomData&   geomData()  const;
@@ -162,6 +170,7 @@ public:
 private:
 // ATTRIBUTES
     EdgeIdType		mId;
+    OsmIdType       mOsmId {std::numeric_limits<OsmIdType>::max()};
     VertexIdType	mSource;
     VertexIdType	mTarget;
     GeomData        mGeomData;

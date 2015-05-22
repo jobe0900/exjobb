@@ -95,6 +95,10 @@ void
 Edge::setRoadData(Edge::RoadData roadData)
 { mRoadData = roadData; }
 
+void
+Edge::setOsmId(OsmIdType osmId)
+{ mOsmId = osmId; }
+
 //============================= ACESS      ===================================
 EdgeIdType
 Edge::id() const
@@ -107,6 +111,10 @@ Edge::source() const
 VertexIdType
 Edge::target() const
 { return mTarget; }
+
+OsmIdType
+Edge::osmId() const
+{ return mOsmId; }
 
 const Edge::GeomData&
 Edge::geomData() const
