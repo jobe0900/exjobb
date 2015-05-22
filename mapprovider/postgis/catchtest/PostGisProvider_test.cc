@@ -81,13 +81,15 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 {
 	try
 	{
-		std::string config_file("config/catchtest/testsettings.json");
-		ConfigurationReader config_reader(config_file);
 
 		// ===================================================================
 		GIVEN ("a valid database configuration structure and "
 				"name to existing topology")
 		{
+//		    std::string config_file("config/catchtest/testsettings.json");
+		    std::string config_file("mapprovider/postgis"
+		        "/catchtest/mikh0522-testsettings.json");
+		    ConfigurationReader config_reader(config_file);
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
 

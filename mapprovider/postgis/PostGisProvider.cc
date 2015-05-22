@@ -160,11 +160,73 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 		// NON-TRANSACTION START
 		pqxx::nontransaction non_trans(mConnection);
 
-		rEdgeResult = non_trans.exec(
-				"SELECT edge_id, start_node, end_node "
-				"FROM " + mSchemaName + ".edge_data "
-				"ORDER BY edge_id ASC;"
-		);
+		std::string sql(
+"SELECT     edge_id, "
+"           start_node, "
+"           end_node, "
+//-- geom data about edge
+"           ST_Length(geom) AS edge_length, "
+"           ST_X(ST_LineInterpolatePoint(geom, 0.5)) AS center_x, "
+"           ST_Y(ST_LineInterpolatePoint(geom, 0.5)) AS center_y, "
+"           ST_Azimuth(ST_PointN(geom,1), "
+"                      ST_PointN(geom,2))/(2*pi())*360 "
+"                      AS source_bearing, "
+"           ST_Azimuth(ST_PointN(geom,ST_NPoints(geom)-1), "
+"                      ST_PointN(geom,ST_NPoints(geom)))/(2*pi())*360 "
+"                      AS target_bearing, "
+//-- osm data about original edge
+"           osm.* "
+"FROM       topo_test.edge_data "
+"JOIN ( "
+"   SELECT  osm_id, element_id, "
+//-- road data
+"           highway, "
+"           junction, "
+"           lanes, "
+"           oneway, "
+//-- access
+"           access, "
+"           barrier, "
+"           disused, "
+"           emergency, "
+//-- restrictions
+"           maxheight, "
+"           maxlength, "
+"           maxspeed, "
+"           maxweight,"
+"           maxwidth, "
+"           minspeed, "
+"           noexit, "
+"           restriction, "
+//-- vehicle access restrictions
+"           goods, "
+"           hgv, "
+"           lhv, "
+"           motorcar, "
+"           motor_vehicle, "
+"           psv, "
+"           vehicle, "
+//-- costs
+"           incline, "
+"           public_transport, "
+"           railway, "
+"           surface, "
+"           tracktype, "
+"           traffic_calming, "
+"           traffic_sign "
+"   FROM    topo_test.relation "
+"   JOIN    public.highways_test"
+"   ON      topogeo_id = (topo_geom).id "
+") AS osm "
+"ON edge_id = element_id "
+"ORDER BY edge_id ASC;"
+		    );
+		rEdgeResult = non_trans.exec(sql);
+//		rEdgeResult = non_trans.exec(
+//				"SELECT edge_id, start_node, end_node "
+//				"FROM " + mSchemaName + ".edge_data "
+//				"ORDER BY edge_id ASC;"
+//		);
 	}
 	catch(const std::exception& e)
 	{

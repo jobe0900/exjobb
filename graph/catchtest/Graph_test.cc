@@ -58,7 +58,6 @@ SCENARIO ("Building a small graph", "[graph]")
 			{
 			    REQUIRE (boost::num_vertices(boost_line_graph) ==
 			             boost::num_edges(boost_graph));
-
 			}
 		}
 
