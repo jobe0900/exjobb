@@ -7,6 +7,7 @@
 
 #include "../../postgis/PostGisProvider.h"
 
+#include <iostream>
 #include <string>
 #include <vector>
 
@@ -16,6 +17,7 @@
 #include "../../../util/TimeToStringMaker.h"
 #include "../../../graph/Edge.h"
 #include "../../../graph/Vertex.h"
+#include "../../../graph/Graph.h"
 
 SCENARIO ("PostGis topology handling", "[postgis][topology]")
 {
@@ -117,6 +119,21 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 					REQUIRE (topology.nrVertices() > 0);
 					REQUIRE (topology.nrEdges() > 0);
 				}
+			}
+
+			// ...............................................................
+			WHEN ("we try to build a graph ")
+			{
+			    Topology topology;
+			    db_handler.getTopology(topology);
+			    Graph graph(topology);
+
+			    THEN ("we should be able to print some information")
+			    {
+			        graph.printGraphInformation(std::cout);
+			        REQUIRE (topology.nrVertices() > 0);
+			        REQUIRE (topology.nrEdges() > 0);
+			    }
 			}
 		}
 	}
