@@ -60,6 +60,7 @@ namespace OsmConstants
         BUS_GUIDEWAY,
         ROAD,
 
+        NR_HIGHWAY_TYPES
     };
 
     // road types
