@@ -19,7 +19,7 @@ SCENARIO ("Building a small graph", "[graph]")
 	{
 	    size_t nr_vertices = 3;
 	    size_t nr_edges = 2;
-	    OsmIdType osm_id(std::numeric_limits<OsmIdType>::max());
+	    OsmIdType osm_id(0);
 
 	    Topology topology;
 	    const Vertex& v1 = topology.addVertex(1, Point(0,0));
