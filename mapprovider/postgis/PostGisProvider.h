@@ -21,6 +21,7 @@
 //
 #include "../../config/DatabaseConfig.h"
 #include "../../graph/Edge.h"
+#include "../../graph/OsmConstants.h"
 #include "../../graph/Topology.h"
 #include "../../graph/Vertex.h"
 #include "../MapProvider.h"
@@ -39,24 +40,6 @@
 class PostGisProvider : public MapProvider
 {
 public:
-// TYPES
-    enum EdgeResultColumns
-    {
-        EDGE_ID,
-        START_NODE,
-        END_NODE,
-        EDGE_LENGTH,
-        CENTER_X,
-        CENTER_Y,
-        SOURCE_BEARING,
-        TARGET_BEARING,
-        OSM_ID,
-        ELEMENT_ID,
-        HIGHWAY,
-        JUNCTION,
-        LANES,
-        ONEWAY
-    };
 // LIFECYCLE
 
     /** Default constructor.
@@ -102,6 +85,12 @@ private:
     void    addEdgeResultToTopology(const pqxx::result& rEdgeResult,
                                     Topology& rTopology);
 
+    /** Check if edge has restrictions on properties of the vehicle.
+     * @param   rRow    Row with data for an Edge.
+     * @return  True if vehicle can pass, false if not.
+     */
+    bool    validDimensionRestrictions(const pqxx::tuple& rRow);
+
     /** Helper to add basic data from db to Edge.
      * @param   rRow        Row with data for an Edge.
      * @param   rTopology   Topology to add edge to.
@@ -121,6 +110,13 @@ private:
      * @param   rRow    Reference to Row with road data in it.
      */
     void    addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow);
+
+    /** Extract highway type from database result and store in RoadData.
+     * @param   rRoadData   The RoadData to store in.
+     * @param   rRow    Reference to Row with road data in it.
+     */
+    void    addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
+                                         const pqxx::tuple& rRow);
 
     /** Get vertices from database.
      * @throws	MapProviderException

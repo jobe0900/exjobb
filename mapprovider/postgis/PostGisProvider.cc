@@ -184,20 +184,20 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "           , junction "
 "           , lanes "
 "           , oneway "
+//-- vehicle property restrictions
+"           , maxheight "
+"           , maxlength "
+"           , maxspeed "
+"           , maxweight "
+"           , maxwidth "
+"           , minspeed "
+//"           , noexit "
+//"           , restriction "
 //-- access
 //"           , access "
 //"           , barrier "
 //"           , disused "
 //"           , emergency "
-//-- restrictions
-//"           , maxheight "
-//"           , maxlength "
-//"           , maxspeed "
-//"           , maxweight "
-//"           , maxwidth "
-//"           , minspeed "
-//"           , noexit "
-//"           , restriction "
 //-- vehicle access restrictions
 //"           , goods "
 //"           , hgv "
@@ -217,6 +217,16 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "   FROM    " + mSchemaName + ".relation "
 "   JOIN    " + mTableName +
 "   ON      topogeo_id = (topo_geom).id "
+"   WHERE   highway not in ('pedestrian'"
+"                           , 'track'"
+"                           , 'raceway'"
+"                           , 'footway'"
+"                           , 'cycleway'"
+"                           , 'bridleway'"
+"                           , 'steps'"
+"                           , 'path'"
+"                           , 'proposed'"
+"                           , 'construction')"
 ") AS osm "
 "ON edge_id = element_id "
 "ORDER BY edge_id ASC;"
@@ -241,18 +251,42 @@ PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
 {
     for(const pqxx::tuple& row : result)
     {
+        if(!validDimensionRestrictions(row))
+        {
+            continue;
+        }
         Edge& edge = addBasicResultToEdge(row, rTopology);
-    // TODO add multimap to topology osm_id => topo_id
         addGeomDataResultToEdge(edge, row);
         addRoadDataResultToEdge(edge, row);
     }
+}
+
+bool
+PostGisProvider::validDimensionRestrictions(const pqxx::tuple& rRow)
+{
+    const VehicleConfig& config = mrConfig.getVehicleConfig();
+    double doubleMax(std::numeric_limits<double>::max());
+
+    using namespace OsmConstants;
+
+    if(config.height >= rRow[MAXHEIGHT].as<double>(doubleMax))
+        return false;
+    if(config.length >= rRow[MAXLENGTH].as<double>(doubleMax))
+        return false;
+    if(config.weight >= rRow[MAXWEIGHT].as<double>(doubleMax))
+        return false;
+    if(config.width  >= rRow[MAXWIDTH].as<double>(doubleMax))
+        return false;
+
+    return true;
 }
 
 Edge&
 PostGisProvider::addBasicResultToEdge(const pqxx::tuple& rRow,
                                       Topology& rTopology)
 {
-    EdgeIdType    edge_id(rRow[EDGE_ID].as<int>(
+    using namespace OsmConstants;
+    EdgeIdType    edge_id(rRow[EDGE_ID].as<EdgeIdType>(
                         std::numeric_limits<EdgeIdType>::max()));
     OsmIdType     osm_id(rRow[OSM_ID].as<OsmIdType>(
                         std::numeric_limits<OsmIdType>::max()));
@@ -269,6 +303,7 @@ PostGisProvider::addBasicResultToEdge(const pqxx::tuple& rRow,
 void
 PostGisProvider::addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
 {
+    using namespace OsmConstants;
     Edge::GeomData  gd(rRow[EDGE_LENGTH].as<double>(0),
                        Point(rRow[CENTER_X].as<double>(0),
                              rRow[CENTER_Y].as<double>(0)),
@@ -280,8 +315,14 @@ PostGisProvider::addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
 void
 PostGisProvider::addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
 {
+    using namespace OsmConstants;
     Edge::RoadData rd;
-    const std::string onewayStr(rRow[ONEWAY].as<std::string>("no"));
+    std::string onewayStr(rRow[ONEWAY].as<std::string>("no"));
+
+    if(rRow[JUNCTION].as<std::string>("") == "roundabout")
+    {
+        onewayStr = "yes";
+    }
     if(onewayStr == "yes")
     {
         rd.direction = Edge::DirectionType::FROM_TO;
@@ -293,7 +334,26 @@ PostGisProvider::addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
 
     rd.nrLanes = rRow[LANES].as<size_t>(1);
 
+    addHighwayTypeToEdgeRoadData(rd, rRow);
+
     rEdge.setRoadData(rd);
+}
+
+void
+PostGisProvider::addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
+                                              const pqxx::tuple& rRow)
+{
+    using namespace OsmConstants;
+    std::string roadTypeStr(rRow[HIGHWAY].as<std::string>("road"));
+
+    for(size_t i = 0; i < HighwayType::NR_HIGHWAY_TYPES; ++i)
+    {
+        if(roadTypeStr == HighwayTypeStrings[i])
+        {
+            rRoadData.roadType = static_cast<HighwayType>(i);
+            return;
+        }
+    }
 }
 
 void

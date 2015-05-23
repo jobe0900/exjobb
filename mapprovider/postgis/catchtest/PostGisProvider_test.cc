@@ -135,6 +135,41 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			        REQUIRE (topology.nrEdges() > 0);
 			    }
 			}
+
+			// ...............................................................
+			WHEN ("fetching an edge from topology")
+			{
+			    Topology topology;
+			    db_handler.getTopology(topology);
+			    const Edge& edge = topology.getEdge(1);
+
+				THEN ("we should be able to print it out")
+				{
+				    INFO (edge);
+					REQUIRE (true);
+
+					/* Information matches this query:
+$ psql -U jonas -d mikh_0522 -c
+"SELECT edge_id, osm_id, start_node, end_node, lanes, highway
+ FROM   topo_test.edge_data
+ JOIN (
+ SELECT osm_id, element_id, highway, lanes
+ FROM topo_test.relation
+ JOIN highways_test
+ ON topogeo_id = (topo_geom).id )
+ AS osm
+ ON edge_id = element_id
+ WHERE edge_id = 1;"
+
+ edge_id |  osm_id   | start_node | end_node | lanes |   highway
+---------+-----------+------------+----------+-------+-------------
+       1 | 124227193 |          1 |       54 |       | residential
+(1 row)
+
+					 */
+				}
+			}
+
 		}
 	}
 	catch (ConfigurationException& e)
