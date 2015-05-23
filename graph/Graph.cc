@@ -26,19 +26,17 @@ Graph::Graph(const Topology& rTopology)
 std::ostream&
 operator<<(std::ostream& os, const Graph& rGraph)
 {
-    os << "Graph: #vertices: " << rGraph.nrVertices()
-       << ", #edges: " << rGraph.nrEdges()
-       << ", #nodes: " << rGraph.nrNodes()
-       << ", #lines: " << rGraph.nrLines()
-       << std::endl;
-
+    rGraph.printGraphInformation(os);
 
     os << std::endl << "Vertices: " << std::endl;
     rGraph.printVertices(os);
+
     os << std::endl << "Edges: " << std::endl;
     rGraph.printEdges(os);
+
     os << std::endl << "Nodes: " << std::endl;
     rGraph.printNodes(os);
+
     os << std::endl << "Lines: " << std::endl;
     rGraph.printLines(os);
 
@@ -292,6 +290,16 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
             }
         }
     }
+}
+
+void
+Graph::printGraphInformation(std::ostream& os) const
+{
+    os << "Graph: #vertices: " << nrVertices()
+       << ", #edges: " << nrEdges()
+       << ", #nodes: " << nrNodes()
+       << ", #lines: " << nrLines()
+       << std::endl;
 }
 
 void

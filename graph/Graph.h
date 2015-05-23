@@ -175,6 +175,10 @@ public:
      */
     bool                  hasNode(EdgeIdType nodeId) const;
 
+    /** Output information about # vertices, edges, nodes, lines.
+     */
+    void                  printGraphInformation(std::ostream& os) const;
+
 protected:
 
 private:
@@ -202,7 +206,6 @@ private:
     void                connectSourceNodeToTargetNodesViaVertex(
                             const NodeType& rSourceNode,
                             const VertexType& rViaVertex);
-
 
     void                printVertices(std::ostream& os) const;
     void                printEdges(std::ostream& os)    const;
