@@ -97,5 +97,30 @@ SCENARIO ("Building a small graph", "[graph]")
 		        REQUIRE (boost::num_edges(boost_graph) == topology.nrEdges());
 		    }
 		}
+
+		// ...................................................................
+		WHEN ("adding an extra lane to an edge before"
+		      " building graph")
+		{
+
+		    Edge::RoadData rd1;
+		    rd1.direction = Edge::DirectionType::FROM_TO;
+		    rd1.nrLanes = 2;
+		    e1.setRoadData(rd1);
+
+		    Edge::RoadData rd2;
+		    rd2.direction = Edge::DirectionType::FROM_TO;
+		    e2.setRoadData(rd2);
+
+		    Graph g2(topology);
+
+		    THEN ("the # of edges in the graph representation"
+		        " should be one more than in the topology")
+		    {
+		        INFO (g2)
+		                    const auto& boost_graph = g2.getBoostGraph();
+		        REQUIRE (boost::num_edges(boost_graph) == topology.nrEdges() + 1);
+		    }
+		}
 	}
 }

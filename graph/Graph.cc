@@ -132,15 +132,19 @@ Graph::addTopoEdgesToGraph()
         if(e.roadData().direction == Edge::DirectionType::FROM_TO
         || e.roadData().direction == Edge::DirectionType::BOTH)
         {
-            addDirectedEdge(e.id(), s, t, e_ix);
-            ++e_ix;
+            for(size_t lane = 1; lane <= e.roadData().nrLanes; ++lane) {
+                addDirectedEdge(e.id(), s, t, e_ix);
+                ++e_ix;
+            }
         }
 
         if(e.roadData().direction == Edge::DirectionType::TO_FROM
         || e.roadData().direction == Edge::DirectionType::BOTH)
         {
-            addDirectedEdge(e.id(), t, s, e_ix);
-            ++e_ix;
+            for(size_t lane = 1; lane <= e.roadData().nrLanes; ++lane) {
+                addDirectedEdge(e.id(), t, s, e_ix);
+                ++e_ix;
+            }
         }
     }
 }
