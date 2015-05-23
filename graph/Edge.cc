@@ -11,8 +11,8 @@
 // Edge::GeomData ------------------------------------------------------------
 Edge::GeomData::GeomData(double length,
                          Point  centerPoint,
-                         double sourceBearing,
-                         double targetBearing)
+                         int    sourceBearing,
+                         int    targetBearing)
     : length(length),
       centerPoint(centerPoint),
       sourceBearing(sourceBearing),

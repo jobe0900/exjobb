@@ -168,12 +168,12 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "           ST_Length(geom) AS edge_length, "
 "           ST_X(ST_LineInterpolatePoint(geom, 0.5)) AS center_x, "
 "           ST_Y(ST_LineInterpolatePoint(geom, 0.5)) AS center_y, "
-"           ST_Azimuth(ST_PointN(geom,1), "
-"                      ST_PointN(geom,2))/(2*pi())*360 "
-"                      AS source_bearing, "
-"           ST_Azimuth(ST_PointN(geom,ST_NPoints(geom)-1), "
-"                      ST_PointN(geom,ST_NPoints(geom)))/(2*pi())*360 "
-"                      AS target_bearing, "
+"           (ST_Azimuth(ST_PointN(geom,1), "
+"                       ST_PointN(geom,2))/(2*pi())*360)::int "
+"                       AS source_bearing, "
+"           (ST_Azimuth(ST_PointN(geom,ST_NPoints(geom)-1), "
+"                       ST_PointN(geom,ST_NPoints(geom)))/(2*pi())*360)::int "
+"                       AS target_bearing, "
 //-- osm data about original edge
 "           osm.* "
 "FROM       topo_test.edge_data "
@@ -271,8 +271,8 @@ PostGisProvider::addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
     Edge::GeomData  gd(rRow[EDGE_LENGTH].as<double>(0),
                        Point(rRow[CENTER_X].as<double>(0),
                              rRow[CENTER_Y].as<double>(0)),
-                       rRow[SOURCE_BEARING].as<double>(0),
-                       rRow[TARGET_BEARING].as<double>(0));
+                       rRow[SOURCE_BEARING].as<int>(0),
+                       rRow[TARGET_BEARING].as<int>(0));
     rEdge.setGeomData(gd);
 }
 

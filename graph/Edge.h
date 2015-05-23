@@ -48,8 +48,8 @@ public:
     {
         double      length {1.0};
         Point       centerPoint;
-        double      sourceBearing {0.0};
-        double      targetBearing {0.0};
+        int         sourceBearing {0};
+        int         targetBearing {0};
 
         /** Constructor. */
         GeomData() = default;
@@ -57,8 +57,8 @@ public:
         /** Constructor. */
         GeomData(double length,
                  Point  centerPoint,
-                 double sourceBearing,
-                 double targetBearing);
+                 int    sourceBearing,
+                 int    targetBearing);
     };
 
     //------------------------------------------------------------------------
