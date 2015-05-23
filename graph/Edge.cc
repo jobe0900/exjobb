@@ -40,6 +40,7 @@ Edge::RoadData::print(std::ostream& os) const
     }
 
     os << ", #lanes: " << nrLanes;
+    os << ", type: " << OsmConstants::HighwayTypeStrings[roadType];
 }
 
 

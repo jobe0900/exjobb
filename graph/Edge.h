@@ -19,6 +19,7 @@
 //
 #include "Vertex.h"
 //#include "EdgeData.h"
+#include "OsmConstants.h"
 
 // FORWARD REFERENCES
 //
@@ -66,8 +67,9 @@ public:
      */
     struct RoadData
     {
-        DirectionType   direction {BOTH};
-        size_t          nrLanes {1};
+        DirectionType               direction {BOTH};
+        size_t                      nrLanes   {1};
+        OsmConstants::HighwayType   roadType  {OsmConstants::HighwayType::ROAD};
 
         /** Constructor. */
         RoadData() = default;
