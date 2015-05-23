@@ -10,6 +10,7 @@
 
 // SYSTEM INCLUDES
 //
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -117,6 +118,11 @@ private:
      */
     void    addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
                                          const pqxx::tuple& rRow);
+
+    /** Get the names of the highway columnms we are interested in from OsmConst.
+     * @return  String to put in query.
+     */
+    std::string getInterestingHighwayColumns() const;
 
     /** Get vertices from database.
      * @throws	MapProviderException

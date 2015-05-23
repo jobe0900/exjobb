@@ -191,14 +191,7 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "           , maxweight "
 "           , maxwidth "
 "           , minspeed "
-//"           , noexit "
-//"           , restriction "
-//-- access
-//"           , access "
-//"           , barrier "
-//"           , disused "
-//"           , emergency "
-//-- vehicle access restrictions
+//-- vehicle type access restrictions
 //"           , goods "
 //"           , hgv "
 //"           , lhv "
@@ -206,6 +199,13 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 //"           , motor_vehicle "
 //"           , psv "
 //"           , vehicle "
+//-- access
+//"           , access "
+//"           , barrier "
+//"           , disused "
+//"           , emergency "
+//"           , noexit "
+//"           , restriction "
 //-- costs
 //"           , incline "
 //"           , public_transport "
@@ -217,16 +217,7 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "   FROM    " + mSchemaName + ".relation "
 "   JOIN    " + mTableName +
 "   ON      topogeo_id = (topo_geom).id "
-"   WHERE   highway not in ('pedestrian'"
-"                           , 'track'"
-"                           , 'raceway'"
-"                           , 'footway'"
-"                           , 'cycleway'"
-"                           , 'bridleway'"
-"                           , 'steps'"
-"                           , 'path'"
-"                           , 'proposed'"
-"                           , 'construction')"
+"   WHERE   highway in " + getInterestingHighwayColumns() +
 ") AS osm "
 "ON edge_id = element_id "
 "ORDER BY edge_id ASC;"
@@ -354,6 +345,25 @@ PostGisProvider::addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
             return;
         }
     }
+}
+
+std::string
+PostGisProvider::getInterestingHighwayColumns() const
+{
+    using namespace OsmConstants;
+    std::string cols;
+    std::stringstream ss;
+    ss << "(";
+    for(size_t i = 0; i < NR_HIGHWAY_TYPES; ++i)
+    {
+        ss << "'" << HighwayTypeStrings[i] << "'";
+        if(i < NR_HIGHWAY_TYPES - 1)
+        {
+            ss << ", ";
+        }
+    }
+    ss << ")";
+    return ss.str();
 }
 
 void

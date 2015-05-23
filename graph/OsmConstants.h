@@ -8,6 +8,7 @@
 #ifndef GRAPH_OSMCONSTANTS_H_
 #define GRAPH_OSMCONSTANTS_H_
 
+
 namespace OsmConstants
 {
     enum EdgeResultColumns
@@ -85,6 +86,7 @@ namespace OsmConstants
         "bus_guideway",
         "road",
     };
+
 };
 
 #endif /* GRAPH_OSMCONSTANTS_H_ */
