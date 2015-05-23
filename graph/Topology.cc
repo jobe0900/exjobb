@@ -12,7 +12,7 @@
 
 //============================= LIFECYCLE ====================================
 Topology::Topology()
-    : mVertexMap(), mEdgeMap()
+    : mVertexMap(), mEdgeMap(), mOsmEdgeMap()
 {
 }
 //============================= OPERATORS ====================================
@@ -28,6 +28,7 @@ Topology::addVertex(VertexIdType id, Point point)
 
 Edge&
 Topology::addEdge(EdgeIdType        id,
+                  OsmIdType         osmId,
                   VertexIdType      source,
                   VertexIdType      target,
                   Edge::GeomData    geomData,
@@ -37,7 +38,9 @@ Topology::addEdge(EdgeIdType        id,
 	{
 	    getVertex(source);
 	    getVertex(target);
-		auto res = mEdgeMap.emplace(id, Edge(id, source, target, geomData, roadData));
+		auto res = mEdgeMap.emplace(
+		    id, Edge(id, osmId, source, target, geomData, roadData));
+		mOsmEdgeMap.insert({osmId, id});
 		return res.first->second;
 	}
 	catch (TopologyException& e)
@@ -49,12 +52,13 @@ Topology::addEdge(EdgeIdType        id,
 
 Edge&
 Topology::addEdge(EdgeIdType        id,
+                  OsmIdType         osmId,
                   VertexIdType      source,
                   VertexIdType      target)
 {
     Edge::GeomData gd;
     Edge::RoadData rd;
-    return addEdge(id, source, target, gd, rd);
+    return addEdge(id, osmId, source, target, gd, rd);
 }
 
 Vertex&

@@ -74,6 +74,7 @@ JsonTestProvider::getTopology(Topology& rTopology)
                 ++i;
             }
             Edge::DirectionType direction;
+            OsmIdType osm_id(std::numeric_limits<OsmIdType>::max());
             switch(e_row[3])
             {
                 case 0:
@@ -85,7 +86,7 @@ JsonTestProvider::getTopology(Topology& rTopology)
                 default:
                     direction = Edge::DirectionType::BOTH;
             }
-            Edge& e = rTopology.addEdge(e_row[0], e_row[1], e_row[2]);
+            Edge& e = rTopology.addEdge(e_row[0], osm_id, e_row[1], e_row[2]);
             Edge::RoadData rd;
             rd.direction = direction;
             e.setRoadData(rd);

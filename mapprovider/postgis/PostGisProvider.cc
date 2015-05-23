@@ -254,14 +254,15 @@ PostGisProvider::addBasicResultToEdge(const pqxx::tuple& rRow,
 {
     EdgeIdType    edge_id(rRow[EDGE_ID].as<int>(
                         std::numeric_limits<EdgeIdType>::max()));
+    OsmIdType     osm_id(rRow[OSM_ID].as<OsmIdType>(
+                        std::numeric_limits<OsmIdType>::max()));
     VertexIdType  source_id(rRow[START_NODE].as<int>(
                         std::numeric_limits<VertexIdType>::max()));
     VertexIdType  target_id(rRow[END_NODE].as<int>(
                         std::numeric_limits<VertexIdType>::max()));
-    Edge&         edge = rTopology.addEdge(edge_id, source_id, target_id);
+    Edge&         edge = rTopology.addEdge(
+                        edge_id, osm_id, source_id, target_id);
 
-    edge.setOsmId(rRow[OSM_ID].as<OsmIdType>(
-                        std::numeric_limits<OsmIdType>::max()));
     return edge;
 }
 

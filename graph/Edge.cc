@@ -48,11 +48,13 @@ Edge::RoadData::print(std::ostream& os) const
 
 //============================= LIFECYCLE ====================================
 Edge::Edge(EdgeIdType       id,
+           OsmIdType        osmId,
            VertexIdType     source,
            VertexIdType     target,
            Edge::GeomData   geomData,
            Edge::RoadData   roadData)
     : mId(id),
+      mOsmId(osmId),
       mSource(source),
       mTarget(target),
       mGeomData(geomData),
@@ -60,9 +62,11 @@ Edge::Edge(EdgeIdType       id,
 { }
 
 Edge::Edge(EdgeIdType       id,
+           OsmIdType        osmId,
            VertexIdType     source,
            VertexIdType     target)
     : mId(id),
+      mOsmId(osmId),
       mSource(source),
       mTarget(target),
       mGeomData(),
@@ -74,6 +78,7 @@ std::ostream&
 operator<<(std::ostream& os, const Edge& rEdge)
 {
 	os  << "Edge [id: " << rEdge.id()
+	    << ", osmId: " << rEdge.osmId()
 		<< ", source: " << rEdge.source()
 		<< ", target: " << rEdge.target()
 		<< "\n   road data: ";

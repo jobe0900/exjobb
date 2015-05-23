@@ -86,12 +86,14 @@ public:
 
     /** Constructor.
      * @param	id		    Id for this Edge
+     * @param   osmId       The original OsmId this edge belongs to.
      * @param	source	    Source vertex
      * @param	target	    Target vertex
      * @param   geomData    Geometric data for the edge.
      * @param   roadData    Road data for the edge.
      */
-    Edge(EdgeIdType     id,
+    Edge(EdgeIdType      id,
+         OsmIdType       osmId,
          VertexIdType    source,
          VertexIdType    target,
          GeomData        geomData,
@@ -100,10 +102,12 @@ public:
     /** Constructor.
      * Using default values for geometry and road.
      * @param	id		Id for this Edge
+     * @param   osmId   The original OsmId this edge belongs to.
      * @param	source	Source vertex
      * @param	target	Target vertex
      */
-    Edge(EdgeIdType     id,
+    Edge(EdgeIdType      id,
+         OsmIdType       osmId,
          VertexIdType    source,
          VertexIdType    target);
 
@@ -171,7 +175,7 @@ public:
 private:
 // ATTRIBUTES
     EdgeIdType		mId;
-    OsmIdType       mOsmId {std::numeric_limits<OsmIdType>::max()};
+    OsmIdType       mOsmId;
     VertexIdType	mSource;
     VertexIdType	mTarget;
     GeomData        mGeomData;

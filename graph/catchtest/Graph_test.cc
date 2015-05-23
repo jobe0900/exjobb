@@ -19,13 +19,14 @@ SCENARIO ("Building a small graph", "[graph]")
 	{
 	    size_t nr_vertices = 3;
 	    size_t nr_edges = 2;
+	    OsmIdType osm_id(std::numeric_limits<OsmIdType>::max());
 
 	    Topology topology;
 	    const Vertex& v1 = topology.addVertex(1, Point(0,0));
 	    const Vertex& v2 = topology.addVertex(2, Point(1,2));
 	    const Vertex& v3 = topology.addVertex(3, Point(3,1));
-	    Edge& e1 = topology.addEdge(1,1,2);
-	    Edge& e2 = topology.addEdge(2,2,3);
+	    Edge& e1 = topology.addEdge(1,osm_id,1,2);
+	    Edge& e2 = topology.addEdge(2,osm_id,2,3);
 
 	    // ...................................................................
 		WHEN ("we try create a Graph from the Topology")

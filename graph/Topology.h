@@ -30,8 +30,9 @@
 // FORWARD REFERENCES
 //
 
-typedef std::map<VertexIdType, Vertex>  TopoVertexMapType;
-typedef std::map<EdgeIdType, Edge>      TopoEdgeMapType;
+typedef std::map<VertexIdType, Vertex>          TopoVertexMapType;
+typedef std::map<EdgeIdType, Edge>              TopoEdgeMapType;
+typedef std::multimap<OsmIdType, EdgeIdType>    OsmIdToTopoIdEdgeMap;
 
 class Topology
 {
@@ -66,6 +67,7 @@ public:
 	/** Try to add an edge to the topology.
 	 * If an edge with the id already exists: return old value.
 	 * @param	id		    Id for the edge
+     * @param   osmId       The original OsmId this edge belongs to.
 	 * @param	source	    Id for source vertex
 	 * @param	target	    Id for target vertex
 	 * @param   geomData    Geometric data for the edge
@@ -74,6 +76,7 @@ public:
 	 * @throw	Topology Exception if vertices are not in topology.
 	 */
 	Edge&           addEdge(EdgeIdType      id,
+	                        OsmIdType       osmId,
 	                        VertexIdType    source,
 	                        VertexIdType    target,
 	                        Edge::GeomData  geomData,
@@ -83,12 +86,14 @@ public:
 	 * Using default values for geometric and road data.
 	 * If an edge with the id already exists: return old value.
 	 * @param	id		    Id for the edge
+     * @param   osmId       The original OsmId this edge belongs to.
 	 * @param	source	    Id for source vertex
 	 * @param	target	    Id for target vertex
 	 * @return	A reference to an edge with given id
 	 * @throw	Topology Exception if vertices are not in topology.
 	 */
 	Edge&           addEdge(EdgeIdType      id,
+	                        OsmIdType       osmId,
 	                        VertexIdType    source,
 	                        VertexIdType    target);
 
@@ -124,8 +129,9 @@ public:
 protected:
 private:
 // ATTRIBUTES
-	TopoVertexMapType  mVertexMap;
-	TopoEdgeMapType    mEdgeMap;
+	TopoVertexMapType     mVertexMap;
+	TopoEdgeMapType       mEdgeMap;
+	OsmIdToTopoIdEdgeMap  mOsmEdgeMap;
 };
 
 // INLINE METHODS

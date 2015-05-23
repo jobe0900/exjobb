@@ -11,6 +11,7 @@
 
 SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
 {
+    OsmIdType osm_id(std::numeric_limits<OsmIdType>::max());
     // -----------------------------------------------------------------------
     GIVEN ("a Topology object and data for a vertex")
 	{
@@ -72,7 +73,7 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
             const Vertex& r_v1 = topo.addVertex(v1, p1);
             const Vertex& r_v2 = topo.addVertex(v2, p2);
 
-            const Edge& r_edge = topo.addEdge(e1, v1, v2);
+            const Edge& r_edge = topo.addEdge(e1, osm_id, v1, v2);
 
             THEN ("we should get a reference to a TopologyEdge object")
             {
@@ -101,7 +102,7 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
             THEN ("we should get a TopologyException")
 			{
                 REQUIRE_THROWS_AS(
-                    const Edge& r_edge = topo.addEdge(e1, v1, v2),
+                    const Edge& r_edge = topo.addEdge(e1, osm_id, v1, v2),
                     TopologyException&
                 );
 			}
@@ -111,18 +112,12 @@ SCENARIO ("Storing topology edges and vertices in Topology", "[topology]")
     // -----------------------------------------------------------------------
     GIVEN ("Three points and to edges for a topology")
     {
-//        Vertex v1(1, Point(0,0));
-//        Vertex v2(2, Point(1,2));
-//        Vertex v3(3, Point(3,4));
-//        Edge e1(1,1,2);
-//        Edge e2(2,2,3);
-
         Topology topology;
         topology.addVertex(1, Point(0,0));
         topology.addVertex(2, Point(1,2));
         topology.addVertex(3, Point(3,4));
-        topology.addEdge(1,1,2);
-        topology.addEdge(2,2,3);
+        topology.addEdge(1,osm_id,1,2);
+        topology.addEdge(2,osm_id,2,3);
 
         // ...................................................................
         WHEN ("counting nr of edges")
