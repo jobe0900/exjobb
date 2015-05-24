@@ -9,3 +9,8 @@ Edges
 -----
 
 The Edges are fetched with a lot of columns. Some of the data are stored as attributes in the Edge class, some in the associated data structures (such as GeomData, RoadData) and others are used for checking prior to adding edge to topology (restrictions based on vehicle propoerties such as width and weight).
+
+
+Access
+------
+It is pretty impossible to build an isolated line graph based on access restrictions, separate from the routing, as some access restrictions are base on whether the edge (road) is  your destination or a via route. That is something that is impossible to know separately from the routing.

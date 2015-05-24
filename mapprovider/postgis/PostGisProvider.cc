@@ -191,16 +191,16 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "           , maxweight "
 "           , maxwidth "
 "           , minspeed "
-//-- vehicle type access restrictions
-//"           , goods "
-//"           , hgv "
-//"           , lhv "
-//"           , motorcar "
-//"           , motor_vehicle "
-//"           , psv "
-//"           , vehicle "
+//-- access restrictions
+"           , access "
+"           , motorcar "
+"           , goods "
+"           , hgv "
+"           , psv "
+"           , lhv "
+"           , motor_vehicle "
+"           , vehicle "
 //-- access
-//"           , access "
 //"           , barrier "
 //"           , disused "
 //"           , emergency "
@@ -223,11 +223,6 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "ORDER BY edge_id ASC;"
 		    );
 		rEdgeResult = non_trans.exec(sql);
-//		rEdgeResult = non_trans.exec(
-//				"SELECT edge_id, start_node, end_node "
-//				"FROM " + mSchemaName + ".edge_data "
-//				"ORDER BY edge_id ASC;"
-//		);
 	}
 	catch(const std::exception& e)
 	{
@@ -246,6 +241,11 @@ PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
         {
             continue;
         }
+
+        if(!accessAllowed(row))
+        {
+            continue;
+        }
         Edge& edge = addBasicResultToEdge(row, rTopology);
         addGeomDataResultToEdge(edge, row);
         addRoadDataResultToEdge(edge, row);
@@ -253,23 +253,123 @@ PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
 }
 
 bool
-PostGisProvider::validDimensionRestrictions(const pqxx::tuple& rRow)
+PostGisProvider::validDimensionRestrictions(const pqxx::tuple& rRow) const
 {
     const VehicleConfig& config = mrConfig.getVehicleConfig();
-    double doubleMax(std::numeric_limits<double>::max());
+    const double doubleMax(std::numeric_limits<double>::max());
 
     using namespace OsmConstants;
 
-    if(config.height >= rRow[MAXHEIGHT].as<double>(doubleMax))
+    if(config.height >= rRow[EdgeResultColumns::MAXHEIGHT_COL].as<double>(doubleMax))
         return false;
-    if(config.length >= rRow[MAXLENGTH].as<double>(doubleMax))
+    if(config.length >= rRow[EdgeResultColumns::MAXLENGTH_COL].as<double>(doubleMax))
         return false;
-    if(config.weight >= rRow[MAXWEIGHT].as<double>(doubleMax))
+    if(config.weight >= rRow[EdgeResultColumns::MAXWEIGHT_COL].as<double>(doubleMax))
         return false;
-    if(config.width  >= rRow[MAXWIDTH].as<double>(doubleMax))
+    if(config.width  >= rRow[EdgeResultColumns::MAXWIDTH_COL].as<double>(doubleMax))
         return false;
 
     return true;
+}
+
+bool
+PostGisProvider::accessAllowed(const pqxx::tuple& rRow) const
+{
+    using namespace OsmConstants;
+    AccessType generic_access = genericAccess(rRow);
+    AccessType type_access = vehicleTypeAccessType(rRow);
+
+    // generic allowed, but type restricted
+    if(generic_access == AccessType::ALLOWED)
+    {
+        if(type_access == AccessType::RESTRICTED)
+        {
+            return false;
+        }
+        return true;
+    }
+    // generic restricted, but type allowed
+    else if(generic_access == AccessType::RESTRICTED)
+    {
+        if(type_access == AccessType::ALLOWED)
+        {
+            return true;
+        }
+        return false;
+    }
+    // generic unspecified, but type restricted
+    else if(type_access == AccessType::RESTRICTED)
+    {
+        return false;
+    }
+    // generic and type unspecified == allowed
+    return true;
+}
+
+OsmConstants::AccessType
+PostGisProvider::genericAccess(const pqxx::tuple& rRow) const
+{
+    using namespace OsmConstants;
+    return accessTypeFromRestrictionString(rRow[ACCESS_COL].as<std::string>(""));
+}
+
+OsmConstants::AccessType
+PostGisProvider::vehicleTypeAccessType(const pqxx::tuple& rRow) const
+{
+    using namespace OsmConstants;
+
+    const VehicleType& v_type = mrConfig.getVehicleConfig().category;
+
+    std::string restriction_string("");
+    switch(v_type)
+    {
+        case VEHICLE_MOTORCAR:
+            restriction_string =
+                rRow[EdgeResultColumns::MOTORCAR_COL].as<std::string>(""); break;
+        case VEHICLE_GOODS:
+            restriction_string =
+                rRow[EdgeResultColumns::GOODS_COL].as<std::string>(""); break;
+        case VEHICLE_HGV:
+            restriction_string =
+                rRow[EdgeResultColumns::HGV_COL].as<std::string>(""); break;
+        case VEHICLE_PSV:
+            restriction_string =
+                rRow[EdgeResultColumns::PSV_COL].as<std::string>(""); break;
+        case VEHICLE_LHV:
+            restriction_string =
+                rRow[EdgeResultColumns::LHV_COL].as<std::string>(""); break;
+        case VEHICLE_MOTOR_VEHICLE:
+            restriction_string =
+                rRow[EdgeResultColumns::MOTOR_VEHICLE_COL].as<std::string>(""); break;
+        case VEHICLE_VEHICLE:
+        default:
+            restriction_string =
+                rRow[EdgeResultColumns::VEHICLE_COL].as<std::string>(""); break;
+
+    }
+    return accessTypeFromRestrictionString(restriction_string);
+}
+
+OsmConstants::AccessType
+PostGisProvider::accessTypeFromRestrictionString(
+        const std::string& rRestrictionString) const
+{
+    using namespace OsmConstants;
+
+    if(rRestrictionString != "")
+    {
+        if( rRestrictionString == ACCESS_YES ||
+            rRestrictionString == ACCESS_PERMISSIVE ||
+            rRestrictionString == ACCESS_DESIGNATED)
+        {
+            return ALLOWED;
+        }
+        else
+        {
+            return RESTRICTED;
+        }
+    }
+    return NOT_SPECIFIED;
 }
 
 Edge&
@@ -277,13 +377,13 @@ PostGisProvider::addBasicResultToEdge(const pqxx::tuple& rRow,
                                       Topology& rTopology)
 {
     using namespace OsmConstants;
-    EdgeIdType    edge_id(rRow[EDGE_ID].as<EdgeIdType>(
+    EdgeIdType    edge_id(rRow[EDGE_ID_COL].as<EdgeIdType>(
                         std::numeric_limits<EdgeIdType>::max()));
-    OsmIdType     osm_id(rRow[OSM_ID].as<OsmIdType>(
+    OsmIdType     osm_id(rRow[OSM_ID_COL].as<OsmIdType>(
                         std::numeric_limits<OsmIdType>::max()));
-    VertexIdType  source_id(rRow[START_NODE].as<int>(
+    VertexIdType  source_id(rRow[START_NODE_COL].as<int>(
                         std::numeric_limits<VertexIdType>::max()));
-    VertexIdType  target_id(rRow[END_NODE].as<int>(
+    VertexIdType  target_id(rRow[END_NODE_COL].as<int>(
                         std::numeric_limits<VertexIdType>::max()));
     Edge&         edge = rTopology.addEdge(
                         edge_id, osm_id, source_id, target_id);
@@ -295,11 +395,11 @@ void
 PostGisProvider::addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
 {
     using namespace OsmConstants;
-    Edge::GeomData  gd(rRow[EDGE_LENGTH].as<double>(0),
-                       Point(rRow[CENTER_X].as<double>(0),
-                             rRow[CENTER_Y].as<double>(0)),
-                       rRow[SOURCE_BEARING].as<int>(0),
-                       rRow[TARGET_BEARING].as<int>(0));
+    Edge::GeomData  gd(rRow[EDGE_LENGTH_COL].as<double>(0),
+                       Point(rRow[CENTER_X_COL].as<double>(0),
+                             rRow[CENTER_Y_COL].as<double>(0)),
+                       rRow[SOURCE_BEARING_COL].as<int>(0),
+                       rRow[TARGET_BEARING_COL].as<int>(0));
     rEdge.setGeomData(gd);
 }
 
@@ -308,9 +408,9 @@ PostGisProvider::addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
 {
     using namespace OsmConstants;
     Edge::RoadData rd;
-    std::string onewayStr(rRow[ONEWAY].as<std::string>("no"));
+    std::string onewayStr(rRow[ONEWAY_COL].as<std::string>("no"));
 
-    if(rRow[JUNCTION].as<std::string>("") == "roundabout")
+    if(rRow[JUNCTION_COL].as<std::string>("") == ROUNDABOUT)
     {
         onewayStr = "yes";
     }
@@ -323,7 +423,7 @@ PostGisProvider::addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
         rd.direction = Edge::DirectionType::TO_FROM;
     }
 
-    rd.nrLanes = rRow[LANES].as<size_t>(1);
+    rd.nrLanes = rRow[LANES_COL].as<size_t>(1);
 
     addHighwayTypeToEdgeRoadData(rd, rRow);
 
@@ -335,7 +435,7 @@ PostGisProvider::addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
                                               const pqxx::tuple& rRow)
 {
     using namespace OsmConstants;
-    std::string roadTypeStr(rRow[HIGHWAY].as<std::string>("road"));
+    std::string roadTypeStr(rRow[HIGHWAY_COL].as<std::string>("road"));
 
     for(size_t i = 0; i < HighwayType::NR_HIGHWAY_TYPES; ++i)
     {

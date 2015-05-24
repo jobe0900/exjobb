@@ -16,6 +16,7 @@
 
 // LOCAL INCLUDES
 //
+#include "../graph/OsmConstants.h"
 
 // FORWARD REFERENCES
 //
@@ -23,11 +24,11 @@
 struct VehicleConfig
 {
 // ATTRIBUTES
-	std::string		category;
-	double			height;
-	double			length;
-	double			weight;
-	double			width;
+	OsmConstants::VehicleType	category;
+	double			            height;
+	double			            length;
+	double			            weight;
+	double			            width;
 };
 
 // INLINE METHODS
