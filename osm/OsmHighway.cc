@@ -12,6 +12,9 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
+OsmHighway::OsmHighway(OsmHighway::HighwayType type)
+    : mType(type)
+{}
 
 //============================= OPERATORS ====================================
 
@@ -21,7 +24,7 @@ OsmHighway::parseString(const std::string& rTypeString)
 {
     for(size_t i = 0; i < NR_HIGHWAY_TYPES; ++i)
     {
-        if(rTypeString == OsmHighway::typeStrings[i])
+        if(rTypeString == OsmHighway::sTypeStrings[i])
         {
             return static_cast<HighwayType>(i);
         }
@@ -37,7 +40,13 @@ OsmHighway::toString(OsmHighway::HighwayType highwayType)
     {
         throw OsmException("OsmHighway:toString: Unknown Highway Type");
     }
-    return OsmHighway::typeStrings[highwayType];
+    return OsmHighway::sTypeStrings[highwayType];
+}
+
+std::string
+OsmHighway::toString() const
+{
+    return sTypeStrings[this->mType];
 }
 
 //============================= OPERATIONS ===================================
@@ -46,7 +55,7 @@ OsmHighway::toString(OsmHighway::HighwayType highwayType)
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-const std::string OsmHighway::typeStrings[] =
+const std::string OsmHighway::sTypeStrings[] =
 {
     "motorway",
     "trunk",

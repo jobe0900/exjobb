@@ -58,7 +58,8 @@ public:
     };
 
 // LIFECYCLE
-    OsmHighway() = default;
+    OsmHighway() = delete;
+    OsmHighway(HighwayType type);
     OsmHighway(const OsmHighway& from) = default;
     ~OsmHighway() = default;
 
@@ -78,11 +79,17 @@ public:
      */
     static std::string  toString(HighwayType highwayType);
 
+    /** Convert this HighwayType to a string.
+     * @return  string representation of this HighwayType.
+     */
+    std::string         toString() const;
+
 // ACCESS
 // INQUIRY
 protected:
 private:
-    static const std::string typeStrings[];
+    HighwayType              mType {ROAD};
+    static const std::string sTypeStrings[];
 };
 
 // INLINE METHODS
