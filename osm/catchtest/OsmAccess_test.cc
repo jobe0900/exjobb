@@ -62,6 +62,23 @@ SCENARIO ("OsmAccess functionality testing", "[osm][access]")
                 }
             }
         }
+
+        // -------------------------------------------------------------------
+        GIVEN ("an access rule")
+        {
+            OsmAccess::AccessRule rule({OsmAccess::YES, OsmAccess::PERMISSIVE});
+
+            //................................................................
+            WHEN ("checking for access for type not in rule")
+            {
+                OsmAccess type(OsmAccess::DELIVERY);
+
+                THEN ("we should not be allowed access")
+                {
+                    REQUIRE_FALSE (type.hasAccess(rule));
+                }
+            }
+        }
     }
     catch (OsmException& oe)
     {

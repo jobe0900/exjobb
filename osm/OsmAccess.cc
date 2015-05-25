@@ -8,6 +8,23 @@
 
 #include "OsmAccess.h"  // class implemented
 
+// AccessRule ----------------------------------------------------------------
+OsmAccess::AccessRule::AccessRule(
+    std::initializer_list<OsmAccess::AccessType> allowedTypes)
+    : allowAccessToTypes(allowedTypes)
+{
+
+}
+
+bool
+OsmAccess::AccessRule::hasAccess(OsmAccess::AccessType type) const
+{
+    auto it = std::find(allowAccessToTypes.begin(),
+        allowAccessToTypes.end(),
+        type);
+    return it != allowAccessToTypes.end();
+}
+
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
@@ -47,6 +64,12 @@ std::string
 OsmAccess::toString() const
 {
     return sTypeStrings[this->mType];
+}
+
+bool
+OsmAccess::hasAccess(OsmAccess::AccessRule rule) const
+{
+    return rule.hasAccess(mType);
 }
 
 //============================= OPERATIONS ===================================

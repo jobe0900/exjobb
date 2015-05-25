@@ -10,7 +10,10 @@
 
 // SYSTEM INCLUDES
 //
+#include <algorithm>
+#include <initializer_list>
 #include <string>
+#include <vector>
 
 // PROJECT INCLUDES
 //
@@ -46,6 +49,19 @@ public:
         NR_ACCESS_TYPES
     };
 
+    /** Allow access to the types in the 'allowAccessTypes', deny all other.
+     */
+    struct AccessRule
+    {
+        AccessRule(std::initializer_list<AccessType> allowedTypes);
+//            : allowAccessToTypes(allowedTypes)
+//        {}
+
+        bool    hasAccess(AccessType type) const;
+
+        std::vector<AccessType> allowAccessToTypes {YES, PERMISSIVE, DESIGNATED};
+    };
+
 // LIFECYCLE
     OsmAccess() = delete;
     OsmAccess(AccessType type);
@@ -59,7 +75,7 @@ public:
      * @return  A valid AccessType
      * @throw   OsmException if invalid string.
      */
-    static AccessType  parseString(const std::string& rTypeString);
+    static AccessType   parseString(const std::string& rTypeString);
 
     /** Convert a Access Type to a string representation.
      * @param   accessType     The type to convert.
@@ -72,6 +88,12 @@ public:
      * @return  string representation of this VehicleType.
      */
     std::string         toString() const;
+
+    /** See if this Access type permits access according to rule;
+     * @param   AccessRule
+     * @return  true if access is allowed, false if not
+     */
+    bool                hasAccess(AccessRule rule) const;
 
 // ACCESS
 // INQUIRY
