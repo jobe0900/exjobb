@@ -185,21 +185,21 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "           , lanes "
 "           , oneway "
 //-- vehicle property restrictions
-"           , maxheight "
-"           , maxlength "
-"           , maxspeed "
-"           , maxweight "
-"           , maxwidth "
-"           , minspeed "
+//"           , maxheight "
+//"           , maxlength "
+//"           , maxspeed "
+//"           , maxweight "
+//"           , maxwidth "
+//"           , minspeed "
 //-- access restrictions
-"           , access "
-"           , motorcar "
-"           , goods "
-"           , hgv "
-"           , psv "
-"           , lhv "
-"           , motor_vehicle "
-"           , vehicle "
+//"           , access "
+//"           , motorcar "
+//"           , goods "
+//"           , hgv "
+//"           , psv "
+//"           , lhv "
+//"           , motor_vehicle "
+//"           , vehicle "
 //-- access
 //"           , barrier "
 //"           , disused "
@@ -237,42 +237,42 @@ PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
 {
     for(const pqxx::tuple& row : result)
     {
-        if(!validDimensionRestrictions(row))
-        {
-            continue;
-        }
-
-        if(!accessAllowed(row))
-        {
-            continue;
-        }
+//        if(!validDimensionRestrictions(row))
+//        {
+//            continue;
+//        }
+//
+//        if(!accessAllowed(row))
+//        {
+//            continue;
+//        }
         Edge& edge = addBasicResultToEdge(row, rTopology);
         addGeomDataResultToEdge(edge, row);
         addRoadDataResultToEdge(edge, row);
     }
 }
 
-bool
-PostGisProvider::validDimensionRestrictions(const pqxx::tuple& rRow) const
-{
-    const VehicleConfig& config = mrConfig.getVehicleConfig();
-    const double doubleMax(std::numeric_limits<double>::max());
+//bool
+//PostGisProvider::validDimensionRestrictions(const pqxx::tuple& rRow) const
+//{
+//    const VehicleConfig& config = mrConfig.getVehicleConfig();
+//    const double doubleMax(std::numeric_limits<double>::max());
+//
+//    if(config.height >= rRow[EdgeQueryResult::MAXHEIGHT].as<double>(doubleMax))
+//        return false;
+//    if(config.length >= rRow[EdgeQueryResult::MAXLENGTH].as<double>(doubleMax))
+//        return false;
+//    if(config.weight >= rRow[EdgeQueryResult::MAXWEIGHT].as<double>(doubleMax))
+//        return false;
+//    if(config.width  >= rRow[EdgeQueryResult::MAXWIDTH].as<double>(doubleMax))
+//        return false;
+//
+//    return true;
+//}
 
-    if(config.height >= rRow[EdgeQueryResult::MAXHEIGHT].as<double>(doubleMax))
-        return false;
-    if(config.length >= rRow[EdgeQueryResult::MAXLENGTH].as<double>(doubleMax))
-        return false;
-    if(config.weight >= rRow[EdgeQueryResult::MAXWEIGHT].as<double>(doubleMax))
-        return false;
-    if(config.width  >= rRow[EdgeQueryResult::MAXWIDTH].as<double>(doubleMax))
-        return false;
-
-    return true;
-}
-
-bool
-PostGisProvider::accessAllowed(const pqxx::tuple& rRow) const
-{
+//bool
+//PostGisProvider::accessAllowed(const pqxx::tuple& rRow) const
+//{
 //    OsmAccess generic_access(genericAccess(rRow));
 //    OsmAccess type_access(vehicleTypeAccessType(rRow));
 
@@ -300,8 +300,8 @@ PostGisProvider::accessAllowed(const pqxx::tuple& rRow) const
 //        return false;
 //    }
     // generic and type unspecified == allowed
-    return true;
-}
+//    return true;
+//}
 
 //OsmConstants::AccessType
 //PostGisProvider::genericAccess(const pqxx::tuple& rRow) const

@@ -90,38 +90,38 @@ private:
     void    addEdgeResultToTopology(const pqxx::result& rEdgeResult,
                                     Topology& rTopology);
 
-    /** Check if edge has restrictions on properties of the vehicle.
-     * @param   rRow    Row with data for an Edge.
-     * @return  True if vehicle can pass, false if not.
-     */
-    bool    validDimensionRestrictions(const pqxx::tuple& rRow) const;
-
-    /** Check if access is allowed
-     * @param   rRow    Row with data for an Edge.
-     * @return  True if we are allowed to travel here.
-     */
-    bool    accessAllowed(const pqxx::tuple& rRow) const;
-
-    /** Check if there are generic access restriction on edge.
-     * Permissive checking, only explicit prohibitions are reported as false.
-     * @return  If access is (kind of) allowed or not, or not specified
-     */
-    OsmAccess::AccessType
-        genericAccess(const pqxx::tuple& rRow) const;
-
-    /** Check if there are restrictions for this vehicle type to travel edge.
-     * @param   rRow    Row with data for an Edge.
-     * @return  AccessType for our type of vehicle.
-     */
-    OsmAccess::AccessType
-            vehicleTypeAccessType(const pqxx::tuple& rRow) const;
-
-    /** Translate a restriction string to an AccessType
-     * @param   rRestrictionString  The string to translate.
-     * @return  The corresponding AccessType.
-     */
-    OsmAccess::AccessType
-            accessTypeFromRestrictionString(const std::string& rRestrictionStr) const;
+//    /** Check if edge has restrictions on properties of the vehicle.
+//     * @param   rRow    Row with data for an Edge.
+//     * @return  True if vehicle can pass, false if not.
+//     */
+//    bool    validDimensionRestrictions(const pqxx::tuple& rRow) const;
+//
+//    /** Check if access is allowed
+//     * @param   rRow    Row with data for an Edge.
+//     * @return  True if we are allowed to travel here.
+//     */
+//    bool    accessAllowed(const pqxx::tuple& rRow) const;
+//
+//    /** Check if there are generic access restriction on edge.
+//     * Permissive checking, only explicit prohibitions are reported as false.
+//     * @return  If access is (kind of) allowed or not, or not specified
+//     */
+//    OsmAccess::AccessType
+//        genericAccess(const pqxx::tuple& rRow) const;
+//
+//    /** Check if there are restrictions for this vehicle type to travel edge.
+//     * @param   rRow    Row with data for an Edge.
+//     * @return  AccessType for our type of vehicle.
+//     */
+//    OsmAccess::AccessType
+//            vehicleTypeAccessType(const pqxx::tuple& rRow) const;
+//
+//    /** Translate a restriction string to an AccessType
+//     * @param   rRestrictionString  The string to translate.
+//     * @return  The corresponding AccessType.
+//     */
+//    OsmAccess::AccessType
+//            accessTypeFromRestrictionString(const std::string& rRestrictionStr) const;
 
     /** Helper to add basic data from db to Edge.
      * @param   rRow        Row with data for an Edge.
@@ -151,7 +151,7 @@ private:
     void    addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
                                          const pqxx::tuple& rRow);
 
-    /** Get the names of the highway columnms we are interested in from OsmConst.
+    /** Get the names of the highway columns we are interested in from OsmConst.
      * @return  String to put in query.
      */
     std::string getInterestingHighwayColumns() const;
