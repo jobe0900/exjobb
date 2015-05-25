@@ -13,7 +13,6 @@ OsmAccess::AccessRule::AccessRule(
     std::initializer_list<OsmAccess::AccessType> allowedTypes)
     : allowAccessToTypes(allowedTypes)
 {
-
 }
 
 bool

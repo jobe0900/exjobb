@@ -49,13 +49,12 @@ public:
         NR_ACCESS_TYPES
     };
 
+
     /** Allow access to the types in the 'allowAccessTypes', deny all other.
      */
     struct AccessRule
     {
         AccessRule(std::initializer_list<AccessType> allowedTypes);
-//            : allowAccessToTypes(allowedTypes)
-//        {}
 
         bool    hasAccess(AccessType type) const;
 
