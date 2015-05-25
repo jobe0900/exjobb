@@ -23,6 +23,7 @@
 #include "DatabaseConfig.h"
 #include "TopologyConfig.h"
 #include "VehicleConfig.h"
+#include "../osm/OsmVehicle.h"
 
 // FORWARD REFERENCES
 //
@@ -99,15 +100,6 @@ private:
 	 * @throw   ConfigurationException  If missing configuration.
 	 */
 	void    fillVehicleConfiguration(VehicleConfig& rVehicleConfig) const;
-
-	/** Translate the category string from configuration to VehicleType.
-	 * @param   Category string from configuration.
-	 * @return  VehicleType the string corresponds to.
-	 * @throw   ConfigurationException
-	 */
-	OsmConstants::VehicleType
-	        parseCategoryString(const std::string& rCategoryString) const;
-
 };
 
 // INLINE METHODS

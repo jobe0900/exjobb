@@ -19,7 +19,7 @@
 //
 #include "Vertex.h"
 //#include "EdgeData.h"
-#include "OsmConstants.h"
+#include "../osm/OsmHighway.h"
 
 // FORWARD REFERENCES
 //
@@ -69,7 +69,7 @@ public:
     {
         DirectionType               direction {BOTH};
         size_t                      nrLanes   {1};
-        OsmConstants::HighwayType   roadType  {OsmConstants::HighwayType::ROAD};
+        OsmHighway::HighwayType     roadType  {OsmHighway::HighwayType::ROAD};
 
         /** Constructor. */
         RoadData() = default;

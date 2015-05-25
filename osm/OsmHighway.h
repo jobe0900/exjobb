@@ -14,6 +14,7 @@
 // SYSTEM INCLUDES
 //
 #include <string>
+#include <vector>
 
 // PROJECT INCLUDES
 //
@@ -57,6 +58,12 @@ public:
         NR_HIGHWAY_TYPES
     };
 
+    enum JunctionType
+    {
+        ROUNDABOUT
+    };
+    static constexpr const char* JUNCTION_ROUNDABOUT = "roundabout";
+
 // LIFECYCLE
     OsmHighway() = delete;
     OsmHighway(HighwayType type);
@@ -85,11 +92,13 @@ public:
     std::string         toString() const;
 
 // ACCESS
+    static const std::vector<std::string>& typeStrings();
+
 // INQUIRY
 protected:
 private:
-    HighwayType              mType {ROAD};
-    static const std::string sTypeStrings[];
+    HighwayType                             mType {ROAD};
+    static const std::vector<std::string>   sTypeStrings;
 };
 
 // INLINE METHODS

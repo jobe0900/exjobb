@@ -10,6 +10,7 @@
 
 // SYSTEM INCLUDES
 //
+#include <algorithm>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -22,12 +23,15 @@
 //
 #include "../../config/DatabaseConfig.h"
 #include "../../graph/Edge.h"
-#include "../../graph/OsmConstants.h"
 #include "../../graph/Topology.h"
 #include "../../graph/Vertex.h"
 #include "../MapProvider.h"
 #include "../MapProviderException.h"
 #include "../../util/TimeToStringMaker.h"
+#include "OsmConstants.h"
+#include "../../osm/OsmAccess.h"
+#include "../../osm/OsmHighway.h"
+#include "../../osm/OsmVehicle.h"
 
 // FORWARD REFERENCES
 //
@@ -102,21 +106,21 @@ private:
      * Permissive checking, only explicit prohibitions are reported as false.
      * @return  If access is (kind of) allowed or not, or not specified
      */
-    OsmConstants::AccessType
+    OsmAccess::AccessType
         genericAccess(const pqxx::tuple& rRow) const;
 
     /** Check if there are restrictions for this vehicle type to travel edge.
      * @param   rRow    Row with data for an Edge.
      * @return  AccessType for our type of vehicle.
      */
-    OsmConstants::AccessType
+    OsmAccess::AccessType
             vehicleTypeAccessType(const pqxx::tuple& rRow) const;
 
     /** Translate a restriction string to an AccessType
      * @param   rRestrictionString  The string to translate.
      * @return  The corresponding AccessType.
      */
-    OsmConstants::AccessType
+    OsmAccess::AccessType
             accessTypeFromRestrictionString(const std::string& rRestrictionStr) const;
 
     /** Helper to add basic data from db to Edge.
@@ -142,6 +146,7 @@ private:
     /** Extract highway type from database result and store in RoadData.
      * @param   rRoadData   The RoadData to store in.
      * @param   rRow    Reference to Row with road data in it.
+     * @throw   MapProviderException
      */
     void    addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
                                          const pqxx::tuple& rRow);

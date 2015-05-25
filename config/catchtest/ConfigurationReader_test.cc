@@ -9,7 +9,6 @@
 #include "../Configuration.h"
 #include "../ConfigurationReader.h"
 #include "../ConfigurationException.h"
-#include "../../graph/OsmConstants.h"
 
 SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		"[json],[config]")
@@ -118,7 +117,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 
 			THEN ("we get a vehicle configuration filled out")
 			{
-				REQUIRE (r_vehicle_config.category == OsmConstants::VEHICLE_MOTORCAR);
+				REQUIRE (r_vehicle_config.category == OsmVehicle::MOTORCAR);
 				REQUIRE (r_vehicle_config.height == Approx(1.6));
 				REQUIRE (r_vehicle_config.length == Approx(4.5));
 				REQUIRE (r_vehicle_config.weight == Approx(2.0));

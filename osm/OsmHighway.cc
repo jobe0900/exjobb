@@ -17,7 +17,7 @@ OsmHighway::OsmHighway(OsmHighway::HighwayType type)
 {}
 
 //============================= OPERATORS ====================================
-
+//============================= OPERATIONS ===================================
 //static
 OsmHighway::HighwayType
 OsmHighway::parseString(const std::string& rTypeString)
@@ -49,13 +49,18 @@ OsmHighway::toString() const
     return sTypeStrings[this->mType];
 }
 
-//============================= OPERATIONS ===================================
 //============================= ACESS      ===================================
+//static
+const std::vector<std::string>&
+OsmHighway::typeStrings()
+{
+    return OsmHighway::sTypeStrings;
+}
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-const std::string OsmHighway::sTypeStrings[] =
+const std::vector<std::string> OsmHighway::sTypeStrings
 {
     "motorway",
     "trunk",

@@ -131,7 +131,7 @@ ConfigurationReader::fillVehicleConfiguration(VehicleConfig& rVehicleConfig) con
     {
         std::string categoryString =
             mPropertyTree.get<std::string>(prefix + "category");
-        rVehicleConfig.category = parseCategoryString(categoryString);
+        rVehicleConfig.category = OsmVehicle::parseString(categoryString);
         prefix += categoryString + ".";
         rVehicleConfig.height = mPropertyTree.get<double>(prefix + "height");
         rVehicleConfig.length = mPropertyTree.get<double>(prefix + "length");
@@ -148,20 +148,3 @@ ConfigurationReader::fillVehicleConfiguration(VehicleConfig& rVehicleConfig) con
     }
 }
 
-OsmConstants::VehicleType
-ConfigurationReader::parseCategoryString(const std::string& rCategoryString) const
-{
-    using namespace OsmConstants;
-    VehicleType v_type;
-
-    for(size_t i = 0; i < NR_VEHICLE_TYPES; ++i)
-    {
-        if(rCategoryString == VehicleTypeStrings[i])
-        {
-           v_type = static_cast<VehicleType>(i);
-           return v_type;
-        }
-    }
-    throw ConfigurationException(
-        std::string("Invalid vehicle category: ") + rCategoryString);
-}
