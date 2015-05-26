@@ -90,6 +90,7 @@ private:
     std::map<EdgeIdType, std::map<OsmVehicle::VehicleType, OsmAccess> >
                                                     mVehicleTypeAccess;
     std::map<EdgeIdType, OsmBarrier>                mBarrier;
+// TODO  OsmTurningRestriction                              mTurnRestrictions;
     std::map<EdgeIdType, bool>                      mDisused;
     std::map<EdgeIdType, bool>                      mNoExit;
 };

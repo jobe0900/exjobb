@@ -193,6 +193,9 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 //"           , minspeed "
 //-- access restrictions
 //"           , access "
+//"           , barrier "
+//"           , disused "
+//"           , noexit "
 //"           , motorcar "
 //"           , goods "
 //"           , hgv "
@@ -201,12 +204,9 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 //"           , motor_vehicle "
 //"           , vehicle "
 //-- access
-//"           , barrier "
-//"           , disused "
-//"           , emergency "
-//"           , noexit "
 //"           , restriction "
 //-- costs
+//"           , emergency "
 //"           , incline "
 //"           , public_transport "
 //"           , railway "
