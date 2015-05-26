@@ -9,7 +9,7 @@
 
 #include "../Restrictions.h"
 
-SCENARIO ("Adding and fetching restrictions", "[restrictions]")
+SCENARIO ("Adding and fetching vehicle restrictions", "[restrictions][vehicle]")
 {
     // -----------------------------------------------------------------------
     GIVEN ("a Restrictions object")
@@ -24,7 +24,7 @@ SCENARIO ("Adding and fetching restrictions", "[restrictions]")
             Restrictions::VehicleProperties vp;
             vp.maxSpeed = max_speed;
 
-            r.setVehiclePropertyRestricionForEdge(id, vp);
+            r.setVehiclePropertyRestrictionForEdge(id, vp);
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("we should get be able to get the property and check")
@@ -102,6 +102,58 @@ SCENARIO ("Adding and fetching restrictions", "[restrictions]")
             THEN ("we should get an empty vector")
             {
                 REQUIRE (rt.size() == 0);
+            }
+        }
+    }
+}
+
+SCENARIO ("Adding and fetching general access restrictions", "[restrictions][general]")
+{
+    // -----------------------------------------------------------------------
+    GIVEN ("a Restrictions object")
+    {
+        Restrictions r;
+        //....................................................................
+        WHEN ("we try to add access restriction DELIVERY to edge id 4")
+        {
+            OsmAccess deliveryAccess({OsmAccess::DELIVERY});
+            EdgeIdType id = 4;
+
+            r.setGeneralAccessRestrictionForEdge(id, deliveryAccess);
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("we should get be able to get the property and check")
+            {
+                REQUIRE (r.generalAccess(id).accessType() == OsmAccess::DELIVERY);
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the type should be in the vector of restriction types for edge")
+            {
+                std::vector<Restrictions::RestrictionType> rt = r.restrictionTypes(id);
+                auto it = std::find(
+                    rt.begin(),
+                    rt.end(),
+                    Restrictions::GENERAL_ACCESS);
+                REQUIRE (it != rt.end());
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the type should be reported as a restriction type for edge")
+            {
+                REQUIRE (r.hasRestriction(id, Restrictions::GENERAL_ACCESS));
+            }
+
+        }
+
+        //....................................................................
+        WHEN ("we try to fetch vehicle property restriction for unknown edge")
+        {
+            THEN ("we should get a RestrictionsException")
+            {
+                REQUIRE_THROWS_AS (
+                    r.generalAccess(567),
+                    RestrictionsException&);
             }
         }
     }

@@ -71,6 +71,12 @@ OsmAccess::hasAccess(OsmAccess::AccessRule rule) const
     return rule.hasAccess(mType);
 }
 
+OsmAccess::AccessType
+OsmAccess::accessType() const
+{
+    return mType;
+}
+
 //============================= OPERATIONS ===================================
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================

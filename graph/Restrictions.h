@@ -33,7 +33,7 @@
 /** Maps EdgeId => restriction.
  * Restrictions maps are:
  * - vehicle properties
- * - General access
+ * - General access to an edge
  * - vehicle type specific access
  * - barriers
  * - turn restrictions
@@ -105,9 +105,17 @@ public:
      * @param   edgeId              Id of the edge.
      * @param   vehicleProperties  The properties to install for the edge.
      */
-    void                setVehiclePropertyRestricionForEdge(
+    void                setVehiclePropertyRestrictionForEdge(
                             EdgeIdType edgeId,
                             VehicleProperties vehicleProperties);
+
+    /** Set access restrictions for this edge, that is restrictions for all.
+     * @param   edgeId         The id of the edge to apply restrictions to.
+     * @param   generalAccess  The access type to set.
+     */
+    void                setGeneralAccessRestrictionForEdge(
+                            EdgeIdType edgeId,
+                            OsmAccess  generalAccess);
 
 // ACCESS
     /** Get which kinds of restrictions this edge has.
@@ -126,6 +134,14 @@ public:
                         vehicleProperties(EdgeIdType edgeId) const;
     VehicleProperties&  vehicleProperties(EdgeIdType edgeId);
 
+    /** Try to fetch the general access restrictions for this edge.
+     * @param   edgeId  The id of the edge.
+     * @return  reference to the OsmAccess object.
+     * @throw   RestrictionException if no entry exists for Edge.
+     */
+    const OsmAccess&    generalAccess(EdgeIdType edgeId) const;
+    OsmAccess&          generalAccess(EdgeIdType edgeId);
+
 // INQUIRY
     /** Ask if an Edge has restriction of a certain type.
      * @param   edgeId              The edge in interest.
@@ -139,6 +155,11 @@ public:
      * @return true if there is a VehicleProperty restriction for edge.
      */
     bool                hasVehiclePropertyRestriction(EdgeIdType edgeId) const;
+
+    /**
+     * @return true if there is a General Access restriction for the edge.
+     */
+    bool                hasGeneralAccessRestriction(EdgeIdType edgeId) const;
 
 protected:
 private:

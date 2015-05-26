@@ -95,6 +95,10 @@ public:
     bool                hasAccess(AccessRule rule) const;
 
 // ACCESS
+    /**
+     * @return  The access type.
+     */
+    AccessType          accessType() const;
 // INQUIRY
 protected:
 private:

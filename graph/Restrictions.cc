@@ -22,7 +22,7 @@ Restrictions::Restrictions()
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
 void
-Restrictions::setVehiclePropertyRestricionForEdge(
+Restrictions::setVehiclePropertyRestrictionForEdge(
     EdgeIdType edgeId,
     Restrictions::VehicleProperties vehicleProperties)
 {
@@ -31,6 +31,18 @@ Restrictions::setVehiclePropertyRestricionForEdge(
         mVehiclePropertiesMap.erase(edgeId);
     }
     mVehiclePropertiesMap.insert({edgeId, vehicleProperties});
+}
+
+void
+Restrictions::setGeneralAccessRestrictionForEdge(
+    EdgeIdType edgeId,
+    OsmAccess  generalAccess)
+{
+    if(hasGeneralAccessRestriction(edgeId))
+    {
+        mGeneralAccessMap.erase(edgeId);
+    }
+    mGeneralAccessMap.insert({edgeId, generalAccess});
 }
 //============================= ACESS      ===================================
 std::vector<Restrictions::RestrictionType>
@@ -67,13 +79,28 @@ Restrictions::vehicleProperties(EdgeIdType edgeId) const
 Restrictions::VehicleProperties&
 Restrictions::vehicleProperties(EdgeIdType edgeId)
 {
-    if(!hasVehiclePropertyRestriction(edgeId))
+    return const_cast<Restrictions::VehicleProperties&>(
+        static_cast<const Restrictions&>(*this).vehicleProperties(edgeId) );
+}
+
+const OsmAccess&
+Restrictions::generalAccess(EdgeIdType edgeId) const
+{
+    if(!hasGeneralAccessRestriction(edgeId))
     {
         throw RestrictionsException(
-            "Restrictions:vehicleProperties: no restriction for edge id: "
+            "Restrictions:generalAccess: no restriction for edge id:"
             + std::to_string(edgeId));
     }
-    return mVehiclePropertiesMap.find(edgeId)->second;
+    return mGeneralAccessMap.find(edgeId)->second;
+}
+
+OsmAccess&
+Restrictions::generalAccess(EdgeIdType edgeId)
+{
+    return const_cast<OsmAccess&>(
+        static_cast<const Restrictions&>(*this).generalAccess(edgeId) );
+
 }
 //============================= INQUIRY    ===================================
 bool
@@ -85,6 +112,8 @@ Restrictions::hasRestriction(
     {
         case VEHICLE_PROPERTIES:
             return hasVehiclePropertyRestriction(edgeId); break;
+        case GENERAL_ACCESS:
+            return hasGeneralAccessRestriction(edgeId); break;
         default:
             return false;
     }
@@ -97,6 +126,12 @@ Restrictions::hasVehiclePropertyRestriction(EdgeIdType edgeId) const
     return (it != mVehiclePropertiesMap.end());
 }
 
+bool
+Restrictions::hasGeneralAccessRestriction(EdgeIdType edgeId) const
+{
+    auto it = mGeneralAccessMap.find(edgeId);
+    return (it != mGeneralAccessMap.end());
+}
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
