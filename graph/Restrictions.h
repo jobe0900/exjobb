@@ -66,6 +66,19 @@ public:
         unsigned    minSpeed    {DEFAULT_SPEED_MIN};
     };
 
+    enum RestrictionType
+    {
+        VEHICLE_PROPERTIES,
+        GENERAL_ACCESS,
+        VEHICLE_TYPE_ACCESS,
+        BARRIER,
+        TURNING,
+        DISUSED,
+        NO_EXIT,
+
+        NR_RESTRICTION_TYPES
+    };
+
 // LIFECYCLE
 
     /** Default constructor.
@@ -95,16 +108,33 @@ public:
     void                setVehiclePropertyRestricionForEdge(
                             EdgeIdType edgeId,
                             VehicleProperties vehicleProperties);
+
 // ACCESS
+    /** Get which kinds of restrictions this edge has.
+     * @param   edgeId      The edge to investigate.
+     * @return  A vector with all types of restrictions.
+     */
+    std::vector<RestrictionType>
+                        restrictionTypes(EdgeIdType edgeId) const;
+
     /** Try to fetch the vehicle property restrictions for an Edge.
-     * @param   The Edge to fetch restrictions for.
+     * @param   edgeId      The Edge to fetch restrictions for.
      * @return  The Vehicle properties
      * @throw   RestrictionException if no entry exists for Edge.
      */
     const VehicleProperties&
                         vehicleProperties(EdgeIdType edgeId) const;
     VehicleProperties&  vehicleProperties(EdgeIdType edgeId);
+
 // INQUIRY
+    /** Ask if an Edge has restriction of a certain type.
+     * @param   edgeId              The edge in interest.
+     * @param   restrictionType     The type of restriction
+     * @return  true if there is a restriction of that type, false if not.
+     */
+    bool                hasRestriction(
+                            EdgeIdType edgeId,
+                            RestrictionType restrictionType) const;
     /**
      * @return true if there is a VehicleProperty restriction for edge.
      */

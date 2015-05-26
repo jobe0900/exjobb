@@ -33,6 +33,25 @@ Restrictions::setVehiclePropertyRestricionForEdge(
     mVehiclePropertiesMap.insert({edgeId, vehicleProperties});
 }
 //============================= ACESS      ===================================
+std::vector<Restrictions::RestrictionType>
+Restrictions::restrictionTypes(EdgeIdType edgeId) const
+{
+    std::vector<Restrictions::RestrictionType> rest_types;
+
+    for(int i = Restrictions::VEHICLE_PROPERTIES;
+        i < Restrictions::NR_RESTRICTION_TYPES;
+        ++i)
+    {
+        RestrictionType type = static_cast<RestrictionType>(i);
+        if(hasRestriction(edgeId, type))
+        {
+            rest_types.push_back(type);
+        }
+    }
+
+    return rest_types;
+}
+
 const Restrictions::VehicleProperties&
 Restrictions::vehicleProperties(EdgeIdType edgeId) const
 {
@@ -57,6 +76,20 @@ Restrictions::vehicleProperties(EdgeIdType edgeId)
     return mVehiclePropertiesMap.find(edgeId)->second;
 }
 //============================= INQUIRY    ===================================
+bool
+Restrictions::hasRestriction(
+    EdgeIdType edgeId,
+    Restrictions::RestrictionType type) const
+{
+    switch (type)
+    {
+        case VEHICLE_PROPERTIES:
+            return hasVehiclePropertyRestriction(edgeId); break;
+        default:
+            return false;
+    }
+}
+
 bool
 Restrictions::hasVehiclePropertyRestriction(EdgeIdType edgeId) const
 {

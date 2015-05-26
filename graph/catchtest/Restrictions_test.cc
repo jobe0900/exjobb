@@ -45,6 +45,24 @@ SCENARIO ("Adding and fetching restrictions", "[restrictions]")
             {
                 REQUIRE (r.hasVehiclePropertyRestriction(id));
             }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the type should be in the vector of restriction types for edge")
+            {
+                std::vector<Restrictions::RestrictionType> rt = r.restrictionTypes(id);
+                auto it = std::find(
+                    rt.begin(),
+                    rt.end(),
+                    Restrictions::VEHICLE_PROPERTIES);
+                REQUIRE (it != rt.end());
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the type should be reported as a restriction type for edge")
+            {
+                REQUIRE (r.hasRestriction(id, Restrictions::VEHICLE_PROPERTIES));
+            }
+
         }
 
         //....................................................................
@@ -64,6 +82,26 @@ SCENARIO ("Adding and fetching restrictions", "[restrictions]")
             THEN ("we should get a false")
             {
                 REQUIRE_FALSE (r.hasVehiclePropertyRestriction(567));
+            }
+        }
+
+        //....................................................................
+        WHEN ("we query for restriction for unknown edge")
+        {
+            THEN ("we should get a false")
+            {
+                REQUIRE_FALSE (
+                    r.hasRestriction(567, Restrictions::VEHICLE_PROPERTIES));
+            }
+        }
+
+        //....................................................................
+        WHEN ("we query for restriction types for unknown edge")
+        {
+            std::vector<Restrictions::RestrictionType> rt = r.restrictionTypes(567);
+            THEN ("we should get an empty vector")
+            {
+                REQUIRE (rt.size() == 0);
             }
         }
     }
