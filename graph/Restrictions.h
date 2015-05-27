@@ -13,6 +13,7 @@
 //
 #include <limits>
 #include <map>
+#include <set>
 
 // PROJECT INCLUDES
 //
@@ -149,6 +150,11 @@ public:
                             EdgeIdType            edgeId,
                             OsmTurningRestriction turningRestriction);
 
+    /** Set disused flag on this edge.
+     * @param   edgeId  The id of the edge to apply restrictions to.
+     */
+    void                setDisusedRestrictionForEdge(EdgeIdType edgeId);
+
 // ACCESS
     /** Get which kinds of restrictions this edge has.
      * @param   edgeId      The edge to investigate.
@@ -250,6 +256,11 @@ public:
      */
     bool                hasTurningRestriction(EdgeIdType edgeId) const;
 
+    /**
+     * @return true if the edge is 'disused'.
+     */
+    bool                hasDisusedRestriction(EdgeIdType edgeId) const;
+
 protected:
 private:
     std::map<EdgeIdType, VehicleProperties>         mVehiclePropertiesMap;
@@ -260,8 +271,8 @@ private:
     // from edge id => turning restriction to several target edges
     std::map<EdgeIdType, std::vector<OsmTurningRestriction> >
                                                     mTurningRestrictionsMap;
-    std::map<EdgeIdType, bool>                      mDisusedMap;
-    std::map<EdgeIdType, bool>                      mNoExitMap;
+    std::set<EdgeIdType>                            mDisusedEdges;
+    std::set<EdgeIdType>                            mNoExitEdges;
 };
 
 // INLINE METHODS

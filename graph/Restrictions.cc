@@ -15,8 +15,8 @@ Restrictions::Restrictions()
       mVehicleTypeAccessMap(),
       mBarrierMap(),
       mTurningRestrictionsMap(),
-      mDisusedMap(),
-      mNoExitMap()
+      mDisusedEdges(),
+      mNoExitEdges()
 { }
 
 //============================= OPERATORS ====================================
@@ -98,6 +98,12 @@ Restrictions::addTurningRestrictionForEdge(
         turns.push_back(turningRestriction);
         mTurningRestrictionsMap.insert({edgeId, turns});
     }
+}
+
+void
+Restrictions::setDisusedRestrictionForEdge(EdgeIdType edgeId)
+{
+    mDisusedEdges.insert(edgeId);
 }
 //============================= ACESS      ===================================
 std::vector<Restrictions::RestrictionType>
@@ -300,6 +306,13 @@ Restrictions::hasTurningRestriction(EdgeIdType edgeId) const
 {
     auto it = mTurningRestrictionsMap.find(edgeId);
     return (it != mTurningRestrictionsMap.end());
+}
+
+bool
+Restrictions::hasDisusedRestriction(EdgeIdType edgeId) const
+{
+    auto it = mDisusedEdges.find(edgeId);
+    return (it != mDisusedEdges.end());
 }
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

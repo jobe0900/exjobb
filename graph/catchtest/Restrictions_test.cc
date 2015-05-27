@@ -428,3 +428,42 @@ SCENARIO ("Adding and fetching turning restrictions", "[restrictions][turning]")
         }
     }
 }
+
+SCENARIO ("Adding and fetching disused restrictions",
+          "[restrictions][disused]")
+{
+    // -----------------------------------------------------------------------
+    GIVEN ("a Restrictions object, edges and turning restrictions")
+    {
+        Restrictions r;
+        EdgeIdType   e1 {1};
+        EdgeIdType   e2 {2};
+
+        //....................................................................
+        WHEN ("we add a disused restriction to edge id 1")
+        {
+            r.setDisusedRestrictionForEdge(e1);
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("we the restriction should be noted")
+            {
+                REQUIRE (r.hasDisusedRestriction(e1));
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the Restriction should be reported as installed for edge")
+            {
+                REQUIRE (r.hasRestriction(e1, Restrictions::DISUSED));
+            }
+        }
+
+        //....................................................................
+        WHEN ("query for disused restrictions for edge without one")
+        {
+            THEN ("we should not have one")
+            {
+                REQUIRE_FALSE (r.hasDisusedRestriction(e2));
+            }
+        }
+    }
+}
