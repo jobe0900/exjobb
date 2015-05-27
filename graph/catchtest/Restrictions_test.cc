@@ -9,7 +9,8 @@
 
 #include "../Restrictions.h"
 
-SCENARIO ("Adding and fetching vehicle restrictions", "[restrictions][vehicle]")
+SCENARIO ("Adding and fetching vehicle restrictions",
+            "[restrictions][vehicleprop]")
 {
     // -----------------------------------------------------------------------
     GIVEN ("a Restrictions object")
@@ -154,6 +155,137 @@ SCENARIO ("Adding and fetching general access restrictions", "[restrictions][gen
                 REQUIRE_THROWS_AS (
                     r.generalAccess(567),
                     RestrictionsException&);
+            }
+        }
+    }
+}
+
+SCENARIO ("Adding and fetching vehicle type restrictions",
+          "[restrictions][vehicletype]")
+{
+    //------------------------------------------------------------------------
+    GIVEN ("A restrictions object, an edgeId and vehicle types")
+    {
+        Restrictions r;
+        EdgeIdType   e1 {1};
+        EdgeIdType   e2 {2};
+        OsmVehicle::VehicleType v1 {OsmVehicle::MOTORCAR};
+        OsmVehicle::VehicleType v2 {OsmVehicle::PSV};
+        OsmAccess    rest_destination {OsmAccess::DESTINATION};
+        OsmAccess    rest_no {OsmAccess::NO};
+
+        //....................................................................
+        WHEN ("adding restriction")
+        {
+            r.setVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_destination);
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("it should be reported as installed for edge")
+            {
+                REQUIRE (
+                    r.hasRestriction(e1, Restrictions::VEHICLE_TYPE_ACCESS));
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("it should NOT be reported as installed for another edge")
+            {
+                REQUIRE_FALSE (
+                    r.hasRestriction(e2, Restrictions::VEHICLE_TYPE_ACCESS));
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("it should have only one restriction")
+            {
+                auto type_vector = r.vehicleTypesWithRestrictions(e1);
+                REQUIRE (type_vector.size() == 1);
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("no other vehicle type should be reported as installed")
+            {
+                REQUIRE_FALSE (r.hasVehicleTypeAccessRestriction(e1, v2));
+            }
+        }
+
+        //....................................................................
+        WHEN ("adding two restrictions")
+        {
+            r.setVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_destination);
+            r.setVehicleTypeAccessRestrictionsForEdge(e1, v2, rest_no);
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("it should be reported as installed for edge")
+            {
+                REQUIRE (
+                    r.hasRestriction(e1, Restrictions::VEHICLE_TYPE_ACCESS));
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("it should NOT be reported as installed for another edge")
+            {
+                REQUIRE_FALSE (
+                    r.hasRestriction(e2, Restrictions::VEHICLE_TYPE_ACCESS));
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("it should have two restriction")
+            {
+                auto type_vector = r.vehicleTypesWithRestrictions(e1);
+                REQUIRE (type_vector.size() == 2);
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("we can print out which vehicle types have restrictions")
+            {
+                const auto& v_type_vector = r.vehicleTypesWithRestrictions(e1);
+                for(const auto& t : v_type_vector)
+                {
+                    INFO ("Edge " << e1 << " restriction for vehicle: "
+                           << OsmVehicle::toString(t) << ": "
+                           << r.vehicleTypeAccess(e1, t).toString());
+                    REQUIRE (true);
+                }
+            }
+        }
+
+        //....................................................................
+        WHEN ("adding restriction to already existing")
+        {
+            r.setVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_destination);
+            r.setVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_no);
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the first should NOT be reported as installed for edge")
+            {
+                REQUIRE_FALSE (r.vehicleTypeAccess(e1, v1).accessType() ==
+                    OsmAccess::DESTINATION);
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the second should be reported as installed for edge")
+            {
+                REQUIRE (r.vehicleTypeAccess(e1, v1).accessType() ==
+                    OsmAccess::NO);
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("it should have one restriction")
+            {
+                auto type_vector = r.vehicleTypesWithRestrictions(e1);
+                REQUIRE (type_vector.size() == 1);
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("we can print out which vehicle types have restrictions")
+            {
+                const auto& v_type_vector = r.vehicleTypesWithRestrictions(e1);
+                for(const auto& t : v_type_vector)
+                {
+                    INFO ("Edge " << e1 << " restriction for vehicle: "
+                           << OsmVehicle::toString(t) << ": "
+                           << r.vehicleTypeAccess(e1, t).toString());
+                    REQUIRE (true);
+                }
             }
         }
     }

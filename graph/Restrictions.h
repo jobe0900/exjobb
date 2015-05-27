@@ -117,6 +117,20 @@ public:
                             EdgeIdType edgeId,
                             OsmAccess  generalAccess);
 
+    /** Set access restrictions for edge based on vehicle type.
+     * There can be several vehicle restrictions for each edge.
+     * The mapping is in two levels:
+     * EdgeId => (VehicleType => Access)
+     * @param   edgeId      The id of the edge to set restrictions for.
+     * @param   vehicleType The type of vehicle to restrict on the edge.
+     * @param   access      The access restriction for that vehicle type
+     *                      on this edge.
+     */
+    void                setVehicleTypeAccessRestrictionsForEdge(
+                            EdgeIdType               edgeId,
+                            OsmVehicle::VehicleType  vehicleType,
+                            OsmAccess                access);
+
 // ACCESS
     /** Get which kinds of restrictions this edge has.
      * @param   edgeId      The edge to investigate.
@@ -142,6 +156,26 @@ public:
     const OsmAccess&    generalAccess(EdgeIdType edgeId) const;
     OsmAccess&          generalAccess(EdgeIdType edgeId);
 
+    /** Try to fetch the vehicle type specific access restrictions for this edge.
+     * @param   edgeId          The id of the edge.
+     * @param   vehiceltType    The type of Vehicle to get access restriction
+     * @return  reference to the OsmAccess object.
+     * @throw   RestrictionException if no entry exists for Edge.
+     */
+    const OsmAccess&    vehicleTypeAccess(
+                            EdgeIdType edgeId,
+                            OsmVehicle::VehicleType vehicleType) const;
+    OsmAccess&          vehicleTypeAccess(
+                            EdgeIdType edgeId,
+                            OsmVehicle::VehicleType vehicleType);
+
+    /** Get a list of the types of vehicles with restrictions on this edge.
+     * @param   edgeId  The id of the Edge.
+     * @return  a Vector with restriction types.
+     */
+    std::vector<OsmVehicle::VehicleType>
+                        vehicleTypesWithRestrictions(EdgeIdType edgeId) const;
+
 // INQUIRY
     /** Ask if an Edge has restriction of a certain type.
      * @param   edgeId              The edge in interest.
@@ -160,6 +194,19 @@ public:
      * @return true if there is a General Access restriction for the edge.
      */
     bool                hasGeneralAccessRestriction(EdgeIdType edgeId) const;
+
+    /**
+     * @return true if there are any Vehicle Type Access restrictions for the edge.
+     */
+    bool                hasVehicleTypeAccessRestriction(EdgeIdType edgeId) const;
+
+    /**
+     * @return true if there are Vehicle Type Access restrictions for the edge
+     *         for that specific type of vehicle.
+     */
+    bool                hasVehicleTypeAccessRestriction(
+                            EdgeIdType edgeId,
+                            OsmVehicle::VehicleType vehicleType) const;
 
 protected:
 private:
