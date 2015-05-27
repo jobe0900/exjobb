@@ -69,6 +69,8 @@ public:
 // OPERATIONS
     virtual void    getTopology(Topology& rTopology);
 
+    virtual void    getRestrictions(Restrictions& rRestrictions);
+
 // INQUIRY
 
 protected:

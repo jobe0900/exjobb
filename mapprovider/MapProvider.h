@@ -21,6 +21,7 @@
 #include "../graph/Topology.h"
 #include "../config/Configuration.h"
 #include "../graph/Edge.h"
+#include "../graph/Restrictions.h"
 #include "../graph/Vertex.h"
 
 // FORWARD REFERENCES
@@ -65,6 +66,11 @@ public:
      */
     virtual void    getTopology(Topology& rTopology) = 0;
 
+    /** Fill the Restrictions with restrictions for edges and vertices.
+     * @param   rRestrictions   The Restrictions to fill with data.
+     * @throws  MapProviderException, RestrictionsException
+     */
+    virtual void    getRestrictions(Restrictions& rRestrictions) = 0;
 // ACCESS
 // INQUIRY
 

@@ -98,6 +98,14 @@ PostGisProvider::getTopology(Topology& rTopology)
     addEdgeResultToTopology(edge_result, rTopology);
 }
 
+void
+PostGisProvider::getRestrictions(Restrictions& rRestrictions)
+{
+    pqxx::result edge_result;
+//TODO    getEdgeRestrictions(edge_result);
+//TODO    addEdgeRestricionsResultToRestricions(edge_result, rRestrictions);
+}
+
 
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================

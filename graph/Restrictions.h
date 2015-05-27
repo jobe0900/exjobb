@@ -14,8 +14,8 @@
  * @author  Jonas Bergman
  */
 
-#ifndef GRAPH_RESTRICTION_H_
-#define GRAPH_RESTRICTION_H_
+#ifndef GRAPH_RESTRICTIONS_H_
+#define GRAPH_RESTRICTIONS_H_
 
 // SYSTEM INCLUDES
 //
@@ -87,4 +87,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* GRAPH_RESTRICTION_H_ */
+#endif /* GRAPH_RESTRICTIONS_H_ */
