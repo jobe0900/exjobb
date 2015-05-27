@@ -98,6 +98,11 @@ JsonTestProvider::getTopology(Topology& rTopology)
     }
 }
 
+void
+JsonTestProvider::getRestrictions(Restrictions& rRestrictions)
+{
+    //none
+}
 
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
