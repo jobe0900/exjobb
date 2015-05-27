@@ -768,7 +768,9 @@ PostGisProvider::addVehiclePropertyResultToEdgeRestrictions(
                 (EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MIN);
 
             edgeRestr.setVehiclePropertyRestrictionForEdge(edgeId, vp);
+
         }
+
     }
     catch (std::exception& e)
     {

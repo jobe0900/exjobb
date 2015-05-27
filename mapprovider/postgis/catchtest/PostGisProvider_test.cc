@@ -184,3 +184,45 @@ $ psql -U jonas -d mikh_0522 -c
 
 	}
 }
+
+SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
+{
+	try
+	{
+
+		// ===================================================================
+		GIVEN ("a valid database configuration structure and "
+				"name to existing topology")
+		{
+		    std::string config_file("mapprovider/postgis"
+		        "/catchtest/mikh0522-testsettings.json");
+		    ConfigurationReader config_reader(config_file);
+		    Configuration config;
+		    config_reader.fillConfiguration(config);
+
+			PostGisProvider pgp(config);
+
+			// ...............................................................
+			WHEN ("we try to fetch Restrictions")
+			{
+			    Restrictions restrictions;
+
+				THEN ("we should not get an exception")
+				{
+					REQUIRE_NOTHROW (pgp.getRestrictions(restrictions););
+				}
+			}
+		}
+	}
+	catch (ConfigurationException& e)
+	{
+		INFO(e.what());
+		REQUIRE (false);	// force output of error and failure
+	}
+	catch (MapProviderException& dbe)
+	{
+		INFO(dbe.what());
+		REQUIRE (false);	// force output of error and failure
+
+	}
+}

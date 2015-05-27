@@ -23,6 +23,7 @@
 //
 #include "../../config/DatabaseConfig.h"
 #include "../../graph/Edge.h"
+#include "../../graph/Restrictions.h"
 #include "../../graph/Topology.h"
 #include "../../graph/Vertex.h"
 #include "../MapProvider.h"

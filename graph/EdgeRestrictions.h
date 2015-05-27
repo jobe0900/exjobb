@@ -51,12 +51,14 @@ public:
      */
     struct VehicleProperties
     {
-        static constexpr double
-            DEFAULT_DIMENSION_MAX {std::numeric_limits<double>::max()};
-        static constexpr unsigned
-            DEFAULT_SPEED_MAX {std::numeric_limits<unsigned>::max()};
-        static constexpr unsigned
-            DEFAULT_SPEED_MIN {0};
+        static double DEFAULT_DIMENSION_MAX;
+        // = {std::numeric_limits<double>::max()};
+
+        static unsigned DEFAULT_SPEED_MAX;
+        // = {std::numeric_limits<unsigned>::max()};
+
+        static unsigned DEFAULT_SPEED_MIN;
+        // = {0};
 
         double      maxHeight   {DEFAULT_DIMENSION_MAX};
         double      maxLength   {DEFAULT_DIMENSION_MAX};

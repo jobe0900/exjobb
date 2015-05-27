@@ -7,6 +7,16 @@
 
 #include "EdgeRestrictions.h"  // class implemented
 
+// STATIC INITIALIZATION
+/*static*/ double EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX
+    = std::numeric_limits<double>::max();
+
+/*static*/ unsigned EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MAX
+    = std::numeric_limits<unsigned>::max();
+
+/*static*/ unsigned EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MIN
+    = 0;
+
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 //============================= LIFECYCLE ====================================
 EdgeRestrictions::EdgeRestrictions()
