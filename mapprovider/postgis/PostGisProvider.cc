@@ -101,8 +101,7 @@ PostGisProvider::getTopology(Topology& rTopology)
 void
 PostGisProvider::getRestrictions(Restrictions& rRestrictions)
 {
-    pqxx::result edge_result;
-//TODO    getEdgeRestrictions(edge_result);
+    getEdgeRestrictions(rRestrictions);
 //TODO    addEdgeRestricionsResultToRestricions(edge_result, rRestrictions);
 }
 
@@ -184,7 +183,7 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "                       AS target_bearing, "
 //-- osm data about original edge
 "           osm.* "
-"FROM       topo_test.edge_data "
+"FROM      " + mSchemaName + ".edge_data "
 "JOIN ( "
 "   SELECT  osm_id, element_id "
 //-- road data
@@ -664,3 +663,117 @@ PostGisProvider::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
 	);
 }
 
+// Restrictions --------------------------------------------------------------
+void
+PostGisProvider::getEdgeRestrictions(Restrictions& rRestrictions)
+{
+    pqxx::result vehicle_prop_result;
+    getVehiclePropertyEdgeRestrictions(vehicle_prop_result);
+    addVehiclePropertyResultToEdgeRestrictions(
+        vehicle_prop_result,
+        rRestrictions);
+}
+
+void
+PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
+{
+    try
+    {
+        if(!mConnection.is_open())
+        {
+            throw MapProviderException(
+                std::string("Could not open ") + mDbConfig.database);
+        }
+
+        // NON-TRANSACTION START
+        pqxx::nontransaction non_trans(mConnection);
+
+        std::string sql(
+            "SELECT     edge_id, "
+            //-- osm data about original edge
+            "           osm.* "
+            "FROM      " + mSchemaName + ".edge_data "
+            "JOIN ( "
+            "   SELECT  osm_id, element_id "
+            //-- vehicle property restrictions
+            "           , maxheight "
+            "           , maxlength "
+            "           , maxspeed "
+            "           , maxweight "
+            "           , maxwidth "
+            "           , minspeed "
+            //-- access restrictions
+//            "           , access "
+//            "           , barrier "
+//            "           , disused "
+//            "           , noexit "
+//            "           , motorcar "
+//            "           , goods "
+//            "           , hgv "
+//            "           , psv "
+//            "           , lhv "
+//            "           , motor_vehicle "
+//            "           , vehicle "
+//            "           , restriction "
+            "   FROM    " + mSchemaName + ".relation "
+            "   JOIN    " + mTableName +
+            "   ON      topogeo_id = (topo_geom).id "
+            "   WHERE   highway in " + getInterestingHighwayColumns() +
+            ") AS osm "
+            "ON edge_id = element_id "
+            "ORDER BY edge_id ASC;"
+        );
+        rResult = non_trans.exec(sql);
+    }
+    catch(const std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:getEdgeRestrictions: ") + e.what());
+    }
+}
+
+void
+PostGisProvider::addVehiclePropertyResultToEdgeRestrictions(
+    const pqxx::result& rResult,
+    Restrictions& rRestrictions)
+{
+    try
+    {
+        EdgeRestrictions& edgeRestr = rRestrictions.edgeRestrictions();
+
+        for(const pqxx::tuple& row : rResult)
+        {
+            // throw exception if no edgeId
+            EdgeIdType edgeId =
+                row[VehiclePropertiesQueryResult::EDGE_ID].as<EdgeIdType>();
+
+            EdgeRestrictions::VehicleProperties vp;
+            vp.maxHeight =
+                row[VehiclePropertiesQueryResult::MAXHEIGHT].as<double>
+                (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
+            vp.maxLength =
+                row[VehiclePropertiesQueryResult::MAXLENGTH].as<double>
+                (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
+            vp.maxWeight =
+                row[VehiclePropertiesQueryResult::MAXWEIGHT].as<double>
+                (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
+            vp.maxWidth =
+                row[VehiclePropertiesQueryResult::MAXWIDTH].as<double>
+                (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
+            vp.maxSpeed =
+                row[VehiclePropertiesQueryResult::MAXSPEED].as<unsigned>
+                (EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MAX);
+            vp.minSpeed =
+                row[VehiclePropertiesQueryResult::MINSPEED].as<unsigned>
+                (EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MIN);
+
+            edgeRestr.setVehiclePropertyRestrictionForEdge(edgeId, vp);
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:addVehicleProp..ToEdge..: ") + e.what());
+
+    }
+}

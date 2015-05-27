@@ -207,14 +207,37 @@ private:
     void	deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
                                       const std::string& rSchemaName);
 
-    // ATTRIBUTES
+    // Restriction helpers ---------------------------------------------------
+    /** Fetch Restrictions for edges.
+     * @param   rRestrictions   Store restrictions in here.
+     * @throw   MapProviderException
+     */
+    void    getEdgeRestrictions(Restrictions& rRestrictions);
+
+    /** Get VehicleProperty restrictions
+     * Helper for 'getEdgeRestrictions()'
+     * @param   rResult     Store the result of query in here.
+     * @throw   MapProviderException
+     */
+    void    getVehiclePropertyEdgeRestrictions(pqxx::result& rResult);
+
+    /** Add the result of the query for vehicle properties to restrictions
+     * @param   rResult         The results of the query
+     * @param   rRestrictions   Store the restrictions here.
+     * @throw   MapProviderException
+     */
+    void    addVehiclePropertyResultToEdgeRestrictions(
+                const pqxx::result&    rResult,
+                Restrictions&          rRestrictions);
+
+// ATTRIBUTES
     const DatabaseConfig&   mDbConfig;
     const TopologyConfig&   mTopoConfig;
     pqxx::connection        mConnection;
     std::string             mTableName;
     std::string             mSchemaName;
 
-    // CONSTANTS
+// CONSTANTS
 };
 
 // INLINE METHODS

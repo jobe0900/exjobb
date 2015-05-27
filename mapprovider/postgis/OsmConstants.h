@@ -34,12 +34,6 @@ struct EdgeQueryResult
         ONEWAY,
 
         // vehicle property
-        MAXHEIGHT,
-        MAXLENGTH,
-        MAXSPEED,       // NOT USED YET
-        MAXWEIGHT,
-        MAXWIDTH,
-        MINSPEED,       // NOT USED YET
 
         // access
         ACCESS,
@@ -50,6 +44,21 @@ struct EdgeQueryResult
         LHV,
         MOTOR_VEHICLE,
         VEHICLE,
+    };
+};
+
+struct VehiclePropertiesQueryResult
+{
+    enum Columns
+    {
+        EDGE_ID,
+        MAXHEIGHT,
+        MAXLENGTH,
+        MAXSPEED,
+        MAXWEIGHT,
+        MAXWIDTH,
+        MINSPEED,
+
     };
 };
 
