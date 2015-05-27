@@ -105,6 +105,12 @@ Restrictions::setDisusedRestrictionForEdge(EdgeIdType edgeId)
 {
     mDisusedEdges.insert(edgeId);
 }
+
+void
+Restrictions::setNoExitRestrictionForEdge(EdgeIdType edgeId)
+{
+    mNoExitEdges.insert(edgeId);
+}
 //============================= ACESS      ===================================
 std::vector<Restrictions::RestrictionType>
 Restrictions::restrictionTypes(EdgeIdType edgeId) const
@@ -250,6 +256,10 @@ Restrictions::hasRestriction(
             return hasBarrierRestriction(edgeId); break;
         case TURNING:
             return hasTurningRestriction(edgeId); break;
+        case DISUSED:
+            return hasDisusedRestriction(edgeId); break;
+        case NO_EXIT:
+            return hasNoExitRestriction(edgeId); break;
         default:
             return false;
     }
@@ -313,6 +323,13 @@ Restrictions::hasDisusedRestriction(EdgeIdType edgeId) const
 {
     auto it = mDisusedEdges.find(edgeId);
     return (it != mDisusedEdges.end());
+}
+
+bool
+Restrictions::hasNoExitRestriction(EdgeIdType edgeId) const
+{
+    auto it = mNoExitEdges.find(edgeId);
+    return (it != mNoExitEdges.end());
 }
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

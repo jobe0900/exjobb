@@ -155,6 +155,11 @@ public:
      */
     void                setDisusedRestrictionForEdge(EdgeIdType edgeId);
 
+    /** Set no exit flag on this edge.
+     * @param   edgeId  The id of the edge to apply restrictions to.
+     */
+    void                setNoExitRestrictionForEdge(EdgeIdType edgeId);
+
 // ACCESS
     /** Get which kinds of restrictions this edge has.
      * @param   edgeId      The edge to investigate.
@@ -260,6 +265,11 @@ public:
      * @return true if the edge is 'disused'.
      */
     bool                hasDisusedRestriction(EdgeIdType edgeId) const;
+
+    /**
+     * @return true if the edge has no exit.
+     */
+    bool                hasNoExitRestriction(EdgeIdType edgeId) const;
 
 protected:
 private:

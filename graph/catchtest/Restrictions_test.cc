@@ -430,7 +430,7 @@ SCENARIO ("Adding and fetching turning restrictions", "[restrictions][turning]")
 }
 
 SCENARIO ("Adding and fetching disused restrictions",
-          "[restrictions][disused]")
+          "[restrictions][disused][noexit]")
 {
     // -----------------------------------------------------------------------
     GIVEN ("a Restrictions object, edges and turning restrictions")
@@ -458,6 +458,24 @@ SCENARIO ("Adding and fetching disused restrictions",
         }
 
         //....................................................................
+        WHEN ("we add a noexit restriction to edge id 1")
+        {
+            r.setNoExitRestrictionForEdge(e1);
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("we the restriction should be noted")
+            {
+                REQUIRE (r.hasNoExitRestriction(e1));
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the Restriction should be reported as installed for edge")
+            {
+                REQUIRE (r.hasRestriction(e1, Restrictions::NO_EXIT));
+            }
+        }
+
+        //....................................................................
         WHEN ("query for disused restrictions for edge without one")
         {
             THEN ("we should not have one")
@@ -465,5 +483,15 @@ SCENARIO ("Adding and fetching disused restrictions",
                 REQUIRE_FALSE (r.hasDisusedRestriction(e2));
             }
         }
+
+        //....................................................................
+        WHEN ("query for noexit restrictions for edge without one")
+        {
+            THEN ("we should not have one")
+            {
+                REQUIRE_FALSE (r.hasNoExitRestriction(e2));
+            }
+        }
+
     }
 }
