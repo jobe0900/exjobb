@@ -131,6 +131,14 @@ public:
                             OsmVehicle::VehicleType  vehicleType,
                             OsmAccess                access);
 
+    /** Set barrier restricting this edge.
+     * @param   edgeId         The id of the edge to apply restrictions to.
+     * @param   barrier        The barrier type to set.
+     */
+    void                setBarrierRestrictionForEdge(
+                            EdgeIdType edgeId,
+                            OsmBarrier barrier);
+
 // ACCESS
     /** Get which kinds of restrictions this edge has.
      * @param   edgeId      The edge to investigate.
@@ -176,6 +184,13 @@ public:
     std::vector<OsmVehicle::VehicleType>
                         vehicleTypesWithRestrictions(EdgeIdType edgeId) const;
 
+    /** Fetch the barrier restricting this edge.
+     * @param   edgeId  The id of the edge.
+     * @return  reference to a OsmBarrier object.
+     * @throw   RestrictionException if no entry exists for this Edge.
+     */
+    const OsmBarrier&   barrier(EdgeIdType edgeId) const;
+
 // INQUIRY
     /** Ask if an Edge has restriction of a certain type.
      * @param   edgeId              The edge in interest.
@@ -207,6 +222,11 @@ public:
     bool                hasVehicleTypeAccessRestriction(
                             EdgeIdType edgeId,
                             OsmVehicle::VehicleType vehicleType) const;
+
+    /**
+     * @return true if there are any barriers restricting access to the edge.
+     */
+    bool                hasBarrierRestriction(EdgeIdType edgeId) const;
 
 protected:
 private:

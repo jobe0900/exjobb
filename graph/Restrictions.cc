@@ -69,6 +69,18 @@ Restrictions::setVehicleTypeAccessRestrictionsForEdge(
         mVehicleTypeAccessMap.insert({edgeId, vehicle_map});
     }
 }
+
+void
+Restrictions::setBarrierRestrictionForEdge(
+    EdgeIdType edgeId,
+    OsmBarrier barrier)
+{
+    if(hasBarrierRestriction(edgeId))
+    {
+        mBarrierMap.erase(edgeId);
+    }
+    mBarrierMap.insert({edgeId, barrier});
+}
 //============================= ACESS      ===================================
 std::vector<Restrictions::RestrictionType>
 Restrictions::restrictionTypes(EdgeIdType edgeId) const
@@ -172,6 +184,18 @@ Restrictions::vehicleTypesWithRestrictions(EdgeIdType edgeId) const
 
     return types;
 }
+
+const OsmBarrier&
+Restrictions::barrier(EdgeIdType edgeId) const
+{
+    if(!hasBarrierRestriction(edgeId))
+    {
+        throw RestrictionsException(
+            "Restrictions:barrier: no restriction for edge id:"
+            + std::to_string(edgeId));
+    }
+    return mBarrierMap.find(edgeId)->second;
+}
 //============================= INQUIRY    ===================================
 bool
 Restrictions::hasRestriction(
@@ -186,6 +210,8 @@ Restrictions::hasRestriction(
             return hasGeneralAccessRestriction(edgeId); break;
         case VEHICLE_TYPE_ACCESS:
             return hasVehicleTypeAccessRestriction(edgeId); break;
+        case BARRIER:
+            return hasBarrierRestriction(edgeId); break;
         default:
             return false;
     }
@@ -228,6 +254,13 @@ Restrictions::hasVehicleTypeAccessRestriction(
         }
     }
     return false;
+}
+
+bool
+Restrictions::hasBarrierRestriction(EdgeIdType edgeId) const
+{
+    auto it = mBarrierMap.find(edgeId);
+    return (it != mBarrierMap.end());
 }
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

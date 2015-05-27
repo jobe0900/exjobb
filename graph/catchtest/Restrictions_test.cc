@@ -292,7 +292,70 @@ SCENARIO ("Adding and fetching vehicle type restrictions",
 }
 
 
+SCENARIO ("Adding and fetching barrier restrictions", "[restrictions][barrier]")
+{
+    // -----------------------------------------------------------------------
+    GIVEN ("a Restrictions object, edges and barriers")
+    {
+        Restrictions r;
+        EdgeIdType   e1 {1};
+        EdgeIdType   e2 {2};
+        OsmBarrier   bollard    {OsmBarrier::BOLLARD};
+        OsmBarrier   swing_gate {OsmBarrier::SWING_GATE};
 
+        //....................................................................
+        WHEN ("we to add a bollard to edge id 1")
+        {
+            r.setBarrierRestrictionForEdge(e1, bollard);
 
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("we should get be able to get the property")
+            {
+                REQUIRE (r.barrier(e1).toString() == bollard.toString());
+            }
 
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the type should be in the vector of restriction types for edge")
+            {
+                std::vector<Restrictions::RestrictionType> rt = r.restrictionTypes(e1);
+                auto it = std::find(
+                    rt.begin(),
+                    rt.end(),
+                    Restrictions::BARRIER);
+                REQUIRE (it != rt.end());
+            }
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("the type should be reported as a restriction type for edge")
+            {
+                REQUIRE (r.hasRestriction(e1, Restrictions::BARRIER));
+            }
+
+        }
+
+        //....................................................................
+        WHEN ("we to add two barriers to edge id 1")
+        {
+            r.setBarrierRestrictionForEdge(e1, bollard);
+            r.setBarrierRestrictionForEdge(e1, swing_gate);
+
+            THEN ("only the last is kept track of")
+            {
+                const OsmBarrier& b = r.barrier(e1);
+                REQUIRE (b.toString() == swing_gate.toString());
+            }
+        }
+
+        //....................................................................
+        WHEN ("we try to fetch barrier for some other edge")
+        {
+            THEN ("we should get a RestrictionsException")
+            {
+                REQUIRE_THROWS_AS (
+                    r.generalAccess(e2),
+                    RestrictionsException&);
+            }
+        }
+    }
+}
 
