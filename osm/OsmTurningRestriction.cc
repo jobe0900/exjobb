@@ -158,7 +158,7 @@ std::vector<std::string> OsmTurningRestriction::sTypeStrings
     "none",
     "no_left_turn",
     "no_right_turn",
-    "no_stright_on",
+    "no_straight_on",
     "no_u_turn",
     "only_right_turn",
     "only_left_turn",
