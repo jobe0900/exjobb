@@ -126,7 +126,7 @@ public:
      * @param   access      The access restriction for that vehicle type
      *                      on this edge.
      */
-    void                setVehicleTypeAccessRestrictionsForEdge(
+    void                addVehicleTypeAccessRestrictionsForEdge(
                             EdgeIdType               edgeId,
                             OsmVehicle::VehicleType  vehicleType,
                             OsmAccess                access);
@@ -138,6 +138,16 @@ public:
     void                setBarrierRestrictionForEdge(
                             EdgeIdType edgeId,
                             OsmBarrier barrier);
+
+    /** Add turning restrictions from this edge.
+     * Actually just adds the restriction without checking if there already is
+     * a restriction between those two edges.
+     * @param   edgeId              The id of the edge to apply restrictions to.
+     * @param   turningRestriction  The barrier type to set.
+     */
+    void                addTurningRestrictionForEdge(
+                            EdgeIdType            edgeId,
+                            OsmTurningRestriction turningRestriction);
 
 // ACCESS
     /** Get which kinds of restrictions this edge has.
@@ -191,6 +201,13 @@ public:
      */
     const OsmBarrier&   barrier(EdgeIdType edgeId) const;
 
+    /** Get a list of the turning restrictions from this edge.
+     * @param   edgeId  The id of the Edge.
+     * @return  a Vector with restriction types.
+     * @throw   RestrictionException if edge has no turning restrictions.
+     */
+    const std::vector<OsmTurningRestriction>&
+                        turningRestrictions(EdgeIdType edgeId) const;
 // INQUIRY
     /** Ask if an Edge has restriction of a certain type.
      * @param   edgeId              The edge in interest.
@@ -228,6 +245,11 @@ public:
      */
     bool                hasBarrierRestriction(EdgeIdType edgeId) const;
 
+    /**
+     * @return true if there are any turning restrictions traveling from edge.
+     */
+    bool                hasTurningRestriction(EdgeIdType edgeId) const;
+
 protected:
 private:
     std::map<EdgeIdType, VehicleProperties>         mVehiclePropertiesMap;
@@ -235,8 +257,9 @@ private:
     std::map<EdgeIdType, std::map<OsmVehicle::VehicleType, OsmAccess> >
                                                     mVehicleTypeAccessMap;
     std::map<EdgeIdType, OsmBarrier>                mBarrierMap;
-    // from edge id => turning restriction
-    std::map<EdgeIdType, OsmTurningRestriction>     mTurnRestrictionsMap;
+    // from edge id => turning restriction to several target edges
+    std::map<EdgeIdType, std::vector<OsmTurningRestriction> >
+                                                    mTurningRestrictionsMap;
     std::map<EdgeIdType, bool>                      mDisusedMap;
     std::map<EdgeIdType, bool>                      mNoExitMap;
 };

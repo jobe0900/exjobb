@@ -14,7 +14,7 @@ Restrictions::Restrictions()
       mGeneralAccessMap(),
       mVehicleTypeAccessMap(),
       mBarrierMap(),
-      mTurnRestrictionsMap(),
+      mTurningRestrictionsMap(),
       mDisusedMap(),
       mNoExitMap()
 { }
@@ -46,7 +46,7 @@ Restrictions::setGeneralAccessRestrictionForEdge(
 }
 
 void
-Restrictions::setVehicleTypeAccessRestrictionsForEdge(
+Restrictions::addVehicleTypeAccessRestrictionsForEdge(
     EdgeIdType               edgeId,
     OsmVehicle::VehicleType  vehicleType,
     OsmAccess                access)
@@ -60,7 +60,6 @@ Restrictions::setVehicleTypeAccessRestrictionsForEdge(
             vehicle_map.erase(vehicleType);
         }
         vehicle_map.insert({vehicleType, access});
-        mVehicleTypeAccessMap.insert({edgeId, vehicle_map});
     }
     else
     {
@@ -80,6 +79,25 @@ Restrictions::setBarrierRestrictionForEdge(
         mBarrierMap.erase(edgeId);
     }
     mBarrierMap.insert({edgeId, barrier});
+}
+
+
+void
+Restrictions::addTurningRestrictionForEdge(
+    EdgeIdType              edgeId,
+    OsmTurningRestriction   turningRestriction)
+{
+    if(hasTurningRestriction(edgeId))
+    {
+        auto& turns = mTurningRestrictionsMap.find(edgeId)->second;
+        turns.push_back(turningRestriction);
+    }
+    else
+    {
+        std::vector<OsmTurningRestriction> turns;
+        turns.push_back(turningRestriction);
+        mTurningRestrictionsMap.insert({edgeId, turns});
+    }
 }
 //============================= ACESS      ===================================
 std::vector<Restrictions::RestrictionType>
@@ -196,6 +214,18 @@ Restrictions::barrier(EdgeIdType edgeId) const
     }
     return mBarrierMap.find(edgeId)->second;
 }
+
+const std::vector<OsmTurningRestriction>&
+Restrictions::turningRestrictions(EdgeIdType edgeId) const
+{
+    if(!hasTurningRestriction(edgeId))
+    {
+        throw RestrictionsException(
+            "Restriction:turningRestriction: no turning restriction for "
+            "edge id: " + std::to_string(edgeId));
+    }
+    return mTurningRestrictionsMap.find(edgeId)->second;
+}
 //============================= INQUIRY    ===================================
 bool
 Restrictions::hasRestriction(
@@ -212,6 +242,8 @@ Restrictions::hasRestriction(
             return hasVehicleTypeAccessRestriction(edgeId); break;
         case BARRIER:
             return hasBarrierRestriction(edgeId); break;
+        case TURNING:
+            return hasTurningRestriction(edgeId); break;
         default:
             return false;
     }
@@ -261,6 +293,13 @@ Restrictions::hasBarrierRestriction(EdgeIdType edgeId) const
 {
     auto it = mBarrierMap.find(edgeId);
     return (it != mBarrierMap.end());
+}
+
+bool
+Restrictions::hasTurningRestriction(EdgeIdType edgeId) const
+{
+    auto it = mTurningRestrictionsMap.find(edgeId);
+    return (it != mTurningRestrictionsMap.end());
 }
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

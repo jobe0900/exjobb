@@ -20,3 +20,7 @@ A Graph consists of a `Topology` and `Costs` (TODO) and `Restrictions` (TODO). T
 
 
 To enable both ordinary graphs and line graphs to use the same graph class, both types uses the same classes for graph, topology and vertices and edges. All differing data is found in `EdgeData` and `VertexData`. Those classes are abstract, and the actual specialization is found in the sub-classes `TopoEdgeData`, `LineGraphEdgeData` and `TopoVertexData` and `LineGraphVertexData`.
+
+### Restrictions
+
+- Turn restriction via other edges and not just via a vertex are difficult. The solution could be to set a flag on the LineGraphNode that there exist a VIA_WAY restriction that must be taken into account.

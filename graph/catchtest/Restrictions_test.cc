@@ -177,7 +177,7 @@ SCENARIO ("Adding and fetching vehicle type restrictions",
         //....................................................................
         WHEN ("adding restriction")
         {
-            r.setVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_destination);
+            r.addVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_destination);
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("it should be reported as installed for edge")
@@ -210,8 +210,8 @@ SCENARIO ("Adding and fetching vehicle type restrictions",
         //....................................................................
         WHEN ("adding two restrictions")
         {
-            r.setVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_destination);
-            r.setVehicleTypeAccessRestrictionsForEdge(e1, v2, rest_no);
+            r.addVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_destination);
+            r.addVehicleTypeAccessRestrictionsForEdge(e1, v2, rest_no);
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("it should be reported as installed for edge")
@@ -251,8 +251,8 @@ SCENARIO ("Adding and fetching vehicle type restrictions",
         //....................................................................
         WHEN ("adding restriction to already existing")
         {
-            r.setVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_destination);
-            r.setVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_no);
+            r.addVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_destination);
+            r.addVehicleTypeAccessRestrictionsForEdge(e1, v1, rest_no);
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("the first should NOT be reported as installed for edge")
@@ -359,3 +359,72 @@ SCENARIO ("Adding and fetching barrier restrictions", "[restrictions][barrier]")
     }
 }
 
+
+SCENARIO ("Adding and fetching turning restrictions", "[restrictions][turning]")
+{
+    // -----------------------------------------------------------------------
+    GIVEN ("a Restrictions object, edges and turning restrictions")
+    {
+        Restrictions r;
+        EdgeIdType   e1 {1};
+        EdgeIdType   e2 {2};
+        EdgeIdType   e3 {3};
+        VertexIdType v1 {4};
+        OsmTurningRestriction turn1(OsmTurningRestriction::NO_LEFT_TURN,
+                                    e1,
+                                    v1,
+                                    e2);
+        OsmTurningRestriction turn2(OsmTurningRestriction::NO_STRAIGHT_ON,
+                                    e1,
+                                    v1,
+                                    e3);
+
+        //....................................................................
+        WHEN ("we to add a turning restriction to edge id 1")
+        {
+            r.addTurningRestrictionForEdge(e1, turn1);
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("we should get be able to get the property")
+            {
+                const auto& turns = r.turningRestrictions(e1);
+                REQUIRE (turns.size() == 1);
+                const OsmTurningRestriction& turn = turns.at(0);
+                REQUIRE (turn.viaType() == OsmTurningRestriction::VIA_NODE);
+                REQUIRE (turn.fromEdgeId() == e1);
+                REQUIRE (turn.viaVertexId() == v1);
+                REQUIRE (turn.toEdgeId() == e2);
+            }
+        }
+
+        //....................................................................
+        WHEN ("trying to fetch turning restrictions for edge without one")
+        {
+            THEN ("we should receive an exception")
+            {
+                REQUIRE_THROWS_AS (
+                    r.turningRestrictions(e2),
+                    RestrictionsException&
+                );
+            }
+        }
+
+        //....................................................................
+        WHEN ("adding two restrictions for an edge")
+        {
+            r.addTurningRestrictionForEdge(e1, turn1);
+            r.addTurningRestrictionForEdge(e1, turn2);
+
+            THEN ("we should have two restrictions for the edge"
+                  " and can print them")
+            {
+                const auto& turns = r.turningRestrictions(e1);
+                for(const auto& t : turns)
+                {
+                    INFO (t.toString());
+                    REQUIRE (true);
+                }
+            }
+        }
+    }
+}
