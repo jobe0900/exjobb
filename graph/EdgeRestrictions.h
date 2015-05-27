@@ -1,13 +1,13 @@
-/**  The Restrictions class contains different restrictions in the graph
- * such as dimensions, access, turn restrictions.
+/**  The EdgeRestrictions class contains different restrictions for edges
+ * in the graph such as dimensions, access, turn restrictions.
  *
- * #include "Restrictions.h" <BR>
+ * #include "EdgeRestrictions.h" <BR>
  *
  * @author  Jonas Bergman
  */
 
-#ifndef GRAPH_RESTRICTIONS_H_
-#define GRAPH_RESTRICTIONS_H_
+#ifndef GRAPH_EDGERESTRICTIONS_H_
+#define GRAPH_EDGERESTRICTIONS_H_
 
 // SYSTEM INCLUDES
 //
@@ -32,7 +32,7 @@
 //
 
 /** Maps EdgeId => restriction.
- * Restrictions maps are:
+ * EdgeRestrictions maps are:
  * - vehicle properties
  * - General access to an edge
  * - vehicle type specific access
@@ -41,11 +41,11 @@
  * - disused roads
  * - no-exit roads
  */
-class Restrictions
+class EdgeRestrictions
 {
 public:
 // TYPES
-    /** Restrictions on Vehicles to travel an Edge.
+    /** EdgeRestrictions on Vehicles to travel an Edge.
      *  Dimensions in meters.
      *  Speed in km/h
      */
@@ -84,19 +84,19 @@ public:
 
     /** Default constructor.
      */
-    Restrictions();
+    EdgeRestrictions();
 
 
     /** Copy constructor.
      *
      * @param from The value to copy to this object.
      */
-    Restrictions(const Restrictions& from) = default;
+    EdgeRestrictions(const EdgeRestrictions& from) = default;
 
 
     /** Destructor.
      */
-    ~Restrictions() = default;
+    ~EdgeRestrictions() = default;
 
 
 // OPERATORS
@@ -293,4 +293,4 @@ private:
 
 
 
-#endif /* GRAPH_RESTRICTIONS_H_ */
+#endif /* GRAPH_EDGERESTRICTIONS_H_ */

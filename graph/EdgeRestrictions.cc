@@ -1,15 +1,15 @@
 /*
- * Restrictions.cc
+ * EdgeRestrictions.cc
  *
  *  Created on: 2015-05-26
  *      Author: Jonas Bergman
  */
 
-#include "Restrictions.h"  // class implemented
+#include "EdgeRestrictions.h"  // class implemented
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 //============================= LIFECYCLE ====================================
-Restrictions::Restrictions()
+EdgeRestrictions::EdgeRestrictions()
     : mVehiclePropertiesMap(),
       mGeneralAccessMap(),
       mVehicleTypeAccessMap(),
@@ -22,9 +22,9 @@ Restrictions::Restrictions()
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
 void
-Restrictions::setVehiclePropertyRestrictionForEdge(
+EdgeRestrictions::setVehiclePropertyRestrictionForEdge(
     EdgeIdType edgeId,
-    Restrictions::VehicleProperties vehicleProperties)
+    EdgeRestrictions::VehicleProperties vehicleProperties)
 {
     if(hasVehiclePropertyRestriction(edgeId))
     {
@@ -34,7 +34,7 @@ Restrictions::setVehiclePropertyRestrictionForEdge(
 }
 
 void
-Restrictions::setGeneralAccessRestrictionForEdge(
+EdgeRestrictions::setGeneralAccessRestrictionForEdge(
     EdgeIdType edgeId,
     OsmAccess  generalAccess)
 {
@@ -46,7 +46,7 @@ Restrictions::setGeneralAccessRestrictionForEdge(
 }
 
 void
-Restrictions::addVehicleTypeAccessRestrictionsForEdge(
+EdgeRestrictions::addVehicleTypeAccessRestrictionsForEdge(
     EdgeIdType               edgeId,
     OsmVehicle::VehicleType  vehicleType,
     OsmAccess                access)
@@ -70,7 +70,7 @@ Restrictions::addVehicleTypeAccessRestrictionsForEdge(
 }
 
 void
-Restrictions::setBarrierRestrictionForEdge(
+EdgeRestrictions::setBarrierRestrictionForEdge(
     EdgeIdType edgeId,
     OsmBarrier barrier)
 {
@@ -83,7 +83,7 @@ Restrictions::setBarrierRestrictionForEdge(
 
 
 void
-Restrictions::addTurningRestrictionForEdge(
+EdgeRestrictions::addTurningRestrictionForEdge(
     EdgeIdType              edgeId,
     OsmTurningRestriction   turningRestriction)
 {
@@ -101,24 +101,24 @@ Restrictions::addTurningRestrictionForEdge(
 }
 
 void
-Restrictions::setDisusedRestrictionForEdge(EdgeIdType edgeId)
+EdgeRestrictions::setDisusedRestrictionForEdge(EdgeIdType edgeId)
 {
     mDisusedEdges.insert(edgeId);
 }
 
 void
-Restrictions::setNoExitRestrictionForEdge(EdgeIdType edgeId)
+EdgeRestrictions::setNoExitRestrictionForEdge(EdgeIdType edgeId)
 {
     mNoExitEdges.insert(edgeId);
 }
 //============================= ACESS      ===================================
-std::vector<Restrictions::RestrictionType>
-Restrictions::restrictionTypes(EdgeIdType edgeId) const
+std::vector<EdgeRestrictions::RestrictionType>
+EdgeRestrictions::restrictionTypes(EdgeIdType edgeId) const
 {
-    std::vector<Restrictions::RestrictionType> rest_types;
+    std::vector<EdgeRestrictions::RestrictionType> rest_types;
 
-    for(int i = Restrictions::VEHICLE_PROPERTIES;
-        i < Restrictions::NR_RESTRICTION_TYPES;
+    for(int i = EdgeRestrictions::VEHICLE_PROPERTIES;
+        i < EdgeRestrictions::NR_RESTRICTION_TYPES;
         ++i)
     {
         RestrictionType type = static_cast<RestrictionType>(i);
@@ -131,8 +131,8 @@ Restrictions::restrictionTypes(EdgeIdType edgeId) const
     return rest_types;
 }
 
-const Restrictions::VehicleProperties&
-Restrictions::vehicleProperties(EdgeIdType edgeId) const
+const EdgeRestrictions::VehicleProperties&
+EdgeRestrictions::vehicleProperties(EdgeIdType edgeId) const
 {
     if(!hasVehiclePropertyRestriction(edgeId))
     {
@@ -143,15 +143,15 @@ Restrictions::vehicleProperties(EdgeIdType edgeId) const
     return mVehiclePropertiesMap.find(edgeId)->second;
 }
 
-Restrictions::VehicleProperties&
-Restrictions::vehicleProperties(EdgeIdType edgeId)
+EdgeRestrictions::VehicleProperties&
+EdgeRestrictions::vehicleProperties(EdgeIdType edgeId)
 {
-    return const_cast<Restrictions::VehicleProperties&>(
-        static_cast<const Restrictions&>(*this).vehicleProperties(edgeId) );
+    return const_cast<EdgeRestrictions::VehicleProperties&>(
+        static_cast<const EdgeRestrictions&>(*this).vehicleProperties(edgeId) );
 }
 
 const OsmAccess&
-Restrictions::generalAccess(EdgeIdType edgeId) const
+EdgeRestrictions::generalAccess(EdgeIdType edgeId) const
 {
     if(!hasGeneralAccessRestriction(edgeId))
     {
@@ -163,15 +163,15 @@ Restrictions::generalAccess(EdgeIdType edgeId) const
 }
 
 OsmAccess&
-Restrictions::generalAccess(EdgeIdType edgeId)
+EdgeRestrictions::generalAccess(EdgeIdType edgeId)
 {
     return const_cast<OsmAccess&>(
-        static_cast<const Restrictions&>(*this).generalAccess(edgeId) );
+        static_cast<const EdgeRestrictions&>(*this).generalAccess(edgeId) );
 
 }
 
 const OsmAccess&
-Restrictions::vehicleTypeAccess(
+EdgeRestrictions::vehicleTypeAccess(
     EdgeIdType              edgeId,
     OsmVehicle::VehicleType vehicleType) const
 {
@@ -187,18 +187,18 @@ Restrictions::vehicleTypeAccess(
 }
 
 OsmAccess&
-Restrictions::vehicleTypeAccess(
+EdgeRestrictions::vehicleTypeAccess(
     EdgeIdType              edgeId,
     OsmVehicle::VehicleType vehicleType)
 {
     return const_cast<OsmAccess&>
-        (static_cast<const Restrictions&>
+        (static_cast<const EdgeRestrictions&>
             (*this).vehicleTypeAccess(edgeId, vehicleType)
         );
 }
 
 std::vector<OsmVehicle::VehicleType>
-Restrictions::vehicleTypesWithRestrictions(EdgeIdType edgeId) const
+EdgeRestrictions::vehicleTypesWithRestrictions(EdgeIdType edgeId) const
 {
     std::vector<OsmVehicle::VehicleType> types;
 
@@ -216,7 +216,7 @@ Restrictions::vehicleTypesWithRestrictions(EdgeIdType edgeId) const
 }
 
 const OsmBarrier&
-Restrictions::barrier(EdgeIdType edgeId) const
+EdgeRestrictions::barrier(EdgeIdType edgeId) const
 {
     if(!hasBarrierRestriction(edgeId))
     {
@@ -228,7 +228,7 @@ Restrictions::barrier(EdgeIdType edgeId) const
 }
 
 const std::vector<OsmTurningRestriction>&
-Restrictions::turningRestrictions(EdgeIdType edgeId) const
+EdgeRestrictions::turningRestrictions(EdgeIdType edgeId) const
 {
     if(!hasTurningRestriction(edgeId))
     {
@@ -240,9 +240,9 @@ Restrictions::turningRestrictions(EdgeIdType edgeId) const
 }
 //============================= INQUIRY    ===================================
 bool
-Restrictions::hasRestriction(
+EdgeRestrictions::hasRestriction(
     EdgeIdType edgeId,
-    Restrictions::RestrictionType type) const
+    EdgeRestrictions::RestrictionType type) const
 {
     switch (type)
     {
@@ -266,28 +266,28 @@ Restrictions::hasRestriction(
 }
 
 bool
-Restrictions::hasVehiclePropertyRestriction(EdgeIdType edgeId) const
+EdgeRestrictions::hasVehiclePropertyRestriction(EdgeIdType edgeId) const
 {
     auto it = mVehiclePropertiesMap.find(edgeId);
     return (it != mVehiclePropertiesMap.end());
 }
 
 bool
-Restrictions::hasGeneralAccessRestriction(EdgeIdType edgeId) const
+EdgeRestrictions::hasGeneralAccessRestriction(EdgeIdType edgeId) const
 {
     auto it = mGeneralAccessMap.find(edgeId);
     return (it != mGeneralAccessMap.end());
 }
 
 bool
-Restrictions::hasVehicleTypeAccessRestriction(EdgeIdType edgeId) const
+EdgeRestrictions::hasVehicleTypeAccessRestriction(EdgeIdType edgeId) const
 {
     auto it = mVehicleTypeAccessMap.find(edgeId);
     return (it != mVehicleTypeAccessMap.end());
 }
 
 bool
-Restrictions::hasVehicleTypeAccessRestriction(
+EdgeRestrictions::hasVehicleTypeAccessRestriction(
     EdgeIdType              edgeId,
     OsmVehicle::VehicleType vehicleType) const
 {
@@ -305,28 +305,28 @@ Restrictions::hasVehicleTypeAccessRestriction(
 }
 
 bool
-Restrictions::hasBarrierRestriction(EdgeIdType edgeId) const
+EdgeRestrictions::hasBarrierRestriction(EdgeIdType edgeId) const
 {
     auto it = mBarrierMap.find(edgeId);
     return (it != mBarrierMap.end());
 }
 
 bool
-Restrictions::hasTurningRestriction(EdgeIdType edgeId) const
+EdgeRestrictions::hasTurningRestriction(EdgeIdType edgeId) const
 {
     auto it = mTurningRestrictionsMap.find(edgeId);
     return (it != mTurningRestrictionsMap.end());
 }
 
 bool
-Restrictions::hasDisusedRestriction(EdgeIdType edgeId) const
+EdgeRestrictions::hasDisusedRestriction(EdgeIdType edgeId) const
 {
     auto it = mDisusedEdges.find(edgeId);
     return (it != mDisusedEdges.end());
 }
 
 bool
-Restrictions::hasNoExitRestriction(EdgeIdType edgeId) const
+EdgeRestrictions::hasNoExitRestriction(EdgeIdType edgeId) const
 {
     auto it = mNoExitEdges.find(edgeId);
     return (it != mNoExitEdges.end());

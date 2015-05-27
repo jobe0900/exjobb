@@ -5,9 +5,10 @@
  *      Author: Jonas Bergman
  */
 
+#include "../EdgeRestrictions.h"
+
 #include "../../catchtest/catch.hpp"
 
-#include "../Restrictions.h"
 
 SCENARIO ("Adding and fetching vehicle restrictions",
             "[restrictions][vehicleprop]")
@@ -15,14 +16,14 @@ SCENARIO ("Adding and fetching vehicle restrictions",
     // -----------------------------------------------------------------------
     GIVEN ("a Restrictions object")
     {
-        Restrictions r;
+        EdgeRestrictions r;
         //....................................................................
         WHEN ("we try to add vehicle property restriction with max speed 60 "
               "to edge id 4")
         {
             int max_speed = 60;
             EdgeIdType id = 4;
-            Restrictions::VehicleProperties vp;
+            EdgeRestrictions::VehicleProperties vp;
             vp.maxSpeed = max_speed;
 
             r.setVehiclePropertyRestrictionForEdge(id, vp);
@@ -36,7 +37,7 @@ SCENARIO ("Adding and fetching vehicle restrictions",
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("we should get be able to get reference to property and change")
             {
-                Restrictions::VehicleProperties& r_vp = r.vehicleProperties(id);
+                EdgeRestrictions::VehicleProperties& r_vp = r.vehicleProperties(id);
                 r_vp.maxHeight = 10.0;
                 REQUIRE (r.vehicleProperties(id).maxHeight == Approx(10.0));
             }
@@ -50,18 +51,18 @@ SCENARIO ("Adding and fetching vehicle restrictions",
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("the type should be in the vector of restriction types for edge")
             {
-                std::vector<Restrictions::RestrictionType> rt = r.restrictionTypes(id);
+                std::vector<EdgeRestrictions::RestrictionType> rt = r.restrictionTypes(id);
                 auto it = std::find(
                     rt.begin(),
                     rt.end(),
-                    Restrictions::VEHICLE_PROPERTIES);
+                    EdgeRestrictions::VEHICLE_PROPERTIES);
                 REQUIRE (it != rt.end());
             }
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("the type should be reported as a restriction type for edge")
             {
-                REQUIRE (r.hasRestriction(id, Restrictions::VEHICLE_PROPERTIES));
+                REQUIRE (r.hasRestriction(id, EdgeRestrictions::VEHICLE_PROPERTIES));
             }
 
         }
@@ -92,14 +93,14 @@ SCENARIO ("Adding and fetching vehicle restrictions",
             THEN ("we should get a false")
             {
                 REQUIRE_FALSE (
-                    r.hasRestriction(567, Restrictions::VEHICLE_PROPERTIES));
+                    r.hasRestriction(567, EdgeRestrictions::VEHICLE_PROPERTIES));
             }
         }
 
         //....................................................................
         WHEN ("we query for restriction types for unknown edge")
         {
-            std::vector<Restrictions::RestrictionType> rt = r.restrictionTypes(567);
+            std::vector<EdgeRestrictions::RestrictionType> rt = r.restrictionTypes(567);
             THEN ("we should get an empty vector")
             {
                 REQUIRE (rt.size() == 0);
@@ -113,7 +114,7 @@ SCENARIO ("Adding and fetching general access restrictions", "[restrictions][gen
     // -----------------------------------------------------------------------
     GIVEN ("a Restrictions object")
     {
-        Restrictions r;
+        EdgeRestrictions r;
         //....................................................................
         WHEN ("we try to add access restriction DELIVERY to edge id 4")
         {
@@ -131,18 +132,18 @@ SCENARIO ("Adding and fetching general access restrictions", "[restrictions][gen
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("the type should be in the vector of restriction types for edge")
             {
-                std::vector<Restrictions::RestrictionType> rt = r.restrictionTypes(id);
+                std::vector<EdgeRestrictions::RestrictionType> rt = r.restrictionTypes(id);
                 auto it = std::find(
                     rt.begin(),
                     rt.end(),
-                    Restrictions::GENERAL_ACCESS);
+                    EdgeRestrictions::GENERAL_ACCESS);
                 REQUIRE (it != rt.end());
             }
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("the type should be reported as a restriction type for edge")
             {
-                REQUIRE (r.hasRestriction(id, Restrictions::GENERAL_ACCESS));
+                REQUIRE (r.hasRestriction(id, EdgeRestrictions::GENERAL_ACCESS));
             }
 
         }
@@ -166,7 +167,7 @@ SCENARIO ("Adding and fetching vehicle type restrictions",
     //------------------------------------------------------------------------
     GIVEN ("A restrictions object, an edgeId and vehicle types")
     {
-        Restrictions r;
+        EdgeRestrictions r;
         EdgeIdType   e1 {1};
         EdgeIdType   e2 {2};
         OsmVehicle::VehicleType v1 {OsmVehicle::MOTORCAR};
@@ -183,14 +184,14 @@ SCENARIO ("Adding and fetching vehicle type restrictions",
             THEN ("it should be reported as installed for edge")
             {
                 REQUIRE (
-                    r.hasRestriction(e1, Restrictions::VEHICLE_TYPE_ACCESS));
+                    r.hasRestriction(e1, EdgeRestrictions::VEHICLE_TYPE_ACCESS));
             }
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("it should NOT be reported as installed for another edge")
             {
                 REQUIRE_FALSE (
-                    r.hasRestriction(e2, Restrictions::VEHICLE_TYPE_ACCESS));
+                    r.hasRestriction(e2, EdgeRestrictions::VEHICLE_TYPE_ACCESS));
             }
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -217,14 +218,14 @@ SCENARIO ("Adding and fetching vehicle type restrictions",
             THEN ("it should be reported as installed for edge")
             {
                 REQUIRE (
-                    r.hasRestriction(e1, Restrictions::VEHICLE_TYPE_ACCESS));
+                    r.hasRestriction(e1, EdgeRestrictions::VEHICLE_TYPE_ACCESS));
             }
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("it should NOT be reported as installed for another edge")
             {
                 REQUIRE_FALSE (
-                    r.hasRestriction(e2, Restrictions::VEHICLE_TYPE_ACCESS));
+                    r.hasRestriction(e2, EdgeRestrictions::VEHICLE_TYPE_ACCESS));
             }
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -297,7 +298,7 @@ SCENARIO ("Adding and fetching barrier restrictions", "[restrictions][barrier]")
     // -----------------------------------------------------------------------
     GIVEN ("a Restrictions object, edges and barriers")
     {
-        Restrictions r;
+        EdgeRestrictions r;
         EdgeIdType   e1 {1};
         EdgeIdType   e2 {2};
         OsmBarrier   bollard    {OsmBarrier::BOLLARD};
@@ -317,18 +318,18 @@ SCENARIO ("Adding and fetching barrier restrictions", "[restrictions][barrier]")
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("the type should be in the vector of restriction types for edge")
             {
-                std::vector<Restrictions::RestrictionType> rt = r.restrictionTypes(e1);
+                std::vector<EdgeRestrictions::RestrictionType> rt = r.restrictionTypes(e1);
                 auto it = std::find(
                     rt.begin(),
                     rt.end(),
-                    Restrictions::BARRIER);
+                    EdgeRestrictions::BARRIER);
                 REQUIRE (it != rt.end());
             }
 
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("the type should be reported as a restriction type for edge")
             {
-                REQUIRE (r.hasRestriction(e1, Restrictions::BARRIER));
+                REQUIRE (r.hasRestriction(e1, EdgeRestrictions::BARRIER));
             }
 
         }
@@ -365,7 +366,7 @@ SCENARIO ("Adding and fetching turning restrictions", "[restrictions][turning]")
     // -----------------------------------------------------------------------
     GIVEN ("a Restrictions object, edges and turning restrictions")
     {
-        Restrictions r;
+        EdgeRestrictions r;
         EdgeIdType   e1 {1};
         EdgeIdType   e2 {2};
         EdgeIdType   e3 {3};
@@ -435,7 +436,7 @@ SCENARIO ("Adding and fetching disused restrictions",
     // -----------------------------------------------------------------------
     GIVEN ("a Restrictions object, edges and turning restrictions")
     {
-        Restrictions r;
+        EdgeRestrictions r;
         EdgeIdType   e1 {1};
         EdgeIdType   e2 {2};
 
@@ -453,7 +454,7 @@ SCENARIO ("Adding and fetching disused restrictions",
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("the Restriction should be reported as installed for edge")
             {
-                REQUIRE (r.hasRestriction(e1, Restrictions::DISUSED));
+                REQUIRE (r.hasRestriction(e1, EdgeRestrictions::DISUSED));
             }
         }
 
@@ -471,7 +472,7 @@ SCENARIO ("Adding and fetching disused restrictions",
             // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
             THEN ("the Restriction should be reported as installed for edge")
             {
-                REQUIRE (r.hasRestriction(e1, Restrictions::NO_EXIT));
+                REQUIRE (r.hasRestriction(e1, EdgeRestrictions::NO_EXIT));
             }
         }
 
