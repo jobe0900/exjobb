@@ -92,6 +92,18 @@ EdgeRestrictions::addVehicleTypeAccessRestrictionsForEdge(
 }
 
 void
+EdgeRestrictions::addVehicleTypeAccessRestrictionsForEdge(
+    EdgeIdType               edgeId,
+    OsmVehicle::VehicleType  vehicleType,
+    OsmAccess::AccessType    accessType)
+{
+    addVehicleTypeAccessRestrictionsForEdge(
+        edgeId,
+        vehicleType,
+        OsmAccess(accessType));
+}
+
+void
 EdgeRestrictions::setBarrierRestrictionForEdge(
     EdgeIdType edgeId,
     OsmBarrier barrier)
@@ -258,6 +270,12 @@ EdgeRestrictions::vehicleTypesWithRestrictions(EdgeIdType edgeId) const
     }
 
     return types;
+}
+
+const std::map<EdgeIdType, std::map<OsmVehicle::VehicleType, OsmAccess> >&
+EdgeRestrictions::vehicleTypeAccessEdges() const
+{
+    return mVehicleTypeAccessMap;
 }
 
 const OsmBarrier&

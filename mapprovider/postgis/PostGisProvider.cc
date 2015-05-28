@@ -892,6 +892,17 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 edgeRestr.setGeneralAccessRestrictionForEdge(edgeId, type);
             }
 
+            colString = row[AccessQueryResult::MOTORCAR].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::MOTORCAR,
+                    type
+                );
+            }
+
             colString = row[AccessQueryResult::BARRIER].as<std::string>("");
             if(colString != "")
             {

@@ -269,6 +269,33 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 				}
 
 				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+				THEN ("we should get a map of vehicle restrictions")
+				{
+				    const auto& edge_map =
+				        restrictions.edgeRestrictions().vehicleTypeAccessEdges();
+				    if(edge_map.size() > 0)
+				    {
+				        EdgeIdType edgeId = edge_map.begin()->first;
+				        const auto& v_map = edge_map.begin()->second;
+				        INFO ("# edges with vehicle restrictions: "
+				            << edge_map.size());
+				        INFO ("# vehicle restrictions on first edge: "
+				            << v_map.size());
+				        INFO ("  First restriction on edge id: " << edgeId
+				            << ", vehicle restriction: "
+				            << OsmVehicle::toString(v_map.begin()->first)
+				            << " : "
+				            << v_map.begin()->second.toString());
+				        REQUIRE (true);
+				    }
+				    else
+				    {
+				        INFO ("No Vehicle Restrictions.");
+				        REQUIRE (true);
+				    }
+				}
+
+				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 				THEN ("we should get a map of barrier restrictions")
 				{
 				    const auto& barrier_map =

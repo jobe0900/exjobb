@@ -142,6 +142,20 @@ public:
                             OsmVehicle::VehicleType  vehicleType,
                             OsmAccess                access);
 
+    /** Set access restrictions for edge based on vehicle type.
+     * There can be several vehicle restrictions for each edge.
+     * The mapping is in two levels:
+     * EdgeId => (VehicleType => Access)
+     * @param   edgeId      The id of the edge to set restrictions for.
+     * @param   vehicleType The type of vehicle to restrict on the edge.
+     * @param   accessType  The access restriction for that vehicle type
+     *                      on this edge.
+     */
+    void                addVehicleTypeAccessRestrictionsForEdge(
+                            EdgeIdType               edgeId,
+                            OsmVehicle::VehicleType  vehicleType,
+                            OsmAccess::AccessType    accessType);
+
     /** Set barrier restricting this edge.
      * @param   edgeId         The id of the edge to apply restrictions to.
      * @param   barrier        The barrier to set.
@@ -234,6 +248,12 @@ public:
      */
     std::vector<OsmVehicle::VehicleType>
                         vehicleTypesWithRestrictions(EdgeIdType edgeId) const;
+
+    /**
+     * @return Get the map of vehicle type restrictions for edges.
+     */
+    const std::map<EdgeIdType, std::map<OsmVehicle::VehicleType, OsmAccess> >&
+                        vehicleTypeAccessEdges() const;
 
     /** Fetch the barrier restricting this edge.
      * @param   edgeId  The id of the edge.
