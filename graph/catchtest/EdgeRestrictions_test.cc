@@ -158,6 +158,20 @@ SCENARIO ("Adding and fetching general access restrictions", "[restrictions][gen
                     RestrictionsException&);
             }
         }
+
+        //....................................................................
+        WHEN ("adding restriction as type as not as object")
+        {
+            EdgeIdType id = 4;
+
+            r.setGeneralAccessRestrictionForEdge(id, OsmAccess::DELIVERY);
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("we should get be able to get the property and check")
+            {
+                REQUIRE (r.generalAccess(id).accessType() == OsmAccess::DELIVERY);
+            }
+        }
     }
 }
 

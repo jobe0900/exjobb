@@ -114,11 +114,19 @@ public:
 
     /** Set access restrictions for this edge, that is restrictions for all.
      * @param   edgeId         The id of the edge to apply restrictions to.
-     * @param   generalAccess  The access type to set.
+     * @param   generalAccess  The access to set.
      */
     void                setGeneralAccessRestrictionForEdge(
                             EdgeIdType edgeId,
                             OsmAccess  generalAccess);
+
+    /** Set access restrictions for this edge, that is restrictions for all.
+     * @param   edgeId         The id of the edge to apply restrictions to.
+     * @param   generalAccess  The access type to set.
+     */
+    void                setGeneralAccessRestrictionForEdge(
+                            EdgeIdType             edgeId,
+                            OsmAccess::AccessType  generalAccessType);
 
     /** Set access restrictions for edge based on vehicle type.
      * There can be several vehicle restrictions for each edge.

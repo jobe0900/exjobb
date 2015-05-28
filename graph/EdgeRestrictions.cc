@@ -56,6 +56,18 @@ EdgeRestrictions::setGeneralAccessRestrictionForEdge(
 }
 
 void
+EdgeRestrictions::setGeneralAccessRestrictionForEdge(
+    EdgeIdType             edgeId,
+    OsmAccess::AccessType  generalAccessType)
+{
+    if(hasGeneralAccessRestriction(edgeId))
+    {
+        mGeneralAccessMap.erase(edgeId);
+    }
+    mGeneralAccessMap.insert({edgeId, OsmAccess(generalAccessType)});
+}
+
+void
 EdgeRestrictions::addVehicleTypeAccessRestrictionsForEdge(
     EdgeIdType               edgeId,
     OsmVehicle::VehicleType  vehicleType,
