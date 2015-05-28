@@ -209,6 +209,12 @@ public:
     const OsmAccess&    generalAccess(EdgeIdType edgeId) const;
     OsmAccess&          generalAccess(EdgeIdType edgeId);
 
+    /** Get all the general access restrictions.
+     * @return map of edges with barriers.
+     */
+    const std::map<EdgeIdType, OsmAccess>&
+                        generalAccess() const;
+
     /** Try to fetch the vehicle type specific access restrictions for this edge.
      * @param   edgeId          The id of the edge.
      * @param   vehiceltType    The type of Vehicle to get access restriction
@@ -235,6 +241,12 @@ public:
      * @throw   RestrictionException if no entry exists for this Edge.
      */
     const OsmBarrier&   barrier(EdgeIdType edgeId) const;
+
+    /** Get all the barrier restrictions.
+     * @return map of edges with barriers.
+     */
+    const std::map<EdgeIdType, OsmBarrier>&
+                        barriers() const;
 
     /** Get a list of the turning restrictions from this edge.
      * @param   edgeId  The id of the Edge.

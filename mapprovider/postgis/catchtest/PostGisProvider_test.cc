@@ -245,6 +245,51 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 				        REQUIRE (true);
 				    }
 				}
+
+			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+				THEN ("we should get a map of general access restrictions")
+				{
+				    const auto& general_map =
+				        restrictions.edgeRestrictions().generalAccess();
+				    if(general_map.size() > 0)
+				    {
+				        EdgeIdType edgeId = general_map.begin()->first;
+				        const OsmAccess& access = general_map.begin()->second;
+				        INFO ("# General access restrictions: "
+				              << general_map.size());
+				        INFO ("  First restriction on edge id: " << edgeId
+				              << ", access restriction: " << access.toString());
+				        REQUIRE (true);
+				    }
+				    else
+				    {
+				        INFO ("No General Access Restrictions.");
+				        REQUIRE (true);
+				    }
+				}
+
+				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+				THEN ("we should get a map of barrier restrictions")
+				{
+				    const auto& barrier_map =
+				        restrictions.edgeRestrictions().barriers();
+				    if(barrier_map.size() > 0)
+				    {
+				        EdgeIdType edgeId = barrier_map.begin()->first;
+				        const OsmBarrier& barrier = barrier_map.begin()->second;
+				        INFO ("# Barrier restrictions: "
+				            << barrier_map.size());
+				        INFO ("  First restriction on edge id: " << edgeId
+				            << ", barrier restriction: " << barrier.toString());
+				        REQUIRE (true);
+				    }
+				    else
+				    {
+				        INFO ("No Barrier Restrictions.");
+				        REQUIRE (true);
+				    }
+				}
+
 			}
 		}
 	}

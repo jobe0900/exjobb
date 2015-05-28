@@ -686,12 +686,13 @@ PostGisProvider::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
 void
 PostGisProvider::getEdgeRestrictions(Restrictions& rRestrictions)
 {
-    pqxx::result vehicle_prop_result;
-    getVehiclePropertyEdgeRestrictions(vehicle_prop_result);
+    pqxx::result result;
+    getVehiclePropertyEdgeRestrictions(result);
+    addVehiclePropertyResultToEdgeRestrictions(result, rRestrictions);
 
-    addVehiclePropertyResultToEdgeRestrictions(
-        vehicle_prop_result,
-        rRestrictions);
+    result.clear();
+    getAccessRestrictions(result);
+    addAccessResultToEdgeRestrictions(result, rRestrictions);
 }
 
 void
@@ -802,5 +803,106 @@ PostGisProvider::addVehiclePropertyResultToEdgeRestrictions(
         throw MapProviderException(
             std::string("PostGisProvider:addVehicleProp..ToEdge..: ") + e.what());
 
+    }
+}
+
+void
+PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
+{
+    try
+        {
+            if(!mConnection.is_open())
+            {
+                throw MapProviderException(
+                    std::string("Could not open ") + mDbConfig.database);
+            }
+
+            // NON-TRANSACTION START
+            pqxx::nontransaction non_trans(mConnection);
+
+            std::string sql(
+                "SELECT     edge_id, "
+                //-- osm data about original edge
+                "           osm.* "
+                "FROM      " + mEdgeTable +
+                " JOIN ( "
+                "   SELECT  element_id "
+                //-- access restrictions
+                "           , access "
+                "           , barrier "
+                "           , disused "
+                "           , noexit "
+                "           , motorcar "
+                "           , goods "
+                "           , hgv "
+                "           , psv "
+                "           , lhv "
+                "           , motor_vehicle "
+                "           , vehicle "
+//                "           , restriction "
+                "   FROM    " + mSchemaName + ".relation "
+                "   JOIN    " + mTableName +
+                "   ON      topogeo_id = (topo_geom).id "
+                "   WHERE   highway in " + getInterestingHighwayColumns() +
+                "   AND     (access         IS NOT NULL "
+                "   OR       barrier        IS NOT NULL "
+                "   OR       disused        IS NOT NULL "
+                "   OR       noexit         IS NOT NULL "
+                "   OR       motorcar       IS NOT NULL "
+                "   OR       goods          IS NOT NULL"
+                "   OR       hgv            IS NOT NULL"
+                "   OR       psv            IS NOT NULL"
+                "   OR       lhv            IS NOT NULL"
+                "   OR       motor_vehicle  IS NOT NULL"
+                "   OR       vehicle        IS NOT NULL)"
+                ") AS osm "
+                "ON edge_id = element_id "
+                "ORDER BY edge_id ASC;"
+            );
+            rResult = non_trans.exec(sql);
+        }
+        catch(const std::exception& e)
+        {
+            throw MapProviderException(
+                std::string("PostGisProvider:getAccessRestrictions: ")
+                            + e.what());
+        }
+}
+
+void
+PostGisProvider::addAccessResultToEdgeRestrictions(
+    const pqxx::result& rResult,
+    Restrictions& rRestrictions)
+{
+    try
+    {
+        EdgeRestrictions& edgeRestr = rRestrictions.edgeRestrictions();
+
+        for(const pqxx::tuple& row : rResult)
+        {
+            // throw exception if no edgeId
+            EdgeIdType edgeId =
+                row[AccessQueryResult::EDGE_ID].as<EdgeIdType>();
+
+            std::string colString;
+            colString = row[AccessQueryResult::ACCESS].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.setGeneralAccessRestrictionForEdge(edgeId, type);
+            }
+
+            colString = row[AccessQueryResult::BARRIER].as<std::string>("");
+            if(colString != "")
+            {
+                OsmBarrier::BarrierType type = OsmBarrier::parseString(colString);
+                edgeRestr.setBarrierRestrictionForEdge(edgeId, type);
+            }
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:addAccessResultToEdge..: ") + e.what());
     }
 }

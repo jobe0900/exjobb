@@ -222,12 +222,30 @@ private:
      */
     void    getVehiclePropertyEdgeRestrictions(pqxx::result& rResult);
 
-    /** Add the result of the query for vehicle properties to restrictions
+    /** Add the result of the query for vehicle properties to restrictions.
+     * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
      * @param   rRestrictions   Store the restrictions here.
      * @throw   MapProviderException
      */
     void    addVehiclePropertyResultToEdgeRestrictions(
+                const pqxx::result&    rResult,
+                Restrictions&          rRestrictions);
+
+    /** Get Access restrictions to edge.
+     * Helper for 'getEdgeRestrictions()'
+     * @param   rResult     Store the result of query in here.
+     * @throw   MapProviderException
+     */
+    void    getAccessRestrictions(pqxx::result& rResult);
+
+    /** Add the result of the query for Access to restrictions.
+     * Helper for 'getEdgeRestrictions()'
+     * @param   rResult         The results of the query
+     * @param   rRestrictions   Store the restrictions here.
+     * @throw   MapProviderException
+     */
+    void    addAccessResultToEdgeRestrictions(
                 const pqxx::result&    rResult,
                 Restrictions&          rRestrictions);
 

@@ -63,6 +63,26 @@ struct VehiclePropertiesQueryResult
     };
 };
 
+struct AccessQueryResult
+{
+    enum Columns
+    {
+        EDGE_ID,
+        ELEMENT_ID,
+        ACCESS,
+        BARRIER,
+        DISUSED,
+        NOEXIT,
+        MOTORCAR,
+        GOODS,
+        HGV,
+        PSV,
+        LHV,
+        MOTOR_VEHICLE,
+        VEHICLE,
+    };
+};
+
 
 
 #endif /* MAPPROVIDER_POSTGIS_OSMCONSTANTS_H_ */

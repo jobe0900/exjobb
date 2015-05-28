@@ -209,6 +209,12 @@ EdgeRestrictions::generalAccess(EdgeIdType edgeId)
 
 }
 
+const std::map<EdgeIdType, OsmAccess>&
+EdgeRestrictions::generalAccess() const
+{
+    return mGeneralAccessMap;
+}
+
 const OsmAccess&
 EdgeRestrictions::vehicleTypeAccess(
     EdgeIdType              edgeId,
@@ -264,6 +270,12 @@ EdgeRestrictions::barrier(EdgeIdType edgeId) const
             + std::to_string(edgeId));
     }
     return mBarrierMap.find(edgeId)->second;
+}
+
+const std::map<EdgeIdType, OsmBarrier>&
+EdgeRestrictions::barriers() const
+{
+    return mBarrierMap;
 }
 
 const std::vector<OsmTurningRestriction>&
