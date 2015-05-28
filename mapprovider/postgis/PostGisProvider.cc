@@ -39,8 +39,26 @@ try
         }
 
         pqxx::nontransaction nt(mConnection);
-        mTableName  = nt.esc(mTopoConfig.roadsPrefix + "_" + topoBaseName);
-        mSchemaName = nt.esc(mTopoConfig.topologySchemaPrefix + "_" + topoBaseName);
+        mTableName     = nt.esc(mTopoConfig.roadsPrefix + "_" +
+                                topoBaseName);
+        mSchemaName    = nt.esc(mTopoConfig.topologySchemaPrefix + "_" +
+                                topoBaseName);
+        mEdgeTable     = nt.esc(mSchemaName + "." +
+                                mTopoConfig.edgeTableName);
+        mEdgeIdCol     = nt.esc(mSchemaName + "." +
+                                mTopoConfig.edgeIdColumnName);
+        mSourceCol     = nt.esc(mSchemaName + "." +
+                                mTopoConfig.sourceColumnName);
+        mTargetCol     = nt.esc(mSchemaName + "." +
+                                mTopoConfig.targetColumnName);
+        mEdgeGeomCol   = nt.esc(mSchemaName + "." +
+                                mTopoConfig.edgeGeomColumnName);
+        mVertexTable   = nt.esc(mSchemaName + "." +
+                                mTopoConfig.vertexTableName);
+        mVertexIdCol   = nt.esc(mSchemaName + "." +
+                                mTopoConfig.vertexIdColumnName);
+        mVertexGeomCol = nt.esc(mSchemaName + "." +
+                                mTopoConfig.vertexGeomColumnName);
         nt.abort();
 
         if(mBuildTempTopology)
@@ -128,8 +146,9 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 
 		rVertexResult = non_trans.exec(
 				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
-				"FROM " + mSchemaName + ".node "
-				"ORDER BY node_id ASC;"
+//				"FROM " + mSchemaName + ".node "
+				" FROM " + mVertexTable +
+				" ORDER BY node_id ASC;"
 		);
 	}
 	catch(const std::exception& e)
@@ -183,8 +202,8 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "                       AS target_bearing, "
 //-- osm data about original edge
 "           osm.* "
-"FROM      " + mSchemaName + ".edge_data "
-"JOIN ( "
+"FROM      " + mEdgeTable +
+" JOIN ( "
 "   SELECT  osm_id, element_id "
 //-- road data
 "           , highway "
@@ -669,6 +688,7 @@ PostGisProvider::getEdgeRestrictions(Restrictions& rRestrictions)
 {
     pqxx::result vehicle_prop_result;
     getVehiclePropertyEdgeRestrictions(vehicle_prop_result);
+
     addVehiclePropertyResultToEdgeRestrictions(
         vehicle_prop_result,
         rRestrictions);
@@ -692,8 +712,8 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
             "SELECT     edge_id, "
             //-- osm data about original edge
             "           osm.* "
-            "FROM      " + mSchemaName + ".edge_data "
-            "JOIN ( "
+            "FROM      " + mEdgeTable +
+            " JOIN ( "
             "   SELECT  osm_id, element_id "
             //-- vehicle property restrictions
             "           , maxheight "
@@ -719,6 +739,12 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
             "   JOIN    " + mTableName +
             "   ON      topogeo_id = (topo_geom).id "
             "   WHERE   highway in " + getInterestingHighwayColumns() +
+            "   AND     (maxheight IS NOT NULL "
+            "   OR       maxlength IS NOT NULL "
+            "   OR       maxweight IS NOT NULL "
+            "   OR       maxwidth  IS NOT NULL "
+            "   OR       maxspeed  IS NOT NULL "
+            "   OR       minspeed  IS NOT NULL)"
             ") AS osm "
             "ON edge_id = element_id "
             "ORDER BY edge_id ASC;"
@@ -728,7 +754,8 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
     catch(const std::exception& e)
     {
         throw MapProviderException(
-            std::string("PostGisProvider:getEdgeRestrictions: ") + e.what());
+            std::string("PostGisProvider:getVehiclePropertyEdgeRestrictions: ")
+                        + e.what());
     }
 }
 
@@ -768,9 +795,7 @@ PostGisProvider::addVehiclePropertyResultToEdgeRestrictions(
                 (EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MIN);
 
             edgeRestr.setVehiclePropertyRestrictionForEdge(edgeId, vp);
-
         }
-
     }
     catch (std::exception& e)
     {

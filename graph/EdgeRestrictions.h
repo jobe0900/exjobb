@@ -179,6 +179,12 @@ public:
                         vehicleProperties(EdgeIdType edgeId) const;
     VehicleProperties&  vehicleProperties(EdgeIdType edgeId);
 
+    /** Get the map of all VehicleProperty Restrictions.
+     * @return  Map of all property restrictons.
+     */
+    const std::map<EdgeIdType, VehicleProperties>&
+                        vehicleProperties() const;
+
     /** Try to fetch the general access restrictions for this edge.
      * @param   edgeId  The id of the edge.
      * @return  reference to the OsmAccess object.

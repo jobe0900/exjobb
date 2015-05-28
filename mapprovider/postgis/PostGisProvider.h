@@ -237,6 +237,14 @@ private:
     pqxx::connection        mConnection;
     std::string             mTableName;
     std::string             mSchemaName;
+    std::string             mEdgeTable;
+    std::string             mEdgeIdCol;
+    std::string             mSourceCol;
+    std::string             mTargetCol;
+    std::string             mEdgeGeomCol;
+    std::string             mVertexTable;
+    std::string             mVertexIdCol;
+    std::string             mVertexGeomCol;
 
 // CONSTANTS
 };

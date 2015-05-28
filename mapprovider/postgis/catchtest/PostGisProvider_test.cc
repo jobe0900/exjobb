@@ -191,8 +191,7 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 	{
 
 		// ===================================================================
-		GIVEN ("a valid database configuration structure and "
-				"name to existing topology")
+		GIVEN ("a valid database configuration to a PostGisProvider ")
 		{
 		    std::string config_file("mapprovider/postgis"
 		        "/catchtest/mikh0522-testsettings.json");
@@ -207,9 +206,35 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 			{
 			    Restrictions restrictions;
 
+			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 				THEN ("we should not get an exception")
 				{
-					REQUIRE_NOTHROW (pgp.getRestrictions(restrictions););
+					REQUIRE_NOTHROW (pgp.getRestrictions(restrictions));
+				}
+			}
+
+			WHEN ("trying to fetch restrictions")
+			{
+			    Restrictions restrictions;
+			    pgp.getRestrictions(restrictions);
+			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+				THEN ("we should get a map of vehicle property restrictions")
+				{
+
+				    const auto& vpr_map =
+				        restrictions.edgeRestrictions().vehicleProperties();
+				    if(vpr_map.size() > 0)
+				    {
+				        INFO ("# VehiclePropertyRestricitons: " << vpr_map.size());
+				        INFO ("  First restriction on edge id: "
+				              << vpr_map.begin()->first);
+				        REQUIRE (true);
+				    }
+				    else
+				    {
+				        INFO ("No VehiclePropertyRestrictions.");
+				        REQUIRE (true);
+				    }
 				}
 			}
 		}

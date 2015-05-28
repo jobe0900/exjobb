@@ -160,6 +160,12 @@ EdgeRestrictions::vehicleProperties(EdgeIdType edgeId)
         static_cast<const EdgeRestrictions&>(*this).vehicleProperties(edgeId) );
 }
 
+const std::map<EdgeIdType, EdgeRestrictions::VehicleProperties>&
+EdgeRestrictions::vehicleProperties() const
+{
+    return mVehiclePropertiesMap;
+}
+
 const OsmAccess&
 EdgeRestrictions::generalAccess(EdgeIdType edgeId) const
 {
