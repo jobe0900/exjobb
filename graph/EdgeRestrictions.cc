@@ -289,6 +289,12 @@ EdgeRestrictions::turningRestrictions(EdgeIdType edgeId) const
     }
     return mTurningRestrictionsMap.find(edgeId)->second;
 }
+
+const std::set<EdgeIdType>&
+EdgeRestrictions::disusedEdges() const
+{
+    return mDisusedEdges;
+}
 //============================= INQUIRY    ===================================
 bool
 EdgeRestrictions::hasRestriction(

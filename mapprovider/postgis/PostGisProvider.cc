@@ -898,6 +898,12 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 OsmBarrier::BarrierType type = OsmBarrier::parseString(colString);
                 edgeRestr.setBarrierRestrictionForEdge(edgeId, type);
             }
+
+            colString = row[AccessQueryResult::DISUSED].as<std::string>("");
+            if(colString == "yes")
+            {
+                edgeRestr.setDisusedRestrictionForEdge(edgeId);
+            }
         }
     }
     catch (std::exception& e)

@@ -290,6 +290,24 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 				    }
 				}
 
+				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+				THEN ("we should get a set of edgeIds of disused edges")
+				{
+				    const auto& disused_set =
+				        restrictions.edgeRestrictions().disusedEdges();
+				    if(disused_set.size() > 0)
+				    {
+				        EdgeIdType edgeId = *disused_set.begin();
+				        INFO ("# Disused edges: " << disused_set.size());
+				        INFO ("  First disused edge id: " << edgeId);
+				        REQUIRE (true);
+				    }
+				    else
+				    {
+				        INFO ("No Disused edges.");
+				        REQUIRE (true);
+				    }
+				}
 			}
 		}
 	}

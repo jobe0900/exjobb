@@ -255,6 +255,12 @@ public:
      */
     const std::vector<OsmTurningRestriction>&
                         turningRestrictions(EdgeIdType edgeId) const;
+
+    /** Get all edges marked as disused.
+     * @return  The set of disused edges (ids).
+     */
+    const std::set<EdgeIdType>&
+                        disusedEdges() const;
 // INQUIRY
     /** Ask if an Edge has restriction of a certain type.
      * @param   edgeId              The edge in interest.
