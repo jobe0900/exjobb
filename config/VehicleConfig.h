@@ -29,6 +29,7 @@ struct VehicleConfig
 	double			            length;
 	double			            weight;
 	double			            width;
+	unsigned                    maxspeed;
 };
 
 // INLINE METHODS

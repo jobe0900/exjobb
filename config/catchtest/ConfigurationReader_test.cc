@@ -122,6 +122,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 				REQUIRE (r_vehicle_config.length == Approx(4.5));
 				REQUIRE (r_vehicle_config.weight == Approx(2.0));
 				REQUIRE (r_vehicle_config.width == Approx(1.9));
+				REQUIRE (r_vehicle_config.maxspeed == 200);
 			}
 		}
 	}

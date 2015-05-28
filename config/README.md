@@ -124,4 +124,5 @@ Configuration about the vehicle to route through the topology. Information might
     - *length* of vehicle in meters.
     - *width* of vehicle in meters.
     - *weight* of vehicle in tons.
+    - *maxspeed* of vehicle in km/h.
     

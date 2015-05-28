@@ -137,6 +137,7 @@ ConfigurationReader::fillVehicleConfiguration(VehicleConfig& rVehicleConfig) con
         rVehicleConfig.length = mPropertyTree.get<double>(prefix + "length");
         rVehicleConfig.weight = mPropertyTree.get<double>(prefix + "weight");
         rVehicleConfig.width = mPropertyTree.get<double>(prefix + "width");
+        rVehicleConfig.maxspeed = mPropertyTree.get<double>(prefix + "maxspeed");
     }
     catch (ConfigurationException& e)
     {
