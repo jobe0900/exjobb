@@ -903,6 +903,72 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 );
             }
 
+            colString = row[AccessQueryResult::GOODS].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::GOODS,
+                    type
+                );
+            }
+
+            colString = row[AccessQueryResult::HGV].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::HGV,
+                    type
+                );
+            }
+
+            colString = row[AccessQueryResult::PSV].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::PSV,
+                    type
+                );
+            }
+
+            colString = row[AccessQueryResult::LHV].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::LHV,
+                    type
+                );
+            }
+
+            colString = row[AccessQueryResult::MOTOR_VEHICLE].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::MOTOR_VEHICLE,
+                    type
+                );
+            }
+
+            colString = row[AccessQueryResult::VEHICLE].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::VEHICLE,
+                    type
+                );
+            }
+
             colString = row[AccessQueryResult::BARRIER].as<std::string>("");
             if(colString != "")
             {
