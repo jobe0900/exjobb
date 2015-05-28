@@ -52,11 +52,12 @@ struct VehiclePropertiesQueryResult
     enum Columns
     {
         EDGE_ID,
+        ELEMENT_ID,
         MAXHEIGHT,
         MAXLENGTH,
-        MAXSPEED,
         MAXWEIGHT,
         MAXWIDTH,
+        MAXSPEED,
         MINSPEED,
 
     };

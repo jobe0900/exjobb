@@ -714,13 +714,13 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
             "           osm.* "
             "FROM      " + mEdgeTable +
             " JOIN ( "
-            "   SELECT  osm_id, element_id "
+            "   SELECT  element_id "
             //-- vehicle property restrictions
             "           , maxheight "
             "           , maxlength "
-            "           , maxspeed "
             "           , maxweight "
             "           , maxwidth "
+            "           , maxspeed "
             "           , minspeed "
             //-- access restrictions
 //            "           , access "

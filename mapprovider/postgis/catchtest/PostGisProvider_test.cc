@@ -225,9 +225,18 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 				        restrictions.edgeRestrictions().vehicleProperties();
 				    if(vpr_map.size() > 0)
 				    {
+				        const EdgeRestrictions::VehicleProperties& vp =
+				            vpr_map.begin()->second;
 				        INFO ("# VehiclePropertyRestricitons: " << vpr_map.size());
 				        INFO ("  First restriction on edge id: "
-				              << vpr_map.begin()->first);
+				              << vpr_map.begin()->first
+				              << "\n   with maxspeed: " << vp.maxSpeed
+				              << ", minspeed: " << vp.minSpeed
+				              << ", maxheight: " << vp.maxHeight
+				              << ", maxlength: " << vp.maxLength
+				              << ", maxweight: " << vp.maxWeight
+				              << ", maxwidth: " << vp.maxWidth
+				              );
 				        REQUIRE (true);
 				    }
 				    else
