@@ -308,6 +308,25 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 				        REQUIRE (true);
 				    }
 				}
+
+				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+				THEN ("we should get a set of edgeIds of 'noexit' edges")
+				{
+				    const auto& noexit_set =
+				        restrictions.edgeRestrictions().noExitEdges();
+				    if(noexit_set.size() > 0)
+				    {
+				        EdgeIdType edgeId = *noexit_set.begin();
+				        INFO ("# 'Noexit' edges: " << noexit_set.size());
+				        INFO ("  First 'noexit' edge id: " << edgeId);
+				        REQUIRE (true);
+				    }
+				    else
+				    {
+				        INFO ("No 'noexit' edges.");
+				        REQUIRE (true);
+				    }
+				}
 			}
 		}
 	}

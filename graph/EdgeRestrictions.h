@@ -261,6 +261,12 @@ public:
      */
     const std::set<EdgeIdType>&
                         disusedEdges() const;
+
+    /** Get all edges marked as 'noexit'.
+     * @return  The set of 'noexit' edges (ids).
+     */
+    const std::set<EdgeIdType>&
+                        noExitEdges() const;
 // INQUIRY
     /** Ask if an Edge has restriction of a certain type.
      * @param   edgeId              The edge in interest.

@@ -295,6 +295,12 @@ EdgeRestrictions::disusedEdges() const
 {
     return mDisusedEdges;
 }
+
+const std::set<EdgeIdType>&
+EdgeRestrictions::noExitEdges() const
+{
+    return mNoExitEdges;
+}
 //============================= INQUIRY    ===================================
 bool
 EdgeRestrictions::hasRestriction(

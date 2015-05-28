@@ -904,6 +904,12 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
             {
                 edgeRestr.setDisusedRestrictionForEdge(edgeId);
             }
+
+            colString = row[AccessQueryResult::NOEXIT].as<std::string>("");
+            if(colString == "yes")
+            {
+                edgeRestr.setNoExitRestrictionForEdge(edgeId);
+            }
         }
     }
     catch (std::exception& e)
