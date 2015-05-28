@@ -371,6 +371,21 @@ SCENARIO ("Adding and fetching barrier restrictions", "[restrictions][barrier]")
                     RestrictionsException&);
             }
         }
+
+        //....................................................................
+        WHEN ("adding restriction as type as not as object")
+        {
+            EdgeIdType id = 4;
+
+            r.setBarrierRestrictionForEdge(id, OsmBarrier::BOLLARD);
+
+            // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+            THEN ("we should get be able to get the property and check")
+            {
+                REQUIRE (r.barrier(id).toString() ==
+                    OsmBarrier::toString(OsmBarrier::BOLLARD));
+            }
+        }
     }
 }
 

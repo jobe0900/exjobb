@@ -144,11 +144,19 @@ public:
 
     /** Set barrier restricting this edge.
      * @param   edgeId         The id of the edge to apply restrictions to.
-     * @param   barrier        The barrier type to set.
+     * @param   barrier        The barrier to set.
      */
     void                setBarrierRestrictionForEdge(
                             EdgeIdType edgeId,
                             OsmBarrier barrier);
+
+    /** Set barrier restricting this edge.
+     * @param   edgeId         The id of the edge to apply restrictions to.
+     * @param   barrierType    The barrier type to set.
+     */
+    void                setBarrierRestrictionForEdge(
+                            EdgeIdType              edgeId,
+                            OsmBarrier::BarrierType barrierType);
 
     /** Add turning restrictions from this edge.
      * Actually just adds the restriction without checking if there already is

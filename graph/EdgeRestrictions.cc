@@ -103,6 +103,17 @@ EdgeRestrictions::setBarrierRestrictionForEdge(
     mBarrierMap.insert({edgeId, barrier});
 }
 
+void
+EdgeRestrictions::setBarrierRestrictionForEdge(
+    EdgeIdType              edgeId,
+    OsmBarrier::BarrierType barrierType)
+{
+    if(hasBarrierRestriction(edgeId))
+    {
+        mBarrierMap.erase(edgeId);
+    }
+    mBarrierMap.insert({edgeId, OsmBarrier(barrierType)});
+}
 
 void
 EdgeRestrictions::addTurningRestrictionForEdge(
