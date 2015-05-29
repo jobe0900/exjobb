@@ -93,7 +93,7 @@ BEGIN\
          LOOP\
             IF restrictionRecord.members[ix+1] LIKE 'from' THEN\
                fromOsmId := trim(leading 'wn' from restrictionRecord.members[ix])::bigint;\
-               nrFrom := nrFrom + 1;\
+        pqxx::nontransaction non_trans(mConnection);       nrFrom := nrFrom + 1;\
         ELSIF restrictionRecord.members[ix+1] LIKE 'to' THEN \
            toOsmId := trim(leading 'wn' from restrictionRecord.members[ix])::bigint;\
            nrTo := nrTo + 1;\

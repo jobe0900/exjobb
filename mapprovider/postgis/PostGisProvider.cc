@@ -1015,8 +1015,10 @@ PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
             "SELECT *"
             "FROM turning_restrictions"
             );
+        non_trans.abort();
 
-        rResult = non_trans.exec(getTurningRestrictions);
+        pqxx::nontransaction new_trans(mConnection);
+        rResult = new_trans.exec(getTurningRestrictions);
 
         std::cerr << "Nr turning restrictions found: " << rResult.size() << std::endl;
 
