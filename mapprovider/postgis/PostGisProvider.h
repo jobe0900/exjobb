@@ -33,6 +33,7 @@
 #include "../../osm/OsmAccess.h"
 #include "../../osm/OsmHighway.h"
 #include "../../osm/OsmVehicle.h"
+#include "FindTurnRestrictionSqlQuery.h"
 
 // FORWARD REFERENCES
 //
@@ -238,11 +239,13 @@ private:
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
      * @param   rRestrictions   Store the restrictions here.
+     * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
     void    addTurningResultToEdgeRestrictions(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions);
+                Restrictions&          rRestrictions,
+                Topology&              rTopology);
 
 // ATTRIBUTES
     const DatabaseConfig&   mDbConfig;

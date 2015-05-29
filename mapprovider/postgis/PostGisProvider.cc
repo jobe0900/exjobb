@@ -689,7 +689,7 @@ PostGisProvider::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
 void
 PostGisProvider::getEdgeRestrictions(
     Restrictions& rRestrictions,
-    Topology& topology)
+    Topology&     rTopology)
 {
     pqxx::result result;
     getVehiclePropertyEdgeRestrictions(result);
@@ -701,6 +701,7 @@ PostGisProvider::getEdgeRestrictions(
 
     result.clear();
     getTurningRestrictions(result);
+    addTurningResultToEdgeRestrictions(result, rRestrictions, rTopology);
 }
 
 void
@@ -1005,12 +1006,20 @@ PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
         // NON-TRANSACTION START
         pqxx::nontransaction non_trans(mConnection);
 
-        std::string sql(
-            "SELECT    members "
-            "FROM      planet_osm_rels "
-            "WHERE     (SELECT 'restriction' = ANY (tags)); "
-        );
-        rResult = non_trans.exec(sql);
+        FindTurnRestrictionSqlQuery::findOsmTurningRestrictions(
+            non_trans,
+            mTableName,
+            mEdgeTable);
+
+        std::string getTurningRestrictions(
+            "SELECT *"
+            "FROM turning_restrictions"
+            );
+
+        rResult = non_trans.exec(getTurningRestrictions);
+
+        std::cerr << "Nr turning restrictions found: " << rResult.size() << std::endl;
+
     }
     catch(const std::exception& e)
     {
@@ -1023,22 +1032,25 @@ PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
 void
 PostGisProvider::addTurningResultToEdgeRestrictions(
     const pqxx::result&     rResult,
-    Restrictions&           rRestrictions)
+    Restrictions&           rRestrictions,
+    Topology&               rTopology)
 {
-//    try
-//    {
-//        EdgeRestrictions& edgeRestr = rRestrictions.edgeRestrictions();
-//
-//        for(const pqxx::tuple& row : rResult)
-//        {
+    try
+    {
+        EdgeRestrictions& edgeRestr = rRestrictions.edgeRestrictions();
+
+        for(const pqxx::tuple& row : rResult)
+        {
+            std::cerr << "Restriction edges " <<
+                row[TurningRestrictionsColumns::EDGE_IDS].as<std::string>() << std::endl;
 //            OsmTurningRestriction turn = parseTurningRestrictionMembers(row);
-//        }
-//    }
-//    catch (std::exception& e)
-//    {
-//        throw MapProviderException(
-//            std::string("PostGisProvider:addTurningResultToEdge..: ") + e.what());
-//    }
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:addTurningResultToEdge..: ") + e.what());
+    }
 }
 
 
