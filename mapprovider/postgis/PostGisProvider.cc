@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <sstream>
+#include <regex>
 
 
 
@@ -117,9 +118,11 @@ PostGisProvider::getTopology(Topology& rTopology)
 }
 
 void
-PostGisProvider::getRestrictions(Restrictions& rRestrictions)
+PostGisProvider::getRestrictions(
+    Restrictions& rRestrictions,
+    Topology& rTopology)
 {
-    getEdgeRestrictions(rRestrictions);
+    getEdgeRestrictions(rRestrictions, rTopology);
 //TODO    addEdgeRestricionsResultToRestricions(edge_result, rRestrictions);
 }
 
@@ -684,7 +687,9 @@ PostGisProvider::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
 
 // Restrictions --------------------------------------------------------------
 void
-PostGisProvider::getEdgeRestrictions(Restrictions& rRestrictions)
+PostGisProvider::getEdgeRestrictions(
+    Restrictions& rRestrictions,
+    Topology& topology)
 {
     pqxx::result result;
     getVehiclePropertyEdgeRestrictions(result);
@@ -693,6 +698,9 @@ PostGisProvider::getEdgeRestrictions(Restrictions& rRestrictions)
     result.clear();
     getAccessRestrictions(result);
     addAccessResultToEdgeRestrictions(result, rRestrictions);
+
+    result.clear();
+    getTurningRestrictions(result);
 }
 
 void
@@ -723,19 +731,6 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
             "           , maxwidth "
             "           , maxspeed "
             "           , minspeed "
-            //-- access restrictions
-//            "           , access "
-//            "           , barrier "
-//            "           , disused "
-//            "           , noexit "
-//            "           , motorcar "
-//            "           , goods "
-//            "           , hgv "
-//            "           , psv "
-//            "           , lhv "
-//            "           , motor_vehicle "
-//            "           , vehicle "
-//            "           , restriction "
             "   FROM    " + mSchemaName + ".relation "
             "   JOIN    " + mTableName +
             "   ON      topogeo_id = (topo_geom).id "
@@ -810,63 +805,63 @@ void
 PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
 {
     try
-        {
-            if(!mConnection.is_open())
-            {
-                throw MapProviderException(
-                    std::string("Could not open ") + mDbConfig.database);
-            }
-
-            // NON-TRANSACTION START
-            pqxx::nontransaction non_trans(mConnection);
-
-            std::string sql(
-                "SELECT     edge_id, "
-                //-- osm data about original edge
-                "           osm.* "
-                "FROM      " + mEdgeTable +
-                " JOIN ( "
-                "   SELECT  element_id "
-                //-- access restrictions
-                "           , access "
-                "           , barrier "
-                "           , disused "
-                "           , noexit "
-                "           , motorcar "
-                "           , goods "
-                "           , hgv "
-                "           , psv "
-                "           , lhv "
-                "           , motor_vehicle "
-                "           , vehicle "
-//                "           , restriction "
-                "   FROM    " + mSchemaName + ".relation "
-                "   JOIN    " + mTableName +
-                "   ON      topogeo_id = (topo_geom).id "
-                "   WHERE   highway in " + getInterestingHighwayColumns() +
-                "   AND     (access         IS NOT NULL "
-                "   OR       barrier        IS NOT NULL "
-                "   OR       disused        IS NOT NULL "
-                "   OR       noexit         IS NOT NULL "
-                "   OR       motorcar       IS NOT NULL "
-                "   OR       goods          IS NOT NULL"
-                "   OR       hgv            IS NOT NULL"
-                "   OR       psv            IS NOT NULL"
-                "   OR       lhv            IS NOT NULL"
-                "   OR       motor_vehicle  IS NOT NULL"
-                "   OR       vehicle        IS NOT NULL)"
-                ") AS osm "
-                "ON edge_id = element_id "
-                "ORDER BY edge_id ASC;"
-            );
-            rResult = non_trans.exec(sql);
-        }
-        catch(const std::exception& e)
+    {
+        if(!mConnection.is_open())
         {
             throw MapProviderException(
-                std::string("PostGisProvider:getAccessRestrictions: ")
-                            + e.what());
+                std::string("Could not open ") + mDbConfig.database);
         }
+
+        // NON-TRANSACTION START
+        pqxx::nontransaction non_trans(mConnection);
+
+        std::string sql(
+            "SELECT     edge_id, "
+            //-- osm data about original edge
+            "           osm.* "
+            "FROM      " + mEdgeTable +
+            " JOIN ( "
+            "   SELECT  element_id "
+            //-- access restrictions
+            "           , access "
+            "           , barrier "
+            "           , disused "
+            "           , noexit "
+            "           , motorcar "
+            "           , goods "
+            "           , hgv "
+            "           , psv "
+            "           , lhv "
+            "           , motor_vehicle "
+            "           , vehicle "
+            //                "           , restriction "
+            "   FROM    " + mSchemaName + ".relation "
+            "   JOIN    " + mTableName +
+            "   ON      topogeo_id = (topo_geom).id "
+            "   WHERE   highway in " + getInterestingHighwayColumns() +
+            "   AND     (access         IS NOT NULL "
+            "   OR       barrier        IS NOT NULL "
+            "   OR       disused        IS NOT NULL "
+            "   OR       noexit         IS NOT NULL "
+            "   OR       motorcar       IS NOT NULL "
+            "   OR       goods          IS NOT NULL"
+            "   OR       hgv            IS NOT NULL"
+            "   OR       psv            IS NOT NULL"
+            "   OR       lhv            IS NOT NULL"
+            "   OR       motor_vehicle  IS NOT NULL"
+            "   OR       vehicle        IS NOT NULL)"
+            ") AS osm "
+            "ON edge_id = element_id "
+            "ORDER BY edge_id ASC;"
+        );
+        rResult = non_trans.exec(sql);
+    }
+    catch(const std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:getAccessRestrictions: ")
+        + e.what());
+    }
 }
 
 void
@@ -995,3 +990,55 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
             std::string("PostGisProvider:addAccessResultToEdge..: ") + e.what());
     }
 }
+
+void
+PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
+{
+    try
+    {
+        if(!mConnection.is_open())
+        {
+            throw MapProviderException(
+                std::string("Could not open ") + mDbConfig.database);
+        }
+
+        // NON-TRANSACTION START
+        pqxx::nontransaction non_trans(mConnection);
+
+        std::string sql(
+            "SELECT    members "
+            "FROM      planet_osm_rels "
+            "WHERE     (SELECT 'restriction' = ANY (tags)); "
+        );
+        rResult = non_trans.exec(sql);
+    }
+    catch(const std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:getAccessRestrictions: ")
+        + e.what());
+    }
+}
+
+void
+PostGisProvider::addTurningResultToEdgeRestrictions(
+    const pqxx::result&     rResult,
+    Restrictions&           rRestrictions)
+{
+//    try
+//    {
+//        EdgeRestrictions& edgeRestr = rRestrictions.edgeRestrictions();
+//
+//        for(const pqxx::tuple& row : rResult)
+//        {
+//            OsmTurningRestriction turn = parseTurningRestrictionMembers(row);
+//        }
+//    }
+//    catch (std::exception& e)
+//    {
+//        throw MapProviderException(
+//            std::string("PostGisProvider:addTurningResultToEdge..: ") + e.what());
+//    }
+}
+
+

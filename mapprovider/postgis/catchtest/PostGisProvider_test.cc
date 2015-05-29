@@ -9,6 +9,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <vector>
 
 #include "../../../catchtest/catch.hpp"
@@ -200,6 +201,8 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 		    config_reader.fillConfiguration(config);
 
 			PostGisProvider pgp(config);
+			Topology topology;
+			pgp.getTopology(topology);
 
 			// ...............................................................
 			WHEN ("we try to fetch Restrictions")
@@ -209,14 +212,15 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 				THEN ("we should not get an exception")
 				{
-					REQUIRE_NOTHROW (pgp.getRestrictions(restrictions));
+					REQUIRE_NOTHROW (
+					    pgp.getRestrictions(restrictions, topology));
 				}
 			}
 
 			WHEN ("trying to fetch restrictions")
 			{
 			    Restrictions restrictions;
-			    pgp.getRestrictions(restrictions);
+			    pgp.getRestrictions(restrictions, topology);
 			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 				THEN ("we should get a map of vehicle property restrictions")
 				{

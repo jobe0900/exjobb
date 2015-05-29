@@ -70,7 +70,9 @@ public:
 // OPERATIONS
     virtual void    getTopology(Topology& rTopology);
 
-    virtual void    getRestrictions(Restrictions& rRestrictions);
+    virtual void    getRestrictions(
+        Restrictions&  rRestrictions,
+        Topology&      rTopology);
 
 // INQUIRY
 
@@ -93,38 +95,6 @@ private:
     void    addEdgeResultToTopology(const pqxx::result& rEdgeResult,
                                     Topology& rTopology);
 
-//    /** Check if edge has restrictions on properties of the vehicle.
-//     * @param   rRow    Row with data for an Edge.
-//     * @return  True if vehicle can pass, false if not.
-//     */
-//    bool    validDimensionRestrictions(const pqxx::tuple& rRow) const;
-//
-//    /** Check if access is allowed
-//     * @param   rRow    Row with data for an Edge.
-//     * @return  True if we are allowed to travel here.
-//     */
-//    bool    accessAllowed(const pqxx::tuple& rRow) const;
-//
-//    /** Check if there are generic access restriction on edge.
-//     * Permissive checking, only explicit prohibitions are reported as false.
-//     * @return  If access is (kind of) allowed or not, or not specified
-//     */
-//    OsmAccess::AccessType
-//        genericAccess(const pqxx::tuple& rRow) const;
-//
-//    /** Check if there are restrictions for this vehicle type to travel edge.
-//     * @param   rRow    Row with data for an Edge.
-//     * @return  AccessType for our type of vehicle.
-//     */
-//    OsmAccess::AccessType
-//            vehicleTypeAccessType(const pqxx::tuple& rRow) const;
-//
-//    /** Translate a restriction string to an AccessType
-//     * @param   rRestrictionString  The string to translate.
-//     * @return  The corresponding AccessType.
-//     */
-//    OsmAccess::AccessType
-//            accessTypeFromRestrictionString(const std::string& rRestrictionStr) const;
 
     /** Helper to add basic data from db to Edge.
      * @param   rRow        Row with data for an Edge.
@@ -211,9 +181,12 @@ private:
     // Restriction helpers ---------------------------------------------------
     /** Fetch Restrictions for edges.
      * @param   rRestrictions   Store restrictions in here.
+     * @param   rTopology       Might get modified from turn restrictions.
      * @throw   MapProviderException
      */
-    void    getEdgeRestrictions(Restrictions& rRestrictions);
+    void    getEdgeRestrictions(
+        Restrictions& rRestrictions,
+        Topology& rTopology);
 
     /** Get VehicleProperty restrictions
      * Helper for 'getEdgeRestrictions()'
@@ -246,6 +219,28 @@ private:
      * @throw   MapProviderException
      */
     void    addAccessResultToEdgeRestrictions(
+                const pqxx::result&    rResult,
+                Restrictions&          rRestrictions);
+
+    /** Get Turning restrictions for traveling from edge.
+     * Helper for 'getEdgeRestrictions()'.
+     * Turning restrictions are relations and not easily handled with
+     * osm2pgsql. Therefore we must use 'slim' mode when converting OSM to
+     * PostGis, and use the table 'planet_osm_rels' and column 'tags' to look
+     * for a 'restriction'. If we find one we have to parse the 'members'
+     * column ourselves.
+     * @param   rResult     Store the result of query in here.
+     * @throw   MapProviderException
+     */
+    void    getTurningRestrictions(pqxx::result& rResult);
+
+    /** Add the result of the query for Turning to restrictions.
+     * Helper for 'getEdgeRestrictions()'
+     * @param   rResult         The results of the query
+     * @param   rRestrictions   Store the restrictions here.
+     * @throw   MapProviderException
+     */
+    void    addTurningResultToEdgeRestrictions(
                 const pqxx::result&    rResult,
                 Restrictions&          rRestrictions);
 
