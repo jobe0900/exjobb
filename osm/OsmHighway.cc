@@ -56,6 +56,25 @@ OsmHighway::typeStrings()
 {
     return OsmHighway::sTypeStrings;
 }
+
+// static
+std::string
+OsmHighway::typesAsCommaSeparatedString()
+{
+    std::string cols;
+    std::stringstream ss;
+    ss << "(";
+    for(size_t i = 0; i < sTypeStrings.size(); ++i)
+    {
+        ss << "'" << sTypeStrings[i] << "'";
+        if(i < sTypeStrings.size() - 1)
+        {
+            ss << ", ";
+        }
+    }
+    ss << ")";
+    return ss.str();
+}
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

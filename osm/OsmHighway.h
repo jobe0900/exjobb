@@ -14,6 +14,7 @@
 // SYSTEM INCLUDES
 //
 #include <string>
+#include <sstream>
 #include <vector>
 
 // PROJECT INCLUDES
@@ -92,7 +93,15 @@ public:
     std::string         toString() const;
 
 // ACCESS
+    /**
+     * @return A vector of all types as strings.
+     */
     static const std::vector<std::string>& typeStrings();
+
+    /** Return "(motorway, trunk....)".
+     * @return A string of all types, comma separated, with parentheses round.
+     */
+    static std::string typesAsCommaSeparatedString();
 
 // INQUIRY
 protected:
