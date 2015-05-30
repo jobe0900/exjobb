@@ -7,6 +7,7 @@
 
 #include "../postgis/PostGisProvider.h"  // class implemented
 
+#include <fstream>
 #include <iostream>
 #include <sstream>
 #include <regex>
@@ -246,7 +247,7 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 "   FROM    " + mSchemaName + ".relation "
 "   JOIN    " + mTableName +
 "   ON      topogeo_id = (topo_geom).id "
-"   WHERE   highway in " + getInterestingHighwayColumns() +
+"   WHERE   highway in " + OsmHighway::typesAsCommaSeparatedString() +
 ") AS osm "
 "ON edge_id = element_id "
 "ORDER BY edge_id ASC;"
@@ -466,24 +467,24 @@ PostGisProvider::addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
     }
 }
 
-std::string
-PostGisProvider::getInterestingHighwayColumns() const
-{
-    std::string cols;
-    std::stringstream ss;
-    const std::vector<std::string>& typeStrings(OsmHighway::typeStrings());
-    ss << "(";
-    for(size_t i = 0; i < typeStrings.size(); ++i)
-    {
-        ss << "'" << typeStrings[i] << "'";
-        if(i < typeStrings.size() - 1)
-        {
-            ss << ", ";
-        }
-    }
-    ss << ")";
-    return ss.str();
-}
+//std::string
+//PostGisProvider::getInterestingHighwayColumns() const
+//{
+//    std::string cols;
+//    std::stringstream ss;
+//    const std::vector<std::string>& typeStrings(OsmHighway::typeStrings());
+//    ss << "(";
+//    for(size_t i = 0; i < typeStrings.size(); ++i)
+//    {
+//        ss << "'" << typeStrings[i] << "'";
+//        if(i < typeStrings.size() - 1)
+//        {
+//            ss << ", ";
+//        }
+//    }
+//    ss << ")";
+//    return ss.str();
+//}
 
 void
 PostGisProvider::buildTopology(int srid, double tolerance)
@@ -716,37 +717,14 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
         }
 
         // NON-TRANSACTION START
-        pqxx::nontransaction non_trans(mConnection);
-
-        std::string sql(
-            "SELECT     edge_id, "
-            //-- osm data about original edge
-            "           osm.* "
-            "FROM      " + mEdgeTable +
-            " JOIN ( "
-            "   SELECT  element_id "
-            //-- vehicle property restrictions
-            "           , maxheight "
-            "           , maxlength "
-            "           , maxweight "
-            "           , maxwidth "
-            "           , maxspeed "
-            "           , minspeed "
-            "   FROM    " + mSchemaName + ".relation "
-            "   JOIN    " + mTableName +
-            "   ON      topogeo_id = (topo_geom).id "
-            "   WHERE   highway in " + getInterestingHighwayColumns() +
-            "   AND     (maxheight IS NOT NULL "
-            "   OR       maxlength IS NOT NULL "
-            "   OR       maxweight IS NOT NULL "
-            "   OR       maxwidth  IS NOT NULL "
-            "   OR       maxspeed  IS NOT NULL "
-            "   OR       minspeed  IS NOT NULL)"
-            ") AS osm "
-            "ON edge_id = element_id "
-            "ORDER BY edge_id ASC;"
-        );
-        rResult = non_trans.exec(sql);
+        pqxx::nontransaction transaction(mConnection);
+        rResult =
+            PostGisRestrictionQueries::getVehiclePropertyEdgeRestrictions(
+                transaction,
+                mEdgeTable,
+                mTableName,
+                mSchemaName
+            );
     }
     catch(const std::exception& e)
     {
@@ -839,7 +817,7 @@ PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
             "   FROM    " + mSchemaName + ".relation "
             "   JOIN    " + mTableName +
             "   ON      topogeo_id = (topo_geom).id "
-            "   WHERE   highway in " + getInterestingHighwayColumns() +
+            "   WHERE   highway in " + OsmHighway::typesAsCommaSeparatedString() +
             "   AND     (access         IS NOT NULL "
             "   OR       barrier        IS NOT NULL "
             "   OR       disused        IS NOT NULL "
@@ -1003,30 +981,28 @@ PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
                 std::string("Could not open ") + mDbConfig.database);
         }
 
-        // NON-TRANSACTION START
-        pqxx::nontransaction non_trans(mConnection);
+        // TRANSACTION START
+        pqxx::nontransaction transaction(mConnection);
 
-        FindTurnRestrictionSqlQuery::findOsmTurningRestrictions(
-            non_trans,
-            mTableName,
-            mEdgeTable);
-
-        std::string getTurningRestrictions(
-            "SELECT *"
-            "FROM turning_restrictions"
-            );
-        non_trans.abort();
-
-        pqxx::nontransaction new_trans(mConnection);
-        rResult = new_trans.exec(getTurningRestrictions);
-
-        std::cerr << "Nr turning restrictions found: " << rResult.size() << std::endl;
-
+        try
+        {
+            PostGisRestrictionQueries::dropCreateTurningRestrictionsTable(transaction);
+            PostGisRestrictionQueries::identifyTurningRestrictions(
+                transaction,
+                mTableName,
+                mEdgeTable);
+            rResult = PostGisRestrictionQueries::getTurningRestrictions(transaction);
+        }
+        catch (const std::exception& e)
+        {
+            transaction.abort();
+            throw e;
+        }
     }
     catch(const std::exception& e)
     {
         throw MapProviderException(
-            std::string("PostGisProvider:getAccessRestrictions: ")
+            std::string("PostGisProvider:getTurningRestrictions: ")
         + e.what());
     }
 }
@@ -1039,12 +1015,13 @@ PostGisProvider::addTurningResultToEdgeRestrictions(
 {
     try
     {
-        EdgeRestrictions& edgeRestr = rRestrictions.edgeRestrictions();
+//        EdgeRestrictions& edgeRestr = rRestrictions.edgeRestrictions();
 
         for(const pqxx::tuple& row : rResult)
         {
             std::cerr << "Restriction edges " <<
-                row[TurningRestrictionsColumns::EDGE_IDS].as<std::string>() << std::endl;
+                row[PostGisRestrictionQueries::TurningRestrictionsColumns::EDGE_IDS]
+                    .as<std::string>() << std::endl;
 //            OsmTurningRestriction turn = parseTurningRestrictionMembers(row);
         }
     }
@@ -1053,6 +1030,15 @@ PostGisProvider::addTurningResultToEdgeRestrictions(
         throw MapProviderException(
             std::string("PostGisProvider:addTurningResultToEdge..: ") + e.what());
     }
+}
+
+std::string
+PostGisProvider::getSqlFileAsString(const std::string& filename) const
+{
+    std::ifstream ifs(filename);
+    std::stringstream ss;
+    ss << ifs.rdbuf();
+    return ss.str();
 }
 
 

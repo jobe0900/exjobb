@@ -33,7 +33,7 @@
 #include "../../osm/OsmAccess.h"
 #include "../../osm/OsmHighway.h"
 #include "../../osm/OsmVehicle.h"
-#include "FindTurnRestrictionSqlQuery.h"
+#include "PostGisRestrictionQueries.h"
 
 // FORWARD REFERENCES
 //
@@ -246,6 +246,9 @@ private:
                 const pqxx::result&    rResult,
                 Restrictions&          rRestrictions,
                 Topology&              rTopology);
+
+    std::string
+            getSqlFileAsString(const std::string& filename) const;
 
 // ATTRIBUTES
     const DatabaseConfig&   mDbConfig;
