@@ -105,6 +105,13 @@ void
 Edge::setOsmId(OsmIdType osmId)
 { mOsmId = osmId; }
 
+//static
+EdgeIdType
+Edge::parse(const std::string& idStr)
+{
+    return static_cast<EdgeIdType>(std::stoul(idStr));
+}
+
 //============================= ACESS      ===================================
 EdgeIdType
 Edge::id() const

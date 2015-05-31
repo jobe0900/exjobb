@@ -10,6 +10,7 @@
 
 // SYSTEM INCLUDES
 //
+
 #include <limits>
 
 // PROJECT INCLUDES
@@ -81,6 +82,8 @@ public:
         void print(std::ostream& os) const;
     };
 
+    static const EdgeIdType MAX_ID {std::numeric_limits<EdgeIdType>::max()};
+
 // LIFECYCLE
     /** Constructor.
      */
@@ -140,6 +143,14 @@ public:
     void              setRoadData(RoadData geomData);
 
     void              setOsmId(OsmIdType osmId);
+
+    /** Parse a string into an EdgeIdType.
+     *  @param  idString    Thestring representing the id.
+     *  @return The corresponding edge id.
+     *  @throw  std::invalid_argument
+     *  @throw  std::out_of_range
+     */
+    static EdgeIdType parse(const std::string& idStr);
 
 // ACCESSORS
     /**
