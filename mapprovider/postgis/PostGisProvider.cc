@@ -467,25 +467,6 @@ PostGisProvider::addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
     }
 }
 
-//std::string
-//PostGisProvider::getInterestingHighwayColumns() const
-//{
-//    std::string cols;
-//    std::stringstream ss;
-//    const std::vector<std::string>& typeStrings(OsmHighway::typeStrings());
-//    ss << "(";
-//    for(size_t i = 0; i < typeStrings.size(); ++i)
-//    {
-//        ss << "'" << typeStrings[i] << "'";
-//        if(i < typeStrings.size() - 1)
-//        {
-//            ss << ", ";
-//        }
-//    }
-//    ss << ")";
-//    return ss.str();
-//}
-
 void
 PostGisProvider::buildTopology(int srid, double tolerance)
 {
@@ -800,47 +781,6 @@ PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
                 mEdgeTable,
                 mTableName,
                 mSchemaName);
-
-//        std::string sql(
-//            "SELECT     edge_id, "
-//            //-- osm data about original edge
-//            "           osm.* "
-//            "FROM      " + mEdgeTable +
-//            " JOIN ( "
-//            "   SELECT  element_id "
-//            //-- access restrictions
-//            "           , access "
-//            "           , barrier "
-//            "           , disused "
-//            "           , noexit "
-//            "           , motorcar "
-//            "           , goods "
-//            "           , hgv "
-//            "           , psv "
-//            "           , lhv "
-//            "           , motor_vehicle "
-//            "           , vehicle "
-//            //                "           , restriction "
-//            "   FROM    " + mSchemaName + ".relation "
-//            "   JOIN    " + mTableName +
-//            "   ON      topogeo_id = (topo_geom).id "
-//            "   WHERE   highway in " + OsmHighway::typesAsCommaSeparatedString() +
-//            "   AND     (access         IS NOT NULL "
-//            "   OR       barrier        IS NOT NULL "
-//            "   OR       disused        IS NOT NULL "
-//            "   OR       noexit         IS NOT NULL "
-//            "   OR       motorcar       IS NOT NULL "
-//            "   OR       goods          IS NOT NULL"
-//            "   OR       hgv            IS NOT NULL"
-//            "   OR       psv            IS NOT NULL"
-//            "   OR       lhv            IS NOT NULL"
-//            "   OR       motor_vehicle  IS NOT NULL"
-//            "   OR       vehicle        IS NOT NULL)"
-//            ") AS osm "
-//            "ON edge_id = element_id "
-//            "ORDER BY edge_id ASC;"
-//        );
-//        rResult = non_trans.exec(sql);
     }
     catch(const std::exception& e)
     {

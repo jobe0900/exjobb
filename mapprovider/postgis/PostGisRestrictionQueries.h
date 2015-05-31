@@ -1,8 +1,8 @@
-/*
- * PostGisRestrictionQueries.h
+/**  Data structure for edges in Topology.
  *
- *  Created on: 30 maj 2015
- *      Author: jonas
+ * #include "PostGisRestrictionQueries.h"
+ *
+ * @author Jonas Bergman
  */
 
 #ifndef MAPPROVIDER_POSTGIS_POSTGISRESTRICTIONQUERIES_H_
@@ -41,33 +41,21 @@ struct PostGisRestrictionQueries
         const std::string&      rOsmEdgeTable,
         const std::string&      rSchemaName)
     {
+        std::vector<std::string> columns {
+            "maxheight",
+            "maxlength",
+            "maxweight",
+            "maxwidth",
+            "maxspeed",
+            "minspeed"
+        };
+
         return rTrans.exec(
-            "SELECT     edge_id, "
-            //-- osm data about original edge
-            "           osm.* "
-            "FROM      " + rTopoEdgeTable +
-            " JOIN ( "
-            "   SELECT  element_id "
-            //-- vehicle property restrictions
-            "           , maxheight "
-            "           , maxlength "
-            "           , maxweight "
-            "           , maxwidth "
-            "           , maxspeed "
-            "           , minspeed "
-            "   FROM    " + rSchemaName + ".relation "
-            "   JOIN    " + rOsmEdgeTable +
-            "   ON      topogeo_id = (topo_geom).id "
-            "   WHERE   highway in " + OsmHighway::typesAsCommaSeparatedString() +
-            "   AND     (maxheight IS NOT NULL "
-            "   OR       maxlength IS NOT NULL "
-            "   OR       maxweight IS NOT NULL "
-            "   OR       maxwidth  IS NOT NULL "
-            "   OR       maxspeed  IS NOT NULL "
-            "   OR       minspeed  IS NOT NULL)"
-            ") AS osm "
-            "ON edge_id = element_id "
-            "ORDER BY edge_id ASC;"
+            startOfQuery(rTopoEdgeTable) +
+            queryColumns(columns) +
+            midOfQuery(rSchemaName, rOsmEdgeTable) +
+            notNullColumns(columns) +
+            endOfQuery()
         );
     }
 
