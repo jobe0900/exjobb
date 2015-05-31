@@ -74,12 +74,12 @@ public:
      * Turning restriction via  other Edges.
      * @param   type        The type of turning restriction.
      * @param   fromEdgeId  The Edge the turn starts at.
-     * @param   viaEdgeIds  Vector with the Edges the turn travels via.
+     * @param   viaOsmIds   String with the OsmIds of roads the turn travels via.
      * @param   toEdgeId    The Edge the turn ends at.
      */
     OsmTurningRestriction(TurningRestrictionType    type,
                           EdgeIdType                fromEdgeId,
-                          std::vector<EdgeIdType>   viaEdgeIds,
+                          std::string               viaOsmIds,
                           EdgeIdType                toEdgeId);
 
     /** Copy constructor. */
@@ -128,7 +128,7 @@ public:
     /**
      * @return  The Ids of the Edges in a 'via way' relation.
      */
-    const std::vector<EdgeIdType>&   viaEdgeIds() const;
+    std::string         viaOsmIds() const;
 
     /**
      * @return  The Vertex Id of the 'via' vertex.
@@ -152,7 +152,7 @@ private:
     TurningRestrictionType                mType {NONE};
     EdgeIdType                            mFromEdgeId;
     TurningViaType                        mViaType {VIA_NODE};
-    std::vector<EdgeIdType>               mViaEdgeIds;
+    std::string                           mViaOsmIds;
     VertexIdType                          mViaVertexId;
     EdgeIdType                            mToEdgeId;
     static std::vector<std::string>       sTypeStrings;

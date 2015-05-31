@@ -18,7 +18,7 @@ SCENARIO ("OsmTurningRestriction functionality testing", "[osm][turning]")
         // -------------------------------------------------------------------
         GIVEN ("a valid string of a turning restriction type")
         {
-            std::string type_string("no_stright_on");
+            std::string type_string("no_straight_on");
 
             //................................................................
             WHEN ("parsing string to an TurningRestrictionType")
@@ -102,11 +102,11 @@ SCENARIO ("OsmTurningRestriction functionality testing", "[osm][turning]")
         }
 
         // -------------------------------------------------------------------
-        GIVEN ("a turning restriction from edge 1 via edges 2 and 3 to edge 4")
+        GIVEN ("a turning restriction from edge 1 via osm edges 20 and 30 to edge 4")
         {
             OsmTurningRestriction restr(OsmTurningRestriction::NO_RIGHT_TURN,
                 1,
-                {2,3},
+                "w20,w30",
                 4);
 
             //................................................................
@@ -119,11 +119,11 @@ SCENARIO ("OsmTurningRestriction functionality testing", "[osm][turning]")
             }
 
             //................................................................
-            WHEN ("checking if edge id 3 is part of restriction")
+            WHEN ("checking if edge id 30 is part of restriction")
             {
-                THEN ("we should receive positive answer")
+                THEN ("we should receive negative answer")
                 {
-                    REQUIRE (restr.isInRestriction(3));
+                    REQUIRE_FALSE (restr.isInRestriction(30));
                 }
             }
 

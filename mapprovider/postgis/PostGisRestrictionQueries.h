@@ -222,7 +222,7 @@ struct PostGisRestrictionQueries
         static Edge&        findEdgeMatchingOsmId(
             OsmIdType                       osmId,
             const std::vector<EdgeIdType>&  rEdgeIds,
-            const Topology&                 rTopology)
+            Topology&                 rTopology)
         {
             EdgeIdType edgeId = Edge::MAX_ID;
             for(EdgeIdType id : rEdgeIds)

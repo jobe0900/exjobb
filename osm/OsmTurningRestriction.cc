@@ -20,7 +20,7 @@ OsmTurningRestriction::OsmTurningRestriction(
     : mType(type),
       mFromEdgeId(fromEdgeId),
       mViaType(VIA_NODE),
-      mViaEdgeIds(),
+      mViaOsmIds(),
       mViaVertexId(viaVertexId),
       mToEdgeId(toEdgeId)
 {}
@@ -28,12 +28,12 @@ OsmTurningRestriction::OsmTurningRestriction(
 OsmTurningRestriction::OsmTurningRestriction(
     OsmTurningRestriction::TurningRestrictionType   type,
     EdgeIdType                                      fromEdgeId,
-    std::vector<EdgeIdType>                         viaEdgeIds,
+    std::string                                     viaOsmIds,
     EdgeIdType                                      toEdgeId)
     : mType(type),
       mFromEdgeId(fromEdgeId),
       mViaType(VIA_WAY),
-      mViaEdgeIds(viaEdgeIds),
+      mViaOsmIds(viaOsmIds),
       mViaVertexId(),
       mToEdgeId(toEdgeId)
 {}
@@ -83,12 +83,7 @@ OsmTurningRestriction::toString() const
     }
     else // via edges
     {
-        oss << ", via edges: | ";
-        for(EdgeIdType id : mViaEdgeIds)
-        {
-            oss << id << " | ";
-        }
-//        oss << "]";
+        oss << ", via edges: [" << mViaOsmIds << "]";
     }
 
     oss << ", to: " << mToEdgeId;
@@ -114,10 +109,10 @@ OsmTurningRestriction::viaType() const
     return mViaType;
 }
 
-const std::vector<EdgeIdType>&
-OsmTurningRestriction::viaEdgeIds() const
+std::string
+OsmTurningRestriction::viaOsmIds() const
 {
-    return mViaEdgeIds;
+    return mViaOsmIds;
 }
 
 VertexIdType
@@ -140,13 +135,6 @@ OsmTurningRestriction::isInRestriction(EdgeIdType edgeId) const
     {
         return true;
     }
-
-    auto it = std::find(mViaEdgeIds.begin(), mViaEdgeIds.end(), edgeId);
-    if(it != mViaEdgeIds.end())
-    {
-        return true;
-    }
-
     return false;
 }
 /////////////////////////////// PROTECTED  ///////////////////////////////////
