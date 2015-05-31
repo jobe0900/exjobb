@@ -18,6 +18,7 @@
 // PROJECT INCLUDES
 //
 #include <pqxx/pqxx>	// link with -lpqxx -lpq
+#include <boost/algorithm/string.hpp>
 
 // LOCAL INCLUDES
 //
@@ -247,8 +248,27 @@ private:
                 Restrictions&          rRestrictions,
                 Topology&              rTopology);
 
-    std::string
-            getSqlFileAsString(const std::string& filename) const;
+//    /** Parse the found turning restrictions.
+//     * @param   rRow        The row with result from the database.
+//     * @param   rTopology   The topology that needs to be queried for edges.
+//     * @return  A complete TurningRestriction
+//     * @throw   pqxx::pqxx_exception
+//     * @throw   OsmException
+//     */
+//    OsmTurningRestriction
+//            parseTurningRestrictionResultRow(
+//                const pqxx::tuple&  rRow,
+//                Topology&           rTopology);
+
+//    /** Parse the string of comma delimited ids such as
+//     * 'edge_ids' column from 'turning_restrictions'.
+//     * @param   rEdgeIds    A string of edge ids as "{123, 456, 678, 789}".
+//     * @return  a vector of the separate EdgeIds
+//     */
+//    std::vector<EdgeIdType>
+//            parseEdgeIdsString(std::string& rEdgeIds);
+//    std::string
+//            getSqlFileAsString(const std::string& filename) const;
 
 // ATTRIBUTES
     const DatabaseConfig&   mDbConfig;

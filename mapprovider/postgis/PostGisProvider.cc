@@ -969,7 +969,9 @@ PostGisProvider::addTurningResultToEdgeRestrictions(
             std::cerr << "Restriction edges " <<
                 row[PostGisRestrictionQueries::TurningRestrictionsColumns::EDGE_IDS]
                     .as<std::string>() << std::endl;
-//            OsmTurningRestriction turn = parseTurningRestrictionMembers(row);
+            OsmTurningRestriction turn =
+                PostGisRestrictionQueries::Results::
+                    parseTurningRestrictionResultRow(row, rTopology);
         }
     }
     catch (std::exception& e)
@@ -979,13 +981,40 @@ PostGisProvider::addTurningResultToEdgeRestrictions(
     }
 }
 
-std::string
-PostGisProvider::getSqlFileAsString(const std::string& filename) const
-{
-    std::ifstream ifs(filename);
-    std::stringstream ss;
-    ss << ifs.rdbuf();
-    return ss.str();
-}
+//OsmTurningRestriction
+//PostGisProvider::parseTurningRestrictionResultRow(
+//    const pqxx::tuple&    rRow,
+//    Topology&             rTopology)
+//{
+//    OsmIdType fromOsmId =
+//        rRow[PostGisRestrictionQueries::FROM_OSM_ID].as<OsmIdType>();
+//    OsmIdType toOsmid =
+//        rRow[PostGisRestrictionQueries::TO_OSM_ID].as<OsmIdType>();
+//    std::string typeString =
+//        rRow[PostGisRestrictionQueries::RESTRICTION_TYPE].as<std::string>();
+//    OsmTurningRestriction::TurningRestrictionType type =
+//        OsmTurningRestriction::parseString(typeString);
+//    std::string edgeIdsString =
+//        rRow[PostGisRestrictionQueries::EDGE_IDS].as<std::string>();
+//
+//    std::vector<EdgeIdType> edgeIds =
+//        PostGisRestrictionQueries::Results::parseEdgeIdsString(edgeIdsString);
+//
+////    VertexIdType vertex = findCommonVertex(edgeIds, rTopology);
+//
+//    // if turning restriction is via way, then the affected edge ids should only contain
+//    // the from edge, as there is no intersection with the to edge.+
+//}
+
+
+
+//std::string
+//PostGisProvider::getSqlFileAsString(const std::string& filename) const
+//{
+//    std::ifstream ifs(filename);
+//    std::stringstream ss;
+//    ss << ifs.rdbuf();
+//    return ss.str();
+//}
 
 
