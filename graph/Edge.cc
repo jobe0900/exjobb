@@ -59,7 +59,9 @@ Edge::Edge(EdgeIdType       id,
       mSource(source),
       mTarget(target),
       mGeomData(geomData),
-      mRoadData(roadData)
+      mRoadData(roadData),
+      mHasRestrictions(false),
+      mHasViaWayRestriction(false)
 { }
 
 Edge::Edge(EdgeIdType       id,
@@ -71,7 +73,9 @@ Edge::Edge(EdgeIdType       id,
       mSource(source),
       mTarget(target),
       mGeomData(),
-      mRoadData()
+      mRoadData(),
+      mHasRestrictions(false),
+      mHasViaWayRestriction(false)
 { }
 
 //============================= OPERATORS ====================================
@@ -104,6 +108,18 @@ Edge::setRoadData(Edge::RoadData roadData)
 void
 Edge::setOsmId(OsmIdType osmId)
 { mOsmId = osmId; }
+
+void
+Edge::setHasRestrictions(bool hasRestrictions)
+{
+    mHasRestrictions = hasRestrictions;
+}
+
+void
+Edge::setHasViaWayRestriction(bool hasViaWayRestriction)
+{
+    mHasViaWayRestriction = hasViaWayRestriction;
+}
 
 //static
 EdgeIdType
@@ -138,6 +154,13 @@ Edge::roadData() const
 { return mRoadData; }
 
 //============================= INQUIRY    ===================================
+bool
+Edge::hasRestrictions() const
+{ return mHasRestrictions; }
+
+bool
+Edge::hasViaWayRestriction() const
+{ return mHasViaWayRestriction; }
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////

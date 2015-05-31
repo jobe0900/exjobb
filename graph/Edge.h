@@ -129,7 +129,7 @@ public:
     /** Textual output of Edge.
      */
     friend
-    std::ostream&	operator<<(std::ostream& os, const Edge& rEdge);
+    std::ostream&	  operator<<(std::ostream& os, const Edge& rEdge);
 
 // OPERATIONS
     /** Set the Geometric data for this edge.
@@ -138,11 +138,24 @@ public:
     void              setGeomData(GeomData geomData);
 
     /** Set the Road data for this edge.
-     * @param   roadData    The RaodData to use.
+     * @param   roadData    The RoadData to use.
      */
     void              setRoadData(RoadData geomData);
 
+    /** Set the OsmId corresponding to this edge.
+     * @param   osmId   The OsmId to set.
+     */
     void              setOsmId(OsmIdType osmId);
+
+    /** Flag that there exists restrictions for this edge and they need
+     * to be taken into account when building graph.
+     */
+    void              setHasRestrictions(bool hasRestrictions = true);
+
+    /** Flag that there exists restrictions for this edge and they need
+     * to be taken into account when building graph.
+     */
+    void              setHasViaWayRestriction(bool hasViaWayRestriction = true);
 
     /** Parse a string into an EdgeIdType.
      *  @param  idString    Thestring representing the id.
@@ -184,6 +197,16 @@ public:
     const RoadData&   roadData()  const;
 
 // INQUIRY
+    /**
+     * @return  true if there exists restrictions for this edge.
+     */
+    bool              hasRestrictions() const;
+
+    /** An edge needs special attention during routing if there exists
+     * a turning restriction via other ways (edges).
+     * @return  true if there exists a turn restriction via ways.
+     */
+    bool              hasViaWayRestriction() const;
 
 private:
 // ATTRIBUTES
@@ -193,6 +216,8 @@ private:
     VertexIdType	mTarget;
     GeomData        mGeomData;
     RoadData        mRoadData;
+    bool            mHasRestrictions;
+    bool            mHasViaWayRestriction;
 
 };
 
