@@ -632,13 +632,14 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
 
         // NON-TRANSACTION START
         pqxx::nontransaction transaction(mConnection);
-        rResult =
-            RestrictionQueries::getVehiclePropertyEdgeRestrictions(
-                transaction,
-                mEdgeTable,
-                mTableName,
-                mSchemaName
-            );
+
+        RestrictionQueries::getVehiclePropertyEdgeRestrictions(
+            transaction,
+            rResult,
+            mEdgeTable,
+            mTableName,
+            mSchemaName
+        );
     }
     catch(const std::exception& e)
     {
@@ -708,12 +709,12 @@ PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
         // NON-TRANSACTION START
         pqxx::nontransaction transaction(mConnection);
 
-        rResult =
-            RestrictionQueries::getAccessRestrictions(
-                transaction,
-                mEdgeTable,
-                mTableName,
-                mSchemaName);
+        RestrictionQueries::getAccessRestrictions(
+            transaction,
+            rResult,
+            mEdgeTable,
+            mTableName,
+            mSchemaName);
     }
     catch(const std::exception& e)
     {
@@ -871,7 +872,7 @@ PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
                 transaction,
                 mTableName,
                 mEdgeTable);
-            rResult = RestrictionQueries::getTurningRestrictions(transaction);
+            RestrictionQueries::getTurningRestrictions(transaction, rResult);
         }
         catch (const std::exception& e)
         {

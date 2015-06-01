@@ -91,28 +91,30 @@ public:
 // OPERATIONS
     /** Query for restrictions based on Vehicle Properties.
      * @param   rTrans          Transaction to perform query in.
+     * @param   rResult         Store the result of query here.
      * @param   rTopoEdgeTable  Name of table with topology edges.
      * @param   rOsmEdgeTable   Name of table with OSM edges.
      * @param   rSchemaName     Name of the topology schema.
-     * @result  pqxx::result of the query
      * @throw   pqxx::pqxx_exception
      */
-    static pqxx::result     getVehiclePropertyEdgeRestrictions(
+    static void             getVehiclePropertyEdgeRestrictions(
         pqxx::transaction_base& rTrans,
+        pqxx::result&           rResult,
         const std::string&      rTopoEdgeTable,
         const std::string&      rOsmEdgeTable,
         const std::string&      rSchemaName);
 
     /** Query for general access restrictions.
      * @param   rTrans          Transaction to perform query in.
+     * @param   rResult         Store the result of query here.
      * @param   rTopoEdgeTable  Name of table with topology edges.
      * @param   rOsmEdgeTable   Name of table with OSM edges.
      * @param   rSchemaName     Name of the topology schema.
-     * @result  pqxx::result of the query
      * @throw   pqxx::pqxx_exception
      */
-    static pqxx::result     getAccessRestrictions(
+    static void             getAccessRestrictions(
         pqxx::transaction_base& rTrans,
+        pqxx::result&           rResult,
         const std::string&      rTopoEdgeTable,
         const std::string&      rOsmEdgeTable,
         const std::string&      rSchemaName);
@@ -137,11 +139,12 @@ public:
 
     /** Get the restrictions from the 'turning_restrictions' table.
      * @param   rTrans          Transaction to perform query in.
-     * @return  pqxx::result    The turning restrictions.
+     * @param   rResult         Store the result of query here.
      * @throw   pqxx::pqxx_exception
      */
-    static pqxx::result     getTurningRestrictions(
-        pqxx::transaction_base& rTrans);
+    static void             getTurningRestrictions(
+        pqxx::transaction_base& rTrans,
+        pqxx::result&           rResult);
 
 // ACCESS
 // INQUIRY
@@ -149,17 +152,17 @@ public:
 protected:
 private:
     /** SELECT FROM JOIN */
-    static std::string startOfQuery(const std::string& rTopoEdgeTable);
+    static std::string  startOfQuery(const std::string& rTopoEdgeTable);
     /** Which columns to pick */
-    static std::string queryColumns(const std::vector<std::string>& rCols);
+    static std::string  queryColumns(const std::vector<std::string>& rCols);
     /** FROM JOIN ON WHERE */
-    static std::string midOfQuery(
+    static std::string  midOfQuery(
         const std::string& rSchemaName,
         const std::string& rOsmEdgeTable);
     /** Make sure only to pick rows with content in some column. */
-    static std::string notNullColumns(const std::vector<std::string>& rCols);
+    static std::string  notNullColumns(const std::vector<std::string>& rCols);
     /** AS ON ORDER BY */
-    static std::string endOfQuery();
+    static std::string  endOfQuery();
 };
 
 

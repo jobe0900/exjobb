@@ -102,9 +102,10 @@ RestrictionQueries::Results::findEdgeMatchingOsmId(
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
 //static
-pqxx::result
+void
 RestrictionQueries::getVehiclePropertyEdgeRestrictions(
     pqxx::transaction_base& rTrans,
+    pqxx::result&           rResult,
     const std::string&      rTopoEdgeTable,
     const std::string&      rOsmEdgeTable,
     const std::string&      rSchemaName)
@@ -118,7 +119,7 @@ RestrictionQueries::getVehiclePropertyEdgeRestrictions(
         "minspeed"
     };
 
-    return rTrans.exec(
+    rResult = rTrans.exec(
         startOfQuery(rTopoEdgeTable) +
         queryColumns(columns) +
         midOfQuery(rSchemaName, rOsmEdgeTable) +
@@ -128,9 +129,10 @@ RestrictionQueries::getVehiclePropertyEdgeRestrictions(
 }
 
 //static
-pqxx::result
+void
 RestrictionQueries::getAccessRestrictions(
     pqxx::transaction_base& rTrans,
+    pqxx::result&           rResult,
     const std::string&      rTopoEdgeTable,
     const std::string&      rOsmEdgeTable,
     const std::string&      rSchemaName)
@@ -149,7 +151,7 @@ RestrictionQueries::getAccessRestrictions(
         "vehicle"
     };
 
-    return rTrans.exec(
+    rResult = rTrans.exec(
         startOfQuery(rTopoEdgeTable) +
         queryColumns(columns) +
         midOfQuery(rSchemaName, rOsmEdgeTable) +
@@ -188,11 +190,12 @@ RestrictionQueries::identifyTurningRestrictions(
 }
 
 //static
-pqxx::result
+void
 RestrictionQueries::getTurningRestrictions(
-    pqxx::transaction_base& rTrans)
+    pqxx::transaction_base& rTrans,
+    pqxx::result&           rResult)
 {
-    return rTrans.exec(
+    rResult = rTrans.exec(
         "SELECT * FROM turning_restrictions"
     );
 }
