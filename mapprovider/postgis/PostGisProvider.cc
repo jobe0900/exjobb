@@ -125,7 +125,6 @@ PostGisProvider::getRestrictions(
     Topology& rTopology)
 {
     getEdgeRestrictions(rRestrictions, rTopology);
-//TODO    addEdgeRestricionsResultToRestricions(edge_result, rRestrictions);
 }
 
 
@@ -149,8 +148,9 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 		// NON-TRANSACTION START
 		pqxx::nontransaction transaction(mConnection);
 
-		rVertexResult = TopologyQueries::getTopologyVertices(
+		TopologyQueries::getTopologyVertices(
 		    transaction,
+		    rVertexResult,
 		    mVertexTable);
 
 	}
@@ -187,71 +187,14 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 		}
 
 		// NON-TRANSACTION START
-		pqxx::nontransaction non_trans(mConnection);
+		pqxx::nontransaction transaction(mConnection);
+		TopologyQueries::getTopologyEdges(
+		    transaction,
+		    rEdgeResult,
+		    mEdgeTable,
+		    mSchemaName,
+		    mTableName);
 
-		std::string sql(
-"SELECT     edge_id, "
-"           start_node, "
-"           end_node, "
-//-- geom data about edge
-"           ST_Length(geom) AS edge_length, "
-"           ST_X(ST_LineInterpolatePoint(geom, 0.5)) AS center_x, "
-"           ST_Y(ST_LineInterpolatePoint(geom, 0.5)) AS center_y, "
-"           (ST_Azimuth(ST_PointN(geom,1), "
-"                       ST_PointN(geom,2))/(2*pi())*360)::int "
-"                       AS source_bearing, "
-"           (ST_Azimuth(ST_PointN(geom,ST_NPoints(geom)-1), "
-"                       ST_PointN(geom,ST_NPoints(geom)))/(2*pi())*360)::int "
-"                       AS target_bearing, "
-//-- osm data about original edge
-"           osm.* "
-"FROM      " + mEdgeTable +
-" JOIN ( "
-"   SELECT  osm_id, element_id "
-//-- road data
-"           , highway "
-"           , junction "
-"           , lanes "
-"           , oneway "
-//-- vehicle property restrictions
-//"           , maxheight "
-//"           , maxlength "
-//"           , maxspeed "
-//"           , maxweight "
-//"           , maxwidth "
-//"           , minspeed "
-//-- access restrictions
-//"           , access "
-//"           , barrier "
-//"           , disused "
-//"           , noexit "
-//"           , motorcar "
-//"           , goods "
-//"           , hgv "
-//"           , psv "
-//"           , lhv "
-//"           , motor_vehicle "
-//"           , vehicle "
-//-- access
-//"           , restriction "
-//-- costs
-//"           , emergency "
-//"           , incline "
-//"           , public_transport "
-//"           , railway "
-//"           , surface "
-//"           , tracktype "
-//"           , traffic_calming "
-//"           , traffic_sign "
-"   FROM    " + mSchemaName + ".relation "
-"   JOIN    " + mTableName +
-"   ON      topogeo_id = (topo_geom).id "
-"   WHERE   highway in " + OsmHighway::typesAsCommaSeparatedString() +
-") AS osm "
-"ON edge_id = element_id "
-"ORDER BY edge_id ASC;"
-		    );
-		rEdgeResult = non_trans.exec(sql);
 	}
 	catch(const std::exception& e)
 	{
@@ -266,15 +209,6 @@ PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
 {
     for(const pqxx::tuple& row : result)
     {
-//        if(!validDimensionRestrictions(row))
-//        {
-//            continue;
-//        }
-//
-//        if(!accessAllowed(row))
-//        {
-//            continue;
-//        }
         Edge& edge = addBasicResultToEdge(row, rTopology);
         addGeomDataResultToEdge(edge, row);
         addRoadDataResultToEdge(edge, row);

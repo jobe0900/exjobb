@@ -39,12 +39,27 @@ public:
 // OPERATIONS
     /** Fetch the vertices for the topology.
      * @param   rTrans          Transaction to perform query in.
+     * @param   rResult         Store the result of query here.
      * @param   rVertexTable    Name of table to fetch vertices from.
-     * @return  pqxx::result
      */
-    static pqxx::result    getTopologyVertices(
+    static void     getTopologyVertices(
         pqxx::transaction_base& rTrans,
-        const std::string& rVertexTable);
+        pqxx::result&           rResult,
+        const std::string&      rVertexTable);
+
+    /** Fetch the edges for the topology.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rResult         Store the result of query here.
+     * @param   rTopoEdgeTable  Name of table to topology edges from.
+     * @param   rSchemaName     Name of topology schema.
+     * @param   rOsmEdgeTable   Name of table with original OSM edge data.
+     */
+    static void     getTopologyEdges(
+        pqxx::transaction_base& rTrans,
+        pqxx::result&           rResult,
+        const std::string&      rTopoEdgeTable,
+        const std::string&      rSchemaName,
+        const std::string&      rOsmEdgeTable);
 
 // ACCESS
 // INQUIRY
