@@ -33,6 +33,7 @@ TopologyQueries::getTopologyVertices(
 		);
 }
 
+//static
 void
 TopologyQueries::getTopologyEdges(
     pqxx::transaction_base& rTrans,
@@ -76,6 +77,123 @@ TopologyQueries::getTopologyEdges(
         "ORDER BY edge_id ASC;"
     );
     rResult = rTrans.exec(sql);
+}
+
+//static
+void
+TopologyQueries::installPostgisTopology(pqxx::transaction_base& rTrans)
+{
+    rTrans.exec(
+            "CREATE EXTENSION IF NOT EXISTS postgis_topology"
+    );
+}
+
+//static
+void
+TopologyQueries::setSearchPath(pqxx::transaction_base& rTrans)
+{
+    rTrans.exec(
+            "SET search_path = topology, public"
+    );
+}
+
+//static
+void
+TopologyQueries::createTemporaryTable(pqxx::transaction_base& rTrans,
+                                      const std::string& rTableName)
+{
+    rTrans.exec(
+            "CREATE TABLE public." + rTableName + " " +
+            "AS SELECT * "
+            "FROM planet_osm_line "
+            "WHERE highway IS NOT NULL"
+    );
+}
+
+//static
+void
+TopologyQueries::createTemporarySchema(pqxx::transaction_base& rTrans,
+                                      const std::string& rSchemaName, int srid)
+{
+    rTrans.exec(
+            "SELECT topology.CreateTopology('" +
+            rSchemaName + "'," +
+            rTrans.quote(srid) + ")"
+    );
+}
+
+//static
+void
+TopologyQueries::addTopoGeometryColumn(pqxx::transaction_base& rTrans,
+                                       const std::string& rSchemaName,
+                                       const std::string& rOsmEdgeTable)
+{
+    rTrans.exec(
+            "SELECT topology.AddTopoGeometryColumn('" +
+            rSchemaName + "', " +
+            "'public', '" +
+            rOsmEdgeTable + "', " +
+            "'topo_geom', 'LINESTRING')"
+    );
+}
+
+//static
+void
+TopologyQueries::fillTopoGeometryColumn(pqxx::transaction_base& rTrans,
+                                        const std::string& rSchemaName,
+                                        const std::string& rOsmEdgeTable,
+                                        double tolerance)
+{
+    rTrans.exec(
+            "UPDATE public." +
+            rOsmEdgeTable + " " +
+            "SET topo_geom = topology.toTopoGeom(way, '" +
+            rSchemaName +
+            "', 1, " +
+            rTrans.quote(tolerance) + ")"
+    );
+}
+
+//static
+void
+TopologyQueries::dropTemporaryTable(pqxx::transaction_base& rTrans,
+                                    const std::string& rTableName)
+{
+    rTrans.exec(
+            "DROP TABLE IF EXISTS public." + rTableName
+    );
+}
+
+//static
+void
+TopologyQueries::dropTemporarySchema(pqxx::transaction_base& rTrans,
+                                     const std::string& rSchemaName)
+{
+    rTrans.exec(
+            "DROP SCHEMA IF EXISTS " + rSchemaName + " CASCADE"
+    );
+}
+
+//static
+void
+TopologyQueries::deleteTemporaryLayerRecord(pqxx::transaction_base& rTrans,
+                                             const std::string& rTableName)
+{
+    rTrans.exec(
+            "DELETE FROM topology.layer "
+            "WHERE table_name = " + rTrans.quote(rTableName)
+    );
+}
+
+//static
+void
+TopologyQueries::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
+                                             const std::string& rSchemaName)
+{
+    rTrans.exec(
+            "DELETE FROM topology.topology "
+            "WHERE name = " + rTrans.quote(rSchemaName)
+    );
 }
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================

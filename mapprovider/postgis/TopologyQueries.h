@@ -140,6 +140,89 @@ public:
         const std::string&      rSchemaName,
         const std::string&      rOsmEdgeTable);
 
+    /** Make sure the 'postgis_topology' extension is installed.
+     * @param   rTrans          Transaction to perform query in.
+     */
+    static void     installPostgisTopology(pqxx::transaction_base& rTrans);
+
+    /** Set schema search path for queries.
+     * @param   rTrans          Transaction to perform query in.
+     */
+    static void     setSearchPath(pqxx::transaction_base& rTrans);
+
+    /** Create the temporary table for topologies.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rTableName      Name of the temporary topology table.
+     */
+    static void     createTemporaryTable(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rTableName);
+
+    /** Create a schema for the temporary postgis topology.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rSchemaName     Name of the temporary schema.
+     * @param   srid            The projection to use.
+     */
+    static void     createTemporarySchema(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rSchemaName,
+        int                     srid);
+
+    /** Add a column for geometry in the table with Osm Edges.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rSchemaName     Name of the temporary schema.
+     * @param   rOsmeEdgeTable  Name of the table with OSM edges.
+     */
+    static void     addTopoGeometryColumn(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rSchemaName,
+        const std::string&      rOsmEdgeTable);
+
+    /** Fill geometry in the table with Osm Edges, using a tolerance for
+     * merging nodes near one another.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rSchemaName     Name of the temporary schema.
+     * @param   rOsmeEdgeTable  Name of the table with OSM edges.
+     * @param   tolerance       Tolerance in unit of projection.
+     */
+    static void     fillTopoGeometryColumn(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rSchemaName,
+        const std::string&      rOsmEdgeTable,
+        double                  tolerance);
+
+    /** Drop the temporary table for topologies.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rTableName      Name of the temporary topology table.
+     */
+    static void     dropTemporaryTable(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rTableName);
+
+    /** Drop the temporary schema for topologies.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rSchemaName     Name of the temporary topology scheam.
+     */
+    static void     dropTemporarySchema(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rTableName);
+
+    /** Clean up in records for postgis topologies.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rTableName      Name of the temporary topology table.
+     */
+    static void     deleteTemporaryLayerRecord(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rTableName);
+
+    /** Clean up in records for postgis topologies.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rTableName      Name of the temporary topology table.
+     */
+    static void     deleteTemporaryTopoRecord(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rSchemaName);
+
 // ACCESS
 // INQUIRY
 

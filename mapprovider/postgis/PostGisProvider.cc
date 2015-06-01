@@ -320,12 +320,15 @@ PostGisProvider::buildTopology(int srid, double tolerance)
 
 		try
 		{
-		    installPostgisTopology(transaction);
-		    setSearchPath(transaction);
-		    createTemporaryTable(transaction, mTableName);
-		    createTemporarySchema(transaction, mSchemaName, srid);
-		    addTopoGeometryColumn(transaction, mSchemaName, mTableName);
-		    fillTopoGeometryColumn(transaction, mSchemaName, mTableName, tolerance);
+		    TopologyQueries::installPostgisTopology(transaction);
+		    TopologyQueries::setSearchPath(transaction);
+		    TopologyQueries::createTemporaryTable(transaction, mTableName);
+		    TopologyQueries::createTemporarySchema(
+		        transaction, mSchemaName, srid);
+		    TopologyQueries::addTopoGeometryColumn(
+		        transaction, mSchemaName, mTableName);
+		    TopologyQueries::fillTopoGeometryColumn(
+		        transaction, mSchemaName, mTableName, tolerance);
 
 		    // TRANSACTION END
 		    transaction.commit();
@@ -360,10 +363,10 @@ PostGisProvider::removeTopology()
 
 		try
 		{
-		    dropTemporaryTable(transaction, mTableName);
-		    dropTemporarySchema(transaction, mSchemaName);
-		    deleteTemporaryLayerRecord(transaction, mTableName);
-		    deleteTemporaryTopoRecord(transaction, mSchemaName);
+		    TopologyQueries::dropTemporaryTable(transaction, mTableName);
+		    TopologyQueries::dropTemporarySchema(transaction, mSchemaName);
+		    TopologyQueries::deleteTemporaryLayerRecord(transaction, mTableName);
+		    TopologyQueries::deleteTemporaryTopoRecord(transaction, mSchemaName);
 
 		    // TRANSACTION END
 		    transaction.commit();
@@ -396,112 +399,6 @@ PostGisProvider::setTopoBaseName(std::string& rTopoBaseName)
     }
 }
 
-void
-PostGisProvider::installPostgisTopology(pqxx::transaction_base& rTrans)
-{
-	rTrans.exec(
-			"CREATE EXTENSION IF NOT EXISTS postgis_topology"
-	);
-}
-
-void
-PostGisProvider::setSearchPath(pqxx::transaction_base& rTrans)
-{
-	rTrans.exec(
-			"SET search_path = topology, public"
-	);
-}
-
-void
-PostGisProvider::createTemporaryTable(pqxx::transaction_base& rTrans,
-									  const std::string& rTableName)
-{
-	rTrans.exec(
-			"CREATE TABLE public." + rTableName + " " +
-			"AS SELECT * "
-			"FROM planet_osm_line "
-			"WHERE highway IS NOT NULL"
-	);
-}
-
-void
-PostGisProvider::createTemporarySchema(pqxx::transaction_base& rTrans,
-									  const std::string& rSchemaName, int srid)
-{
-	rTrans.exec(
-			"SELECT topology.CreateTopology('" +
-			rSchemaName + "'," +
-			rTrans.quote(srid) + ")"
-	);
-}
-
-void
-PostGisProvider::addTopoGeometryColumn(pqxx::transaction_base& rTrans,
-									   const std::string& rSchemaName,
-									   const std::string& rTableName)
-{
-	rTrans.exec(
-			"SELECT topology.AddTopoGeometryColumn('" +
-			rSchemaName + "', " +
-			"'public', '" +
-			rTableName + "', " +
-			"'topo_geom', 'LINESTRING')"
-	);
-}
-
-void
-PostGisProvider::fillTopoGeometryColumn(pqxx::transaction_base& rTrans,
-									    const std::string& rSchemaName,
-									    const std::string& rTableName,
-										double tolerance)
-{
-	rTrans.exec(
-			"UPDATE public." +
-			rTableName + " " +
-			"SET topo_geom = topology.toTopoGeom(way, '" +
-			rSchemaName +
-			"', 1, " +
-			rTrans.quote(tolerance) + ")"
-	);
-}
-
-void
-PostGisProvider::dropTemporaryTable(pqxx::transaction_base& rTrans,
-									const std::string& rTableName)
-{
-	rTrans.exec(
-			"DROP TABLE IF EXISTS public." + rTableName
-	);
-}
-
-void
-PostGisProvider::dropTemporarySchema(pqxx::transaction_base& rTrans,
-									 const std::string& rSchemaName)
-{
-	rTrans.exec(
-			"DROP SCHEMA IF EXISTS " + rSchemaName + " CASCADE"
-	);
-}
-
-void
-PostGisProvider::deleteTemporaryLayerRecord(pqxx::transaction_base& rTrans,
-									 	 	 const std::string& rTableName)
-{
-	rTrans.exec(
-			"DELETE FROM topology.layer "
-			"WHERE table_name = " + rTrans.quote(rTableName)
-	);
-}
-
-void
-PostGisProvider::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
-									 	 	 const std::string& rSchemaName)
-{
-	rTrans.exec(
-			"DELETE FROM topology.topology "
-			"WHERE name = " + rTrans.quote(rSchemaName)
-	);
-}
 
 // Restrictions --------------------------------------------------------------
 void
