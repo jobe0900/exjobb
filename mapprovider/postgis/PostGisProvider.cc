@@ -5,7 +5,8 @@
  *      Author: Jonas Bergman
  */
 
-#include "../postgis/PostGisProvider.h"  // class implemented
+#include "PostGisProvider.h"  // class implemented
+#include "TopologyQueries.h"
 
 #include <fstream>
 #include <iostream>
@@ -146,19 +147,17 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 		}
 
 		// NON-TRANSACTION START
-		pqxx::nontransaction non_trans(mConnection);
+		pqxx::nontransaction transaction(mConnection);
 
-		rVertexResult = non_trans.exec(
-				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
-//				"FROM " + mSchemaName + ".node "
-				" FROM " + mVertexTable +
-				" ORDER BY node_id ASC;"
-		);
+		rVertexResult = TopologyQueries::getTopologyVertices(
+		    transaction,
+		    mVertexTable);
+
 	}
 	catch(const std::exception& e)
 	{
         throw MapProviderException(
-            std::string("PostGisProvider:getTopoVertices: ") + e.what());
+            std::string("PostGisProvider:getTopologyVertices: ") + e.what());
 	}
 }
 
