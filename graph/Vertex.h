@@ -10,6 +10,7 @@
 
 // SYSTEM INCLUDES
 //
+#include <limits>
 #include <ostream>
 
 // PROJECT INCLUDES
@@ -29,6 +30,8 @@ typedef unsigned        VertexIdType;
 class Vertex
 {
 public:
+// TYPES and CONSTANTS
+    static const VertexIdType MAX_ID;
 // LIFECYCLE
 	/** Constructor.
 	 * @param	id		         Id for this vertex.

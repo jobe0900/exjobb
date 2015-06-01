@@ -21,11 +21,11 @@
 #include "Vertex.h"
 //#include "EdgeData.h"
 #include "../osm/OsmHighway.h"
+#include "../osm/OsmId.h"
 
 // FORWARD REFERENCES
 //
 typedef unsigned            EdgeIdType;
-typedef unsigned long int   OsmIdType;
 
 /**
  * Data structure for edges in the topology.
@@ -82,7 +82,7 @@ public:
         void print(std::ostream& os) const;
     };
 
-    static const EdgeIdType MAX_ID {std::numeric_limits<EdgeIdType>::max()};
+    static const EdgeIdType MAX_ID;
 
 // LIFECYCLE
     /** Constructor.

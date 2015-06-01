@@ -12,40 +12,40 @@
 /**
  * To query the database for edge related data we fetch the following columns.
  */
-struct EdgeQueryResult
-{
-    enum Columns
-    {
-        EDGE_ID,
-        START_NODE,
-        END_NODE,
-        EDGE_LENGTH,
-        CENTER_X,
-        CENTER_Y,
-        SOURCE_BEARING,
-        TARGET_BEARING,
-        OSM_ID,
-        ELEMENT_ID,     // NOT USED: same as EDGE_ID_COL
-
-        // road data
-        HIGHWAY,
-        JUNCTION,
-        LANES,
-        ONEWAY,
-
-        // vehicle property
-
-        // access
-        ACCESS,
-        MOTORCAR,
-        GOODS,
-        HGV,
-        PSV,
-        LHV,
-        MOTOR_VEHICLE,
-        VEHICLE,
-    };
-};
+//struct EdgeQueryResult
+//{
+//    enum Columns
+//    {
+//        EDGE_ID,
+//        START_NODE,
+//        END_NODE,
+//        EDGE_LENGTH,
+//        CENTER_X,
+//        CENTER_Y,
+//        SOURCE_BEARING,
+//        TARGET_BEARING,
+//        OSM_ID,
+//        ELEMENT_ID,     // NOT USED: same as EDGE_ID_COL
+//
+//        // road data
+//        HIGHWAY,
+//        JUNCTION,
+//        LANES,
+//        ONEWAY,
+//
+//        // vehicle property
+//
+//        // access
+//        ACCESS,
+//        MOTORCAR,
+//        GOODS,
+//        HGV,
+//        PSV,
+//        LHV,
+//        MOTOR_VEHICLE,
+//        VEHICLE,
+//    };
+//};
 
 struct VehiclePropertiesQueryResult
 {

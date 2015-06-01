@@ -8,6 +8,8 @@
 #include "Edge.h"  // class implemented
 
 //============================= TYPES     ====================================
+const EdgeIdType Edge::MAX_ID = std::numeric_limits<EdgeIdType>::max();
+
 // Edge::GeomData ------------------------------------------------------------
 Edge::GeomData::GeomData(double length,
                          Point  centerPoint,

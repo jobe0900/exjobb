@@ -9,6 +9,7 @@
 
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
+const VertexIdType Vertex::MAX_ID = std::numeric_limits<VertexIdType>::max();
 
 //============================= LIFECYCLE ====================================
 Vertex::Vertex(VertexIdType id, Point point, bool hasRestrictions)
