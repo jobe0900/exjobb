@@ -72,6 +72,41 @@ public:
             VEHICLE,
         };
     };
+    struct VehiclePropertiesResult
+    {
+        enum Columns
+        {
+            EDGE_ID,
+            ELEMENT_ID,
+            MAXHEIGHT,
+            MAXLENGTH,
+            MAXWEIGHT,
+            MAXWIDTH,
+            MAXSPEED,
+            MINSPEED,
+
+        };
+    };
+
+    struct AccessResult
+    {
+        enum Columns
+        {
+            EDGE_ID,
+            ELEMENT_ID,
+            ACCESS,
+            BARRIER,
+            DISUSED,
+            NOEXIT,
+            MOTORCAR,
+            GOODS,
+            HGV,
+            PSV,
+            LHV,
+            MOTOR_VEHICLE,
+            VEHICLE,
+        };
+    };
 
 // LIFECYCLE
     /** Constructor. */

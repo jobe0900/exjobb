@@ -565,26 +565,27 @@ PostGisProvider::addVehiclePropertyResultToEdgeRestrictions(
         {
             // throw exception if no edgeId
             EdgeIdType edgeId =
-                row[VehiclePropertiesQueryResult::EDGE_ID].as<EdgeIdType>();
+                row[TopologyQueries::VehiclePropertiesResult::EDGE_ID]
+                    .as<EdgeIdType>();
 
             EdgeRestrictions::VehicleProperties vp;
             vp.maxHeight =
-                row[VehiclePropertiesQueryResult::MAXHEIGHT].as<double>
+                row[TopologyQueries::VehiclePropertiesResult::MAXHEIGHT].as<double>
                 (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
             vp.maxLength =
-                row[VehiclePropertiesQueryResult::MAXLENGTH].as<double>
+                row[TopologyQueries::VehiclePropertiesResult::MAXLENGTH].as<double>
                 (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
             vp.maxWeight =
-                row[VehiclePropertiesQueryResult::MAXWEIGHT].as<double>
+                row[TopologyQueries::VehiclePropertiesResult::MAXWEIGHT].as<double>
                 (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
             vp.maxWidth =
-                row[VehiclePropertiesQueryResult::MAXWIDTH].as<double>
+                row[TopologyQueries::VehiclePropertiesResult::MAXWIDTH].as<double>
                 (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
             vp.maxSpeed =
-                row[VehiclePropertiesQueryResult::MAXSPEED].as<unsigned>
+                row[TopologyQueries::VehiclePropertiesResult::MAXSPEED].as<unsigned>
                 (EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MAX);
             vp.minSpeed =
-                row[VehiclePropertiesQueryResult::MINSPEED].as<unsigned>
+                row[TopologyQueries::VehiclePropertiesResult::MINSPEED].as<unsigned>
                 (EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MIN);
 
             edgeRestr.setVehiclePropertyRestrictionForEdge(edgeId, vp);
@@ -640,17 +641,19 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
         {
             // throw exception if no edgeId
             EdgeIdType edgeId =
-                row[AccessQueryResult::EDGE_ID].as<EdgeIdType>();
+                row[TopologyQueries::AccessResult::EDGE_ID].as<EdgeIdType>();
 
             std::string colString;
-            colString = row[AccessQueryResult::ACCESS].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::ACCESS]
+                            .as<std::string>("");
             if(colString != "")
             {
                 OsmAccess::AccessType type = OsmAccess::parseString(colString);
                 edgeRestr.setGeneralAccessRestrictionForEdge(edgeId, type);
             }
 
-            colString = row[AccessQueryResult::MOTORCAR].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::MOTORCAR]
+                            .as<std::string>("");
             if(colString != "")
             {
                 OsmAccess::AccessType type = OsmAccess::parseString(colString);
@@ -661,7 +664,8 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 );
             }
 
-            colString = row[AccessQueryResult::GOODS].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::GOODS]
+                            .as<std::string>("");
             if(colString != "")
             {
                 OsmAccess::AccessType type = OsmAccess::parseString(colString);
@@ -672,7 +676,8 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 );
             }
 
-            colString = row[AccessQueryResult::HGV].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::HGV]
+                            .as<std::string>("");
             if(colString != "")
             {
                 OsmAccess::AccessType type = OsmAccess::parseString(colString);
@@ -683,7 +688,8 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 );
             }
 
-            colString = row[AccessQueryResult::PSV].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::PSV]
+                            .as<std::string>("");
             if(colString != "")
             {
                 OsmAccess::AccessType type = OsmAccess::parseString(colString);
@@ -694,7 +700,8 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 );
             }
 
-            colString = row[AccessQueryResult::LHV].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::LHV]
+                            .as<std::string>("");
             if(colString != "")
             {
                 OsmAccess::AccessType type = OsmAccess::parseString(colString);
@@ -705,7 +712,8 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 );
             }
 
-            colString = row[AccessQueryResult::MOTOR_VEHICLE].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::MOTOR_VEHICLE]
+                            .as<std::string>("");
             if(colString != "")
             {
                 OsmAccess::AccessType type = OsmAccess::parseString(colString);
@@ -716,7 +724,8 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 );
             }
 
-            colString = row[AccessQueryResult::VEHICLE].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::VEHICLE]
+                            .as<std::string>("");
             if(colString != "")
             {
                 OsmAccess::AccessType type = OsmAccess::parseString(colString);
@@ -727,20 +736,23 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
                 );
             }
 
-            colString = row[AccessQueryResult::BARRIER].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::BARRIER]
+                            .as<std::string>("");
             if(colString != "")
             {
                 OsmBarrier::BarrierType type = OsmBarrier::parseString(colString);
                 edgeRestr.setBarrierRestrictionForEdge(edgeId, type);
             }
 
-            colString = row[AccessQueryResult::DISUSED].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::DISUSED]
+                            .as<std::string>("");
             if(colString == "yes")
             {
                 edgeRestr.setDisusedRestrictionForEdge(edgeId);
             }
 
-            colString = row[AccessQueryResult::NOEXIT].as<std::string>("");
+            colString = row[TopologyQueries::AccessResult::NOEXIT]
+                            .as<std::string>("");
             if(colString == "yes")
             {
                 edgeRestr.setNoExitRestrictionForEdge(edgeId);

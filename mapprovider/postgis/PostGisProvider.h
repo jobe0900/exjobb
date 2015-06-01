@@ -30,7 +30,6 @@
 #include "../MapProvider.h"
 #include "../MapProviderException.h"
 #include "../../util/TimeToStringMaker.h"
-#include "OsmConstants.h"
 #include "../../osm/OsmAccess.h"
 #include "../../osm/OsmHighway.h"
 #include "../../osm/OsmVehicle.h"
