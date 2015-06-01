@@ -1,32 +1,32 @@
 /*
- * PostGisRestrictionQueries.cc
+ * RestrictionQueries.cc
  *
  *  Created on: 2015-05-31
  *      Author: Jonas Bergman
  */
 
 
-#include "PostGisRestrictionQueries.h"  // class implemented
+#include "RestrictionQueries.h"  // class implemented
 
 // Result --------------------------------------------------------------------
 //static
 OsmTurningRestriction
-PostGisRestrictionQueries::Results::parseTurningRestrictionResultRow(
+RestrictionQueries::Results::parseTurningRestrictionResultRow(
     const pqxx::tuple&    rRow,
     Topology&             rTopology)
 {
     OsmIdType fromOsmId =
-        rRow[PostGisRestrictionQueries::FROM_OSM_ID].as<OsmIdType>();
+        rRow[RestrictionQueries::FROM_OSM_ID].as<OsmIdType>();
     OsmIdType toOsmId =
-        rRow[PostGisRestrictionQueries::TO_OSM_ID].as<OsmIdType>();
+        rRow[RestrictionQueries::TO_OSM_ID].as<OsmIdType>();
     std::string typeString =
-        rRow[PostGisRestrictionQueries::RESTRICTION_TYPE].as<std::string>();
+        rRow[RestrictionQueries::RESTRICTION_TYPE].as<std::string>();
     OsmTurningRestriction::TurningRestrictionType type =
         OsmTurningRestriction::parseString(typeString);
     std::string edgeIdsString =
-        rRow[PostGisRestrictionQueries::EDGE_IDS].as<std::string>();
+        rRow[RestrictionQueries::EDGE_IDS].as<std::string>();
     std::string viaOsmIdsString =
-        rRow[PostGisRestrictionQueries::VIA_OSM].as<std::string>("");
+        rRow[RestrictionQueries::VIA_OSM].as<std::string>("");
 
     std::vector<EdgeIdType> edgeIds = parseEdgeIdsString(edgeIdsString);
 
@@ -62,7 +62,7 @@ PostGisRestrictionQueries::Results::parseTurningRestrictionResultRow(
 
 //static
 std::vector<EdgeIdType>
-PostGisRestrictionQueries::Results::parseEdgeIdsString(std::string& rEdgeIds)
+RestrictionQueries::Results::parseEdgeIdsString(std::string& rEdgeIds)
 {
     boost::trim_if(rEdgeIds, boost::is_any_of("{}"));
     std::vector<std::string> idStrings;
@@ -78,7 +78,7 @@ PostGisRestrictionQueries::Results::parseEdgeIdsString(std::string& rEdgeIds)
 
 //static
 Edge&
-PostGisRestrictionQueries::Results::findEdgeMatchingOsmId(
+RestrictionQueries::Results::findEdgeMatchingOsmId(
     OsmIdType                       osmId,
     const std::vector<EdgeIdType>&  rEdgeIds,
     Topology&                       rTopology)
@@ -103,7 +103,7 @@ PostGisRestrictionQueries::Results::findEdgeMatchingOsmId(
 //============================= OPERATIONS ===================================
 //static
 pqxx::result
-PostGisRestrictionQueries::getVehiclePropertyEdgeRestrictions(
+RestrictionQueries::getVehiclePropertyEdgeRestrictions(
     pqxx::transaction_base& rTrans,
     const std::string&      rTopoEdgeTable,
     const std::string&      rOsmEdgeTable,
@@ -129,7 +129,7 @@ PostGisRestrictionQueries::getVehiclePropertyEdgeRestrictions(
 
 //static
 pqxx::result
-PostGisRestrictionQueries::getAccessRestrictions(
+RestrictionQueries::getAccessRestrictions(
     pqxx::transaction_base& rTrans,
     const std::string&      rTopoEdgeTable,
     const std::string&      rOsmEdgeTable,
@@ -160,7 +160,7 @@ PostGisRestrictionQueries::getAccessRestrictions(
 
 //static
 void
-PostGisRestrictionQueries::dropCreateTurningRestrictionsTable(
+RestrictionQueries::dropCreateTurningRestrictionsTable(
     pqxx::transaction_base& rTrans)
 {
     rTrans.exec(
@@ -176,7 +176,7 @@ PostGisRestrictionQueries::dropCreateTurningRestrictionsTable(
 
 //static
 void
-PostGisRestrictionQueries::identifyTurningRestrictions(
+RestrictionQueries::identifyTurningRestrictions(
     pqxx::transaction_base& rTrans,
     const std::string&      rOsmEdgeTable,
     const std::string&      rTopoEdgeTable)
@@ -189,7 +189,7 @@ PostGisRestrictionQueries::identifyTurningRestrictions(
 
 //static
 pqxx::result
-PostGisRestrictionQueries::getTurningRestrictions(
+RestrictionQueries::getTurningRestrictions(
     pqxx::transaction_base& rTrans)
 {
     return rTrans.exec(
@@ -202,7 +202,7 @@ PostGisRestrictionQueries::getTurningRestrictions(
 /////////////////////////////// PRIVATE    ///////////////////////////////////
 //static
 std::string
-PostGisRestrictionQueries::startOfQuery(const std::string& rTopoEdgeTable)
+RestrictionQueries::startOfQuery(const std::string& rTopoEdgeTable)
 {
     return (
         "SELECT     edge_id, "
@@ -216,7 +216,7 @@ PostGisRestrictionQueries::startOfQuery(const std::string& rTopoEdgeTable)
 
 //static
 std::string
-PostGisRestrictionQueries::queryColumns(const std::vector<std::string>& rCols)
+RestrictionQueries::queryColumns(const std::vector<std::string>& rCols)
 {
     std::ostringstream oss;
     for(const std::string& col : rCols)
@@ -228,7 +228,7 @@ PostGisRestrictionQueries::queryColumns(const std::vector<std::string>& rCols)
 
 //static
 std::string
-PostGisRestrictionQueries::midOfQuery(
+RestrictionQueries::midOfQuery(
     const std::string& rSchemaName,
     const std::string& rOsmEdgeTable)
 {
@@ -242,7 +242,7 @@ PostGisRestrictionQueries::midOfQuery(
 
 //static
 std::string
-PostGisRestrictionQueries::notNullColumns(const std::vector<std::string>& rCols)
+RestrictionQueries::notNullColumns(const std::vector<std::string>& rCols)
 {
     std::ostringstream oss;
     oss << " AND (";
@@ -262,7 +262,7 @@ PostGisRestrictionQueries::notNullColumns(const std::vector<std::string>& rCols)
 
 //static
 std::string
-PostGisRestrictionQueries::endOfQuery()
+RestrictionQueries::endOfQuery()
 {
     return (
         ") AS osm "

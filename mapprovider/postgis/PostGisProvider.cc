@@ -700,7 +700,7 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
         // NON-TRANSACTION START
         pqxx::nontransaction transaction(mConnection);
         rResult =
-            PostGisRestrictionQueries::getVehiclePropertyEdgeRestrictions(
+            RestrictionQueries::getVehiclePropertyEdgeRestrictions(
                 transaction,
                 mEdgeTable,
                 mTableName,
@@ -776,7 +776,7 @@ PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
         pqxx::nontransaction transaction(mConnection);
 
         rResult =
-            PostGisRestrictionQueries::getAccessRestrictions(
+            RestrictionQueries::getAccessRestrictions(
                 transaction,
                 mEdgeTable,
                 mTableName,
@@ -933,12 +933,12 @@ PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
 
         try
         {
-            PostGisRestrictionQueries::dropCreateTurningRestrictionsTable(transaction);
-            PostGisRestrictionQueries::identifyTurningRestrictions(
+            RestrictionQueries::dropCreateTurningRestrictionsTable(transaction);
+            RestrictionQueries::identifyTurningRestrictions(
                 transaction,
                 mTableName,
                 mEdgeTable);
-            rResult = PostGisRestrictionQueries::getTurningRestrictions(transaction);
+            rResult = RestrictionQueries::getTurningRestrictions(transaction);
         }
         catch (const std::exception& e)
         {
@@ -967,7 +967,7 @@ PostGisProvider::addTurningResultToEdgeRestrictions(
         for(const pqxx::tuple& row : rResult)
         {
             OsmTurningRestriction turn =
-                PostGisRestrictionQueries::Results::
+                RestrictionQueries::Results::
                     parseTurningRestrictionResultRow(row, rTopology);
             edgeRestr.addTurningRestrictionForEdge(turn.fromEdgeId(), turn);
         }

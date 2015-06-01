@@ -6,7 +6,7 @@
  */
 
 #include "../../postgis/PostGisProvider.h"
-#include "../../postgis/PostGisRestrictionQueries.h"
+#include "../../postgis/RestrictionQueries.h"
 
 #include <iostream>
 #include <string>
@@ -369,7 +369,7 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 			    THEN ("we shoud be able to split the string")
 			    {
 			        std::vector<EdgeIdType> edgeIds =
-			            PostGisRestrictionQueries::Results::parseEdgeIdsString(
+			            RestrictionQueries::Results::parseEdgeIdsString(
 			                edgesString);
 			        REQUIRE (edgeIds.size() == 4);
 			        REQUIRE (edgeIds[0] == 123);

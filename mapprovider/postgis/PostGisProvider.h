@@ -34,7 +34,7 @@
 #include "../../osm/OsmAccess.h"
 #include "../../osm/OsmHighway.h"
 #include "../../osm/OsmVehicle.h"
-#include "PostGisRestrictionQueries.h"
+#include "RestrictionQueries.h"
 
 // FORWARD REFERENCES
 //

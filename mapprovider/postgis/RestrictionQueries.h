@@ -1,12 +1,12 @@
 /**  Queries for PostGisProvider to find restrictions.
  *
- * #include "PostGisRestrictionQueries.h"
+ * #include "RestrictionQueries.h"
  *
  * @author Jonas Bergman
  */
 
-#ifndef MAPPROVIDER_POSTGIS_POSTGISRESTRICTIONQUERIES_H_
-#define MAPPROVIDER_POSTGIS_POSTGISRESTRICTIONQUERIES_H_
+#ifndef MAPPROVIDER_POSTGIS_RESTRICTIONQUERIES_H_
+#define MAPPROVIDER_POSTGIS_RESTRICTIONQUERIES_H_
 
 // SYSTEM INCLUDES
 //
@@ -28,8 +28,10 @@
 #include "../../graph/Vertex.h"
 #include "../MapProviderException.h"
 
-/** Class for holding static queries needed by the PostGisProvider. */
-class PostGisRestrictionQueries
+/** Class for holding static queries about restrictions,
+ * needed by the PostGisProvider.
+ */
+class RestrictionQueries
 {
 public:
 // TYPES
@@ -81,9 +83,9 @@ public:
     };
 
 // LIFECYCLE
-    PostGisRestrictionQueries() = delete;
-    PostGisRestrictionQueries(const PostGisRestrictionQueries& from) = delete;
-    ~PostGisRestrictionQueries() = default;
+    RestrictionQueries() = delete;
+    RestrictionQueries(const RestrictionQueries& from) = delete;
+    ~RestrictionQueries() = default;
 
 // OPERATORS
 // OPERATIONS
@@ -163,4 +165,4 @@ private:
 
 
 
-#endif /* MAPPROVIDER_POSTGIS_POSTGISRESTRICTIONQUERIES_H_ */
+#endif /* MAPPROVIDER_POSTGIS_RESTRICTIONQUERIES_H_ */
