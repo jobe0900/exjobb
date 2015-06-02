@@ -22,7 +22,7 @@
 
 // FORWARD REFERENCES
 //
-typedef unsigned        VertexIdType;
+typedef long        VertexIdType;
 
 /**
  * Data structure for vertices in the topology.

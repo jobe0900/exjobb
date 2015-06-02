@@ -25,7 +25,7 @@
 
 // FORWARD REFERENCES
 //
-typedef unsigned            EdgeIdType;
+typedef long            EdgeIdType;
 
 /**
  * Data structure for edges in the topology.
