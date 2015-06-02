@@ -24,6 +24,8 @@
 #include "Vertex.h"
 #include "Edge.h"
 #include "Topology.h"
+#include "Restrictions.h"
+#include "../config/Configuration.h"
 
 // FORWARD REFERENCES
 //
@@ -111,9 +113,8 @@ public:
     Graph() = delete;
 
     /** Constructor.
-     * Build a graph from the supplied topology.
-     * @param   rTopology   The topology to use as basis for the graph.
-     * @throws  GraphException if something is wrong with topology.
+     * Graph should be based on the supplied topology.
+     * @param   rTopology       The topology to use as basis for the graph.
      */
     Graph(const Topology& rTopology);
 
@@ -133,6 +134,14 @@ public:
     std::ostream&         operator<<(std::ostream& os, const Graph& rGraph);
 
 // OPERATIONS
+    /** Add restrictions to the topology and rebuilds the graph.
+     * @param   pRestrictions   Restrictions to impose on the graph.
+     * @param   pConfiguration  Configuration to compare restrictions against.
+     */
+    void                  addRestrictions(
+        Restrictions&   rRestrictions,
+        Configuration&  rConfiguration);
+
 // ACCESS
     /**
      * @return  The number of Vertices in the Graph.
@@ -154,15 +163,17 @@ public:
      */
     size_t                nrLines() const;
 
-    /**
+    /** Builds graph if necessary before returning.
      * @return  The Boost Graph representation of the Graph.
+     * @throws  GraphException if something goes wrong building the graph.
      */
-    const GraphType&      getBoostGraph() const;
+    const GraphType&      getBoostGraph();
 
-    /**
+    /** Builds graph if necessary before returning.
      * @return  The Boost Graph representation of the LineGraph.
+     * @throws  GraphException if something goes wrong building the graph.
      */
-    const LineGraphType&  getBoostLineGraph() const;
+    const LineGraphType&  getBoostLineGraph();
 
 // INQUIRY
     /**
@@ -187,13 +198,38 @@ private:
     // buildGraph() ----------------------------------------------------------
     // Used when constructing the internal Boost graph representation
     // from the Topology.
+
+    /** Build the graph by adding vertices and edges from the topology. */
     void                buildGraph();
+
+    /** Add the topology vertices to the graph, respecting restrictions.
+     * Helper for 'buildGraph()'.
+     */
     void                addTopoVerticesToGraph();
+
+    /** Add the topology edges to the graph, respecting restrictions.
+     * Helper for 'buildGraph()'.
+     */
     void                addTopoEdgesToGraph();
-    void                addDirectedEdge(EdgeIdType id,
-                                        const VertexType& source,
-                                        const VertexType& target,
-                                        EdgeIdType ix);
+
+    /** Add a directed edge from source to target.
+     * Helper for 'addTopoEdgesToGraph()'.
+     * @param   id      The edge's topology id.
+     * @param   source  The source vertex.
+     * @param   target  The target vertex.
+     * @param   e_ix    The running index amongst edges added to graph.
+     */
+    void                addDirectedEdge(
+        EdgeIdType id,
+        const VertexType& source,
+        const VertexType& target,
+        EdgeIdType ix);
+
+    /** Get the graph vertex corresponding to a given id.
+     * @param   id      The vertex' topology id.
+     * @return  Reference to the Graph vertex corresponding to id.
+     * @throw   GraphException if there is no corresponding vertex to id.
+     */
     const VertexType&   getGraphVertex(VertexIdType id) const;
 
     // buidlLineGraph() ------------------------------------------------------
@@ -202,10 +238,11 @@ private:
     void                addGraphEdgesToLineGraph();
     const NodeType&     getLineGraphNode(NodeIdType id) const;
     void                addGraphEdgeAsLineGraphNode(
-                            const EdgeType& rGraphEdge, NodeType& rNode);
+        const EdgeType& rGraphEdge,
+        NodeType& rNode);
     void                connectSourceNodeToTargetNodesViaVertex(
-                            const NodeType& rSourceNode,
-                            const VertexType& rViaVertex);
+        const NodeType& rSourceNode,
+        const VertexType& rViaVertex);
 
     void                printVertices(std::ostream& os) const;
     void                printEdges(std::ostream& os)    const;
@@ -219,6 +256,8 @@ private:
     TopoEdgeIdToGraphEdgeMapType      mIdToEdgeMap;       // map original id to GraphEdge
     GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode
     const Topology&                   mrTopology;
+    Restrictions*                     mpRestrictions;
+    Configuration*                    mpConfiguration;
 
 // CONSTANTS
 };

@@ -16,10 +16,12 @@ Graph::Graph(const Topology& rTopology)
     : mGraph(),
       mIdToVertexMap(),
       mIdToEdgeMap(),
-      mrTopology(rTopology)
+      mrTopology(rTopology),
+      mpRestrictions(nullptr),
+      mpConfiguration(nullptr)
 {
-    buildGraph();
-    buildLineGraph();
+        buildGraph();
+        buildLineGraph();
 }
 
 //============================= OPERATORS ====================================
@@ -43,6 +45,16 @@ operator<<(std::ostream& os, const Graph& rGraph)
     return os;
 }
 //============================= OPERATIONS ===================================
+void
+Graph::addRestrictions(
+    Restrictions&   rRestrictions,
+    Configuration&  rConfiguration)
+{
+    mpRestrictions =  &rRestrictions;
+    mpConfiguration = &rConfiguration;
+    buildGraph();
+    buildLineGraph();
+}
 //============================= ACESS      ===================================
 size_t
 Graph::nrVertices() const
@@ -69,13 +81,13 @@ Graph::nrLines() const
 }
 
 const Graph::GraphType&
-Graph::getBoostGraph() const
+Graph::getBoostGraph()
 {
     return mGraph;
 }
 
 const Graph::LineGraphType&
-Graph::getBoostLineGraph() const
+Graph::getBoostLineGraph()
 {
     return mLineGraph;
 }
@@ -123,9 +135,24 @@ void
 Graph::addTopoEdgesToGraph()
 {
     EdgeIdType e_ix = 0;
+
+    OsmBarrier::RestrictionsRule barrier_rule;  // default rule
+    OsmAccess::AccessRule access_rule; // default rule
+
     for(const auto& edgepair : mrTopology.mEdgeMap)
     {
         const Edge& e = edgepair.second;
+
+        if(mpRestrictions != nullptr && mpConfiguration != nullptr)
+        {
+            const EdgeRestrictions& er = mpRestrictions->edgeRestrictions();
+            if(!er.isEdgeAllowed(e.id(), mpConfiguration->getVehicleConfig(),
+                                 barrier_rule, access_rule))
+            {
+                continue;
+            }
+        }
+
         const VertexType& s = getGraphVertex(e.source());
         const VertexType& t = getGraphVertex(e.target());
 
@@ -167,7 +194,6 @@ Graph::addDirectedEdge(EdgeIdType id,
         throw GraphException("Graph:addDirectedEdge: cannot add edge: "
             + std::to_string(id));
     }
-
 }
 
 const Graph::VertexType&

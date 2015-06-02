@@ -75,7 +75,7 @@ SCENARIO ("OsmAccess functionality testing", "[osm][access]")
 
                 THEN ("we should not be allowed access")
                 {
-                    REQUIRE_FALSE (type.hasAccess(rule));
+                    REQUIRE_FALSE (type.allowsAccess(rule));
                 }
             }
         }

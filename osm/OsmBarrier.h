@@ -72,6 +72,8 @@ public:
      */
     struct RestrictionsRule
     {
+        RestrictionsRule() = default;
+        RestrictionsRule(const RestrictionsRule& from) = default;
         RestrictionsRule(std::initializer_list<BarrierType> restrictionTypes);
 
         bool    restrictsAccess(BarrierType type) const;

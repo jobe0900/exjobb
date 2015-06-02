@@ -66,7 +66,7 @@ OsmAccess::toString() const
 }
 
 bool
-OsmAccess::hasAccess(OsmAccess::AccessRule rule) const
+OsmAccess::allowsAccess(OsmAccess::AccessRule rule) const
 {
     return rule.hasAccess(mType);
 }

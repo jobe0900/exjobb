@@ -19,15 +19,15 @@
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 //============================= LIFECYCLE ====================================
-EdgeRestrictions::EdgeRestrictions()
-    : mVehiclePropertiesMap(),
-      mGeneralAccessMap(),
-      mVehicleTypeAccessMap(),
-      mBarrierMap(),
-      mTurningRestrictionsMap(),
-      mDisusedEdges(),
-      mNoExitEdges()
-{ }
+//EdgeRestrictions::EdgeRestrictions()
+//    : mVehiclePropertiesMap(),
+//      mGeneralAccessMap(),
+//      mVehicleTypeAccessMap(),
+//      mBarrierMap(),
+//      mTurningRestrictionsMap(),
+//      mDisusedEdges(),
+//      mNoExitEdges()
+//{ }
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
@@ -319,6 +319,63 @@ EdgeRestrictions::noExitEdges() const
 {
     return mNoExitEdges;
 }
+
+bool
+EdgeRestrictions::isEdgeAllowed(
+        EdgeIdType edgeId,
+        const VehicleConfig& rVehicleConfig,
+        const OsmBarrier::RestrictionsRule& rBarrierRule,
+        const OsmAccess::AccessRule& rAccessRule) const
+{
+    const auto& restriction_types = restrictionTypes(edgeId);
+
+    bool is_restricted = false;
+    bool is_generally_restricted = false;
+    bool is_vehicle_allowed = false;
+
+    for(const auto& r : restriction_types)
+    {
+        switch (r)
+        {
+            case EdgeRestrictions::DISUSED:
+                is_restricted = true; break;
+            case EdgeRestrictions::VEHICLE_PROPERTIES:
+                if(vehicleProperties(edgeId).restrictsAccess(rVehicleConfig))
+                {
+                    is_restricted = true;
+                }
+                break;
+            case EdgeRestrictions::BARRIER:
+                if(barrier(edgeId).restrictsAccess(rBarrierRule))
+                {
+                    is_restricted = true;
+                }
+                break;
+            case EdgeRestrictions::GENERAL_ACCESS:
+                if(!generalAccess(edgeId).allowsAccess(rAccessRule))
+                {
+                    is_generally_restricted = true;
+                }
+                break;
+            case EdgeRestrictions::VEHICLE_TYPE_ACCESS:
+                if(vehicleTypeAccess(edgeId, rVehicleConfig.category)
+                    .allowsAccess(rAccessRule))
+                {
+                    is_vehicle_allowed = true;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    if(is_restricted || (is_generally_restricted && !is_vehicle_allowed))
+    {
+        return false; // this edge should not be added.
+    }
+    return true;
+}
+
 //============================= INQUIRY    ===================================
 bool
 EdgeRestrictions::hasRestriction(

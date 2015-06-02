@@ -35,7 +35,7 @@ public:
 
     /** Default constructor.
      */
-    Configuration();
+    Configuration() = default;
 
 
     /** Copy constructor.
