@@ -286,6 +286,13 @@ public:
     const std::vector<OsmTurningRestriction>&
                         turningRestrictions(EdgeIdType edgeId) const;
 
+    /** Get a list of all edge id's to which travle from edge is not allowed.
+     * @param   edgeId      The id of the edge to travle from.
+     * @return  A vector of edgeIds to which travel is not allowed.
+     */
+    std::vector<EdgeIdType>
+                        restrictedTargetEdges(EdgeIdType sourceEdgeId) const;
+
     /** Get all edges marked as disused.
      * @return  The set of disused edges (ids).
      */

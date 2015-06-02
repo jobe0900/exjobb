@@ -10,6 +10,7 @@
 
 // SYSTEM INCLUDES
 //
+#include <algorithm>
 #include <map>
 #include <ostream>
 
@@ -20,7 +21,6 @@
 // LOCAL INCLUDES
 //
 #include "GraphException.h"
-#include "TopologyTypes.h"
 #include "Vertex.h"
 #include "Edge.h"
 #include "Topology.h"
@@ -234,15 +234,62 @@ private:
 
     // buidlLineGraph() ------------------------------------------------------
     // Used when transforming the Graph to a LineGraph
+
+    /** Start converting the Graph to a LineGraph.
+     */
     void                buildLineGraph();
+
+    /** Add Edges from the graph as Nodes in the Linegraph.
+     * Helper for 'buildLineGraph()'
+     */
     void                addGraphEdgesToLineGraph();
-    const NodeType&     getLineGraphNode(NodeIdType id) const;
+
+    /** Actually add a graph edge as a linegraph node, checking if it already
+     * exists or not.
+     * @param   rGraphEdge  The Edge to add to the LineGraph as Node.
+     * @param   rNode       The Node corresponding to the edge returned here.
+     */
     void                addGraphEdgeAsLineGraphNode(
         const EdgeType& rGraphEdge,
-        NodeType& rNode);
+        NodeType&       rNode);
+
+    /** Get an already existing Node from the LineGraph.
+     * @param   id  The Edge id (== the Node id).
+     * @param   The LineGraph Node.
+     * @throw   GraphException if there is no Node with that id.
+     */
+    const NodeType&     getLineGraphNode(NodeIdType id) const;
+
+    /** Connect the newly added Node to all Nodes it should be connected to,
+     * that is look up which outgoing edges there are from the Edge's (node's)
+     * target vertex, and if there are no restrictions: add the Edge as a Node
+     * to the LineGraph and add a Line between the Nodes.
+     * @param   rSourceNode     The Node to add Lines from.
+     * @parma   rViaVertex      Are there any restrictions in the vertex?
+     * @throw   GraphException
+     */
     void                connectSourceNodeToTargetNodesViaVertex(
         const NodeType& rSourceNode,
         const VertexType& rViaVertex);
+
+    /**
+     * @param   edgeId  Id to edge to look up.
+     * @return  true if this edge has no exits, meaning it is no use adding it.
+     */
+    bool                edgeHasNoExit(EdgeIdType edgeId) const;
+
+    /**
+     * @return  A vector of all restricted edges from this Edge.
+     */
+    std::vector<EdgeIdType>
+                        getRestrictedTargets(EdgeIdType edgeId) const;
+
+    /**
+     * @return  true if this target edge has restricted access from the source.
+     */
+    bool                isTargetRestricted(
+        const std::vector<EdgeIdType>&  rRestrictedTargets,
+        EdgeIdType                      targetId) const;
 
     void                printVertices(std::ostream& os) const;
     void                printEdges(std::ostream& os)    const;

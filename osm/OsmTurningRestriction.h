@@ -147,6 +147,15 @@ public:
      */
     bool                isInRestriction(EdgeIdType edgeId) const;
 
+    /** Check if Travel from 'from' to 'to' is restricted.
+     * @param   fromEdgeId    Travel from edge.
+     * @param   toEdgeId      Travel to edge.
+     * @return  true if travle is restricted.
+     */
+    bool                isRestricted(
+        EdgeIdType fromEdgeId,
+        EdgeIdType toEdgeId) const;
+
 protected:
 private:
     TurningRestrictionType                mType {NONE};

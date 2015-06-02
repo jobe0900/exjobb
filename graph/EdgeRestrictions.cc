@@ -308,6 +308,27 @@ EdgeRestrictions::turningRestrictions(EdgeIdType edgeId) const
     return mTurningRestrictionsMap.find(edgeId)->second;
 }
 
+std::vector<EdgeIdType>
+EdgeRestrictions::restrictedTargetEdges(EdgeIdType sourceEdgeId) const
+{
+    std::vector<EdgeIdType> restricted_targets;
+
+    try
+    {
+        const auto& r_vec = this->turningRestrictions(sourceEdgeId);
+
+        for(const auto& restr : r_vec)
+        {
+            restricted_targets.push_back(restr.toEdgeId());
+        }
+    }
+    catch (RestrictionsException& re)
+    {
+        // never mind
+    }
+    return restricted_targets;
+}
+
 const std::set<EdgeIdType>&
 EdgeRestrictions::disusedEdges() const
 {
