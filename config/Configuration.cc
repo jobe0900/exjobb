@@ -11,9 +11,9 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Configuration::Configuration()
-    : mDbConfig(), mVehicleConfig()
-{}
+//Configuration::Configuration()
+//    : mDbConfig(), mVehicleConfig()
+//{}
 
 //Configuration::~Configuration()
 //{

@@ -10,7 +10,7 @@
 
 #include <limits>
 
-typedef unsigned long OsmIdType;
+typedef long long OsmIdType;
 
 struct Osm
 {

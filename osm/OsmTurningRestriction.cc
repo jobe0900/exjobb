@@ -137,6 +137,26 @@ OsmTurningRestriction::isInRestriction(EdgeIdType edgeId) const
     }
     return false;
 }
+
+bool
+OsmTurningRestriction::isRestricted(
+    EdgeIdType fromEdgeId,
+    EdgeIdType toEdgeId) const
+{
+    if(mFromEdgeId == fromEdgeId && mToEdgeId == toEdgeId)
+    {
+        if(mType == NO_LEFT_TURN
+        || mType == NO_RIGHT_TURN
+        || mType == NO_STRAIGHT_ON
+        || mType == NO_U_TURN
+        || mType == NO_ENTRY
+        || mType == NO_EXIT)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////

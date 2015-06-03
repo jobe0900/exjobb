@@ -10,6 +10,7 @@
 
 // SYSTEM INCLUDES
 //
+#include <algorithm>
 #include <map>
 #include <ostream>
 
@@ -20,10 +21,12 @@
 // LOCAL INCLUDES
 //
 #include "GraphException.h"
-#include "TopologyTypes.h"
 #include "Vertex.h"
 #include "Edge.h"
 #include "Topology.h"
+#include "Restrictions.h"
+#include "../config/Configuration.h"
+#include "../lgu/Logging.h"
 
 // FORWARD REFERENCES
 //
@@ -111,9 +114,8 @@ public:
     Graph() = delete;
 
     /** Constructor.
-     * Build a graph from the supplied topology.
-     * @param   rTopology   The topology to use as basis for the graph.
-     * @throws  GraphException if something is wrong with topology.
+     * Graph should be based on the supplied topology.
+     * @param   rTopology       The topology to use as basis for the graph.
      */
     Graph(const Topology& rTopology);
 
@@ -133,6 +135,14 @@ public:
     std::ostream&         operator<<(std::ostream& os, const Graph& rGraph);
 
 // OPERATIONS
+    /** Add restrictions to the topology and rebuilds the graph.
+     * @param   pRestrictions   Restrictions to impose on the graph.
+     * @param   pConfiguration  Configuration to compare restrictions against.
+     */
+    void                  addRestrictions(
+        Restrictions&   rRestrictions,
+        Configuration&  rConfiguration);
+
 // ACCESS
     /**
      * @return  The number of Vertices in the Graph.
@@ -154,15 +164,17 @@ public:
      */
     size_t                nrLines() const;
 
-    /**
+    /** Builds graph if necessary before returning.
      * @return  The Boost Graph representation of the Graph.
+     * @throws  GraphException if something goes wrong building the graph.
      */
-    const GraphType&      getBoostGraph() const;
+    const GraphType&      getBoostGraph();
 
-    /**
+    /** Builds graph if necessary before returning.
      * @return  The Boost Graph representation of the LineGraph.
+     * @throws  GraphException if something goes wrong building the graph.
      */
-    const LineGraphType&  getBoostLineGraph() const;
+    const LineGraphType&  getBoostLineGraph();
 
 // INQUIRY
     /**
@@ -187,25 +199,98 @@ private:
     // buildGraph() ----------------------------------------------------------
     // Used when constructing the internal Boost graph representation
     // from the Topology.
+
+    /** Build the graph by adding vertices and edges from the topology. */
     void                buildGraph();
+
+    /** Add the topology vertices to the graph, respecting restrictions.
+     * Helper for 'buildGraph()'.
+     */
     void                addTopoVerticesToGraph();
+
+    /** Add the topology edges to the graph, respecting restrictions.
+     * Helper for 'buildGraph()'.
+     */
     void                addTopoEdgesToGraph();
-    void                addDirectedEdge(EdgeIdType id,
-                                        const VertexType& source,
-                                        const VertexType& target,
-                                        EdgeIdType ix);
+
+    /** Add a directed edge from source to target.
+     * Helper for 'addTopoEdgesToGraph()'.
+     * @param   id      The edge's topology id.
+     * @param   source  The source vertex.
+     * @param   target  The target vertex.
+     * @param   e_ix    The running index amongst edges added to graph.
+     */
+    void                addDirectedEdge(
+        EdgeIdType id,
+        const VertexType& source,
+        const VertexType& target,
+        EdgeIdType ix);
+
+    /** Get the graph vertex corresponding to a given id.
+     * @param   id      The vertex' topology id.
+     * @return  Reference to the Graph vertex corresponding to id.
+     * @throw   GraphException if there is no corresponding vertex to id.
+     */
     const VertexType&   getGraphVertex(VertexIdType id) const;
 
     // buidlLineGraph() ------------------------------------------------------
     // Used when transforming the Graph to a LineGraph
+
+    /** Start converting the Graph to a LineGraph.
+     */
     void                buildLineGraph();
+
+    /** Add Edges from the graph as Nodes in the Linegraph.
+     * Helper for 'buildLineGraph()'
+     */
     void                addGraphEdgesToLineGraph();
-    const NodeType&     getLineGraphNode(NodeIdType id) const;
+
+    /** Actually add a graph edge as a linegraph node, checking if it already
+     * exists or not.
+     * @param   rGraphEdge  The Edge to add to the LineGraph as Node.
+     * @param   rNode       The Node corresponding to the edge returned here.
+     */
     void                addGraphEdgeAsLineGraphNode(
-                            const EdgeType& rGraphEdge, NodeType& rNode);
+        const EdgeType& rGraphEdge,
+        NodeType&       rNode);
+
+    /** Get an already existing Node from the LineGraph.
+     * @param   id  The Edge id (== the Node id).
+     * @param   The LineGraph Node.
+     * @throw   GraphException if there is no Node with that id.
+     */
+    const NodeType&     getLineGraphNode(NodeIdType id) const;
+
+    /** Connect the newly added Node to all Nodes it should be connected to,
+     * that is look up which outgoing edges there are from the Edge's (node's)
+     * target vertex, and if there are no restrictions: add the Edge as a Node
+     * to the LineGraph and add a Line between the Nodes.
+     * @param   rSourceNode     The Node to add Lines from.
+     * @parma   rViaVertex      Are there any restrictions in the vertex?
+     * @throw   GraphException
+     */
     void                connectSourceNodeToTargetNodesViaVertex(
-                            const NodeType& rSourceNode,
-                            const VertexType& rViaVertex);
+        const NodeType& rSourceNode,
+        const VertexType& rViaVertex);
+
+    /**
+     * @param   edgeId  Id to edge to look up.
+     * @return  true if this edge has no exits, meaning it is no use adding it.
+     */
+    bool                edgeHasNoExit(EdgeIdType edgeId) const;
+
+    /**
+     * @return  A vector of all restricted edges from this Edge.
+     */
+    std::vector<EdgeIdType>
+                        getRestrictedTargets(EdgeIdType edgeId) const;
+
+    /**
+     * @return  true if this target edge has restricted access from the source.
+     */
+    bool                isTargetRestricted(
+        const std::vector<EdgeIdType>&  rRestrictedTargets,
+        EdgeIdType                      targetId) const;
 
     void                printVertices(std::ostream& os) const;
     void                printEdges(std::ostream& os)    const;
@@ -219,6 +304,11 @@ private:
     TopoEdgeIdToGraphEdgeMapType      mIdToEdgeMap;       // map original id to GraphEdge
     GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode
     const Topology&                   mrTopology;
+    Restrictions*                     mpRestrictions;
+    Configuration*                    mpConfiguration;
+    mutable boost::log::sources::severity_logger
+        <boost::log::trivial::severity_level>
+                                      mLog;
 
 // CONSTANTS
 };

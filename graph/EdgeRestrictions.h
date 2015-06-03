@@ -27,6 +27,7 @@
 #include "../osm/OsmVehicle.h"
 #include "Edge.h"
 #include "Vertex.h"
+#include "../config/VehicleConfig.h"
 
 // FORWARD REFERENCES
 //
@@ -67,6 +68,15 @@ public:
 
         unsigned    maxSpeed    {DEFAULT_SPEED_MAX};
         unsigned    minSpeed    {DEFAULT_SPEED_MIN};
+
+        bool    restrictsAccess(const VehicleConfig& rVehicleConfig) const
+        {
+            return (maxHeight <= rVehicleConfig.height)
+                || (maxLength <= rVehicleConfig.length)
+                || (maxWeight <= rVehicleConfig.weight)
+                || (maxWidth  <= rVehicleConfig.width)
+                || (minSpeed  >= rVehicleConfig.maxspeed);
+        }
     };
 
     enum RestrictionType
@@ -86,7 +96,7 @@ public:
 
     /** Default constructor.
      */
-    EdgeRestrictions();
+    EdgeRestrictions() = default;
 
 
     /** Copy constructor.
@@ -276,6 +286,13 @@ public:
     const std::vector<OsmTurningRestriction>&
                         turningRestrictions(EdgeIdType edgeId) const;
 
+    /** Get a list of all edge id's to which travle from edge is not allowed.
+     * @param   edgeId      The id of the edge to travle from.
+     * @return  A vector of edgeIds to which travel is not allowed.
+     */
+    std::vector<EdgeIdType>
+                        restrictedTargetEdges(EdgeIdType sourceEdgeId) const;
+
     /** Get all edges marked as disused.
      * @return  The set of disused edges (ids).
      */
@@ -338,6 +355,19 @@ public:
      * @return true if the edge has no exit.
      */
     bool                hasNoExitRestriction(EdgeIdType edgeId) const;
+
+    /** Check the restrictions for an edge.
+     * @param   rEdge           The Edge to check.
+     * @param   rVehicleConfig  Configuration for the current vehicle.
+     * @param   rBarrierRule    Rules for which Barrier types restricts access.
+     * @param   rAccessRule     Rules for which Access types restricts access.
+     * @return  true if access is allowed, false if access restricted
+     */
+    bool                isEdgeRestricted(
+        EdgeIdType  edgeId,
+        const VehicleConfig& rVehicleConfig,
+        const OsmBarrier::RestrictionsRule& rBarrierRule,
+        const OsmAccess::AccessRule& rAccessRule) const;
 
 protected:
 private:

@@ -54,6 +54,8 @@ public:
      */
     struct AccessRule
     {
+        AccessRule() = default;
+        AccessRule(const AccessRule& from) = default;
         AccessRule(std::initializer_list<AccessType> allowedTypes);
 
         bool    hasAccess(AccessType type) const;
@@ -92,7 +94,7 @@ public:
      * @param   AccessRule
      * @return  true if access is allowed, false if not
      */
-    bool                hasAccess(AccessRule rule) const;
+    bool                allowsAccess(AccessRule rule) const;
 
 // ACCESS
     /**
