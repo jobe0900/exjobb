@@ -1,10 +1,6 @@
-/**  Data structure for Point in Mercator, unit meters.
+/**  Data structure for Point.
  *
- * #include "TopologyNode.h"
- *
- * A longer description.
- *
- * @see something
+ * #include "Point.h"
  */
 
 #ifndef UTIL_POINT_H_

@@ -33,9 +33,8 @@ public:
 	 */
 	TimeToStringMaker() = delete;
 
-	/** Destructor.
-	 */
-//	~TimeToStringMaker() {};
+	/** Copy constructor */
+	TimeToStringMaker(const TimeToStringMaker& from) = delete;
 
 // OPERATORS
 // OPERATIONS
