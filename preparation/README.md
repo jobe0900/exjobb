@@ -46,3 +46,39 @@ This step is optional. It should be efficient and safe to build the topology onc
     $ psql -U tester -d mikh_0530 -f build_postgis_topology.sql
     
 This step creates a table `public.highways_lgu` and adds a new schema called `topo_lgu` which contains tables for the topology.
+
+
+Test databases
+--------------
+During testing different databases has been tested, they were created so:
+
+#### `mikh_style`
+
+    $ createdb mikh_style -U jonas
+    $ psql -U jonas -d mikh_style -c "CREATE extension postgis;"
+    $ psql -U jonas -d mikh_style -c "CREATE extension postgis_topology;"
+    $ psql -U jonas -d mikh_style -c "CREATE extension hstore;"
+    $ psql -U jonas -d mikh_style -c "SET search_path=topology,public
+    $ osm2pgsql -U jonas -d mikh_style -s -k -S new.style mikhailovsk.osm
+    $ psql -U jonas -d mikh_style -c "CREATE TABLE highways_test AS SELECT * FROM planet_osm_line WHERE highway IS NOT NULL;"
+    $ psql -U jonas -d mikh_style -c "SELECT topology.CreateTopology('topo_test', 900913);"
+    $ psql -U jonas -d mikh_style -c "SELECT topology.AddTopoGeometryColumn('topo_test', 'public', 'highways_test', 'topo_geom', 'LINESTRING');"
+    $ psql -U jonas -d mikh_style -c "UPDATE highways_test SET topo_geom = topology.toTopoGeom(way, 'topo_test', 1, 1.0);"
+    
+#### `mikh_0522`
+
+    $ createdb mikh_0522 -U jonas
+    $ psql -U jonas -d mikh_0522 -c "CREATE EXTENSION postgis;"
+    $ psql -U jonas -d mikh_0522 -c "CREATE EXTENSION postgis_topology;"
+    $ psql -U jonas -d mikh_0522 -c "CREATE EXTENSION hstore;"
+    $ osm2pgsql -U jonas -d mikh_0522 -s -k -S LGU.style mikhailovsk.osm
+    $ psql -U jonas -d mikh_0522 -c "CREATE TABLE highways_test AS SELECT * FROM planet_osm_line WHERE highway IS NOT NULL;"
+    $ psql -U jonas -d mikh_0522 -c "SELECT topology.CreateTopology('topo_test', 900913);"
+    $ psql -U jonas -d mikh_0522 -c "SELECT topology.AddTopoGeometryColumn('topo_test', 'public', 'highways_test', 'topo_geom', 'LINESTRING');"
+    $ psql -U jonas -d mikh_0522 -c "UPDATE highways_test SET topo_geom = topology.toTopoGeom(way, 'topo_test', 1, 1.0);"
+    
+#### `mikh_0530`
+Described above.
+
+#### `mikh_restr_0602`
+As `mikh_0530` but using the modified osm-file `mikhailovsk-turnrestriction.osm` instead. That file has been modified with a turn restriction for testing purposes.
