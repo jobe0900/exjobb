@@ -1,8 +1,11 @@
-/*
- * Logging.h
+/* Use Boost loggging, and handle setup in this file.
  *
- *  Created on: 3 jun 2015
- *      Author: jonas
+ * #include "Logging.h"
+ *
+ * Needs a lot of linking to work:
+ * -lboost_log -lboost_log_setup -lboost_thread -lboost_system -lpthread
+ *
+ *
  */
 
 #ifndef LGU_LOGGING_H_
@@ -18,7 +21,9 @@
 #include <boost/log/utility/setup/common_attributes.hpp>
 #include <boost/log/trivial.hpp>
 
-
+/** To simplify the set up of logging in the application: include this file
+ * and call the 'initLogging()' function.
+ */
 struct Logging
 {
     static void initLogging()
@@ -35,8 +40,6 @@ struct Logging
         boost::log::core::get()->set_filter(
             boost::log::trivial::severity >= boost::log::trivial::info
         );
-
-
 
         isInited = true;
     }
