@@ -2,9 +2,6 @@
  *
  * #include "ConfigurationException.h"
  *
- * A longer description.
- *
- * @see something
  * @author Jonas Bergman
  */
 

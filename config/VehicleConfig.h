@@ -21,6 +21,9 @@
 // FORWARD REFERENCES
 //
 
+/** A simple data structure for holding the configuration
+ *  of the vehicle we are routing.
+ */
 struct VehicleConfig
 {
 // ATTRIBUTES

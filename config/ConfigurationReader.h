@@ -48,7 +48,6 @@ public:
 	ConfigurationReader(const std::string& rFilename);
 
 
-
 // OPERATORS
 // OPERATIONS
 
@@ -57,20 +56,6 @@ public:
 	 * @throws  ConfigurationException
 	 */
 	void    fillConfiguration(Configuration& rConfig) const;
-
-	/** Read the database part of the configuration and populate config struct.
-	 *
-	 * @param	rDatabaseConfig		The configuration structure to populate.
-	 * @throw	ConfigurationException	If missing configuration.
-	 */
-//	void	getDatabaseConfiguration(DatabaseConfig& rDatabaseConfig);
-
-	/** Read the vehicle part of the configuration and populate config struct.
-	 *
-	 * @param	rVehicleConfig		The configuration structure to populate.
-	 * @throw	ConfigurationException	If missing configuration.
-	 */
-//	void	getVehicleConfiguration(VehicleConfig& rVehicleConfig);
 
 // ACCESS
 // INQUIRY

@@ -2,9 +2,6 @@
  *
  * #include "DatabaseConfig.h"
  *
- * A longer description.
- *
- * @see something
  * @author Jonas Bergman
  */
 #ifndef CONFIG_DATABASECONFIG_H_
@@ -25,6 +22,9 @@
 // FORWARD REFERENCES
 //
 
+/** A simple data structure for holding the configuration
+ * for database connections.
+ */
 struct DatabaseConfig
 {
 // ATTRIBUTES
@@ -41,20 +41,16 @@ struct DatabaseConfig
 	 */
 	std::string
 	getConnectionString() const {
-//	    if(connectionString.length() == 0) {
-	        std::ostringstream oss;
-	        oss << "host=" << hostname
-	            << " port=" << port
-	            << " user=" << username
-	            << " password=" << password
-	            << " dbname=" << database;
-	        return  oss.str();
-//	    }
-//		return connectionString;
+	    std::ostringstream oss;
+	    oss << "host=" << hostname
+	        << " port=" << port
+	        << " user=" << username
+	        << " password=" << password
+	        << " dbname=" << database;
+	    return  oss.str();
 	}
 
 private:
-//	std::string connectionString;
 };
 
 // INLINE METHODS

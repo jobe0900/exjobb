@@ -67,16 +67,6 @@ public:
      */
     const VehicleConfig&  getVehicleConfig() const;
 
-    /** Set the DatabaseConfig.
-     * @param   pDbConfig   Pointer to a database configuration
-     */
-//    void                  setDatabaseConfig(const DatabaseConfig* pDbConfig);
-
-    /** Set the VehicleConfig.
-     * @param   pVehicleConfig   Pointer to a vehicle configuration
-     */
-//    void                  setVehicleConfig(const VehicleConfig* pVehicleConfig);
-
 // ACCESS
 // INQUIRY
 

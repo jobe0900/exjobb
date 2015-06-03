@@ -1,8 +1,8 @@
 /*
  * ConfigurationReader.cc
  *
- *  Created on: 7 maj 2015
- *      Author: jonas
+ *  Created on: 2015-05-07
+ *      Author: Jonas Bergman
  */
 
 #include "ConfigurationReader.h"  // class implemented
