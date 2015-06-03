@@ -1,7 +1,7 @@
 /**  The EdgeRestrictions class contains different restrictions for edges
  * in the graph such as dimensions, access, turn restrictions.
  *
- * #include "EdgeRestrictions.h" <BR>
+ * #include "EdgeRestrictions.h"
  *
  * @author  Jonas Bergman
  */
@@ -69,6 +69,9 @@ public:
         unsigned    maxSpeed    {DEFAULT_SPEED_MAX};
         unsigned    minSpeed    {DEFAULT_SPEED_MIN};
 
+        /** Look if the vehicle properties restricts
+         * vehicle with given configuration.
+         */
         bool    restrictsAccess(const VehicleConfig& rVehicleConfig) const
         {
             return (maxHeight <= rVehicleConfig.height)
@@ -220,7 +223,7 @@ public:
     VehicleProperties&  vehicleProperties(EdgeIdType edgeId);
 
     /** Get the map of all VehicleProperty Restrictions.
-     * @return  Map of all property restrictons.
+     * @return  Map of all property restrictions.
      */
     const std::map<EdgeIdType, VehicleProperties>&
                         vehicleProperties() const;

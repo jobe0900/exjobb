@@ -1,15 +1,7 @@
-/*
- * Restriction.h
- *
- *  Created on: 27 maj 2015
- *      Author: jonas
- */
-
-
 /**  The Restrictions class is a container for
  *   EdgeRestrictions and VertexRestrictions.
  *
- * #include "Restrictions.h" <BR>
+ * #include "Restrictions.h"
  *
  * @author  Jonas Bergman
  */

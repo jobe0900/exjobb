@@ -19,7 +19,6 @@
 // LOCAL INCLUDES
 //
 #include "Vertex.h"
-//#include "EdgeData.h"
 #include "../osm/OsmHighway.h"
 #include "../osm/OsmId.h"
 
@@ -158,7 +157,7 @@ public:
     void              setHasViaWayRestriction(bool hasViaWayRestriction = true);
 
     /** Parse a string into an EdgeIdType.
-     *  @param  idString    Thestring representing the id.
+     *  @param  idString    The string representing the id.
      *  @return The corresponding edge id.
      *  @throw  std::invalid_argument
      *  @throw  std::out_of_range

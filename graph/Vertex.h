@@ -1,6 +1,6 @@
 /**  Data structure for vertices in Topology.
  *
- * #include "TopologyNode.h"
+ * #include "Vertex.h"
  *
  * @author Jonas Bergman
  */

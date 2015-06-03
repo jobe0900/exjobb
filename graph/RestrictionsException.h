@@ -23,7 +23,7 @@
 //
 
 /**
- * Exception to throw from Restrictions class..
+ * Exception to throw from Restrictions class.
  * More information of the type of exception is given in the 'what()' message.
  */
 class RestrictionsException : public std::exception

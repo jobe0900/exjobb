@@ -2,8 +2,6 @@
  *
  * #include "Topology.h"
  *
- * A longer description.
- *
  * @author Jonas Bergman
  */
 
@@ -34,6 +32,8 @@ typedef std::map<VertexIdType, Vertex>          TopoVertexMapType;
 typedef std::map<EdgeIdType, Edge>              TopoEdgeMapType;
 typedef std::multimap<OsmIdType, EdgeIdType>    OsmIdToTopoIdEdgeMap;
 
+/** This class holds Edges and Vertices such as they are in the database.
+ */
 class Topology
 {
     friend class Graph;

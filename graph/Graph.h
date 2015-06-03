@@ -34,6 +34,7 @@
 // TYPES
 typedef EdgeIdType  NodeIdType;
 typedef EdgeIdType  LineIdType;
+
 /**
  * Map the GraphEdges to the original Edge id in the Topology.
  */
@@ -78,9 +79,10 @@ struct LineGraphLine
 
 
 /**
- * A class for a graph representing the topology.
+ * A class for a keeping Topology and optional Restrictions and Costs, and
+ * from that informations building a Boost graph that is transformed to
+ * another Boost graph representing a Line Graph.
  */
-//template <typename GraphType>
 class Graph
 {
 public:

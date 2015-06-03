@@ -1,26 +1,35 @@
-README
-======
-
 graph
------
+=====
 
 The `graph` package constist of classes for representing graphs.
 
-### Vertex
-The Vertex class is simple with just an `id` and a `point` location.
-
-### Edge
-The Edge class simply has an `id`, and id to `source` Vertex and id to `target` Vertex.
+## Graph
+A Graph consists of a `Topology` and can contain `Restrictions` and `Costs` (TODO). Those classes are used when building a `graph` and `linegraph` based on [Boost adjacency lists](http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/adjacency_list.html). The `Graph` class holds several `maps` that connects the original Edges and Vertices to those used internally in the Boost graphs, so that it is possible to backtrack information about those elements. The internal Boost types keeps some properties ["bundled"](http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/bundles.html), instead of as "interior" properties.
 
 ### Topology
-Topology is a class holding Edges and Vertices for the topology fetched from the `MapProvider`. It simply states which Vertices are connected by which Edges, without any costs or restrictions or directions. When created it validates that the `source` and `target` Vertices of the Edges actually exists in the topology.
+`Topology` is a class holding `Edges` and `Vertices` for the topology fetched from the `MapProvider`. It simply states which `Vertices` are connected by which `Edges`, without any costs or restrictions or directions. When created it validates that the `source` and `target` Vertices of the Edges actually exists in the topology.
 
-### Graph
-A Graph consists of a `Topology` and `Costs` (TODO) and `Restrictions` (TODO). The Graph is directed, so when one adds a topology it creates a directed Boost graph as the representation. The Graph maps "Graph Edges" and "Graph Vertices" to id's to the Edge class and the Vertex class, so one can have a look up to find all relevant information in the original Edges and Vertices in the Topology.
+### Edge
+The Edge holds some relevant data from the topology. It has an `id`, and a field for which the original `osm_id` was before building the database topology. It also holds id to `source` Vertex and id to `target` Vertex, some data about the geometry and the "road" such as # of lanes, plus flags stating if it has restrictions.
 
-
-To enable both ordinary graphs and line graphs to use the same graph class, both types uses the same classes for graph, topology and vertices and edges. All differing data is found in `EdgeData` and `VertexData`. Those classes are abstract, and the actual specialization is found in the sub-classes `TopoEdgeData`, `LineGraphEdgeData` and `TopoVertexData` and `LineGraphVertexData`.
+### Vertex
+The Vertex class is simple with just an `id` and a `point` location, plus a flag for restrictions.
 
 ### Restrictions
+The `Restrictions` class is a container for `EdgeRestrictions` and `VertexRestrictions` (TODO).
 
-- Turn restriction via other edges and not just via a vertex are difficult. The solution could be to set a flag on the LineGraphNode that there exist a VIA_WAY restriction that must be taken into account.
+### EdgeRestrictions
+The `EdgeRestrictions` are a bunch of maps, mapping and `EdgeId` to restrictions that can be imposed on edges. Those restrictions are:
+
+- **Vehicle properties**: weight, height, length, width, maxspeed.
+- **General access**: [OSM wiki for access](http://wiki.openstreetmap.org/wiki/Key:access).
+- **Vehicle type access**: as for General access, but specified for a category of vehicles, such as `motorcar` or `goods`.
+- **Barrier**: if the edge is blocked with some kind of barrier.
+- **Turning restrictions**: [OSM wiki for turn restrictions](http://wiki.openstreetmap.org/wiki/Relation:restriction).
+- **Disused**: if the edge (road) is marked as no longer in use.
+- **NoExit**: if the edge has no exit, it should not be used for building a linegraph.
+
+(Turn restriction via other edges and not just via a vertex are difficult. At the time when converting the topology to a line graph it is impossible to have the relevant information. The solution is to set a flag on the Edge that there exist a VIA_WAY restriction that must be taken into account when routing, and the routing module must look up and make its own decisions somehow.)
+
+### Exceptions
+`GraphException` is the main public exception to be thrown from this package. `RestrictionsException` and `TopologyException` are thrown when building those classes, but not as exposed externally.

@@ -19,16 +19,6 @@
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 //============================= LIFECYCLE ====================================
-//EdgeRestrictions::EdgeRestrictions()
-//    : mVehiclePropertiesMap(),
-//      mGeneralAccessMap(),
-//      mVehicleTypeAccessMap(),
-//      mBarrierMap(),
-//      mTurningRestrictionsMap(),
-//      mDisusedEdges(),
-//      mNoExitEdges()
-//{ }
-
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
 void
