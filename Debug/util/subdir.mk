@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CC_SRCS += \
+../util/Logging.cc \
 ../util/TimeToStringMaker.cc 
 
 OBJS += \
+./util/Logging.o \
 ./util/TimeToStringMaker.o 
 
 CC_DEPS += \
+./util/Logging.d \
 ./util/TimeToStringMaker.d 
 
 

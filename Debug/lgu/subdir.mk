@@ -4,16 +4,13 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CC_SRCS += \
-../lgu/LineGraphUtility.cc \
-../lgu/Logging.cc 
+../lgu/LineGraphUtility.cc 
 
 OBJS += \
-./lgu/LineGraphUtility.o \
-./lgu/Logging.o 
+./lgu/LineGraphUtility.o 
 
 CC_DEPS += \
-./lgu/LineGraphUtility.d \
-./lgu/Logging.d 
+./lgu/LineGraphUtility.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

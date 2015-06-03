@@ -26,7 +26,7 @@
 #include "Topology.h"
 #include "Restrictions.h"
 #include "../config/Configuration.h"
-#include "../lgu/Logging.h"
+#include "../util/Logging.h"
 
 // FORWARD REFERENCES
 //
