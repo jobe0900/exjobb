@@ -94,7 +94,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		    THEN ("the # of edges in the graph representation"
 		          " should as many as in the topology")
 		    {
-		        INFO (g2)
+		        INFO (g2);
 		        const auto& boost_graph = g2.getBoostGraph();
 		        REQUIRE (boost::num_edges(boost_graph) == topology.nrEdges());
 		    }
@@ -119,8 +119,8 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		    THEN ("the # of edges in the graph representation"
 		        " should be one more than in the topology")
 		    {
-		        INFO (g2)
-		                    const auto& boost_graph = g2.getBoostGraph();
+		        INFO (g2);
+		        const auto& boost_graph = g2.getBoostGraph();
 		        REQUIRE (boost::num_edges(boost_graph) == topology.nrEdges() + 1);
 		    }
 		}

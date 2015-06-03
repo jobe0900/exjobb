@@ -31,7 +31,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 				REQUIRE (r_db_config.port == 5432);
 				REQUIRE (r_db_config.username == "tester");
 				REQUIRE (r_db_config.password == "tester");
-				REQUIRE (r_db_config.database == "mikh_style");
+				REQUIRE (r_db_config.database == "mikh_0530");
 			}
 		}
 	}
@@ -84,7 +84,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 			THEN ("we get a topology configuration filled out")
 			{
 				REQUIRE (r_topo_config.providerName == "postgis");
-				REQUIRE (r_topo_config.topoName == "test");
+				REQUIRE (r_topo_config.topoName == "lgu");
 				REQUIRE (r_topo_config.roadsPrefix == "highways");
 				REQUIRE (r_topo_config.topologySchemaPrefix == "topo");
 				REQUIRE (r_topo_config.tempTopoName == "");
