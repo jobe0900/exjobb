@@ -8,7 +8,6 @@
 #include "JsonTestProvider.h"  // class implemented
 #include "../../graph/Vertex.h"
 #include "../../graph/Edge.h"
-//#include "../../graph/TopoEdgeData.h"
 
 #include <iostream>
 #include <sstream>
@@ -58,8 +57,6 @@ JsonTestProvider::getTopology(Topology& rTopology)
                 v_row[i] = item.second.get_value<int>();
                 ++i;
             }
-//            Vertex v(v_row[0], Point(v_row[1], v_row[2]));
-//            rTopology.addVertex(v);
             rTopology.addVertex(v_row[0], Point(v_row[1], v_row[2]));
         }
 

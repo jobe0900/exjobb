@@ -23,7 +23,9 @@
 // FORWARD REFERENCES
 //
 
-
+/** This class holds static queries about the topology to be used by the
+ * PostGisProvider. It also holds types for handling the results.
+ */
 class TopologyQueries
 {
 public:
@@ -59,8 +61,6 @@ public:
             LANES,
             ONEWAY,
 
-            // vehicle property
-
             // access
             ACCESS,
             MOTORCAR,
@@ -72,6 +72,7 @@ public:
             VEHICLE,
         };
     };
+
     struct VehiclePropertiesResult
     {
         enum Columns

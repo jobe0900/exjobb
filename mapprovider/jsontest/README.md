@@ -1,4 +1,9 @@
-Format of test file  in json is:
+JsonTest
+========
+
+This package exists for the sole purpose of testing in the initial stages of development, so that we easily could read in a small set of well-known edges and vertices.
+
+Format of test file in json is:
 
 ```json
     {

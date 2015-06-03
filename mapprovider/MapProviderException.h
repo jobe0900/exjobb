@@ -2,9 +2,6 @@
  *
  * #include "MapProviderException.h"
  *
- * A longer description.
- *
- * @see something
  * @author Jonas Bergman
  */
 
@@ -52,7 +49,6 @@ public:
 // INQUIRY
 	const char* what() const noexcept
 	{return mMessage.c_str();}
-//	{return (mMessage + " " + std::exception::what()).c_str();}
 
 protected:
 private:

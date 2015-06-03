@@ -42,7 +42,6 @@
  * A class to handle the reading of data from the PostGis database.
  * The configurations for the connection and the base name of the
  * topology name is given.
- * from a json configuration file.
  */
 class PostGisProvider : public MapProvider
 {
@@ -95,7 +94,6 @@ private:
      */
     void    addEdgeResultToTopology(const pqxx::result& rEdgeResult,
                                     Topology& rTopology);
-
 
     /** Helper to add basic data from db to Edge.
      * @param   rRow        Row with data for an Edge.

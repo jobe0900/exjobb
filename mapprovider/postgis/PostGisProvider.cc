@@ -85,8 +85,6 @@ catch(const std::exception& e)
             std::string("PostGisProvider:ctor(out): ") + e.what());
 }
 
-
-
 PostGisProvider::~PostGisProvider()
 {
 	try
@@ -155,7 +153,6 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 		    transaction,
 		    rVertexResult,
 		    mVertexTable);
-
 	}
 	catch(const std::exception& e)
 	{
@@ -199,7 +196,6 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 		    mEdgeTable,
 		    mSchemaName,
 		    mTableName);
-
 	}
 	catch(const std::exception& e)
 	{
@@ -219,8 +215,6 @@ PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
         addRoadDataResultToEdge(edge, row);
     }
 }
-
-
 
 Edge&
 PostGisProvider::addBasicResultToEdge(const pqxx::tuple& rRow,
@@ -314,7 +308,6 @@ PostGisProvider::buildTopology(int srid, double tolerance)
 					std::string("Could not open ") + mDbConfig.database);
 		}
 
-
 		// TRANSACTION START
 		pqxx::work transaction(mConnection);
 
@@ -382,7 +375,6 @@ PostGisProvider::removeTopology()
         throw MapProviderException(std::string(
             "PostGisProvider:removeTopology: ") + e.what());
 	}
-
 }
 
 void
