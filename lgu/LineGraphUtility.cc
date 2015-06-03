@@ -20,8 +20,7 @@ LineGraphUtility::LineGraphUtility(const std::string& rFilename)
       mConfig(),
       mpMapProvider(nullptr),
       mTopology(),
-      mpGraph(nullptr),
-      mpLineGraph(nullptr)
+      mpGraph(nullptr)
 {
     try
     {
@@ -53,7 +52,6 @@ LineGraphUtility::init()
     initConfiguration();
     initMapProvider();
     buildGraph();
-//    transformGraph();
 }
 
 void

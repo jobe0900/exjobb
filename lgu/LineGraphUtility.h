@@ -25,6 +25,9 @@
 //
 
 
+/** A class to run the fetching of data from database, through to complete
+ * weighted linegraph.
+ */
 class LineGraphUtility
 {
 public:
@@ -55,7 +58,7 @@ public:
 // OPERATIONS
     /** Return a LineGraph
      */
-    Graph*  getLineGraph();
+    Graph::LineGraphType*  getLineGraph();
 
 // ACCESS
 // INQUIRY
@@ -76,7 +79,6 @@ private:
     MapProvider*        mpMapProvider;
     Topology            mTopology;
     Graph*              mpGraph;
-    Graph*              mpLineGraph;
 
 // CONSTANTS
 //    static constexpr const char* SETTINGSFILE = "settings.json";
