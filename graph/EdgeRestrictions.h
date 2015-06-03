@@ -363,7 +363,7 @@ public:
      * @param   rAccessRule     Rules for which Access types restricts access.
      * @return  true if access is allowed, false if access restricted
      */
-    bool                isEdgeAllowed(
+    bool                isEdgeRestricted(
         EdgeIdType  edgeId,
         const VehicleConfig& rVehicleConfig,
         const OsmBarrier::RestrictionsRule& rBarrierRule,

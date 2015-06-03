@@ -342,7 +342,7 @@ EdgeRestrictions::noExitEdges() const
 }
 
 bool
-EdgeRestrictions::isEdgeAllowed(
+EdgeRestrictions::isEdgeRestricted(
         EdgeIdType edgeId,
         const VehicleConfig& rVehicleConfig,
         const OsmBarrier::RestrictionsRule& rBarrierRule,
@@ -377,24 +377,24 @@ EdgeRestrictions::isEdgeAllowed(
                 {
                     is_generally_restricted = true;
                 }
-                break;
+                continue;
             case EdgeRestrictions::VEHICLE_TYPE_ACCESS:
                 if(vehicleTypeAccess(edgeId, rVehicleConfig.category)
                     .allowsAccess(rAccessRule))
                 {
                     is_vehicle_allowed = true;
                 }
-                break;
+                continue;
             default:
-                break;
+                continue;
         }
     }
 
     if(is_restricted || (is_generally_restricted && !is_vehicle_allowed))
     {
-        return false; // this edge should not be added.
+        return true; // this edge should not be added.
     }
-    return true;
+    return false;
 }
 
 //============================= INQUIRY    ===================================

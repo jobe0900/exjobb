@@ -56,6 +56,11 @@ Graph::addRestrictions(
 {
     mpRestrictions =  &rRestrictions;
     mpConfiguration = &rConfiguration;
+    mGraph.clear();
+    mLineGraph.clear();
+    mIdToVertexMap.clear();
+    mIdToEdgeMap.clear();
+    mEdgeIdToNodeMap.clear();
     buildGraph();
     buildLineGraph();
 }
@@ -150,9 +155,12 @@ Graph::addTopoEdgesToGraph()
         if(mpRestrictions != nullptr && mpConfiguration != nullptr)
         {
             const EdgeRestrictions& er = mpRestrictions->edgeRestrictions();
-            if(!er.isEdgeAllowed(e.id(), mpConfiguration->getVehicleConfig(),
+            if(er.isEdgeRestricted(e.id(), mpConfiguration->getVehicleConfig(),
                                  barrier_rule, access_rule))
             {
+                BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                    << "Graph:addTopoEdgeToGraph(): "
+                    << "Restricted Source id " << e.id();
                 continue;
             }
         }
@@ -328,6 +336,12 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
                     + ", target: " + std::to_string(target_node_id));
             }
         }
+        else
+        {
+            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                << "Graph:connectSourceNodeToTargetNodesViaVertex(): Restricted: "
+                << "Source: " << topo_source_id << " , Target: " << topo_target_id;
+        }
     }
 }
 
@@ -350,6 +364,9 @@ Graph::getRestrictedTargets(EdgeIdType edgeId) const
     {
         if(mpRestrictions->edgeRestrictions().hasTurningRestriction(edgeId))
         {
+            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                << "Graph:getRestrictedTargets(): "
+                << "Source id " << edgeId << " has restricted targets. ";
             targets = mpRestrictions->edgeRestrictions()
                       .restrictedTargetEdges(edgeId);
         }
@@ -371,6 +388,7 @@ Graph::isTargetRestricted(
         if(restr_it != rRestrictedTargets.end())
         {
             BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                << "Graph:isTargetRestricted(): "
                 << "Restricted target id " << targetId;
             return true;
         }

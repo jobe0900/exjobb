@@ -143,25 +143,24 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
 
             PostGisProvider pgp(config);
 
-            Topology topology;
-            pgp.getTopology(topology);
+            Topology topology_unrestr;
+            pgp.getTopology(topology_unrestr);
+
+            Topology topology_restr;
+            pgp.getTopology(topology_restr);
+
 
             Restrictions restrictions;
-            pgp.getRestrictions(restrictions, topology);
+            pgp.getRestrictions(restrictions, topology_restr);
 
-            Graph graph_unrestr(topology);
-            Graph graph_restr(topology);
+            Graph graph_unrestr(topology_unrestr);
+            Graph graph_restr(topology_restr);
 
             // ...............................................................
             WHEN ("Adding a turning restriction")
             {
-                graph_unrestr.addRestrictions(restrictions, config);
-//                THEN ("We should not receive an exception")
-//                {
-//                    REQUIRE_NOTHROW(
-//                        graph_unrestr.addRestrictions(restrictions, config);
-//                    );
-//                }
+                graph_restr.addRestrictions(restrictions, config);
+
                 THEN ("there should be equally many vertices "
                       "in restricted and unrestricted")
                 {
