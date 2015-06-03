@@ -26,6 +26,7 @@
 #include "Topology.h"
 #include "Restrictions.h"
 #include "../config/Configuration.h"
+#include "../lgu/Logging.h"
 
 // FORWARD REFERENCES
 //
@@ -305,6 +306,9 @@ private:
     const Topology&                   mrTopology;
     Restrictions*                     mpRestrictions;
     Configuration*                    mpConfiguration;
+    mutable boost::log::sources::severity_logger
+        <boost::log::trivial::severity_level>
+                                      mLog;
 
 // CONSTANTS
 };

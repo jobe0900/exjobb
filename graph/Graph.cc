@@ -18,10 +18,14 @@ Graph::Graph(const Topology& rTopology)
       mIdToEdgeMap(),
       mrTopology(rTopology),
       mpRestrictions(nullptr),
-      mpConfiguration(nullptr)
+      mpConfiguration(nullptr),
+      mLog()
 {
-        buildGraph();
-        buildLineGraph();
+    Logging::initLogging();
+    boost::log::add_common_attributes();
+
+    buildGraph();
+    buildLineGraph();
 }
 
 //============================= OPERATORS ====================================
@@ -366,6 +370,8 @@ Graph::isTargetRestricted(
             targetId);
         if(restr_it != rRestrictedTargets.end())
         {
+            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                << "Restricted target id " << targetId;
             return true;
         }
     }

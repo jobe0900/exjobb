@@ -11,8 +11,10 @@
 
 #include "../Graph.h"
 #include "../Topology.h"
+#include "../../config/ConfigurationReader.h"
+#include "../../mapprovider/postgis/PostGisProvider.h"
 
-SCENARIO ("Building a small graph", "[graph]")
+SCENARIO ("Building a small graph", "[graph][basic]")
 {
 	// -----------------------------------------------------------------------
 	GIVEN ("Three points and two edges for a topology")
@@ -123,4 +125,85 @@ SCENARIO ("Building a small graph", "[graph]")
 		    }
 		}
 	}
+}
+
+SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
+{
+    try
+    {
+
+        // ===================================================================
+        GIVEN ("Configuration to build a Graph with restrictions ")
+        {
+            std::string config_file("graph/catchtest"
+                "/mikh_restr_0602-testsettings.json");
+            ConfigurationReader config_reader(config_file);
+            Configuration config;
+            config_reader.fillConfiguration(config);
+
+            PostGisProvider pgp(config);
+
+            Topology topology;
+            pgp.getTopology(topology);
+
+            Restrictions restrictions;
+            pgp.getRestrictions(restrictions, topology);
+
+            Graph graph_unrestr(topology);
+            Graph graph_restr(topology);
+
+            // ...............................................................
+            WHEN ("Adding a turning restriction")
+            {
+                graph_unrestr.addRestrictions(restrictions, config);
+//                THEN ("We should not receive an exception")
+//                {
+//                    REQUIRE_NOTHROW(
+//                        graph_unrestr.addRestrictions(restrictions, config);
+//                    );
+//                }
+                THEN ("there should be equally many vertices "
+                      "in restricted and unrestricted")
+                {
+                    INFO ("  Restricted # Vertices: " << graph_restr.nrVertices());
+                    INFO ("UNRestricted # Vertices: " << graph_unrestr.nrVertices());
+                    REQUIRE (graph_restr.nrVertices() == graph_unrestr.nrVertices());
+                }
+
+                THEN ("there should be equally many edges "
+                      "in restricted and unrestricted")
+                {
+                    INFO ("  Restricted # Edges:    " << graph_restr.nrEdges());
+                    INFO ("UNRestricted # Edges:    " << graph_unrestr.nrEdges());
+                    REQUIRE (graph_restr.nrEdges() == graph_unrestr.nrEdges());
+                }
+
+                THEN ("there should be equally many nodes "
+                      "in restricted and unrestricted")
+                {
+                    INFO ("  Restricted # Nodes:    " << graph_restr.nrNodes());
+                    INFO ("UNRestricted # Nodes:    " << graph_unrestr.nrNodes());
+                    REQUIRE (graph_restr.nrNodes() == graph_unrestr.nrNodes());
+                }
+                THEN ("there should be one line less "
+                      "in restricted than unrestricted")
+                {
+                    INFO ("  Restricted # Lines:    " << graph_restr.nrLines());
+                    INFO ("UNRestricted # Lines:    " << graph_unrestr.nrLines());
+                    REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 1);
+                }
+            }
+        }
+    }
+    catch (ConfigurationException& e)
+    {
+        INFO(e.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+    catch (MapProviderException& dbe)
+    {
+        INFO(dbe.what());
+        REQUIRE (false);    // force output of error and failure
+
+    }
 }
