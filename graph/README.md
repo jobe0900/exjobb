@@ -35,7 +35,7 @@ The `EdgeRestrictions` are a bunch of maps, mapping and `EdgeId` to restrictions
 There can be tags at a point (node) but not necessarily at a vertex. Can be a barrier or a sign. They need to be related to the corresponding edge. Those tags that might impose restrictions on travel are
 
 - **Access**: to specify a `barrier` more
-- **Barrier**: might be combined with `access` (or other tags found in hstore if not following guidelines). 
+- **Barrier**: might be combined with `access` (or other tags found in hstore if not following guidelines). What does for example `motorcar=no` mean, when no other vehicles are specified? Are all bigger than a car restricted, or are all other allowed?
 - **Crossing**: specify a `highway=` or `railway=` crossing more. `crossing=no` might mean restricted travel?
 
 Traffic signs must add tags on the node so there is no need to try to figure out which edge or vertex the sign belongs to.
