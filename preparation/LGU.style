@@ -106,13 +106,13 @@ node,way 	traffic_calming 	text 		linear
 node,way 	traffic_sign 		text 		linear
 
 # Access restrictions for vehicle types
-way 		goods				text 		linear
-way 		hgv					text 		linear
-way 		lhv					text 		linear
-way 		motorcar			text 		linear
-way 		motor_vehicle		text 		linear
-way 		psv					text 		linear
-way 		vehicle				text 		linear
+node,way	goods				text 		linear
+node,way	hgv					text 		linear
+node,way	lhv					text 		linear
+node,way	motorcar			text 		linear
+node,way	motor_vehicle		text 		linear
+node,way	psv					text 		linear
+node,way	vehicle				text 		linear
 
 
 
