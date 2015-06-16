@@ -31,5 +31,14 @@ The `EdgeRestrictions` are a bunch of maps, mapping and `EdgeId` to restrictions
 
 (Turn restriction via other edges and not just via a vertex are difficult. At the time when converting the topology to a line graph it is impossible to have the relevant information. The solution is to set a flag on the Edge that there exist a VIA_WAY restriction that must be taken into account when routing, and the routing module must look up and make its own decisions somehow.)
 
+### PointRestrictions
+There can be tags at a point (node) but not necessarily at a vertex. Can be a barrier or a sign. They need to be related to the corresponding edge. Those tags that might impose restrictions on travel are
+
+- **Access**: to specify a `barrier` more
+- **Barrier**: might be combined with `access` (or other tags found in hstore if not following guidelines). 
+- **Crossing**: specify a `highway=` or `railway=` crossing more. `crossing=no` might mean restricted travel?
+
+Traffic signs must add tags on the node so there is no need to try to figure out which edge or vertex the sign belongs to.
+
 ### Exceptions
 `GraphException` is the main public exception to be thrown from this package. `RestrictionsException` and `TopologyException` are thrown when building those classes, but not as exposed externally.
