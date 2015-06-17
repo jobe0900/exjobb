@@ -226,7 +226,7 @@ private:
     const DatabaseConfig&   mDbConfig;
     const TopologyConfig&   mTopoConfig;
     pqxx::connection        mConnection;
-    std::string             mTableName;
+    std::string             mHighwayTableName;
     std::string             mSchemaName;
     std::string             mEdgeTable;
     std::string             mEdgeIdCol;

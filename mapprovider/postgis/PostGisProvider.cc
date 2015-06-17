@@ -45,25 +45,25 @@ try
         }
 
         pqxx::nontransaction nt(mConnection);
-        mTableName     = nt.esc(mTopoConfig.roadsPrefix + "_" +
+        mHighwayTableName   = nt.esc(mTopoConfig.roadsPrefix + "_" +
                                 topoBaseName);
-        mSchemaName    = nt.esc(mTopoConfig.topologySchemaPrefix + "_" +
+        mSchemaName         = nt.esc(mTopoConfig.topologySchemaPrefix + "_" +
                                 topoBaseName);
-        mEdgeTable     = nt.esc(mSchemaName + "." +
+        mEdgeTable          = nt.esc(mSchemaName + "." +
                                 mTopoConfig.edgeTableName);
-        mEdgeIdCol     = nt.esc(mSchemaName + "." +
+        mEdgeIdCol          = nt.esc(mSchemaName + "." +
                                 mTopoConfig.edgeIdColumnName);
-        mSourceCol     = nt.esc(mSchemaName + "." +
+        mSourceCol          = nt.esc(mSchemaName + "." +
                                 mTopoConfig.sourceColumnName);
-        mTargetCol     = nt.esc(mSchemaName + "." +
+        mTargetCol          = nt.esc(mSchemaName + "." +
                                 mTopoConfig.targetColumnName);
-        mEdgeGeomCol   = nt.esc(mSchemaName + "." +
+        mEdgeGeomCol        = nt.esc(mSchemaName + "." +
                                 mTopoConfig.edgeGeomColumnName);
-        mVertexTable   = nt.esc(mSchemaName + "." +
+        mVertexTable        = nt.esc(mSchemaName + "." +
                                 mTopoConfig.vertexTableName);
-        mVertexIdCol   = nt.esc(mSchemaName + "." +
+        mVertexIdCol        = nt.esc(mSchemaName + "." +
                                 mTopoConfig.vertexIdColumnName);
-        mVertexGeomCol = nt.esc(mSchemaName + "." +
+        mVertexGeomCol      = nt.esc(mSchemaName + "." +
                                 mTopoConfig.vertexGeomColumnName);
         nt.abort();
 
@@ -195,7 +195,7 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 		    rEdgeResult,
 		    mEdgeTable,
 		    mSchemaName,
-		    mTableName);
+		    mHighwayTableName);
 	}
 	catch(const std::exception& e)
 	{
@@ -315,13 +315,13 @@ PostGisProvider::buildTopology(int srid, double tolerance)
 		{
 		    TopologyQueries::installPostgisTopology(transaction);
 		    TopologyQueries::setSearchPath(transaction);
-		    TopologyQueries::createTemporaryTable(transaction, mTableName);
+		    TopologyQueries::createTemporaryTable(transaction, mHighwayTableName);
 		    TopologyQueries::createTemporarySchema(
 		        transaction, mSchemaName, srid);
 		    TopologyQueries::addTopoGeometryColumn(
-		        transaction, mSchemaName, mTableName);
+		        transaction, mSchemaName, mHighwayTableName);
 		    TopologyQueries::fillTopoGeometryColumn(
-		        transaction, mSchemaName, mTableName, tolerance);
+		        transaction, mSchemaName, mHighwayTableName, tolerance);
 
 		    // TRANSACTION END
 		    transaction.commit();
@@ -356,9 +356,9 @@ PostGisProvider::removeTopology()
 
 		try
 		{
-		    TopologyQueries::dropTemporaryTable(transaction, mTableName);
+		    TopologyQueries::dropTemporaryTable(transaction, mHighwayTableName);
 		    TopologyQueries::dropTemporarySchema(transaction, mSchemaName);
-		    TopologyQueries::deleteTemporaryLayerRecord(transaction, mTableName);
+		    TopologyQueries::deleteTemporaryLayerRecord(transaction, mHighwayTableName);
 		    TopologyQueries::deleteTemporaryTopoRecord(transaction, mSchemaName);
 
 		    // TRANSACTION END
@@ -429,7 +429,7 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
             transaction,
             rResult,
             mEdgeTable,
-            mTableName,
+            mHighwayTableName,
             mSchemaName
         );
     }
@@ -506,7 +506,7 @@ PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
             transaction,
             rResult,
             mEdgeTable,
-            mTableName,
+            mHighwayTableName,
             mSchemaName);
     }
     catch(const std::exception& e)
@@ -674,7 +674,7 @@ PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
             RestrictionQueries::dropCreateTurningRestrictionsTable(transaction);
             RestrictionQueries::identifyTurningRestrictions(
                 transaction,
-                mTableName,
+                mHighwayTableName,
                 mEdgeTable);
             RestrictionQueries::getTurningRestrictions(transaction, rResult);
         }
