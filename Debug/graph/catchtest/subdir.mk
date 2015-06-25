@@ -8,15 +8,15 @@ CC_SRCS += \
 ../graph/catchtest/Graph_test.cc \
 ../graph/catchtest/Topology_test.cc 
 
-OBJS += \
-./graph/catchtest/EdgeRestrictions_test.o \
-./graph/catchtest/Graph_test.o \
-./graph/catchtest/Topology_test.o 
-
 CC_DEPS += \
 ./graph/catchtest/EdgeRestrictions_test.d \
 ./graph/catchtest/Graph_test.d \
 ./graph/catchtest/Topology_test.d 
+
+OBJS += \
+./graph/catchtest/EdgeRestrictions_test.o \
+./graph/catchtest/Graph_test.o \
+./graph/catchtest/Topology_test.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

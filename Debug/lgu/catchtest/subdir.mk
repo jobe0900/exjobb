@@ -6,11 +6,11 @@
 CC_SRCS += \
 ../lgu/catchtest/LineGraphUtility_test.cc 
 
-OBJS += \
-./lgu/catchtest/LineGraphUtility_test.o 
-
 CC_DEPS += \
 ./lgu/catchtest/LineGraphUtility_test.d 
+
+OBJS += \
+./lgu/catchtest/LineGraphUtility_test.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

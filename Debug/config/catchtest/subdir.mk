@@ -6,11 +6,11 @@
 CC_SRCS += \
 ../config/catchtest/ConfigurationReader_test.cc 
 
-OBJS += \
-./config/catchtest/ConfigurationReader_test.o 
-
 CC_DEPS += \
 ./config/catchtest/ConfigurationReader_test.d 
+
+OBJS += \
+./config/catchtest/ConfigurationReader_test.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

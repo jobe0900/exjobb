@@ -221,12 +221,31 @@ private:
                 Restrictions&          rRestrictions,
                 Topology&              rTopology);
 
+    /** Get restrictions defined at points but applicable to edges,
+     * such as barriers and railway crossings.
+     * @param   rResult     Store the result of query in here.
+     * @throw   MapProviderException
+     */
+    void    getEdgePointRestrictions(pqxx::result& rResult);
+
+    /** Add the result of the query for Point restriciotns on Edges to Restrictions.
+     * Helper for 'getEdgeRestrictions()'
+     * @param   rResult         The results of the query
+     * @param   rRestrictions   Store the restrictions here.
+     * @param   rTopology       Update affected edges in the topology.
+     * @throw   MapProviderException
+     */
+    void    addPointResultToEdgeRestrictions(
+                const pqxx::result&    rResult,
+                Restrictions&          rRestrictions,
+                Topology&              rTopology);
 
 // ATTRIBUTES
     const DatabaseConfig&   mDbConfig;
     const TopologyConfig&   mTopoConfig;
     pqxx::connection        mConnection;
     std::string             mHighwayTableName;
+    std::string             mPointTableName;
     std::string             mSchemaName;
     std::string             mEdgeTable;
     std::string             mEdgeIdCol;

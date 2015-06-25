@@ -16,7 +16,7 @@ The Edge holds some relevant data from the topology. It has an `id`, and a field
 The Vertex class is simple with just an `id` and a `point` location, plus a flag for restrictions.
 
 ### Restrictions
-The `Restrictions` class is a container for `EdgeRestrictions` and `VertexRestrictions` (TODO).
+The `Restrictions` class is a container for `EdgeRestrictions` (there are no specific `VertexRestrictions`).
 
 ### EdgeRestrictions
 The `EdgeRestrictions` are a bunch of maps, mapping and `EdgeId` to restrictions that can be imposed on edges. Those restrictions are:
@@ -39,5 +39,6 @@ There can be tags at a point (node) but not necessarily at a vertex. Can be a ba
 
 Traffic signs must add tags on the edge so there is no need to try to figure out which edge or vertex the sign belongs to.
 
+Edges that somehow are restricted are not included in the LineGraph as possible to travel to, but travel from that edge are allowed. This is to make it possible to use LineGraph routing in cooperation to some other technique, so it is possible to get routed somewhere along an edge that has a barrier restriction in the end, which makes the edge unsuitable for travel to.
 ### Exceptions
 `GraphException` is the main public exception to be thrown from this package. `RestrictionsException` and `TopologyException` are thrown when building those classes, but not as exposed externally.

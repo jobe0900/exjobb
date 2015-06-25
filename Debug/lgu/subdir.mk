@@ -6,11 +6,11 @@
 CC_SRCS += \
 ../lgu/LineGraphUtility.cc 
 
-OBJS += \
-./lgu/LineGraphUtility.o 
-
 CC_DEPS += \
 ./lgu/LineGraphUtility.d 
+
+OBJS += \
+./lgu/LineGraphUtility.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

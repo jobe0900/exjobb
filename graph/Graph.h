@@ -14,6 +14,8 @@
 #include <map>
 #include <ostream>
 
+#include <iostream>
+
 // PROJECT INCLUDES
 //
 #include <boost/graph/adjacency_list.hpp>
@@ -282,10 +284,27 @@ private:
     bool                edgeHasNoExit(EdgeIdType edgeId) const;
 
     /**
+     * @return A vector of all Edges going out from a vertex.
+     */
+    std::vector<EdgeIdType>
+                        getOutEdges(VertexIdType vertexId) const;
+
+    /**
      * @return  A vector of all restricted edges from this Edge.
      */
     std::vector<EdgeIdType>
                         getRestrictedTargets(EdgeIdType edgeId) const;
+
+//    /**
+//     * @param   edgeId      Examine restricted travel from this edge.
+//     * @param   barrierRule Rule for which barrier types are blocking access.
+//     * @param   accessRule  Rule for which access types are blocking.
+//     * @return  A vector of all restricted edges from this Edge.
+//     */
+//    std::vector<EdgeIdType> getRestrictedTargets(
+//        EdgeIdType                           edgeId,
+//        const OsmBarrier::RestrictionsRule&  barrierRule,
+//        const OsmAccess::AccessRule&         accessRule) const;
 
     /**
      * @return  true if this target edge has restricted access from the source.
@@ -308,6 +327,8 @@ private:
     const Topology&                   mrTopology;
     Restrictions*                     mpRestrictions;
     Configuration*                    mpConfiguration;
+    OsmBarrier::RestrictionsRule      mBarrierRule; // TODO read in config?
+    OsmAccess::AccessRule             mAccessRule;  // TODO read in config?
     mutable boost::log::sources::severity_logger
         <boost::log::trivial::severity_level>
                                       mLog;

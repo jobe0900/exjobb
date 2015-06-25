@@ -6,11 +6,11 @@
 CC_SRCS += \
 ../mapprovider/jsontest/JsonTestProvider.cc 
 
-OBJS += \
-./mapprovider/jsontest/JsonTestProvider.o 
-
 CC_DEPS += \
 ./mapprovider/jsontest/JsonTestProvider.d 
+
+OBJS += \
+./mapprovider/jsontest/JsonTestProvider.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

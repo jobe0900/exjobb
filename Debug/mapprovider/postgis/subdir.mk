@@ -8,15 +8,15 @@ CC_SRCS += \
 ../mapprovider/postgis/RestrictionQueries.cc \
 ../mapprovider/postgis/TopologyQueries.cc 
 
-OBJS += \
-./mapprovider/postgis/PostGisProvider.o \
-./mapprovider/postgis/RestrictionQueries.o \
-./mapprovider/postgis/TopologyQueries.o 
-
 CC_DEPS += \
 ./mapprovider/postgis/PostGisProvider.d \
 ./mapprovider/postgis/RestrictionQueries.d \
 ./mapprovider/postgis/TopologyQueries.d 
+
+OBJS += \
+./mapprovider/postgis/PostGisProvider.o \
+./mapprovider/postgis/RestrictionQueries.o \
+./mapprovider/postgis/TopologyQueries.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

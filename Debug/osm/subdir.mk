@@ -11,14 +11,6 @@ CC_SRCS += \
 ../osm/OsmTurningRestriction.cc \
 ../osm/OsmVehicle.cc 
 
-OBJS += \
-./osm/OsmAccess.o \
-./osm/OsmBarrier.o \
-./osm/OsmHighway.o \
-./osm/OsmId.o \
-./osm/OsmTurningRestriction.o \
-./osm/OsmVehicle.o 
-
 CC_DEPS += \
 ./osm/OsmAccess.d \
 ./osm/OsmBarrier.d \
@@ -26,6 +18,14 @@ CC_DEPS += \
 ./osm/OsmId.d \
 ./osm/OsmTurningRestriction.d \
 ./osm/OsmVehicle.d 
+
+OBJS += \
+./osm/OsmAccess.o \
+./osm/OsmBarrier.o \
+./osm/OsmHighway.o \
+./osm/OsmId.o \
+./osm/OsmTurningRestriction.o \
+./osm/OsmVehicle.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

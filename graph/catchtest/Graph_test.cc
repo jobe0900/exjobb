@@ -136,7 +136,7 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
         GIVEN ("Configuration to build a Graph with restrictions ")
         {
             std::string config_file("graph/catchtest"
-                "/mikh_restr_0602-testsettings.json");
+                "/mikh_restr_0617-testsettings.json");
             ConfigurationReader config_reader(config_file);
             Configuration config;
             config_reader.fillConfiguration(config);
@@ -157,7 +157,7 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
             Graph graph_restr(topology_restr);
 
             // ...............................................................
-            WHEN ("Adding a turning restriction")
+            WHEN ("Adding a turning restriction and a point restriction (barrier)")
             {
                 graph_restr.addRestrictions(restrictions, config);
 
@@ -184,12 +184,14 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
                     INFO ("UNRestricted # Nodes:    " << graph_unrestr.nrNodes());
                     REQUIRE (graph_restr.nrNodes() == graph_unrestr.nrNodes());
                 }
-                THEN ("there should be one line less "
+                THEN ("there should be 4 lines less "
                       "in restricted than unrestricted")
                 {
+                    // 1 turn restriction
+                    // 3 where target is restricted by barrier (lift gate)
                     INFO ("  Restricted # Lines:    " << graph_restr.nrLines());
                     INFO ("UNRestricted # Lines:    " << graph_unrestr.nrLines());
-                    REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 1);
+                    REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 4);
                 }
             }
         }

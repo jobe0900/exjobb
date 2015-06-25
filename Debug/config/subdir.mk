@@ -7,13 +7,13 @@ CC_SRCS += \
 ../config/Configuration.cc \
 ../config/ConfigurationReader.cc 
 
-OBJS += \
-./config/Configuration.o \
-./config/ConfigurationReader.o 
-
 CC_DEPS += \
 ./config/Configuration.d \
 ./config/ConfigurationReader.d 
+
+OBJS += \
+./config/Configuration.o \
+./config/ConfigurationReader.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

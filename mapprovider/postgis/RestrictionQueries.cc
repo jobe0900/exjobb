@@ -199,6 +199,33 @@ RestrictionQueries::getTurningRestrictions(
         "SELECT * FROM turning_restrictions"
     );
 }
+
+//static
+void
+RestrictionQueries::getEdgePointRestrictions(
+    pqxx::transaction_base& rTrans,
+    pqxx::result&           rResult,
+    const std::string&      rOsmPointTable,
+    const std::string&      rTopoEdgeTable)
+{
+    rResult = rTrans.exec(
+        "SELECT p.osm_id, "
+        "       p.barrier, "
+        "       p.access, "
+        "       p.goods, "
+        "       p.hgv, "
+        "       p.lhv, "
+        "       p.motorcar, "
+        "       p.motor_vehicle, "
+        "       p.psv, "
+        "       p.vehicle, "
+        "       e.edge_id "
+        "FROM  " + rOsmPointTable + " p, "
+        "      " + rTopoEdgeTable + " e "
+        "WHERE  p.barrier IS NOT NULL "
+        "AND    ST_Intersects(p.way, e.geom)"
+    );
+}
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

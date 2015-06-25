@@ -82,3 +82,6 @@ Described above.
 
 #### `mikh_restr_0602`
 As `mikh_0530` but using the modified osm-file `mikhailovsk-turnrestriction.osm` instead. That file has been modified with a turn restriction for testing purposes.
+
+#### `mikh_restr_0617`
+As `mikh_0602` but extra columns in `planet_osm_point` to get point restrictions.

@@ -10,19 +10,19 @@ CC_SRCS += \
 ../osm/catchtest/OsmTurningRestriction_test.cc \
 ../osm/catchtest/OsmVehicle_test.cc 
 
-OBJS += \
-./osm/catchtest/OsmAccess_test.o \
-./osm/catchtest/OsmBarrier_test.o \
-./osm/catchtest/OsmHighway_test.o \
-./osm/catchtest/OsmTurningRestriction_test.o \
-./osm/catchtest/OsmVehicle_test.o 
-
 CC_DEPS += \
 ./osm/catchtest/OsmAccess_test.d \
 ./osm/catchtest/OsmBarrier_test.d \
 ./osm/catchtest/OsmHighway_test.d \
 ./osm/catchtest/OsmTurningRestriction_test.d \
 ./osm/catchtest/OsmVehicle_test.d 
+
+OBJS += \
+./osm/catchtest/OsmAccess_test.o \
+./osm/catchtest/OsmBarrier_test.o \
+./osm/catchtest/OsmHighway_test.o \
+./osm/catchtest/OsmTurningRestriction_test.o \
+./osm/catchtest/OsmVehicle_test.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

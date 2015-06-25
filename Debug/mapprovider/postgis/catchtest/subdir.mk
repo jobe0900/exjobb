@@ -6,11 +6,11 @@
 CC_SRCS += \
 ../mapprovider/postgis/catchtest/PostGisProvider_test.cc 
 
-OBJS += \
-./mapprovider/postgis/catchtest/PostGisProvider_test.o 
-
 CC_DEPS += \
 ./mapprovider/postgis/catchtest/PostGisProvider_test.d 
+
+OBJS += \
+./mapprovider/postgis/catchtest/PostGisProvider_test.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

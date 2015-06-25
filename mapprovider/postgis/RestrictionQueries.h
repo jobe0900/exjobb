@@ -44,6 +44,24 @@ public:
         RESTRICTION_TYPE
     };
 
+    struct EdgePointRestrictions
+    {
+        enum Columns
+        {
+            POINT_OSM_ID,
+            BARRIER,
+            ACCESS,
+            GOODS,
+            HGV,
+            LHV,
+            MOTORCAR,
+            MOTOR_VEHICLE,
+            PSV,
+            VEHICLE,
+            EDGE_ID,
+        };
+    };
+
     /** Results from queries are handled by these functions. */
     struct Results
     {
@@ -146,6 +164,18 @@ public:
         pqxx::transaction_base& rTrans,
         pqxx::result&           rResult);
 
+    /** Get the restrictions from the 'planet_osm_point' that relates to edges.
+     * @param   rTrans          Transaction to perform query in.
+     * @param   rResult         Store the result of query here.
+     * @param   rOsmPointTabl   The name of the table with original osm points.
+     * @param   rTopoEdgeTable  The name of the table with topology edges.
+     * @throw   pqxx::pqxx_exception
+     */
+    static void             getEdgePointRestrictions(
+        pqxx::transaction_base& rTrans,
+        pqxx::result&           rResult,
+        const std::string&      rOsmPointTable,
+        const std::string&      rTopoEdgeTable);
 // ACCESS
 // INQUIRY
 

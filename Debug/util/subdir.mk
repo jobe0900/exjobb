@@ -7,13 +7,13 @@ CC_SRCS += \
 ../util/Logging.cc \
 ../util/TimeToStringMaker.cc 
 
-OBJS += \
-./util/Logging.o \
-./util/TimeToStringMaker.o 
-
 CC_DEPS += \
 ./util/Logging.d \
 ./util/TimeToStringMaker.d 
+
+OBJS += \
+./util/Logging.o \
+./util/TimeToStringMaker.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

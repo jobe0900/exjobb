@@ -342,7 +342,7 @@ EdgeRestrictions::isEdgeRestricted(
 
     bool is_restricted = false;
     bool is_generally_restricted = false;
-    bool is_vehicle_allowed = false;
+    bool is_vehicle_banned = false;
 
     for(const auto& r : restriction_types)
     {
@@ -369,10 +369,10 @@ EdgeRestrictions::isEdgeRestricted(
                 }
                 continue;
             case EdgeRestrictions::VEHICLE_TYPE_ACCESS:
-                if(vehicleTypeAccess(edgeId, rVehicleConfig.category)
+                if(!vehicleTypeAccess(edgeId, rVehicleConfig.category)
                     .allowsAccess(rAccessRule))
                 {
-                    is_vehicle_allowed = true;
+                    is_vehicle_banned = true;
                 }
                 continue;
             default:
@@ -380,7 +380,9 @@ EdgeRestrictions::isEdgeRestricted(
         }
     }
 
-    if(is_restricted || (is_generally_restricted && !is_vehicle_allowed))
+    if(is_restricted
+        || (is_generally_restricted && is_vehicle_banned)
+        || is_vehicle_banned)
     {
         return true; // this edge should not be added.
     }

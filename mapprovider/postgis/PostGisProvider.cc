@@ -47,6 +47,7 @@ try
         pqxx::nontransaction nt(mConnection);
         mHighwayTableName   = nt.esc(mTopoConfig.roadsPrefix + "_" +
                                 topoBaseName);
+        mPointTableName     = nt.esc("planet_osm_point");
         mSchemaName         = nt.esc(mTopoConfig.topologySchemaPrefix + "_" +
                                 topoBaseName);
         mEdgeTable          = nt.esc(mSchemaName + "." +
@@ -409,6 +410,10 @@ PostGisProvider::getEdgeRestrictions(
     result.clear();
     getTurningRestrictions(result);
     addTurningResultToEdgeRestrictions(result, rRestrictions, rTopology);
+
+    result.clear();
+    getEdgePointRestrictions(result);
+    addPointResultToEdgeRestrictions(result, rRestrictions, rTopology);
 }
 
 void
@@ -714,5 +719,160 @@ PostGisProvider::addTurningResultToEdgeRestrictions(
     {
         throw MapProviderException(
             std::string("PostGisProvider:addTurningResultToEdge..: ") + e.what());
+    }
+}
+
+void
+PostGisProvider::getEdgePointRestrictions(pqxx::result& rResult)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw MapProviderException(
+					std::string("Could not open ") + mDbConfig.database);
+		}
+
+		// NON-TRANSACTION START
+		pqxx::nontransaction transaction(mConnection);
+
+		RestrictionQueries::getEdgePointRestrictions(
+		    transaction,
+		    rResult,
+		    mPointTableName,
+		    mEdgeTable);
+	}
+	catch(const std::exception& e)
+	{
+        throw MapProviderException(
+            std::string("PostGisProvider:getEdgePointRestrictions: ") + e.what());
+	}
+}
+
+void
+PostGisProvider::addPointResultToEdgeRestrictions(
+    const pqxx::result&     rResult,
+    Restrictions&           rRestrictions,
+    Topology&               rTopology)
+{
+    try
+    {
+        EdgeRestrictions& edgeRestr = rRestrictions.edgeRestrictions();
+
+        for(const pqxx::tuple& row : rResult)
+        {
+            EdgeIdType edgeId =
+                row[RestrictionQueries::EdgePointRestrictions::EDGE_ID]
+                    .as<EdgeIdType>();
+
+            std::string barrierTypeString =
+                row[RestrictionQueries::EdgePointRestrictions::BARRIER]
+                    .as<std::string>();
+            OsmBarrier::BarrierType barrierType =
+                OsmBarrier::parseString(barrierTypeString);
+            edgeRestr.setBarrierRestrictionForEdge(edgeId, barrierType);
+
+            // mark edge as having a restriction
+            Edge& edge = rTopology.getEdge(edgeId);
+            edge.setHasRestrictions(true);
+
+            std::string colString;
+            colString = row[RestrictionQueries::EdgePointRestrictions::ACCESS]
+                            .as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.setGeneralAccessRestrictionForEdge(edgeId, type);
+            }
+
+            colString = row[RestrictionQueries::EdgePointRestrictions::GOODS]
+                            .as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::GOODS,
+                    type
+                );
+            }
+
+            colString = row[RestrictionQueries::EdgePointRestrictions::HGV]
+                            .as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::HGV,
+                    type
+                );
+            }
+
+            colString = row[RestrictionQueries::EdgePointRestrictions::LHV]
+                            .as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::LHV,
+                    type
+                );
+            }
+
+            colString = row[RestrictionQueries::EdgePointRestrictions::MOTORCAR]
+                            .as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::MOTORCAR,
+                    type
+                );
+            }
+
+            colString = row[RestrictionQueries::EdgePointRestrictions::MOTOR_VEHICLE]
+                            .as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::MOTOR_VEHICLE,
+                    type
+                );
+            }
+
+            colString = row[RestrictionQueries::EdgePointRestrictions::PSV]
+                            .as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::PSV,
+                    type
+                );
+            }
+
+            colString = row[RestrictionQueries::EdgePointRestrictions::VEHICLE]
+                            .as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                edgeRestr.addVehicleTypeAccessRestrictionsForEdge(
+                    edgeId,
+                    OsmVehicle::VEHICLE,
+                    type
+                );
+            }
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:addPointResultToEdge..: ") + e.what());
     }
 }

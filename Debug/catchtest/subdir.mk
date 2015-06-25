@@ -6,11 +6,11 @@
 CC_SRCS += \
 ../catchtest/catchmain.cc 
 
-OBJS += \
-./catchtest/catchmain.o 
-
 CC_DEPS += \
 ./catchtest/catchmain.d 
+
+OBJS += \
+./catchtest/catchmain.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

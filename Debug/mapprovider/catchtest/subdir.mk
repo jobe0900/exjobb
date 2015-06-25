@@ -6,11 +6,11 @@
 CC_SRCS += \
 ../mapprovider/catchtest/MapProvider_test.cc 
 
-OBJS += \
-./mapprovider/catchtest/MapProvider_test.o 
-
 CC_DEPS += \
 ./mapprovider/catchtest/MapProvider_test.d 
+
+OBJS += \
+./mapprovider/catchtest/MapProvider_test.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes
