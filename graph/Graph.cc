@@ -152,18 +152,18 @@ Graph::addTopoEdgesToGraph()
         const Edge& e = edgepair.second;
 
         // TODO should we really add restricted edges or not?
-//        if(mpRestrictions != nullptr && mpConfiguration != nullptr)
-//        {
-//            const EdgeRestrictions& er = mpRestrictions->edgeRestrictions();
-//            if(er.isEdgeRestricted(e.id(), mpConfiguration->getVehicleConfig(),
-//                                 mBarrierRule, mAccessRule))
-//            {
-//                BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-//                    << "Graph:addTopoEdgeToGraph(): "
-//                    << "Restricted Source id " << e.id();
-//                continue;
-//            }
-//        }
+        if(mpRestrictions != nullptr && mpConfiguration != nullptr)
+        {
+            const EdgeRestrictions& er = mpRestrictions->edgeRestrictions();
+            if(er.isEdgeRestricted(e.id(), mpConfiguration->getVehicleConfig(),
+                                 mBarrierRule, mAccessRule))
+            {
+                BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                    << "Graph:addTopoEdgeToGraph(): "
+                    << "Restricted Source id " << e.id();
+                continue;
+            }
+        }
 
         const VertexType& s = getGraphVertex(e.source());
         const VertexType& t = getGraphVertex(e.target());

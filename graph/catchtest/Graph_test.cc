@@ -169,29 +169,30 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
                     REQUIRE (graph_restr.nrVertices() == graph_unrestr.nrVertices());
                 }
 
-                THEN ("there should be equally many edges "
+                THEN ("there should be 2 less edges "
                       "in restricted and unrestricted")
                 {
                     INFO ("  Restricted # Edges:    " << graph_restr.nrEdges());
                     INFO ("UNRestricted # Edges:    " << graph_unrestr.nrEdges());
-                    REQUIRE (graph_restr.nrEdges() == graph_unrestr.nrEdges());
+                    REQUIRE (graph_restr.nrEdges() == graph_unrestr.nrEdges() - 2);
                 }
 
-                THEN ("there should be equally many nodes "
+                THEN ("there should be 2 less nodes "
                       "in restricted and unrestricted")
                 {
                     INFO ("  Restricted # Nodes:    " << graph_restr.nrNodes());
                     INFO ("UNRestricted # Nodes:    " << graph_unrestr.nrNodes());
-                    REQUIRE (graph_restr.nrNodes() == graph_unrestr.nrNodes());
+                    REQUIRE (graph_restr.nrNodes() == graph_unrestr.nrNodes() - 2);
                 }
-                THEN ("there should be 4 lines less "
+                THEN ("there should be 9 lines less "
                       "in restricted than unrestricted")
                 {
                     // 1 turn restriction
-                    // 3 where target is restricted by barrier (lift gate)
+                    // 3*2 where target is restricted by barrier (lift gate)
+                    // 2 u-turns on restricted edge
                     INFO ("  Restricted # Lines:    " << graph_restr.nrLines());
                     INFO ("UNRestricted # Lines:    " << graph_unrestr.nrLines());
-                    REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 4);
+                    REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 9);
                 }
             }
         }
