@@ -174,11 +174,13 @@ private:
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
      * @param   rRestrictions   Store the restrictions here.
+     * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
     void    addVehiclePropertyResultToEdgeRestrictions(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions);
+                Restrictions&          rRestrictions,
+                Topology&              rTopology);
 
     /** Get Access restrictions to edge.
      * Helper for 'getEdgeRestrictions()'
@@ -191,11 +193,13 @@ private:
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
      * @param   rRestrictions   Store the restrictions here.
+     * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
     void    addAccessResultToEdgeRestrictions(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions);
+                Restrictions&          rRestrictions,
+                Topology&              rTopology);
 
     /** Get Turning restrictions for traveling from edge.
      * Helper for 'getEdgeRestrictions()'.

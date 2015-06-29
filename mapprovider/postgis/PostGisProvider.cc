@@ -401,11 +401,11 @@ PostGisProvider::getEdgeRestrictions(
 {
     pqxx::result result;
     getVehiclePropertyEdgeRestrictions(result);
-    addVehiclePropertyResultToEdgeRestrictions(result, rRestrictions);
+    addVehiclePropertyResultToEdgeRestrictions(result, rRestrictions, rTopology);
 
     result.clear();
     getAccessRestrictions(result);
-    addAccessResultToEdgeRestrictions(result, rRestrictions);
+    addAccessResultToEdgeRestrictions(result, rRestrictions, rTopology);
 
     result.clear();
     getTurningRestrictions(result);
@@ -449,7 +449,8 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
 void
 PostGisProvider::addVehiclePropertyResultToEdgeRestrictions(
     const pqxx::result& rResult,
-    Restrictions& rRestrictions)
+    Restrictions&       rRestrictions,
+    Topology&           rTopology)
 {
     try
     {
@@ -483,13 +484,16 @@ PostGisProvider::addVehiclePropertyResultToEdgeRestrictions(
                 (EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MIN);
 
             edgeRestr.setVehiclePropertyRestrictionForEdge(edgeId, vp);
+
+            // mark edge as having a restriction
+            Edge& edge = rTopology.getEdge(edgeId);
+            edge.setHasRestrictions(true);
         }
     }
     catch (std::exception& e)
     {
         throw MapProviderException(
             std::string("PostGisProvider:addVehicleProp..ToEdge..: ") + e.what());
-
     }
 }
 
@@ -525,7 +529,8 @@ PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
 void
 PostGisProvider::addAccessResultToEdgeRestrictions(
     const pqxx::result& rResult,
-    Restrictions& rRestrictions)
+    Restrictions&       rRestrictions,
+    Topology&           rTopology)
 {
     try
     {
@@ -651,6 +656,10 @@ PostGisProvider::addAccessResultToEdgeRestrictions(
             {
                 edgeRestr.setNoExitRestrictionForEdge(edgeId);
             }
+
+            // mark edge as having a restriction
+            Edge& edge = rTopology.getEdge(edgeId);
+            edge.setHasRestrictions(true);
         }
     }
     catch (std::exception& e)
@@ -713,6 +722,10 @@ PostGisProvider::addTurningResultToEdgeRestrictions(
                 RestrictionQueries::Results::
                     parseTurningRestrictionResultRow(row, rTopology);
             edgeRestr.addTurningRestrictionForEdge(turn.fromEdgeId(), turn);
+
+            // mark edge as having a restriction
+            Edge& edge = rTopology.getEdge(turn.fromEdgeId());
+            edge.setHasRestrictions(true);
         }
     }
     catch (std::exception& e)
