@@ -34,6 +34,7 @@ ConfigurationReader::fillConfiguration(Configuration& rConfig) const
     fillDatabaseConfiguration(rConfig.mDbConfig);
     fillTopologyConfiguration(rConfig.mTopoConfig);
     fillVehicleConfiguration(rConfig.mVehicleConfig);
+    fillCostConfiguration(rConfig.mCostConfig);
 }
 
 
@@ -149,3 +150,85 @@ ConfigurationReader::fillVehicleConfiguration(VehicleConfig& rVehicleConfig) con
     }
 }
 
+void
+ConfigurationReader::fillCostConfiguration(CostConfig& rCostConfig) const
+{
+    try
+    {
+        fillDefaultSpeedCost(rCostConfig);
+    }
+    catch (ConfigurationException& e)
+    {
+        throw e;
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
+
+void
+ConfigurationReader::fillDefaultSpeedCost(CostConfig& rCostConfig) const
+{
+    std::string prefix("cost.default_speed.");
+
+    rCostConfig.defaultSpeed.motorway.high =
+        mPropertyTree.get<int>(prefix + "motorway.high");
+    rCostConfig.defaultSpeed.motorway.low =
+        mPropertyTree.get<int>(prefix + "motorway.low");
+    rCostConfig.defaultSpeed.motorway_link.high =
+        mPropertyTree.get<int>(prefix + "motorway_link.high");
+    rCostConfig.defaultSpeed.motorway_link.low =
+        mPropertyTree.get<int>(prefix + "motorway_link.low");
+
+    rCostConfig.defaultSpeed.trunk.high =
+        mPropertyTree.get<int>(prefix + "trunk.high");
+    rCostConfig.defaultSpeed.trunk.low =
+        mPropertyTree.get<int>(prefix + "trunk.low");
+    rCostConfig.defaultSpeed.trunk_link.high =
+        mPropertyTree.get<int>(prefix + "trunk_link.high");
+    rCostConfig.defaultSpeed.trunk_link.low =
+        mPropertyTree.get<int>(prefix + "trunk_link.low");
+
+    rCostConfig.defaultSpeed.primary.high =
+        mPropertyTree.get<int>(prefix + "primary.high");
+    rCostConfig.defaultSpeed.primary.low =
+        mPropertyTree.get<int>(prefix + "primary.low");
+    rCostConfig.defaultSpeed.primary_link.high =
+        mPropertyTree.get<int>(prefix + "primary_link.high");
+    rCostConfig.defaultSpeed.primary_link.low =
+        mPropertyTree.get<int>(prefix + "primary_link.low");
+
+    rCostConfig.defaultSpeed.secondary.high =
+        mPropertyTree.get<int>(prefix + "secondary.high");
+    rCostConfig.defaultSpeed.secondary.low =
+        mPropertyTree.get<int>(prefix + "secondary.low");
+    rCostConfig.defaultSpeed.secondary_link.high =
+        mPropertyTree.get<int>(prefix + "secondary_link.high");
+    rCostConfig.defaultSpeed.secondary_link.low =
+        mPropertyTree.get<int>(prefix + "secondary_link.low");
+
+    rCostConfig.defaultSpeed.tertiary.high =
+        mPropertyTree.get<int>(prefix + "tertiary.high");
+    rCostConfig.defaultSpeed.tertiary.low =
+        mPropertyTree.get<int>(prefix + "tertiary.low");
+    rCostConfig.defaultSpeed.tertiary_link.high =
+        mPropertyTree.get<int>(prefix + "tertiary_link.high");
+    rCostConfig.defaultSpeed.tertiary_link.low =
+        mPropertyTree.get<int>(prefix + "tertiary_link.low");
+
+    rCostConfig.defaultSpeed.unclassified.high =
+        mPropertyTree.get<int>(prefix + "unclassified.high");
+    rCostConfig.defaultSpeed.unclassified.low =
+        mPropertyTree.get<int>(prefix + "unclassified.low");
+
+    rCostConfig.defaultSpeed.residential.high =
+        mPropertyTree.get<int>(prefix + "residential.high");
+    rCostConfig.defaultSpeed.residential.low =
+        mPropertyTree.get<int>(prefix + "residential.low");
+
+    rCostConfig.defaultSpeed.living_street.high =
+        mPropertyTree.get<int>(prefix + "living_street.high");
+    rCostConfig.defaultSpeed.living_street.low =
+        mPropertyTree.get<int>(prefix + "living_street.low");
+}

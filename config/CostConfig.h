@@ -62,9 +62,4 @@ struct CostConfig
 // EXTERNAL REFERENCES
 //
 
-#endif /* CONFIG_TOPOLOGYCONFIG_H_ */
-
-
-
-
 #endif /* CONFIG_COSTCONFIG_H_ */

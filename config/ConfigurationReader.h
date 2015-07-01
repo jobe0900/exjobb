@@ -81,10 +81,21 @@ private:
 	void    fillTopologyConfiguration(TopologyConfig& rTopologyConfig) const;
 
 	/** Read the vehicle part of the configuration and populate config struct.
-	 * @param  The Vehicle configuration
+	 * @param   The Vehicle configuration
 	 * @throw   ConfigurationException  If missing configuration.
 	 */
 	void    fillVehicleConfiguration(VehicleConfig& rVehicleConfig) const;
+
+	/** Read the Cost part of the configuration and populate config struct.
+	 * @param   The Cost configuration
+	 * @throw   ConfigurationException  If missing configuration.
+	 */
+	void    fillCostConfiguration(CostConfig& rCostConfig) const;
+
+	/** Helper to `fillCostConfig()`. Fill in the Default Speed part.
+	 * @param   The Cost configuration.
+	 */
+	void    fillDefaultSpeedCost(CostConfig& rCostConfig) const;
 };
 
 // INLINE METHODS

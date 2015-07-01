@@ -73,12 +73,13 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 	GIVEN ("a filename to a valid configuration file")
 	{
 		std::string filename("config/catchtest/testsettings.json");
+		ConfigurationReader config_reader(filename);
+		Configuration config;
+		config_reader.fillConfiguration(config);
 
+		//....................................................................
 		WHEN ("asking for topology configuration")
 		{
-			ConfigurationReader config_reader(filename);
-			Configuration config;
-			config_reader.fillConfiguration(config);
 			const TopologyConfig& r_topo_config = config.getTopologyConfig();
 
 			THEN ("we get a topology configuration filled out")
@@ -101,18 +102,10 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 				REQUIRE (r_topo_config.vertexGeomColumnName == "geom");
 			}
 		}
-	}
 
-	//------------------------------------------------------------------------
-	GIVEN ("a filename to a valid configuration file")
-	{
-		std::string filename("config/catchtest/testsettings.json");
-
+		//....................................................................
 		WHEN ("asking for vehicle configuration")
 		{
-			ConfigurationReader config_reader(filename);
-			Configuration config;
-			config_reader.fillConfiguration(config);
 			const VehicleConfig& r_vehicle_config = config.getVehicleConfig();
 
 			THEN ("we get a vehicle configuration filled out")
@@ -123,6 +116,49 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 				REQUIRE (r_vehicle_config.weight == Approx(2.0));
 				REQUIRE (r_vehicle_config.width == Approx(1.9));
 				REQUIRE (r_vehicle_config.maxspeed == 200);
+			}
+		}
+
+		//....................................................................
+		WHEN ("asking for cost configuration")
+		{
+			const CostConfig& r_cost_config = config.getCostConfig();
+
+			THEN ("we get a vehicle configuration filled out")
+			{
+			    REQUIRE (r_cost_config.defaultSpeed.motorway.high == 110);
+			    REQUIRE (r_cost_config.defaultSpeed.motorway.low  ==  90);
+			    REQUIRE (r_cost_config.defaultSpeed.motorway_link.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.motorway_link.low  == 90);
+
+			    REQUIRE (r_cost_config.defaultSpeed.trunk.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.trunk.low  == 60);
+			    REQUIRE (r_cost_config.defaultSpeed.trunk_link.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.trunk_link.low  == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.primary.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.primary.low  == 60);
+			    REQUIRE (r_cost_config.defaultSpeed.primary_link.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.primary_link.low  == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.secondary.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.secondary.low  == 60);
+			    REQUIRE (r_cost_config.defaultSpeed.secondary_link.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.secondary_link.low  == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.tertiary.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.tertiary.low  == 60);
+			    REQUIRE (r_cost_config.defaultSpeed.tertiary_link.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.tertiary_link.low  == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.unclassified.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.unclassified.low  == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.residential.high == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.residential.low  == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.living_street.high == 20);
+			    REQUIRE (r_cost_config.defaultSpeed.living_street.low  == 20);
 			}
 		}
 	}
