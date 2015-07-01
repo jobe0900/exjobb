@@ -196,8 +196,9 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 		// ===================================================================
 		GIVEN ("a valid database configuration to a PostGisProvider ")
 		{
-		    std::string config_file("mapprovider/postgis"
-		        "/catchtest/mikh0530-testsettings.json");
+//		    std::string config_file("mapprovider/postgis"
+//		        "/catchtest/mikh0530-testsettings.json");
+		    std::string config_file("catchtest/mikh_restr_0617-testsettings.json");
 		    ConfigurationReader config_reader(config_file);
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
