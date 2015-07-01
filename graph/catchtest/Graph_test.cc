@@ -135,8 +135,7 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
         // ===================================================================
         GIVEN ("Configuration to build a Graph with restrictions ")
         {
-            std::string config_file("graph/catchtest"
-                "/mikh_restr_0617-testsettings.json");
+            std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
             ConfigurationReader config_reader(config_file);
             Configuration config;
             config_reader.fillConfiguration(config);

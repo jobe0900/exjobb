@@ -16,7 +16,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 	//------------------------------------------------------------------------
 	GIVEN ("a filename to a valid configuration file")
 	{
-		std::string filename("config/catchtest/testsettings.json");
+		std::string filename("catchtest/testsettings/testsettings.json");
 
 		WHEN ("asking for database configuration")
 		{
@@ -39,7 +39,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 	//------------------------------------------------------------------------
 	GIVEN ("a filename to a configuration file with missing information")
 	{
-		std::string filename("config/catchtest/testsettings-missing-name.json");
+		std::string filename("catchtest/testsettings/testsettings-missing-name.json");
 
 		WHEN ("asking for database configuration")
 		{
@@ -72,7 +72,7 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 	//------------------------------------------------------------------------
 	GIVEN ("a filename to a valid configuration file")
 	{
-		std::string filename("config/catchtest/testsettings.json");
+		std::string filename("catchtest/testsettings/testsettings.json");
 		ConfigurationReader config_reader(filename);
 		Configuration config;
 		config_reader.fillConfiguration(config);

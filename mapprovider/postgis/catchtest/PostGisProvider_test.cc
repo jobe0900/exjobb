@@ -28,8 +28,7 @@ SCENARIO ("PostGis topology handling", "[postgis][topology]")
 		// ===================================================================
 		GIVEN ("a valid configuration structure with a temporary name")
 		{
-		    std::string config_file("mapprovider/postgis"
-		        "/catchtest/temptable-testsettings.json");
+		    std::string config_file("catchtest/testsettings/temptable-testsettings.json");
 		    ConfigurationReader config_reader(config_file);
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
@@ -60,8 +59,7 @@ SCENARIO ("PostGis topology handling", "[postgis][topology]")
 		{
 		    WHEN ("we try to read in topology")
             {
-		        std::string config_file("mapprovider/postgis"
-		            "/catchtest/missing-topo-testsettings.json");
+		        std::string config_file("catchtest/testsettings/missing-topo-testsettings.json");
 		        ConfigurationReader config_reader(config_file);
 		        Configuration config;
 		        config_reader.fillConfiguration(config);
@@ -91,8 +89,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 				"name to existing topology")
 		{
 //		    std::string config_file("config/catchtest/testsettings.json");
-		    std::string config_file("mapprovider/postgis"
-		        "/catchtest/mikh0522-testsettings.json");
+		    std::string config_file("catchtest/testsettings/mikh0522-testsettings.json");
 		    ConfigurationReader config_reader(config_file);
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
@@ -196,9 +193,7 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 		// ===================================================================
 		GIVEN ("a valid database configuration to a PostGisProvider ")
 		{
-//		    std::string config_file("mapprovider/postgis"
-//		        "/catchtest/mikh0530-testsettings.json");
-		    std::string config_file("catchtest/mikh_restr_0617-testsettings.json");
+		    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
 		    ConfigurationReader config_reader(config_file);
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
