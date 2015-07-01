@@ -133,5 +133,5 @@ Cost
 Configuration relating to costs when routing through the graph.
 
 - **"default_speed"**:
-    - each road category has default speeds when none is specified. [OSM default speeds](http://wiki.openstreetmap.org/wiki/OSM_tags_for_routing/Maxspeed). Most roads have two speeds, `high` and `low`, which differentiate the speeds inside and outside of a town. `living_street` is always inside so it only has one number. `motorway` is really the `high` number, and the `low` number is the speed on the links (ramps). It is not trivial to find out if a road is inside or outside of that area, so for this application which is meant to be used for routing in urban areas (?), the `low` number is assumed for all cost calculations.
+    - each road category has default speeds when none is specified. [OSM default speeds](http://wiki.openstreetmap.org/wiki/OSM_tags_for_routing/Maxspeed). Most roads have two speeds, `high` and `low`, which differentiate the speeds inside and outside of a town. `living_street` is always inside so only the low is important. `motorway` is really the `high` number, and the `low` number is the speed on the links (ramps). It is not trivial to find out if a road is inside or outside of that area, so for this application which is meant to be used for routing in urban areas (?), the `low` number is assumed for all cost calculations.
     

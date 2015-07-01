@@ -69,14 +69,19 @@
 	{
 	   "default_speed":
 	   {
-	       "motorway":     {"high": 110, "low":  90},
-	       "trunk":        {"high":  90, "low":  60},
-	       "primary":      {"high":  90, "low":  60},
-	       "secondary":    {"high":  90, "low":  60},
-	       "tertiary":     {"high":  90, "low":  60},
-	       "unclassified": {"high":  90, "low":  60},
-	       "residential":  {"high":  90, "low":  60},
-	       "living_street": 20
+	       "motorway":      {"high": 110, "low":  90},
+	       "motorway_link": {"high":  90, "low":  90},
+	       "trunk":         {"high":  90, "low":  60},
+	       "trunk_link":    {"high":  90, "low":  60},
+	       "primary":       {"high":  90, "low":  60},
+	       "primary_link":  {"high":  90, "low":  60},
+	       "secondary":     {"high":  90, "low":  60},
+	       "secondary_link":{"high":  90, "low":  60},
+	       "tertiary":      {"high":  90, "low":  60},
+	       "tertiary_link": {"high":  90, "low":  60},
+	       "unclassified":  {"high":  90, "low":  60},
+	       "residential":   {"high":  90, "low":  60},
+	       "living_street": {"high":  20, "low":  20}
 	   }
 	}
 }   
