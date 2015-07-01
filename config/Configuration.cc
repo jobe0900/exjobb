@@ -31,6 +31,12 @@ Configuration::getVehicleConfig() const
     return mVehicleConfig;
 }
 
+const CostConfig&
+Configuration::getCostConfig() const
+{
+    return mCostConfig;
+}
+
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

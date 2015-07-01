@@ -18,6 +18,7 @@
 //
 #include "DatabaseConfig.h"
 #include "VehicleConfig.h"
+#include "CostConfig.h"
 
 // FORWARD REFERENCES
 //
@@ -67,6 +68,11 @@ public:
      */
     const VehicleConfig&  getVehicleConfig() const;
 
+    /** Get the cost related parts of the configuration.
+     * @return  Reference to a CostConfig.
+     */
+    const CostConfig&     getCostConfig() const;
+
 // ACCESS
 // INQUIRY
 
@@ -76,6 +82,7 @@ private:
     DatabaseConfig mDbConfig;
     TopologyConfig mTopoConfig;
     VehicleConfig  mVehicleConfig;
+    CostConfig     mCostConfig;
 };
 
 // INLINE METHODS
