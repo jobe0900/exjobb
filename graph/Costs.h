@@ -1,13 +1,12 @@
-#ifndef GRAPH_COSTS_H_
-#define GRAPH_COSTS_H_
-
 /**  The Costs class is a container for
- *   EdgeCosts and VertexCosts.
+ *   EdgeCosts and TurnCosts.
  *
  * #include "Costs.h"
  *
  * @author  Jonas Bergman
  */
+#ifndef GRAPH_COSTS_H_
+#define GRAPH_COSTS_H_
 
 // SYSTEM INCLUDES
 //
@@ -17,8 +16,7 @@
 
 // LOCAL INCLUDES
 //
-#include "EdgeRestrictions.h"
-#include "RestrictionsException.h"
+#include "EdgeCosts.h"
 #include "Edge.h"
 #include "Vertex.h"
 
@@ -60,17 +58,17 @@ public:
     EdgeCosts&           edgeCosts()
                          { return mEdgeCosts; }
 
-    const VertexCosts&   vertexRestrictions() const
-                         { return mVertexCosts; }
-
-    VertexCosts&         vertexCosts()
-                         { return mVertexCosts; }
+//    const TurnCosts&     turnCosts() const
+//                         { return mTurnCosts; }
+//
+//    TurnCosts&           turnCosts()
+//                         { return mTurnCosts; }
 
 // INQUIRY
 protected:
 private:
     EdgeCosts    mEdgeCosts {};
-    VertexCosts  mVertexCosts {};
+//    TurnCosts    mTurnCosts {};
 };
 
 // INLINE METHODS
