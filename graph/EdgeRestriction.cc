@@ -121,6 +121,12 @@ EdgeRestriction::setNoExitRestriction()
 {
     mIsNoExitEdge = true;
 }
+
+void
+EdgeRestriction::setViaWayRestriction()
+{
+    mHasViaWayRestriction = true;
+}
 //============================= ACESS      ===================================
 std::vector<EdgeRestriction::RestrictionType>
 EdgeRestriction::restrictionTypes() const
@@ -447,6 +453,12 @@ bool
 EdgeRestriction::hasNoExitRestriction() const
 {
     return mIsNoExitEdge;
+}
+
+bool
+EdgeRestriction::hasViaWayRestriction() const
+{
+    return mHasViaWayRestriction;
 }
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

@@ -180,9 +180,13 @@ public:
     void                setDisusedRestriction();
 
     /** Set no exit flag on this edge.
-     * @param   edgeId  The id of the edge to apply restrictions to.
      */
     void                setNoExitRestriction();
+
+    /** Flag this edge as part of a via way restriction that needs attention
+     * when routing.
+     */
+    void                setViaWayRestriction();
 
 // ACCESS
     /** Get which kinds of restrictions this edge has.
@@ -278,6 +282,18 @@ public:
 //    const std::set<EdgeIdType>&
 //                        noExitEdges() const;
 // INQUIRY
+
+    /** Check the restrictions for an edge.
+     * @param   rVehicleConfig  Configuration for the current vehicle.
+     * @param   rBarrierRule    Rules for which Barrier types restricts access.
+     * @param   rAccessRule     Rules for which Access types restricts access.
+     * @return  true if access is allowed, false if access restricted
+     */
+    bool                isEdgeRestricted(
+        const VehicleConfig& rVehicleConfig,
+        const OsmBarrier::RestrictionsRule& rBarrierRule,
+        const OsmAccess::AccessRule& rAccessRule) const;
+
     /** Ask if an Edge has restriction of a certain type.
      * @param   restrictionType     The type of restriction
      * @return  true if there is a restriction of that type, false if not.
@@ -326,16 +342,11 @@ public:
      */
     bool                hasNoExitRestriction() const;
 
-    /** Check the restrictions for an edge.
-     * @param   rVehicleConfig  Configuration for the current vehicle.
-     * @param   rBarrierRule    Rules for which Barrier types restricts access.
-     * @param   rAccessRule     Rules for which Access types restricts access.
-     * @return  true if access is allowed, false if access restricted
+    /**
+     * @return true if the edge is part of a turning restriction via another way.
      */
-    bool                isEdgeRestricted(
-        const VehicleConfig& rVehicleConfig,
-        const OsmBarrier::RestrictionsRule& rBarrierRule,
-        const OsmAccess::AccessRule& rAccessRule) const;
+    bool               hasViaWayRestriction() const;
+
 
 protected:
 private:
@@ -348,6 +359,7 @@ private:
                             mTurningRestrictions;
     bool                    mIsDisusedEdge {false};
     bool                    mIsNoExitEdge {false};
+    bool                    mHasViaWayRestriction {false};
 //    std::map<EdgeIdType, VehicleProperties>         mVehiclePropertiesMap;
 //    std::map<EdgeIdType, OsmAccess>                 mGeneralAccessMap;
 //    std::map<EdgeIdType, std::map<OsmVehicle::VehicleType, OsmAccess> >
