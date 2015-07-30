@@ -62,8 +62,9 @@ Edge::Edge(EdgeIdType       id,
       mTarget(target),
       mGeomData(geomData),
       mRoadData(roadData),
-      mHasRestrictions(false),
-      mHasViaWayRestriction(false)
+      mpRestrictions(nullptr)
+//      mHasRestrictions(false),
+//      mHasViaWayRestriction(false)
 { }
 
 Edge::Edge(EdgeIdType       id,
@@ -76,9 +77,15 @@ Edge::Edge(EdgeIdType       id,
       mTarget(target),
       mGeomData(),
       mRoadData(),
-      mHasRestrictions(false),
-      mHasViaWayRestriction(false)
+      mpRestrictions(nullptr)
+//      mHasRestrictions(false),
+//      mHasViaWayRestriction(false)
 { }
+
+Edge::~Edge()
+{
+    delete mpRestrictions;
+}
 
 //============================= OPERATORS ====================================
 std::ostream&
@@ -112,16 +119,30 @@ Edge::setOsmId(OsmIdType osmId)
 { mOsmId = osmId; }
 
 void
-Edge::setHasRestrictions(bool hasRestrictions)
+Edge::setRestrictions(EdgeRestriction* pRestrictions)
 {
-    mHasRestrictions = hasRestrictions;
+    delete mpRestrictions;
+    mpRestrictions = pRestrictions;
 }
 
 void
-Edge::setHasViaWayRestriction(bool hasViaWayRestriction)
+Edge::clearRestrictions()
 {
-    mHasViaWayRestriction = hasViaWayRestriction;
+    delete mpRestrictions;
+    mpRestrictions = nullptr;
 }
+
+//void
+//Edge::setHasRestrictions(bool hasRestrictions)
+//{
+//    mHasRestrictions = hasRestrictions;
+//}
+//
+//void
+//Edge::setHasViaWayRestriction(bool hasViaWayRestriction)
+//{
+//    mHasViaWayRestriction = hasViaWayRestriction;
+//}
 
 //static
 EdgeIdType
@@ -158,11 +179,17 @@ Edge::roadData() const
 //============================= INQUIRY    ===================================
 bool
 Edge::hasRestrictions() const
-{ return mHasRestrictions; }
+{ return mpRestrictions != nullptr; }
 
 bool
 Edge::hasViaWayRestriction() const
-{ return mHasViaWayRestriction; }
+{
+    if(hasRestrictions())
+    {
+        return mpRestrictions->mHasViaWayRestriction();
+    }
+    return false;
+}
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////

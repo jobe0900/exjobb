@@ -21,6 +21,7 @@
 #include "Vertex.h"
 #include "../osm/OsmHighway.h"
 #include "../osm/OsmId.h"
+#include "EdgeRestriction.h"
 
 // FORWARD REFERENCES
 //
@@ -118,11 +119,11 @@ public:
     /** Copy constructor.
      * @param   from    The Edge to make a copy of.
      */
-    Edge(const Edge& from) = default;
+    Edge(const Edge& from) = delete;
 
     /** Destructor.
      */
-    ~Edge() = default;
+    ~Edge();
 
 // OPERATORS
     /** Textual output of Edge.
@@ -146,15 +147,24 @@ public:
      */
     void              setOsmId(OsmIdType osmId);
 
-    /** Flag that there exists restrictions for this edge and they need
-     * to be taken into account when building graph.
+    /** Set the restrictions for this edge.
+     * @param   pRestrictions   The restrictions for this edge.
      */
-    void              setHasRestrictions(bool hasRestrictions = true);
+    void              setRestrictions(EdgeRestriction* pRestrictions);
 
-    /** Flag that there exists restrictions for this edge and they need
-     * to be taken into account when building graph.
+    /** Remove the restrictions for this edge.
      */
-    void              setHasViaWayRestriction(bool hasViaWayRestriction = true);
+    void              clearRestrictions();
+
+//    /** Flag that there exists restrictions for this edge and they need
+//     * to be taken into account when building graph.
+//     */
+//    void              setHasRestrictions(bool hasRestrictions = true);
+//
+//    /** Flag that there exists restrictions for this edge and they need
+//     * to be taken into account when building graph.
+//     */
+//    void              setHasViaWayRestriction(bool hasViaWayRestriction = true);
 
     /** Parse a string into an EdgeIdType.
      *  @param  idString    The string representing the id.
@@ -215,8 +225,9 @@ private:
     VertexIdType	mTarget;
     GeomData        mGeomData;
     RoadData        mRoadData;
-    bool            mHasRestrictions;
-    bool            mHasViaWayRestriction;
+    EdgeRestriction*  mpRestrictions;
+//    bool            mHasRestrictions;
+//    bool            mHasViaWayRestriction;
 
 };
 
