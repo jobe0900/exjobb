@@ -205,6 +205,11 @@ public:
      */
     const RoadData&   roadData()  const;
 
+    /** Return pointer to either existing or a new set of restrictions.
+     * @return  Pointer to EdgeRestriction
+     */
+    EdgeRestriction*  getRestrictions();
+
 // INQUIRY
     /**
      * @return  true if there exists restrictions for this edge.
@@ -216,6 +221,11 @@ public:
      * @return  true if there exists a turn restriction via ways.
      */
     bool              hasViaWayRestriction() const;
+
+//    /** Check if the edge has an explicit max speed limit or if we must resort
+//     * to using the speed implied by the highway type.
+//     */
+//    bool              hasMaxSpeedRestriction() const;
 
 private:
 // ATTRIBUTES

@@ -176,6 +176,15 @@ const Edge::RoadData&
 Edge::roadData() const
 { return mRoadData; }
 
+EdgeRestriction*
+Edge::getRestrictions()
+{
+    if(!hasRestrictions()) {
+        mpRestrictions = new EdgeRestriction();
+    }
+    return mpRestrictions;
+}
+
 //============================= INQUIRY    ===================================
 bool
 Edge::hasRestrictions() const
@@ -190,6 +199,16 @@ Edge::hasViaWayRestriction() const
     }
     return false;
 }
+
+//bool
+//Edge::hasMaxSpeedRestriction() const
+//{
+//    if(hasRestrictions())
+//    {
+//        return mpRestrictions->hasMaxSpeedRestriction();
+//    }
+//    return false;
+//}
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
