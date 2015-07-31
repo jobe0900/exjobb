@@ -203,6 +203,13 @@ public:
                         vehicleProperties() const;
     VehicleProperties&  vehicleProperties();
 
+    /** Fetch the max speed for this edge. If no explicitcit speed is set it
+     * returns `VehicleProperties::DEFAULT_SPEED_MAX`. One can query to see if
+     * if there exists an explicit limit with  `hasMaxSpeedRestriction()`
+     * @return  Either the explicit speed limit or a default if not set.
+     */
+    unsigned            maxSpeed() const;
+
 //    /** Get the map of all VehicleProperty Restrictions.
 //     * @return  Map of all property restrictions.
 //     */
@@ -304,6 +311,11 @@ public:
      * @return true if there is a VehicleProperty restriction for edge.
      */
     bool                hasVehiclePropertyRestriction() const;
+
+    /** Convenience method to query for max speed.
+     * @return true if there is a max speed restriction for the edge.
+     */
+    bool                hasMaxSpeedRestriction() const;
 
     /**
      * @return true if there is a General Access restriction for the edge.

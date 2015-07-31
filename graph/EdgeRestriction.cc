@@ -171,6 +171,16 @@ EdgeRestriction::vehicleProperties()
 //        static_cast<const EdgeRestriction&>(*this).vehicleProperties() );
 }
 
+unsigned
+EdgeRestriction::maxSpeed() const
+{
+    if(hasVehiclePropertyRestriction())
+    {
+        return mpVehicleProperties->maxSpeed;
+    }
+    return VehicleProperties::DEFAULT_SPEED_MAX;
+}
+
 //const std::map<EdgeIdType, EdgeRestrictions::VehicleProperties>&
 //EdgeRestriction::vehicleProperties() const
 //{
@@ -403,6 +413,16 @@ bool
 EdgeRestriction::hasVehiclePropertyRestriction() const
 {
     return mpVehicleProperties != nullptr;
+}
+
+bool
+EdgeRestriction::hasMaxSpeedRestriction() const
+{
+    if(hasVehiclePropertyRestriction())
+    {
+        return mpVehicleProperties->maxSpeed != VehicleProperties::DEFAULT_SPEED_MAX;
+    }
+    return false;
 }
 
 //bool
