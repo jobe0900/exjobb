@@ -66,15 +66,22 @@ public:
      */
     virtual void    getTopology(Topology& rTopology) = 0;
 
-    /** Fill the Restrictions with restrictions for edges and vertices.
-     * Might also update Edges in the topology.
-     * @param   rRestrictions   The Restrictions to fill with data.
-     * @param   rTopology       The Topology that might get updated.
+    /** Update the edges with restrictions
+     * @param   rTopology       The Topology with edges to get updated.
      * @throws  MapProviderException, RestrictionsException
      */
     virtual void    getRestrictions(
-        Restrictions&  rRestrictions,
         Topology&      rTopology) = 0;
+
+//    /** Fill the Restrictions with restrictions for edges and vertices.
+//     * Might also update Edges in the topology.
+//     * @param   rRestrictions   The Restrictions to fill with data.
+//     * @param   rTopology       The Topology that might get updated.
+//     * @throws  MapProviderException, RestrictionsException
+//     */
+//    virtual void    getRestrictions(
+//        Restrictions&  rRestrictions,
+//        Topology&      rTopology) = 0;
 // ACCESS
 // INQUIRY
 

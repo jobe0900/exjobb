@@ -10,7 +10,7 @@
 
 // Result --------------------------------------------------------------------
 //static
-OsmTurningRestriction
+OsmTurningRestriction*
 RestrictionQueries::Results::parseTurningRestrictionResultRow(
     const pqxx::tuple&    rRow,
     Topology&             rTopology)
@@ -33,31 +33,31 @@ RestrictionQueries::Results::parseTurningRestrictionResultRow(
     Edge& fromEdge = findEdgeMatchingOsmId(fromOsmId, edgeIds, rTopology);
     Edge& toEdge   = findEdgeMatchingOsmId(toOsmId, edgeIds, rTopology);
 
+    OsmTurningRestriction* p_restriction {nullptr};
 
     // VIA WAY
     if(fromEdge.target() != toEdge.source())
     {
-        fromEdge.setHasRestrictions(true);
-        fromEdge.setHasViaWayRestriction(true);
-        OsmTurningRestriction restriction(
+//        fromEdge.setHasRestrictions(true);
+//        fromEdge.setHasViaWayRestriction(true);
+        p_restriction = new OsmTurningRestriction(
             type,
             fromEdge.id(),
             viaOsmIdsString,
             toEdge.id());
-        return restriction;
     }
     // VIA NODE
     else
     {
         VertexIdType vertexId = fromEdge.target();
-        fromEdge.setHasRestrictions(true);
-        OsmTurningRestriction restriction(
+//        fromEdge.setHasRestrictions(true);
+        p_restriction = new OsmTurningRestriction(
             type,
             fromEdge.id(),
             vertexId,
             toEdge.id());
-        return restriction;
     }
+    return p_restriction;
 }
 
 //static

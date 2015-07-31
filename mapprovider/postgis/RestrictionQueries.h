@@ -73,7 +73,7 @@ public:
          * @throw   TopologyException
          * @throw   MapProviderException
          */
-        static OsmTurningRestriction
+        static OsmTurningRestriction*
                             parseTurningRestrictionResultRow(
             const pqxx::tuple&    rRow,
             Topology&             rTopology);

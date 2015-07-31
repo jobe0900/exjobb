@@ -70,9 +70,11 @@ public:
 // OPERATIONS
     virtual void    getTopology(Topology& rTopology);
 
-    virtual void    getRestrictions(
-        Restrictions&  rRestrictions,
-        Topology&      rTopology);
+    virtual void    getRestrictions(Topology& rTopology);
+
+//    virtual void    getRestrictions(
+//        Restrictions&  rRestrictions,
+//        Topology&      rTopology);
 
 // INQUIRY
 
@@ -80,7 +82,18 @@ protected:
 
 private:
 // HELPERS
-    // Helpers for 'getTopology()'
+//    /** Get vertices from database.
+//     * @param   rVertexResult   Result of db query for Vertices.
+//     * @throws	MapProviderException
+//     */
+//    void    getVerticesFromDb(pqxx::result& rVertexResult);
+//
+//    /** Get edges from database.
+//     * @param   rEdgeResult   Result of db query for Edges.
+//     * @throws	MapProviderException
+//     */
+//    void    getEdgesFromDb(pqxx::result& rEdgeResult);
+
     /** Get edges from database.
      * @param   rEdgeResult   Result of db query for Edges.
      * @throws	MapProviderException
@@ -154,14 +167,20 @@ private:
 
 
     // Restriction helpers ---------------------------------------------------
-    /** Fetch Restrictions for edges.
-     * @param   rRestrictions   Store restrictions in here.
-     * @param   rTopology       Might get modified from turn restrictions.
+    /** Fetch restrictions for edges.
+     * @param   rTopology  Adding EdgeRestricion to Edges in topology.
      * @throw   MapProviderException
      */
-    void    getEdgeRestrictions(
-        Restrictions& rRestrictions,
-        Topology& rTopology);
+    void    getEdgeRestrictions(Topology& rTopology);
+
+//    /** Fetch Restrictions for edges.
+//     * @param   rRestrictions   Store restrictions in here.
+//     * @param   rTopology       Might get modified from turn restrictions.
+//     * @throw   MapProviderException
+//     */
+//    void    getEdgeRestrictions(
+//        Restrictions& rRestrictions,
+//        Topology& rTopology);
 
     /** Get VehicleProperty restrictions
      * Helper for 'getEdgeRestrictions()'
@@ -170,17 +189,27 @@ private:
      */
     void    getVehiclePropertyEdgeRestrictions(pqxx::result& rResult);
 
-    /** Add the result of the query for vehicle properties to restrictions.
+    /** Add the result of the query for vehicle properties to Edge's restrictions.
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
-     * @param   rRestrictions   Store the restrictions here.
      * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
-    void    addVehiclePropertyResultToEdgeRestrictions(
+    void    addVehiclePropertyRestrictionsToEdge(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions,
                 Topology&              rTopology);
+
+//    /** Add the result of the query for vehicle properties to restrictions.
+//     * Helper for 'getEdgeRestrictions()'
+//     * @param   rResult         The results of the query
+//     * @param   rRestrictions   Store the restrictions here.
+//     * @param   rTopology       Update affected edges in the topology.
+//     * @throw   MapProviderException
+//     */
+//    void    addVehiclePropertyResultToEdgeRestrictions(
+//                const pqxx::result&    rResult,
+//                Restrictions&          rRestrictions,
+//                Topology&              rTopology);
 
     /** Get Access restrictions to edge.
      * Helper for 'getEdgeRestrictions()'
@@ -192,14 +221,24 @@ private:
     /** Add the result of the query for Access to restrictions.
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
-     * @param   rRestrictions   Store the restrictions here.
      * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
-    void    addAccessResultToEdgeRestrictions(
+    void    addAccessRestrictionsToEdge(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions,
                 Topology&              rTopology);
+
+//    /** Add the result of the query for Access to restrictions.
+//     * Helper for 'getEdgeRestrictions()'
+//     * @param   rResult         The results of the query
+//     * @param   rRestrictions   Store the restrictions here.
+//     * @param   rTopology       Update affected edges in the topology.
+//     * @throw   MapProviderException
+//     */
+//    void    addAccessResultToEdgeRestrictions(
+//                const pqxx::result&    rResult,
+//                Restrictions&          rRestrictions,
+//                Topology&              rTopology);
 
     /** Get Turning restrictions for traveling from edge.
      * Helper for 'getEdgeRestrictions()'.
@@ -213,17 +252,27 @@ private:
      */
     void    getTurningRestrictions(pqxx::result& rResult);
 
-    /** Add the result of the query for Turning to restrictions.
+    /** Add the result of the query for Turning restrictions.
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
-     * @param   rRestrictions   Store the restrictions here.
      * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
-    void    addTurningResultToEdgeRestrictions(
+    void    addTurningRestrictionsToEdge(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions,
                 Topology&              rTopology);
+
+//    /** Add the result of the query for Turning to restrictions.
+//     * Helper for 'getEdgeRestrictions()'
+//     * @param   rResult         The results of the query
+//     * @param   rRestrictions   Store the restrictions here.
+//     * @param   rTopology       Update affected edges in the topology.
+//     * @throw   MapProviderException
+//     */
+//    void    addTurningResultToEdgeRestrictions(
+//                const pqxx::result&    rResult,
+//                Restrictions&          rRestrictions,
+//                Topology&              rTopology);
 
     /** Get restrictions defined at points but applicable to edges,
      * such as barriers and railway crossings.
@@ -232,22 +281,34 @@ private:
      */
     void    getEdgePointRestrictions(pqxx::result& rResult);
 
-    /** Add the result of the query for Point restriciotns on Edges to Restrictions.
+    /** Add the result of the query for Point restrictions on Edges .
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
-     * @param   rRestrictions   Store the restrictions here.
      * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
-    void    addPointResultToEdgeRestrictions(
+    void    addPointRestrictionsToEdge(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions,
                 Topology&              rTopology);
+
+//    /** Add the result of the query for Point restriciotns on Edges to Restrictions.
+//     * Helper for 'getEdgeRestrictions()'
+//     * @param   rResult         The results of the query
+//     * @param   rRestrictions   Store the restrictions here.
+//     * @param   rTopology       Update affected edges in the topology.
+//     * @throw   MapProviderException
+//     */
+//    void    addPointResultToEdgeRestrictions(
+//                const pqxx::result&    rResult,
+//                Restrictions&          rRestrictions,
+//                Topology&              rTopology);
 
 // ATTRIBUTES
     const DatabaseConfig&   mDbConfig;
     const TopologyConfig&   mTopoConfig;
     pqxx::connection        mConnection;
+//    pqxx::result            mEdgeResult;
+//    pqxx::result            mVertexResult;
     std::string             mHighwayTableName;
     std::string             mPointTableName;
     std::string             mSchemaName;
