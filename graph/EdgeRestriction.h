@@ -31,6 +31,7 @@
 
 // FORWARD REFERENCES
 //
+//class OsmTurningRestriction;
 
 /**
  * EdgeRestriction are:
@@ -102,11 +103,11 @@ public:
     EdgeRestriction() = default;
 
 
-//    /** Copy constructor.
-//     *
-//     * @param from The value to copy to this object.
-//     */
-//    EdgeRestriction(const EdgeRestriction& from) = default;
+    /** Copy constructor.
+     *
+     * @param from The value to copy to this object.
+     */
+    EdgeRestriction(const EdgeRestriction& from) = delete;
 
 
     /** Destructor.

@@ -127,84 +127,84 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 	}
 }
 
-SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
-{
-    try
-    {
-
-        // ===================================================================
-        GIVEN ("Configuration to build a Graph with restrictions ")
-        {
-            std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
-            ConfigurationReader config_reader(config_file);
-            Configuration config;
-            config_reader.fillConfiguration(config);
-
-            PostGisProvider pgp(config);
-
-            Topology topology_unrestr;
-            pgp.getTopology(topology_unrestr);
-
-            Topology topology_restr;
-            pgp.getTopology(topology_restr);
-
-
-            Restrictions restrictions;
-            pgp.getRestrictions(restrictions, topology_restr);
-
-            Graph graph_unrestr(topology_unrestr);
-            Graph graph_restr(topology_restr);
-
-            // ...............................................................
-            WHEN ("Adding a turning restriction and a point restriction (barrier)")
-            {
-                graph_restr.addRestrictions(restrictions, config);
-
-                THEN ("there should be equally many vertices "
-                      "in restricted and unrestricted")
-                {
-                    INFO ("  Restricted # Vertices: " << graph_restr.nrVertices());
-                    INFO ("UNRestricted # Vertices: " << graph_unrestr.nrVertices());
-                    REQUIRE (graph_restr.nrVertices() == graph_unrestr.nrVertices());
-                }
-
-                THEN ("there should be 2 less edges "
-                      "in restricted and unrestricted")
-                {
-                    INFO ("  Restricted # Edges:    " << graph_restr.nrEdges());
-                    INFO ("UNRestricted # Edges:    " << graph_unrestr.nrEdges());
-                    REQUIRE (graph_restr.nrEdges() == graph_unrestr.nrEdges() - 2);
-                }
-
-                THEN ("there should be 2 less nodes "
-                      "in restricted and unrestricted")
-                {
-                    INFO ("  Restricted # Nodes:    " << graph_restr.nrNodes());
-                    INFO ("UNRestricted # Nodes:    " << graph_unrestr.nrNodes());
-                    REQUIRE (graph_restr.nrNodes() == graph_unrestr.nrNodes() - 2);
-                }
-                THEN ("there should be 9 lines less "
-                      "in restricted than unrestricted")
-                {
-                    // 1 turn restriction
-                    // 3*2 where target is restricted by barrier (lift gate)
-                    // 2 u-turns on restricted edge
-                    INFO ("  Restricted # Lines:    " << graph_restr.nrLines());
-                    INFO ("UNRestricted # Lines:    " << graph_unrestr.nrLines());
-                    REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 9);
-                }
-            }
-        }
-    }
-    catch (ConfigurationException& e)
-    {
-        INFO(e.what());
-        REQUIRE (false);    // force output of error and failure
-    }
-    catch (MapProviderException& dbe)
-    {
-        INFO(dbe.what());
-        REQUIRE (false);    // force output of error and failure
-
-    }
-}
+//SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
+//{
+//    try
+//    {
+//
+//        // ===================================================================
+//        GIVEN ("Configuration to build a Graph with restrictions ")
+//        {
+//            std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
+//            ConfigurationReader config_reader(config_file);
+//            Configuration config;
+//            config_reader.fillConfiguration(config);
+//
+//            PostGisProvider pgp(config);
+//
+//            Topology topology_unrestr;
+//            pgp.getTopology(topology_unrestr);
+//
+//            Topology topology_restr;
+//            pgp.getTopology(topology_restr);
+//
+//
+//            Restrictions restrictions;
+//            pgp.getRestrictions(restrictions, topology_restr);
+//
+//            Graph graph_unrestr(topology_unrestr);
+//            Graph graph_restr(topology_restr);
+//
+//            // ...............................................................
+//            WHEN ("Adding a turning restriction and a point restriction (barrier)")
+//            {
+//                graph_restr.addRestrictions(restrictions, config);
+//
+//                THEN ("there should be equally many vertices "
+//                      "in restricted and unrestricted")
+//                {
+//                    INFO ("  Restricted # Vertices: " << graph_restr.nrVertices());
+//                    INFO ("UNRestricted # Vertices: " << graph_unrestr.nrVertices());
+//                    REQUIRE (graph_restr.nrVertices() == graph_unrestr.nrVertices());
+//                }
+//
+//                THEN ("there should be 2 less edges "
+//                      "in restricted and unrestricted")
+//                {
+//                    INFO ("  Restricted # Edges:    " << graph_restr.nrEdges());
+//                    INFO ("UNRestricted # Edges:    " << graph_unrestr.nrEdges());
+//                    REQUIRE (graph_restr.nrEdges() == graph_unrestr.nrEdges() - 2);
+//                }
+//
+//                THEN ("there should be 2 less nodes "
+//                      "in restricted and unrestricted")
+//                {
+//                    INFO ("  Restricted # Nodes:    " << graph_restr.nrNodes());
+//                    INFO ("UNRestricted # Nodes:    " << graph_unrestr.nrNodes());
+//                    REQUIRE (graph_restr.nrNodes() == graph_unrestr.nrNodes() - 2);
+//                }
+//                THEN ("there should be 9 lines less "
+//                      "in restricted than unrestricted")
+//                {
+//                    // 1 turn restriction
+//                    // 3*2 where target is restricted by barrier (lift gate)
+//                    // 2 u-turns on restricted edge
+//                    INFO ("  Restricted # Lines:    " << graph_restr.nrLines());
+//                    INFO ("UNRestricted # Lines:    " << graph_unrestr.nrLines());
+//                    REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 9);
+//                }
+//            }
+//        }
+//    }
+//    catch (ConfigurationException& e)
+//    {
+//        INFO(e.what());
+//        REQUIRE (false);    // force output of error and failure
+//    }
+//    catch (MapProviderException& dbe)
+//    {
+//        INFO(dbe.what());
+//        REQUIRE (false);    // force output of error and failure
+//
+//    }
+//}

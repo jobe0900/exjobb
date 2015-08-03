@@ -108,6 +108,8 @@ public:
      */
     struct CostsRule
     {
+        CostsRule() = default;
+        CostsRule(const CostsRule& from) = default;
         CostsRule(std::initializer_list<BarrierType> costsTypes);
 
         bool    costs(BarrierType type) const;
@@ -127,7 +129,6 @@ public:
             OsmBarrier::SUMP_BUSTER,
             OsmBarrier::SWING_GATE,
             OsmBarrier::TOLL_BOOTH,
-            OsmBarrier::YES
         };
     };
 

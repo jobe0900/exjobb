@@ -7,6 +7,8 @@
 
 #include "Edge.h"  // class implemented
 
+#include "EdgeRestriction.h"
+
 //============================= TYPES     ====================================
 const EdgeIdType Edge::MAX_ID = std::numeric_limits<EdgeIdType>::max();
 
@@ -81,6 +83,18 @@ Edge::Edge(EdgeIdType       id,
 //      mHasRestrictions(false),
 //      mHasViaWayRestriction(false)
 { }
+
+Edge::Edge(Edge&& from)
+    :   mId(from.mId),
+        mOsmId(from.mOsmId),
+        mSource(from.mSource),
+        mTarget(from.mTarget),
+        mGeomData(from.mGeomData),
+        mRoadData(from.mRoadData),
+        mpRestrictions(from.mpRestrictions)
+{
+    from.mpRestrictions = nullptr;
+}
 
 Edge::~Edge()
 {
@@ -176,14 +190,43 @@ const Edge::RoadData&
 Edge::roadData() const
 { return mRoadData; }
 
-EdgeRestriction*
-Edge::getRestrictions()
+//EdgeRestriction*
+//Edge::getRestrictions()
+//{
+//    if(!hasRestrictions()) {
+//        mpRestrictions = new EdgeRestriction();
+//    }
+//    return mpRestrictions;
+//}
+
+EdgeRestriction&
+Edge::restrictions()
 {
-    if(!hasRestrictions()) {
-        mpRestrictions = new EdgeRestriction();
+    if(mpRestrictions == nullptr) {
+        throw RestrictionsException(std::string("No restriction on edge ")
+            + std::to_string(mId));
     }
-    return mpRestrictions;
+    return *mpRestrictions;
 }
+
+const EdgeRestriction&
+Edge::restrictions() const
+{
+    if(mpRestrictions == nullptr) {
+        throw RestrictionsException(std::string("No restriction on edge ")
+            + std::to_string(mId));
+    }
+    return *mpRestrictions;
+}
+
+//const EdgeRestriction&
+//Edge::restrictions() const
+//{
+//    if(!hasRestrictions()) {
+//        mpRestrictions = new EdgeRestriction();
+//    }
+//    return *mpRestrictions;
+//}
 
 //============================= INQUIRY    ===================================
 bool
@@ -195,7 +238,7 @@ Edge::hasViaWayRestriction() const
 {
     if(hasRestrictions())
     {
-        return mpRestrictions->mHasViaWayRestriction();
+        return mpRestrictions->hasViaWayRestriction();
     }
     return false;
 }

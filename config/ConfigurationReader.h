@@ -86,6 +86,13 @@ private:
 	 */
 	void    fillVehicleConfiguration(VehicleConfig& rVehicleConfig) const;
 
+	/** Read the Access part of the configuration and build the rule for
+	 * which tags allows access (and hence which tags restricts access).
+	 * @param   rAccessRule     The rule to fill out.
+	 * @throw   ConfigurationException  If missing configuration.
+	 */
+	void    fillAccessRule(OsmAccess::AccessRule& rAccessRule) const;
+
 	/** Read the Cost part of the configuration and populate config struct.
 	 * @param   The Cost configuration
 	 * @throw   ConfigurationException  If missing configuration.

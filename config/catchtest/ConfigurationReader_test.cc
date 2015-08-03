@@ -161,6 +161,35 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 			    REQUIRE (r_cost_config.defaultSpeed.living_street.low  == 20);
 			}
 		}
+
+		WHEN ("asking for access rules")
+		{
+		    const OsmAccess::AccessRule r_access_rule = config.getAccessRule();
+
+		    THEN ("we get an AccessRule filled out")
+		    {
+		        std::vector<OsmAccess::AccessType> types = r_access_rule.allowAccessToTypes;
+		        REQUIRE (types.size() == 3);
+		        auto it = std::find(types.begin(), types.end(),
+		            OsmAccess::AccessType::YES);
+		        REQUIRE (it != types.end());
+		        INFO (OsmAccess::toString(*it));
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmAccess::AccessType::PERMISSIVE);
+		        REQUIRE (it != types.end());
+		        INFO (OsmAccess::toString(*it));
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmAccess::AccessType::DESIGNATED);
+		        REQUIRE (it != types.end());
+		        INFO (OsmAccess::toString(*it));
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmAccess::AccessType::NO);
+		        REQUIRE (it == types.end());
+		    }
+		}
 	}
 }
 

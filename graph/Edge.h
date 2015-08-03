@@ -21,11 +21,12 @@
 #include "Vertex.h"
 #include "../osm/OsmHighway.h"
 #include "../osm/OsmId.h"
-#include "EdgeRestriction.h"
+//#include "EdgeRestriction.h"
 
 // FORWARD REFERENCES
 //
 typedef long            EdgeIdType;
+class EdgeRestriction;
 
 /**
  * Data structure for edges in the topology.
@@ -116,10 +117,10 @@ public:
          VertexIdType    source,
          VertexIdType    target);
 
-    /** Copy constructor.
-     * @param   from    The Edge to make a copy of.
+    /** Move constructor.
+     * @param   from    The Edge to make a move of.
      */
-    Edge(const Edge& from) = delete;
+    Edge(Edge&& from);
 
     /** Destructor.
      */
@@ -205,10 +206,18 @@ public:
      */
     const RoadData&   roadData()  const;
 
-    /** Return pointer to either existing or a new set of restrictions.
-     * @return  Pointer to EdgeRestriction
+//    /** Return pointer to either existing or a new set of restrictions.
+//     * @return  Pointer to EdgeRestriction
+//     */
+//    EdgeRestriction*  getRestrictions();
+
+    /**
+     * @return  Reference to EdgeRestriction
+     * @throw   RestrictionException if no restriction is applied on Edge.
      */
-    EdgeRestriction*  getRestrictions();
+    EdgeRestriction&    restrictions();
+    const EdgeRestriction&
+                        restrictions() const;
 
 // INQUIRY
     /**

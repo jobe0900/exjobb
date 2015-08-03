@@ -70,7 +70,7 @@ public:
 // OPERATIONS
     virtual void    getTopology(Topology& rTopology);
 
-    virtual void    getRestrictions(Topology& rTopology);
+    virtual void    addRestrictions(Topology& rTopology);
 
 //    virtual void    getRestrictions(
 //        Restrictions&  rRestrictions,
@@ -145,6 +145,7 @@ private:
      * @throws	MapProviderException
      */
     void    getTopologyVertices(pqxx::result& rVertexResult);
+
     /** Add vertices to topology.
      * @throws  TopologyException
      */
@@ -167,11 +168,11 @@ private:
 
 
     // Restriction helpers ---------------------------------------------------
-    /** Fetch restrictions for edges.
+    /** Add restrictions to edges.
      * @param   rTopology  Adding EdgeRestricion to Edges in topology.
      * @throw   MapProviderException
      */
-    void    getEdgeRestrictions(Topology& rTopology);
+    void    addEdgeRestrictions(Topology& rTopology);
 
 //    /** Fetch Restrictions for edges.
 //     * @param   rRestrictions   Store restrictions in here.

@@ -31,6 +31,12 @@ Configuration::getVehicleConfig() const
     return mVehicleConfig;
 }
 
+const OsmAccess::AccessRule&
+Configuration::getAccessRule() const
+{
+    return mAccessRule;
+}
+
 const CostConfig&
 Configuration::getCostConfig() const
 {

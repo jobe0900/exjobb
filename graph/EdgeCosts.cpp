@@ -7,14 +7,14 @@
 
 #include "EdgeCosts.h"
 
-EdgeCosts::EdgeCosts()
-{
-    // TODO Auto-generated constructor stub
+//EdgeCosts::EdgeCosts()
+//{
+//    // TODO Auto-generated constructor stub
+//
+//}
 
-}
-
-EdgeCosts::~EdgeCosts()
-{
-    // TODO Auto-generated destructor stub
-}
+//EdgeCosts::~EdgeCosts()
+//{
+//    // TODO Auto-generated destructor stub
+//}
 

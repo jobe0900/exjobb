@@ -53,8 +53,7 @@ public:
 // OPERATIONS
     virtual void    getTopology(Topology& rTopology);
 
-    virtual void    getRestrictions(
-        Restrictions&  rRestrictions,
+    virtual void    addRestrictions(
         Topology&      rTopology);
 
 // ACCESS

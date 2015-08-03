@@ -224,11 +224,11 @@ EdgeRestriction::vehicleTypeAccess(
     if(!hasVehicleTypeAccessRestriction(vehicleType))
     {
         throw RestrictionsException(
-            "Restrictions:vehicleTypeAccess: no restriction for"
-            + " vehicle type " + OsmVehicle::toString(vehicleType))
-            + "  for edge";
+            std::string("Restrictions:vehicleTypeAccess: no restriction for")
+            + " vehicle type " + OsmVehicle::toString(vehicleType)
+            + "  for edge");
     }
-    return mVehicleTypeAccessMap.find(vehicleType)->second;
+    return *(mVehicleTypeAccessMap.find(vehicleType)->second);
 }
 
 OsmAccess&
@@ -342,27 +342,27 @@ EdgeRestriction::isEdgeRestricted(
     {
         switch (r)
         {
-            case EdgeRestrictions::DISUSED:
+            case EdgeRestriction::DISUSED:
                 is_restricted = true; break;
-            case EdgeRestrictions::VEHICLE_PROPERTIES:
+            case EdgeRestriction::VEHICLE_PROPERTIES:
                 if(vehicleProperties().restrictsAccess(rVehicleConfig))
                 {
                     is_restricted = true;
                 }
                 break;
-            case EdgeRestrictions::BARRIER:
+            case EdgeRestriction::BARRIER:
                 if(barrier().restrictsAccess(rBarrierRule))
                 {
                     is_restricted = true;
                 }
                 break;
-            case EdgeRestrictions::GENERAL_ACCESS:
+            case EdgeRestriction::GENERAL_ACCESS:
                 if(!generalAccess().allowsAccess(rAccessRule))
                 {
                     is_generally_restricted = true;
                 }
                 continue;
-            case EdgeRestrictions::VEHICLE_TYPE_ACCESS:
+            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
                 if(!vehicleTypeAccess(rVehicleConfig.category)
                     .allowsAccess(rAccessRule))
                 {
@@ -425,19 +425,17 @@ EdgeRestriction::hasMaxSpeedRestriction() const
     return false;
 }
 
-//bool
-//EdgeRestriction::hasGeneralAccessRestriction(EdgeIdType edgeId) const
-//{
-//    auto it = mGeneralAccessMap.find(edgeId);
-//    return (it != mGeneralAccessMap.end());
-//}
-//
-//bool
-//EdgeRestrictions::hasVehicleTypeAccessRestriction(EdgeIdType edgeId) const
-//{
-//    auto it = mVehicleTypeAccessMap.find(edgeId);
-//    return (it != mVehicleTypeAccessMap.end());
-//}
+bool
+EdgeRestriction::hasGeneralAccessRestriction() const
+{
+    return mpGeneralAccess != nullptr;
+}
+
+bool
+EdgeRestriction::hasVehicleTypeAccessRestriction() const
+{
+    return mVehicleTypeAccessMap.size() > 0;
+}
 
 bool
 EdgeRestriction::hasVehicleTypeAccessRestriction(

@@ -7,6 +7,8 @@
 
 #include "Topology.h"  // class implemented
 
+#include <utility>
+
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
@@ -38,8 +40,11 @@ Topology::addEdge(EdgeIdType        id,
 	{
 	    getVertex(source);
 	    getVertex(target);
-		auto res = mEdgeMap.emplace(
-		    id, Edge(id, osmId, source, target, geomData, roadData));
+	    Edge edge(id, osmId, source, target, geomData, roadData);
+		auto res = mEdgeMap.emplace(id, std::move(edge));
+//		auto res = mEdgeMap.emplace(
+//		    id, Edge(id, osmId, source, target, geomData, roadData));
+//		    id, id, osmId, source, target, geomData, roadData);
 		mOsmEdgeMap.insert({osmId, id});
 		return res.first->second;
 	}
@@ -90,7 +95,12 @@ Topology::getEdge(EdgeIdType id)
 const Edge&
 Topology::getEdge(EdgeIdType id) const
 {
-    return const_cast<Topology&>(*this).getEdge(id);
+    auto it = mEdgeMap.find(id);
+    if(it == mEdgeMap.end()) {
+        throw TopologyException("Edge not found: " + std::to_string(id));
+    }
+    return it->second;
+//    return const_cast<Topology&>(*this).getEdge(id);
 }
 
 

@@ -29,6 +29,7 @@
 #include "Restrictions.h"
 #include "../config/Configuration.h"
 #include "../util/Logging.h"
+#include "EdgeRestriction.h"
 
 // FORWARD REFERENCES
 //
@@ -121,7 +122,7 @@ public:
      * Graph should be based on the supplied topology.
      * @param   rTopology       The topology to use as basis for the graph.
      */
-    Graph(const Topology& rTopology);
+    Graph(Topology& rTopology);
 
     /** Copy constructor.
      * Disabled.
@@ -130,7 +131,7 @@ public:
 
     /** Destructor.
      */
-    ~Graph() = default;
+    ~Graph();
 
 // OPERATORS
     /** Output operator to print to a stream.
@@ -140,12 +141,9 @@ public:
 
 // OPERATIONS
     /** Add restrictions to the topology and rebuilds the graph.
-     * @param   pRestrictions   Restrictions to impose on the graph.
      * @param   pConfiguration  Configuration to compare restrictions against.
      */
-    void                  addRestrictions(
-        Restrictions&   rRestrictions,
-        Configuration&  rConfiguration);
+    void                  addRestrictions(Configuration*  pConfiguration);
 
 // ACCESS
     /**
@@ -281,7 +279,7 @@ private:
      * @param   edgeId  Id to edge to look up.
      * @return  true if this edge has no exits, meaning it is no use adding it.
      */
-    bool                edgeHasNoExit(EdgeIdType edgeId) const;
+    bool                edgeHasNoExit(EdgeIdType edgeId);
 
     /**
      * @return A vector of all Edges going out from a vertex.
@@ -306,6 +304,12 @@ private:
 //        const OsmBarrier::RestrictionsRule&  barrierRule,
 //        const OsmAccess::AccessRule&         accessRule) const;
 
+    /** Look if an edge is restricted with the current configuration.
+     * @param   rEdge       The edge to examine
+     * @return  true        If the edge is restricted
+     */
+    bool                isEdgeRestricted(const Edge& rEdge) const;
+
     /**
      * @return  true if this target edge has restricted access from the source.
      */
@@ -324,14 +328,16 @@ private:
     TopoVertexIdToGraphVertexMapType  mIdToVertexMap;     // map original id to GraphVertex
     TopoEdgeIdToGraphEdgeMapType      mIdToEdgeMap;       // map original id to GraphEdge
     GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode
-    const Topology&                   mrTopology;
-    Restrictions*                     mpRestrictions;
+    Topology&                         mrTopology;
+//    Restrictions*                     mpRestrictions;
     Configuration*                    mpConfiguration;
     OsmBarrier::RestrictionsRule      mBarrierRule; // TODO read in config?
     OsmAccess::AccessRule             mAccessRule;  // TODO read in config?
     mutable boost::log::sources::severity_logger
         <boost::log::trivial::severity_level>
                                       mLog;
+    bool                              mUseRestrictions {false};
+    bool                              mUseCosts {false};
 
 // CONSTANTS
 };

@@ -150,6 +150,37 @@ ConfigurationReader::fillVehicleConfiguration(VehicleConfig& rVehicleConfig) con
     }
 }
 
+
+void
+ConfigurationReader::fillAccessRule(OsmAccess::AccessRule& rAccessRule) const
+{
+    std::string prefix("access.allow");
+
+    try
+    {
+        std::vector<OsmAccess::AccessType> allow_tags;
+        for(auto& item : mPropertyTree.get_child(prefix))
+        {
+            std::string tag_string = item.second.get_value<std::string>();
+            allow_tags.push_back(OsmAccess::parseString(tag_string));
+        }
+        rAccessRule.allowAccessToTypes = allow_tags;
+    }
+    catch (ConfigurationException& e)
+    {
+        throw e;
+    }
+    catch (OsmException& ose)
+    {
+        throw ConfigurationException(std::string("Could not read config") +
+            ", error parsing access tag: " + ose.what());
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
+
 void
 ConfigurationReader::fillCostConfiguration(CostConfig& rCostConfig) const
 {

@@ -165,4 +165,4 @@ const std::vector<std::string> OsmHighway::sSurfaceTypeStrings
     "woodchips",
 
     "metal_grid"
-}
+};
