@@ -315,6 +315,89 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		        REQUIRE (it == types.end());
 		    }
 		}
+
+		WHEN ("asking for costs rules")
+		{
+		    const OsmBarrier::CostsRule
+		        r_costs_rule = config.getBarrierCostsRule();
+
+		    THEN ("we get CostssRule filled out")
+		    {
+		        std::vector<OsmBarrier::BarrierType> types =
+		            r_costs_rule.costsTypes;
+		        REQUIRE (types.size() == 13);
+
+		        auto it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::BORDER_CONTROL);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::BUMP_GATE);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::BUS_TRAP);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::CATTLE_GRID);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::ENTRANCE);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::GATE);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::HAMPSHIRE_GATE);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::HEIGHT_RESTRICTOR);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::JERSEY_BARRIER);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::LIFT_GATE);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::SUMP_BUSTER);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::SWING_GATE);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::TOLL_BOOTH);
+		        INFO ("Costs: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::YES);
+		        INFO ("No cost: yes");
+		        REQUIRE (it == types.end());
+		    }
+		}
 	}
 }
 

@@ -43,6 +43,12 @@ Configuration::getBarrierRestrictionsRule() const
     return mBarrierRestrictionsRule;
 }
 
+const OsmBarrier::CostsRule&
+Configuration::getBarrierCostsRule() const
+{
+    return mBarrierCostsRule;
+}
+
 const CostConfig&
 Configuration::getCostConfig() const
 {

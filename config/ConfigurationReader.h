@@ -100,6 +100,13 @@ private:
 	 */
 	void    fillBarrierRestrictRule(OsmBarrier::RestrictionsRule& rRestrictRule) const;
 
+	/** Read the Barrier part of the configuration and build the rule for
+	 * which barriers imposes a cost.
+	 * @param   rCostRule     The rule to fill out.
+	 * @throw   ConfigurationException  If missing configuration.
+	 */
+	void    fillBarrierCostsRule(OsmBarrier::CostsRule& rCostsRule) const;
+
 	/** Read the Cost part of the configuration and populate config struct.
 	 * @param   The Cost configuration
 	 * @throw   ConfigurationException  If missing configuration.

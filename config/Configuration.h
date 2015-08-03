@@ -83,6 +83,12 @@ public:
     const OsmBarrier::RestrictionsRule&
                           getBarrierRestrictionsRule() const;
 
+    /** Get the rules for which values of the `barrier`-tag costs to pass
+     * @return  Reference to an CostsRule
+     */
+    const OsmBarrier::CostsRule&
+                          getBarrierCostsRule() const;
+
     /** Get the cost related parts of the configuration.
      * @return  Reference to a CostConfig.
      */
@@ -99,7 +105,7 @@ private:
     VehicleConfig           mVehicleConfig;
     CostConfig              mCostConfig;
     OsmAccess::AccessRule   mAccessRule;
-    OsmBarrier::CostsRule   mBarrierCostRule;
+    OsmBarrier::CostsRule   mBarrierCostsRule;
     OsmBarrier::RestrictionsRule mBarrierRestrictionsRule;
 };
 
