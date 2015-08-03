@@ -170,23 +170,148 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		    {
 		        std::vector<OsmAccess::AccessType> types = r_access_rule.allowAccessToTypes;
 		        REQUIRE (types.size() == 3);
+
 		        auto it = std::find(types.begin(), types.end(),
 		            OsmAccess::AccessType::YES);
+		        INFO ("Allows access:" + OsmAccess::toString(*it));
 		        REQUIRE (it != types.end());
-		        INFO (OsmAccess::toString(*it));
 
 		        it = std::find(types.begin(), types.end(),
 		            OsmAccess::AccessType::PERMISSIVE);
+		        INFO ("Allows access:" + OsmAccess::toString(*it));
 		        REQUIRE (it != types.end());
-		        INFO (OsmAccess::toString(*it));
 
 		        it = std::find(types.begin(), types.end(),
 		            OsmAccess::AccessType::DESIGNATED);
+		        INFO ("Allows access:" + OsmAccess::toString(*it));
 		        REQUIRE (it != types.end());
-		        INFO (OsmAccess::toString(*it));
 
 		        it = std::find(types.begin(), types.end(),
 		            OsmAccess::AccessType::NO);
+		        INFO ("Denies access: no");
+		        REQUIRE (it == types.end());
+		    }
+		}
+
+		WHEN ("asking for restrictions rules")
+		{
+		    const OsmBarrier::RestrictionsRule
+		        r_restrict_rule = config.getBarrierRestrictionsRule();
+
+		    THEN ("we get RestrictionsRule filled out")
+		    {
+		        std::vector<OsmBarrier::BarrierType> types =
+		            r_restrict_rule.restrictionTypes;
+		        REQUIRE (types.size() == 21);
+
+		        auto it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::BLOCK);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::BOLLARD);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::BUS_TRAP);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::CHAIN);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::CYCLE_BARRIER);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::DEBRIS);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::FULLHEIGHT_TURNSTILE);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::HORSE_STILE);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::JERSEY_BARRIER);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::KENT_CARRIAGE_GAP);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::KISSING_GATE);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::LOG);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::MOTORCYCLE_BARRIER);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::ROPE);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::SALLY_PORT);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::SPIKES);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::STILE);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::SUMP_BUSTER);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::SWING_GATE);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::TURNSTILE);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::YES);
+		        INFO ("Restrict: " + OsmBarrier::toString(*it));
+		        REQUIRE (it != types.end());
+
+		        it = std::find(types.begin(), types.end(),
+		            OsmBarrier::BarrierType::GATE);
+		        INFO ("Allow: gate");
 		        REQUIRE (it == types.end());
 		    }
 		}

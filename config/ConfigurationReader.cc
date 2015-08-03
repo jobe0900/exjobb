@@ -182,6 +182,36 @@ ConfigurationReader::fillAccessRule(OsmAccess::AccessRule& rAccessRule) const
 }
 
 void
+ConfigurationReader::fillBarrierRestrictRule(OsmBarrier::RestrictionsRule& rRestrictRule) const
+{
+    std::string prefix("barrier.restrict");
+
+    try
+    {
+        std::vector<OsmBarrier::BarrierType> restrict_barriers;
+        for(auto& item : mPropertyTree.get_child(prefix))
+        {
+            std::string restrict_string = item.second.get_value<std::string>();
+            restrict_barriers.push_back(OsmBarrier::parseString(restrict_string));
+        }
+        rRestrictRule.restrictionTypes = restrict_barriers;
+    }
+    catch (ConfigurationException& e)
+    {
+        throw e;
+    }
+    catch (OsmException& ose)
+    {
+        throw ConfigurationException(std::string("Could not read config") +
+            ", error parsing barrier restrictions: " + ose.what());
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
+
+void
 ConfigurationReader::fillCostConfiguration(CostConfig& rCostConfig) const
 {
     try

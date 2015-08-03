@@ -77,6 +77,12 @@ public:
     const OsmAccess::AccessRule&
                           getAccessRule() const;
 
+    /** Get the rules for which values of the `barrier`-tag restricts access
+     * @return  Reference to an RestrictionsRule
+     */
+    const OsmBarrier::RestrictionsRule&
+                          getBarrierRestrictionsRule() const;
+
     /** Get the cost related parts of the configuration.
      * @return  Reference to a CostConfig.
      */

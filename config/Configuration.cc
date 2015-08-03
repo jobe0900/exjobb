@@ -37,6 +37,12 @@ Configuration::getAccessRule() const
     return mAccessRule;
 }
 
+const OsmBarrier::RestrictionsRule&
+Configuration::getBarrierRestrictionsRule() const
+{
+    return mBarrierRestrictionsRule;
+}
+
 const CostConfig&
 Configuration::getCostConfig() const
 {
