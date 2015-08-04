@@ -318,84 +318,68 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 
 		WHEN ("asking for costs rules")
 		{
-		    const OsmBarrier::CostsRule
-		        r_costs_rule = config.getBarrierCostsRule();
+		    const OsmBarrier::CostsRule r_costs_rule = config.getBarrierCostsRule();
 
 		    THEN ("we get CostssRule filled out")
 		    {
-		        std::vector<OsmBarrier::BarrierType> types =
-		            r_costs_rule.costsTypes;
-		        REQUIRE (types.size() == 13);
+//		        std::vector<OsmBarrier::BarrierType> types =
+//		            r_costs_rule.costsTypes;
+		        REQUIRE (r_costs_rule.costs.size() == 13);
 
-		        auto it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::BORDER_CONTROL);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: border control");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::BORDER_CONTROL) == 120);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::BUMP_GATE);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: bump gate");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::BUMP_GATE) == 30);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::BUS_TRAP);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: bus trap");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::BUS_TRAP) == 30);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::CATTLE_GRID);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: cattle grid");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::CATTLE_GRID) == 20);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::ENTRANCE);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: entrance");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::ENTRANCE) == 10);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::GATE);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: gate");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::GATE) == 30);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::HAMPSHIRE_GATE);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: hampshire gate");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::HAMPSHIRE_GATE) == 60);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::HEIGHT_RESTRICTOR);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: height restrictor");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::HEIGHT_RESTRICTOR) == 5);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::JERSEY_BARRIER);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: jersey barrier");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::JERSEY_BARRIER) == 10);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::LIFT_GATE);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: lift gate");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::LIFT_GATE) == 60);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::SUMP_BUSTER);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: sump buster");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::SUMP_BUSTER) == 30);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::SWING_GATE);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: swing gate");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::SWING_GATE) == 60);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::TOLL_BOOTH);
-		        INFO ("Costs: " + OsmBarrier::toString(*it));
-		        REQUIRE (it != types.end());
+		        INFO("Costs: toll both");
+		        REQUIRE (r_costs_rule.getCost(
+		            OsmBarrier::BarrierType::TOLL_BOOTH) == 40);
 
-		        it = std::find(types.begin(), types.end(),
-		            OsmBarrier::BarrierType::YES);
-		        INFO ("No cost: yes");
-		        REQUIRE (it == types.end());
+		        INFO("No cost: yes");
+		        REQUIRE (r_costs_rule.costsToPass(OsmBarrier::BarrierType::YES) == false);
 		    }
 		}
 	}

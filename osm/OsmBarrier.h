@@ -12,6 +12,7 @@
 //
 #include <algorithm>
 #include <initializer_list>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -67,6 +68,14 @@ public:
         NR_BARRIER_TYPES
     };
 
+//    struct BarrierCostType
+//    {
+//        BarrierCostType(BarrierType barrier, unsigned cost)
+//            : barrierType(barrier), cost(cost) {}
+//        BarrierType     barrierType {NONE};
+//        unsigned        cost {0};
+//    };
+
 
     /** Barriers which infer restrictions on access.
      */
@@ -78,30 +87,30 @@ public:
 
         bool    restrictsAccess(BarrierType type) const;
 
-        std::vector<BarrierType> restrictionTypes
-        {
-            OsmBarrier::BLOCK,
-            OsmBarrier::BOLLARD,
-            OsmBarrier::BUS_TRAP,
-            OsmBarrier::CHAIN,
-            OsmBarrier::CYCLE_BARRIER,
-            OsmBarrier::DEBRIS,
-            OsmBarrier::FULLHEIGHT_TURNSTILE,
-            OsmBarrier::HORSE_STILE,
-            OsmBarrier::JERSEY_BARRIER,
-            OsmBarrier::KENT_CARRIAGE_GAP,
-            OsmBarrier::KISSING_GATE,
-            OsmBarrier::LOG,
-            OsmBarrier::MOTORCYCLE_BARRIER,
-            OsmBarrier::ROPE,
-            OsmBarrier::SALLY_PORT,
-            OsmBarrier::SPIKES,
-            OsmBarrier::STILE,
-            OsmBarrier::SUMP_BUSTER,
-            OsmBarrier::SWING_GATE,
-            OsmBarrier::TURNSTILE,
-            OsmBarrier::YES
-        };
+        std::vector<BarrierType> restrictionTypes;
+//        {
+//            OsmBarrier::BLOCK,
+//            OsmBarrier::BOLLARD,
+//            OsmBarrier::BUS_TRAP,
+//            OsmBarrier::CHAIN,
+//            OsmBarrier::CYCLE_BARRIER,
+//            OsmBarrier::DEBRIS,
+//            OsmBarrier::FULLHEIGHT_TURNSTILE,
+//            OsmBarrier::HORSE_STILE,
+//            OsmBarrier::JERSEY_BARRIER,
+//            OsmBarrier::KENT_CARRIAGE_GAP,
+//            OsmBarrier::KISSING_GATE,
+//            OsmBarrier::LOG,
+//            OsmBarrier::MOTORCYCLE_BARRIER,
+//            OsmBarrier::ROPE,
+//            OsmBarrier::SALLY_PORT,
+//            OsmBarrier::SPIKES,
+//            OsmBarrier::STILE,
+//            OsmBarrier::SUMP_BUSTER,
+//            OsmBarrier::SWING_GATE,
+//            OsmBarrier::TURNSTILE,
+//            OsmBarrier::YES
+//        };
     };
 
     /** Barriers which infer costs.
@@ -110,26 +119,30 @@ public:
     {
         CostsRule() = default;
         CostsRule(const CostsRule& from) = default;
-        CostsRule(std::initializer_list<BarrierType> costsTypes);
+//        CostsRule(std::initializer_list<BarrierCostType> costsTypes);
 
-        bool    costs(BarrierType type) const;
+        bool        costsToPass(BarrierType type) const;
+        unsigned    getCost(BarrierType type) const;
+        void        addCost(BarrierType type, unsigned cost);
 
-        std::vector<BarrierType> costsTypes
-        {
-            OsmBarrier::BORDER_CONTROL,
-            OsmBarrier::BUMP_GATE,
-            OsmBarrier::BUS_TRAP,
-            OsmBarrier::CATTLE_GRID,
-            OsmBarrier::ENTRANCE,
-            OsmBarrier::GATE,
-            OsmBarrier::HAMPSHIRE_GATE,
-            OsmBarrier::HEIGHT_RESTRICTOR,
-            OsmBarrier::JERSEY_BARRIER,
-            OsmBarrier::LIFT_GATE,
-            OsmBarrier::SUMP_BUSTER,
-            OsmBarrier::SWING_GATE,
-            OsmBarrier::TOLL_BOOTH,
-        };
+        std::map<BarrierType, unsigned> costs;
+
+//        std::vector<BarrierCostType> costsTypes;
+//        {
+//            BarrierCostType(OsmBarrier::BORDER_CONTROL,
+//            OsmBarrier::BUMP_GATE,
+//            OsmBarrier::BUS_TRAP,
+//            OsmBarrier::CATTLE_GRID,
+//            OsmBarrier::ENTRANCE,
+//            OsmBarrier::GATE,
+//            OsmBarrier::HAMPSHIRE_GATE,
+//            OsmBarrier::HEIGHT_RESTRICTOR,
+//            OsmBarrier::JERSEY_BARRIER,
+//            OsmBarrier::LIFT_GATE,
+//            OsmBarrier::SUMP_BUSTER,
+//            OsmBarrier::SWING_GATE,
+//            OsmBarrier::TOLL_BOOTH,
+//        };
     };
 
 // LIFECYCLE

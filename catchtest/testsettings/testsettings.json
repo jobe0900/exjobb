@@ -85,7 +85,7 @@
          "chain",
          "cycle_barrier",
          "debris",
-         "fullheight_turnstile",
+         "full-height_turnstile",
          "horse_stile",
          "jersey_barrier",
          "kent_carriage_gap",
@@ -104,19 +104,19 @@
       
       "cost":
       [
-         "border_control",
-         "bump_gate",
-         "bus_trap",
-         "cattle_grid",
-         "entrance",
-         "gate",
-         "hampshire_gate",
-         "height_restrictor",
-         "jersey_barrier",
-         "lift_gate",
-         "sump_buster",
-         "swing_gate",
-         "toll_booth"
+         ["border_control",     120],
+         ["bump_gate",          30],
+         ["bus_trap",           30],
+         ["cattle_grid",        20],
+         ["entrance",           10],
+         ["gate",               30],
+         ["hampshire_gate",     60],
+         ["height_restrictor",   5],
+         ["jersey_barrier",     10],
+         ["lift_gate",          60],
+         ["sump_buster",        30],
+         ["swing_gate",         60],
+         ["toll_booth",         40]
       ]
    },
     
@@ -137,22 +137,6 @@
           "unclassified":  {"high":  90, "low":  60},
           "residential":   {"high":  90, "low":  60},
           "living_street": {"high":  20, "low":  20}
-      },
-      "barriers":
-      {
-         "border_control":  120,
-         "bump_gate":       30,
-         "bus_trap":        30,
-         "cattle_grid":     20,
-         "entrance":        10,
-         "gate":            30,
-         "hampshire_gate":  60,
-         "height_restrictor": 5,
-         "jersey_barrier":  10,
-         "lift_gate":       60,
-         "sump_buster":     30,
-         "swing_gate":      60,
-         "toll_booth":      40
       }
    }
 }   

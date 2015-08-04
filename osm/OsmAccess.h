@@ -60,7 +60,7 @@ public:
 
         bool    hasAccess(AccessType type) const;
 
-        std::vector<AccessType> allowAccessToTypes {YES, PERMISSIVE, DESIGNATED};
+        std::vector<AccessType> allowAccessToTypes; //{YES, PERMISSIVE, DESIGNATED};
     };
 
 // LIFECYCLE

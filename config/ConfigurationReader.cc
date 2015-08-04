@@ -7,7 +7,6 @@
 
 #include "ConfigurationReader.h"  // class implemented
 
-
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
@@ -34,6 +33,9 @@ ConfigurationReader::fillConfiguration(Configuration& rConfig) const
     fillDatabaseConfiguration(rConfig.mDbConfig);
     fillTopologyConfiguration(rConfig.mTopoConfig);
     fillVehicleConfiguration(rConfig.mVehicleConfig);
+    fillAccessRule(rConfig.mAccessRule);
+    fillBarrierRestrictRule(rConfig.mBarrierRestrictionsRule);
+    fillBarrierCostsRule(rConfig.mBarrierCostsRule);
     fillCostConfiguration(rConfig.mCostConfig);
 }
 
@@ -218,13 +220,26 @@ ConfigurationReader::fillBarrierCostsRule(OsmBarrier::CostsRule& rCostsRule) con
 
     try
     {
-        std::vector<OsmBarrier::BarrierType> cost_barriers;
-        for(auto& item : mPropertyTree.get_child(prefix))
+        for(auto& row : mPropertyTree.get_child(prefix))
         {
-            std::string cost_string = item.second.get_value<std::string>();
-            cost_barriers.push_back(OsmBarrier::parseString(cost_string));
+            int i = 0;
+            std::string type_string;
+            unsigned cost;
+            for(auto& item : row.second)
+            {
+                if(i == 0)
+                {
+                    type_string = item.second.get_value<std::string>();
+                }
+                else
+                {
+                    cost = item.second.get_value<unsigned>();
+                }
+                ++i;
+            }
+            OsmBarrier::BarrierType barrier_type = OsmBarrier::parseString(type_string);
+            rCostsRule.addCost(barrier_type, cost);
         }
-        rCostsRule.costsTypes = cost_barriers;
     }
     catch (ConfigurationException& e)
     {
