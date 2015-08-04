@@ -243,6 +243,66 @@ Edge::hasViaWayRestriction() const
     return false;
 }
 
+bool
+Edge::isRestricted(const Configuration& rConfig) const
+{
+    if(mpRestrictions == nullptr)
+    {
+        return false;
+    }
+    const auto& restriction_types = mpRestrictions->restrictionTypes();
+
+    bool is_restricted = false;
+    bool is_generally_restricted = false;
+    bool is_vehicle_banned = false;
+
+    for(const auto& r : restriction_types)
+    {
+        switch (r)
+        {
+            case EdgeRestriction::DISUSED:
+                is_restricted = true; break;
+            case EdgeRestriction::VEHICLE_PROPERTIES:
+                if(mpRestrictions->vehicleProperties()
+                    .restrictsAccess(rConfig.getVehicleConfig()))
+                {
+                    is_restricted = true;
+                }
+                break;
+            case EdgeRestriction::BARRIER:
+                if(mpRestrictions->barrier()
+                    .restrictsAccess(rConfig.getBarrierRestrictionsRule()))
+                {
+                    is_restricted = true;
+                }
+                break;
+            case EdgeRestriction::GENERAL_ACCESS:
+                if(!mpRestrictions->generalAccess()
+                    .allowsAccess(rConfig.getAccessRule()))
+                {
+                    is_generally_restricted = true;
+                }
+                continue;
+            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
+                if(!mpRestrictions->vehicleTypeAccess(rConfig.getVehicleConfig().category)
+                    .allowsAccess(rConfig.getAccessRule()))
+                {
+                    is_vehicle_banned = true;
+                }
+                continue;
+            default:
+                continue;
+        }
+    }
+
+    if(is_restricted
+        || (is_generally_restricted && is_vehicle_banned)
+        || is_vehicle_banned)
+    {
+        return true;
+    }
+    return false;
+}
 //bool
 //Edge::hasMaxSpeedRestriction() const
 //{

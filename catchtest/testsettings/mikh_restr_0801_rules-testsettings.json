@@ -86,7 +86,7 @@
          "chain",
          "cycle_barrier",
          "debris",
-         "fullheight_turnstile",
+         "full-height_turnstile",
          "horse_stile",
          "jersey_barrier",
          "kent_carriage_gap",
@@ -138,6 +138,6 @@
           "unclassified":  {"high":  90, "low":  60},
           "residential":   {"high":  90, "low":  60},
           "living_street": {"high":  20, "low":  20}
-      },
+      }
    }
 }       

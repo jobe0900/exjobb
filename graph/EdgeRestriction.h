@@ -291,16 +291,17 @@ public:
 //                        noExitEdges() const;
 // INQUIRY
 
-    /** Check the restrictions for an edge.
-     * @param   rVehicleConfig  Configuration for the current vehicle.
-     * @param   rBarrierRule    Rules for which Barrier types restricts access.
-     * @param   rAccessRule     Rules for which Access types restricts access.
-     * @return  true if access is allowed, false if access restricted
-     */
-    bool                isEdgeRestricted(
-        const VehicleConfig& rVehicleConfig,
-        const OsmBarrier::RestrictionsRule& rBarrierRule,
-        const OsmAccess::AccessRule& rAccessRule) const;
+//    /** Check the restrictions for an edge.
+//     * @param   rVehicleConfig  Configuration for the current vehicle.
+//     * @param   rBarrierRule    Rules for which Barrier types restricts access.
+//     * @param   rAccessRule     Rules for which Access types restricts access.
+//     * @return  true if access is allowed, false if access restricted
+//     */
+//    bool                isEdgeRestricted(
+//        const VehicleConfig& rVehicleConfig,
+//        const OsmBarrier::RestrictionsRule& rBarrierRule,
+//        const OsmAccess::AccessRule& rAccessRule) const;
+
 
     /** Ask if an Edge has restriction of a certain type.
      * @param   restrictionType     The type of restriction

@@ -304,11 +304,11 @@ private:
 //        const OsmBarrier::RestrictionsRule&  barrierRule,
 //        const OsmAccess::AccessRule&         accessRule) const;
 
-    /** Look if an edge is restricted with the current configuration.
-     * @param   rEdge       The edge to examine
-     * @return  true        If the edge is restricted
-     */
-    bool                isEdgeRestricted(const Edge& rEdge) const;
+//    /** Look if an edge is restricted with the current configuration.
+//     * @param   rEdge       The edge to examine
+//     * @return  true        If the edge is restricted
+//     */
+//    bool                isEdgeRestricted(const Edge& rEdge) const;
 
     /**
      * @return  true if this target edge has restricted access from the source.
@@ -331,8 +331,8 @@ private:
     Topology&                         mrTopology;
 //    Restrictions*                     mpRestrictions;
     Configuration*                    mpConfiguration;
-    OsmBarrier::RestrictionsRule      mBarrierRule; // TODO read in config?
-    OsmAccess::AccessRule             mAccessRule;  // TODO read in config?
+//    OsmBarrier::RestrictionsRule      mBarrierRule; // TODO read in config?
+//    OsmAccess::AccessRule             mAccessRule;  // TODO read in config?
     mutable boost::log::sources::severity_logger
         <boost::log::trivial::severity_level>
                                       mLog;

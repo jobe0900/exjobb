@@ -19,6 +19,7 @@
 // LOCAL INCLUDES
 //
 #include "Vertex.h"
+#include "../config/Configuration.h"
 #include "../osm/OsmHighway.h"
 #include "../osm/OsmId.h"
 //#include "EdgeRestriction.h"
@@ -230,6 +231,12 @@ public:
      * @return  true if there exists a turn restriction via ways.
      */
     bool              hasViaWayRestriction() const;
+
+    /** Check if travel on the Edge is restricted given the configuration.
+     * @param   rConfig     Configuration with restriction rules.
+     * @return  true        If travel is restricted.
+     */
+    bool                isRestricted(const Configuration& rConfig) const;
 
 //    /** Check if the edge has an explicit max speed limit or if we must resort
 //     * to using the speed implied by the highway type.

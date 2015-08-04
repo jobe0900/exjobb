@@ -18,8 +18,8 @@ Graph::Graph(Topology& rTopology)
       mIdToEdgeMap(),
       mrTopology(rTopology),
       mpConfiguration(nullptr),
-      mBarrierRule(),
-      mAccessRule(),
+//      mBarrierRule(),
+//      mAccessRule(),
       mLog()
 {
     Logging::initLogging();
@@ -61,11 +61,13 @@ Graph::addRestrictions(
 {
     mpConfiguration = pConfiguration;
     mUseRestrictions = true;
+
     mGraph.clear();
     mLineGraph.clear();
     mIdToVertexMap.clear();
     mIdToEdgeMap.clear();
     mEdgeIdToNodeMap.clear();
+
     buildGraph();
     buildLineGraph();
 }
@@ -154,7 +156,10 @@ Graph::addTopoEdgesToGraph()
     {
         const Edge& e = edgepair.second;
 
-        if(isEdgeRestricted(e))
+        if(mUseRestrictions
+            && mpConfiguration != nullptr
+            && e.isRestricted(*mpConfiguration))
+//        if(isEdgeRestricted(e))
         {
             BOOST_LOG_SEV(mLog, boost::log::trivial::info)
                         << "Graph:addTopoEdgeToGraph(): "
@@ -263,8 +268,6 @@ Graph::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
 {
     EdgeIdType e_graph_id = boost::get(&GraphEdge::graphEdgeId, mGraph, rGraphEdge);
     EdgeIdType e_topo_id  = boost::get(&GraphEdge::topoEdgeId, mGraph, rGraphEdge);
-
-    // TODO don't add a restricted edge!
 
     if(!hasNode(e_graph_id))
     {
@@ -415,7 +418,8 @@ Graph::getRestrictedTargets(EdgeIdType edgeId) const
 
             Edge& e = mrTopology.getEdge(e_id);
 
-            if(isEdgeRestricted(e))
+            if(e.isRestricted(*mpConfiguration))
+//            if(isEdgeRestricted(e))
             {
                 BOOST_LOG_SEV(mLog, boost::log::trivial::info)
                     << "Graph:getRestrictedTargets(): "
@@ -473,70 +477,70 @@ Graph::getRestrictedTargets(EdgeIdType edgeId) const
 // Ask Edge self if it is restricted given a configuration.
 /////////////////////
 
-bool
-Graph::isEdgeRestricted(const Edge& rEdge) const
-{
-    // check preliminaries
-    if(!mUseRestrictions
-        || mpConfiguration == nullptr
-        || !rEdge.hasRestrictions())
-    {
-        return false;
-    }
-
-    // check actual restrictions.
-    const auto& restriction_types = rEdge.restrictions().restrictionTypes();
-    const EdgeRestriction& r_restrictions = rEdge.restrictions();
-    const VehicleConfig& r_vehicle_config = mpConfiguration->getVehicleConfig();
-
-    bool is_restricted = false;
-    bool is_generally_restricted = false;
-    bool is_vehicle_banned = false;
-
-    for(const auto& r : restriction_types)
-    {
-        switch (r)
-        {
-            case EdgeRestriction::DISUSED:
-                is_restricted = true; break;
-            case EdgeRestriction::VEHICLE_PROPERTIES:
-                if(r_restrictions.vehicleProperties().restrictsAccess(r_vehicle_config))
-                {
-                    is_restricted = true;
-                }
-                break;
-            case EdgeRestriction::BARRIER:
-                if(r_restrictions.barrier().restrictsAccess(mBarrierRule))
-                {
-                    is_restricted = true;
-                }
-                break;
-            case EdgeRestriction::GENERAL_ACCESS:
-                if(!r_restrictions.generalAccess().allowsAccess(mAccessRule))
-                {
-                    is_generally_restricted = true;
-                }
-                continue;
-            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
-                if(!r_restrictions.vehicleTypeAccess(r_vehicle_config.category)
-                    .allowsAccess(mAccessRule))
-                {
-                    is_vehicle_banned = true;
-                }
-                continue;
-            default:
-                continue;
-        }
-    }
-
-    if(is_restricted
-        || (is_generally_restricted && is_vehicle_banned)
-        || is_vehicle_banned)
-    {
-        return true; // this edge should not be added.
-    }
-    return false;
-}
+//bool
+//Graph::isEdgeRestricted(const Edge& rEdge) const
+//{
+//    // check preliminaries
+//    if(!mUseRestrictions
+//        || mpConfiguration == nullptr
+//        || !rEdge.hasRestrictions())
+//    {
+//        return false;
+//    }
+//
+//    // check actual restrictions.
+//    const auto& restriction_types = rEdge.restrictions().restrictionTypes();
+//    const EdgeRestriction& r_restrictions = rEdge.restrictions();
+//    const VehicleConfig& r_vehicle_config = mpConfiguration->getVehicleConfig();
+//
+//    bool is_restricted = false;
+//    bool is_generally_restricted = false;
+//    bool is_vehicle_banned = false;
+//
+//    for(const auto& r : restriction_types)
+//    {
+//        switch (r)
+//        {
+//            case EdgeRestriction::DISUSED:
+//                is_restricted = true; break;
+//            case EdgeRestriction::VEHICLE_PROPERTIES:
+//                if(r_restrictions.vehicleProperties().restrictsAccess(r_vehicle_config))
+//                {
+//                    is_restricted = true;
+//                }
+//                break;
+//            case EdgeRestriction::BARRIER:
+//                if(r_restrictions.barrier().restrictsAccess(mBarrierRule))
+//                {
+//                    is_restricted = true;
+//                }
+//                break;
+//            case EdgeRestriction::GENERAL_ACCESS:
+//                if(!r_restrictions.generalAccess().allowsAccess(mAccessRule))
+//                {
+//                    is_generally_restricted = true;
+//                }
+//                continue;
+//            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
+//                if(!r_restrictions.vehicleTypeAccess(r_vehicle_config.category)
+//                    .allowsAccess(mAccessRule))
+//                {
+//                    is_vehicle_banned = true;
+//                }
+//                continue;
+//            default:
+//                continue;
+//        }
+//    }
+//
+//    if(is_restricted
+//        || (is_generally_restricted && is_vehicle_banned)
+//        || is_vehicle_banned)
+//    {
+//        return true; // this edge should not be added.
+//    }
+//    return false;
+//}
 
 bool
 Graph::isTargetRestricted(

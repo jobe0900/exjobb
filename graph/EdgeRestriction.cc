@@ -326,62 +326,63 @@ EdgeRestriction::restrictedTargetEdges() const
 //    return mNoExitEdges;
 //}
 
-bool
-EdgeRestriction::isEdgeRestricted(
-        const VehicleConfig& rVehicleConfig,
-        const OsmBarrier::RestrictionsRule& rBarrierRule,
-        const OsmAccess::AccessRule& rAccessRule) const
-{
-    const auto& restriction_types = restrictionTypes();
+//bool
+//EdgeRestriction::isEdgeRestricted(
+//        const VehicleConfig& rVehicleConfig,
+//        const OsmBarrier::RestrictionsRule& rBarrierRule,
+//        const OsmAccess::AccessRule& rAccessRule) const
+//{
+//    const auto& restriction_types = restrictionTypes();
+//
+//    bool is_restricted = false;
+//    bool is_generally_restricted = false;
+//    bool is_vehicle_banned = false;
+//
+//    for(const auto& r : restriction_types)
+//    {
+//        switch (r)
+//        {
+//            case EdgeRestriction::DISUSED:
+//                is_restricted = true; break;
+//            case EdgeRestriction::VEHICLE_PROPERTIES:
+//                if(vehicleProperties().restrictsAccess(rVehicleConfig))
+//                {
+//                    is_restricted = true;
+//                }
+//                break;
+//            case EdgeRestriction::BARRIER:
+//                if(barrier().restrictsAccess(rBarrierRule))
+//                {
+//                    is_restricted = true;
+//                }
+//                break;
+//            case EdgeRestriction::GENERAL_ACCESS:
+//                if(!generalAccess().allowsAccess(rAccessRule))
+//                {
+//                    is_generally_restricted = true;
+//                }
+//                continue;
+//            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
+//                if(!vehicleTypeAccess(rVehicleConfig.category)
+//                    .allowsAccess(rAccessRule))
+//                {
+//                    is_vehicle_banned = true;
+//                }
+//                continue;
+//            default:
+//                continue;
+//        }
+//    }
+//
+//    if(is_restricted
+//        || (is_generally_restricted && is_vehicle_banned)
+//        || is_vehicle_banned)
+//    {
+//        return true; // this edge should not be added.
+//    }
+//    return false;
+//}
 
-    bool is_restricted = false;
-    bool is_generally_restricted = false;
-    bool is_vehicle_banned = false;
-
-    for(const auto& r : restriction_types)
-    {
-        switch (r)
-        {
-            case EdgeRestriction::DISUSED:
-                is_restricted = true; break;
-            case EdgeRestriction::VEHICLE_PROPERTIES:
-                if(vehicleProperties().restrictsAccess(rVehicleConfig))
-                {
-                    is_restricted = true;
-                }
-                break;
-            case EdgeRestriction::BARRIER:
-                if(barrier().restrictsAccess(rBarrierRule))
-                {
-                    is_restricted = true;
-                }
-                break;
-            case EdgeRestriction::GENERAL_ACCESS:
-                if(!generalAccess().allowsAccess(rAccessRule))
-                {
-                    is_generally_restricted = true;
-                }
-                continue;
-            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
-                if(!vehicleTypeAccess(rVehicleConfig.category)
-                    .allowsAccess(rAccessRule))
-                {
-                    is_vehicle_banned = true;
-                }
-                continue;
-            default:
-                continue;
-        }
-    }
-
-    if(is_restricted
-        || (is_generally_restricted && is_vehicle_banned)
-        || is_vehicle_banned)
-    {
-        return true; // this edge should not be added.
-    }
-    return false;
-}
 
 //============================= INQUIRY    ===================================
 bool
