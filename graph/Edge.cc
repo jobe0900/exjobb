@@ -203,8 +203,9 @@ EdgeRestriction&
 Edge::restrictions()
 {
     if(mpRestrictions == nullptr) {
-        throw RestrictionsException(std::string("No restriction on edge ")
-            + std::to_string(mId));
+//        throw RestrictionsException(std::string("No restriction on edge ")
+//            + std::to_string(mId));
+        mpRestrictions = new EdgeRestriction();
     }
     return *mpRestrictions;
 }
