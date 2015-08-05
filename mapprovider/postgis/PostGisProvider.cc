@@ -128,8 +128,7 @@ PostGisProvider::getTopology(Topology& rTopology)
 
 
 void
-PostGisProvider::addRestrictions(
-    Topology& rTopology)
+PostGisProvider::addRestrictionsAndCosts(Topology& rTopology)
 {
     addEdgeRestrictions(rTopology);
 }

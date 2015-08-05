@@ -76,9 +76,9 @@
       ]
    },
    
-   "barrier":
+   "restrict":
    {
-      "restrict":
+      "barriers":
       [
          "block",
          "bollard",
@@ -101,24 +101,8 @@
          "swing_gate",
          "turnstile",
          "yes"
-      ],
-      
-      "cost":
-      [
-         ["border_control",     120],
-         ["bump_gate",          30],
-         ["bus_trap",           30],
-         ["cattle_grid",        20],
-         ["entrance",           10],
-         ["gate",               30],
-         ["hampshire_gate",     60],
-         ["height_restrictor",   5],
-         ["jersey_barrier",     10],
-         ["lift_gate",          60],
-         ["sump_buster",        30],
-         ["swing_gate",         60],
-         ["toll_booth",         40]
       ]
+      
    },
     
    "cost":
@@ -138,6 +122,23 @@
           "unclassified":  {"high":  90, "low":  60},
           "residential":   {"high":  90, "low":  60},
           "living_street": {"high":  20, "low":  20}
-      }
+      },
+      
+      "barriers":
+      [
+         ["border_control",    120],
+         ["bump_gate",          30],
+         ["bus_trap",           30],
+         ["cattle_grid",        20],
+         ["entrance",           10],
+         ["gate",               30],
+         ["hampshire_gate",     60],
+         ["height_restrictor",   5],
+         ["jersey_barrier",     10],
+         ["lift_gate",          60],
+         ["sump_buster",        30],
+         ["swing_gate",         60],
+         ["toll_booth",         40]
+      ]
    }
 }       

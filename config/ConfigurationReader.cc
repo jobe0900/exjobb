@@ -186,7 +186,7 @@ ConfigurationReader::fillAccessRule(OsmAccess::AccessRule& rAccessRule) const
 void
 ConfigurationReader::fillBarrierRestrictRule(OsmBarrier::RestrictionsRule& rRestrictRule) const
 {
-    std::string prefix("barrier.restrict");
+    std::string prefix("restrict.barriers");
 
     try
     {
@@ -216,7 +216,7 @@ ConfigurationReader::fillBarrierRestrictRule(OsmBarrier::RestrictionsRule& rRest
 void
 ConfigurationReader::fillBarrierCostsRule(OsmBarrier::CostsRule& rCostsRule) const
 {
-    std::string prefix("barrier.cost");
+    std::string prefix("cost.barriers");
 
     try
     {

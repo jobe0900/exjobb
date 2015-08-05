@@ -70,7 +70,7 @@ public:
 // OPERATIONS
     virtual void    getTopology(Topology& rTopology);
 
-    virtual void    addRestrictions(Topology& rTopology);
+    virtual void    addRestrictionsAndCosts(Topology& rTopology);
 
 //    virtual void    getRestrictions(
 //        Restrictions&  rRestrictions,

@@ -65,23 +65,79 @@
         }
     },
 
-	"cost":
-	{
-	   "default_speed":
-	   {
-	       "motorway":      {"high": 110, "low":  90},
-	       "motorway_link": {"high":  90, "low":  90},
-	       "trunk":         {"high":  90, "low":  60},
-	       "trunk_link":    {"high":  90, "low":  60},
-	       "primary":       {"high":  90, "low":  60},
-	       "primary_link":  {"high":  90, "low":  60},
-	       "secondary":     {"high":  90, "low":  60},
-	       "secondary_link":{"high":  90, "low":  60},
-	       "tertiary":      {"high":  90, "low":  60},
-	       "tertiary_link": {"high":  90, "low":  60},
-	       "unclassified":  {"high":  90, "low":  60},
-	       "residential":   {"high":  90, "low":  60},
-	       "living_street": {"high":  20, "low":  20}
-	   }
-	}
+	"access":
+   {
+      "allow":
+      [
+         "yes",
+         "permissive",
+         "designated"
+      ]
+   },
+   
+   "restrict":
+   {
+      "barriers":
+      [
+         "block",
+         "bollard",
+         "bus_trap",
+         "chain",
+         "cycle_barrier",
+         "debris",
+         "full-height_turnstile",
+         "horse_stile",
+         "jersey_barrier",
+         "kent_carriage_gap",
+         "kissing_gate",
+         "log",
+         "motorcycle_barrier",
+         "rope",
+         "sally_port",
+         "spikes",
+         "stile",
+         "sump_buster",
+         "swing_gate",
+         "turnstile",
+         "yes"
+      ]
+      
+   },
+    
+   "cost":
+   {
+      "default_speed":
+      {
+          "motorway":      {"high": 110, "low":  90},
+          "motorway_link": {"high":  90, "low":  90},
+          "trunk":         {"high":  90, "low":  60},
+          "trunk_link":    {"high":  90, "low":  60},
+          "primary":       {"high":  90, "low":  60},
+          "primary_link":  {"high":  90, "low":  60},
+          "secondary":     {"high":  90, "low":  60},
+          "secondary_link":{"high":  90, "low":  60},
+          "tertiary":      {"high":  90, "low":  60},
+          "tertiary_link": {"high":  90, "low":  60},
+          "unclassified":  {"high":  90, "low":  60},
+          "residential":   {"high":  90, "low":  60},
+          "living_street": {"high":  20, "low":  20}
+      },
+      
+      "barriers":
+      [
+         ["border_control",    120],
+         ["bump_gate",          30],
+         ["bus_trap",           30],
+         ["cattle_grid",        20],
+         ["entrance",           10],
+         ["gate",               30],
+         ["hampshire_gate",     60],
+         ["height_restrictor",   5],
+         ["jersey_barrier",     10],
+         ["lift_gate",          60],
+         ["sump_buster",        30],
+         ["swing_gate",         60],
+         ["toll_booth",         40]
+      ]
+   }
 }   

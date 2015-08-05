@@ -66,11 +66,12 @@ public:
      */
     virtual void    getTopology(Topology& rTopology) = 0;
 
-    /** Add restrictions to the the edges.
+    /** Read tags that might impose restrictions and costs and add them to
+     * the edges in the topology.
      * @param   rTopology       The Topology with edges to get updated.
      * @throws  MapProviderException, RestrictionsException
      */
-    virtual void    addRestrictions(
+    virtual void    addRestrictionsAndCosts(
         Topology&      rTopology) = 0;
 
 //    /** Fill the Restrictions with restrictions for edges and vertices.

@@ -96,8 +96,7 @@ JsonTestProvider::getTopology(Topology& rTopology)
 }
 
 void
-JsonTestProvider::addRestrictions(
-    Topology&      rTopology)
+JsonTestProvider::addRestrictionsAndCosts(Topology& rTopology)
 {
     //none
 }
