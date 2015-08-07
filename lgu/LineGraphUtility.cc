@@ -106,7 +106,7 @@ LineGraphUtility::initMapProvider()
 void
 LineGraphUtility::initTopology()
 {
-    mpMapProvider->getTopology(mTopology);
+    mpMapProvider->getMapData(mTopology);
 }
 
 void
@@ -115,7 +115,7 @@ LineGraphUtility::buildGraph()
     try
     {
         initTopology();
-        mpGraph = new Graph(mTopology);
+        mpGraph = new Graph(mTopology, mConfig);
     }
     catch (const std::exception& e)
     {

@@ -51,9 +51,10 @@ public:
 
 // OPERATORS
 // OPERATIONS
-    virtual void    getTopology(Topology& rTopology);
+//    virtual void    getTopology(Topology& rTopology);
+    virtual void    getMapData(Topology& rTopology);
 
-    virtual void    addRestrictionsAndCosts(Topology& rTopology);
+//    virtual void    addRestrictionsAndCosts(Topology& rTopology);
 
 // ACCESS
 // INQUIRY

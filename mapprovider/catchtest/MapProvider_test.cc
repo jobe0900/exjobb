@@ -46,7 +46,7 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 			WHEN ("we try to fetch topology")
 			{
 			    Topology topology;
-				p_mp->getTopology(topology);
+				p_mp->getMapData(topology);
 
 				THEN ("we should receive topology vertices and edges")
 				{

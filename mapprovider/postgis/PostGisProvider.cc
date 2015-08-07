@@ -25,6 +25,7 @@
 PostGisProvider::PostGisProvider(const Configuration& rConfig)
 try
     : MapProvider(rConfig),
+      mConfig(rConfig),
       mDbConfig(rConfig.getDatabaseConfig()),
       mTopoConfig(rConfig.getTopologyConfig()),
       mConnection(mDbConfig.getConnectionString())
@@ -112,7 +113,7 @@ PostGisProvider::~PostGisProvider()
 
 //============================= OPERATIONS ===================================
 void
-PostGisProvider::getTopology(Topology& rTopology)
+PostGisProvider::getMapData(Topology& rTopology)
 {
 //    getVerticesFromDb(mVertexResult);
 //    getEdgesFromDb(mEdgeResult);
@@ -124,14 +125,11 @@ PostGisProvider::getTopology(Topology& rTopology)
     pqxx::result edge_result;
     getTopologyEdges(edge_result);
     addEdgeResultToTopology(edge_result, rTopology);
+
+    addRestrictionsAndCosts(rTopology);
 }
 
 
-void
-PostGisProvider::addRestrictionsAndCosts(Topology& rTopology)
-{
-    addEdgeRestrictions(rTopology);
-}
 
 //void
 //PostGisProvider::getRestrictions(
@@ -490,6 +488,12 @@ PostGisProvider::setTopoBaseName(std::string& rTopoBaseName)
 
 
 // Restrictions --------------------------------------------------------------
+void
+PostGisProvider::addRestrictionsAndCosts(Topology& rTopology)
+{
+    addEdgeRestrictions(rTopology);
+}
+
 void
 PostGisProvider::addEdgeRestrictions(Topology& rTopology)
 {

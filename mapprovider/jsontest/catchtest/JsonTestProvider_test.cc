@@ -49,7 +49,7 @@ SCENARIO ("JsonTest topology handling", "[jsontest]")
                 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 THEN ("we should not receive an exception")
                 {
-                    REQUIRE_NOTHROW (jtp.getTopology(topology));
+                    REQUIRE_NOTHROW (jtp.getMapData(topology));
                 }
             }
             // ...............................................................
@@ -57,10 +57,12 @@ SCENARIO ("JsonTest topology handling", "[jsontest]")
             {
                 Topology topology;
                 JsonTestProvider jtp(config);
-                jtp.getTopology(topology);
+                jtp.getMapData(topology);
 
                 size_t nr_vertices = 13;
                 size_t nr_edges = 16;
+
+                Configuration config;
 
                 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 THEN ("we should have the right number of edges and vertices"
@@ -73,14 +75,14 @@ SCENARIO ("JsonTest topology handling", "[jsontest]")
                 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 THEN ("we should be able to create a graph from topology")
                 {
-                    REQUIRE_NOTHROW (Graph graph(topology));
+                    REQUIRE_NOTHROW (Graph graph(topology, config));
                 }
 
                 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 THEN ("we should be able to create a graph from topology"
                     " and print out the graph")
                 {
-                    Graph graph(topology);
+                    Graph graph(topology, config);
                     INFO (graph);
                     REQUIRE (true);
                 }

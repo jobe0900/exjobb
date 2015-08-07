@@ -30,19 +30,21 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 	    Edge& e1 = topology.addEdge(1,osm_id,1,2);
 	    Edge& e2 = topology.addEdge(2,osm_id,2,3);
 
+	    Configuration config;
+
 	    // ...................................................................
 		WHEN ("we try create a Graph from the Topology")
 		{
 			THEN ("we should not get an Exception")
 			{
-				REQUIRE_NOTHROW (Graph g(topology));
+				REQUIRE_NOTHROW (Graph g(topology, config));
 			}
 		}
 
 	    // ...................................................................
 		WHEN ("building a graph from the topology")
 		{
-		    Graph g(topology);
+		    Graph g(topology, config);
 		    const auto& boost_graph = g.getBoostGraph();
 		    const auto& boost_line_graph = g.getBoostLineGraph();
 
@@ -67,7 +69,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		// ...................................................................
 		WHEN ("we try print out a Graph from the Topology")
 		{
-		    Graph g(topology);
+		    Graph g(topology, config);
 
 		    THEN ("we should get a print out")
 		    {
@@ -89,7 +91,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		    rd2.direction = Edge::DirectionType::FROM_TO;
 		    e2.setRoadData(rd2);
 
-		    Graph g2(topology);
+		    Graph g2(topology, config);
 
 		    THEN ("the # of edges in the graph representation"
 		          " should as many as in the topology")
@@ -114,7 +116,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		    rd2.direction = Edge::DirectionType::FROM_TO;
 		    e2.setRoadData(rd2);
 
-		    Graph g2(topology);
+		    Graph g2(topology, config);
 
 		    THEN ("the # of edges in the graph representation"
 		        " should be one more than in the topology")
@@ -137,27 +139,36 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
         {
             std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
             ConfigurationReader config_reader(config_file);
-            Configuration* p_config = new Configuration();
-            config_reader.fillConfiguration(*p_config);
+//            Configuration* p_config = new Configuration();
+            Configuration config;
+//            config_reader.fillConfiguration(*p_config);
+            config_reader.fillConfiguration(config);
 
-            PostGisProvider pgp(*p_config);
+//            PostGisProvider pgp(*p_config);
+            PostGisProvider pgp(config);
 
-            Topology topology_unrestr;
-            pgp.getTopology(topology_unrestr);
+//            Topology topology_unrestr;
+//            pgp.getTopology(topology_unrestr);
+//
+//            Topology topology_restr;
+//            pgp.getTopology(topology_restr);
 
-            Topology topology_restr;
-            pgp.getTopology(topology_restr);
+//            pgp.addRestrictionsAndCosts(topology_restr);
 
-            pgp.addRestrictionsAndCosts(topology_restr);
-
-            Graph graph_unrestr(topology_unrestr);
-            Graph graph_restr(topology_restr);
+//            Graph graph_unrestr(topology_unrestr);
+//            Graph graph_restr(topology_restr);
 //            graph_restr.addRestrictions(p_config);
+            Topology topology;
+            pgp.getMapData(topology);
+
+            Graph graph_restr(topology, config);
+            Graph graph_unrestr(topology, config);
+            graph_unrestr.useRestrictions(false);
 
             // ...............................................................
             WHEN ("Adding a turning restriction and a point restriction (barrier)")
             {
-                graph_restr.addRestrictions(p_config);
+//                graph_restr.addRestrictions(p_config);
 
                 THEN ("there should be equally many vertices "
                       "in restricted and unrestricted")

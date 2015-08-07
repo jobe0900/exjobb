@@ -12,15 +12,16 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Graph::Graph(Topology& rTopology)
+Graph::Graph(Topology& rTopology, const Configuration& rConfig)
     : mGraph(),
       mIdToVertexMap(),
       mIdToEdgeMap(),
       mrTopology(rTopology),
-      mpConfiguration(nullptr),
+      mrConfiguration(rConfig),
 //      mBarrierRule(),
 //      mAccessRule(),
-      mLog()
+      mLog(),
+      mUseRestrictions(true)
 {
     Logging::initLogging();
     boost::log::add_common_attributes();
@@ -31,7 +32,7 @@ Graph::Graph(Topology& rTopology)
 
 Graph::~Graph()
 {
-    delete mpConfiguration;
+//    delete mpConfiguration;
 }
 
 //============================= OPERATORS ====================================
@@ -55,23 +56,41 @@ operator<<(std::ostream& os, const Graph& rGraph)
     return os;
 }
 //============================= OPERATIONS ===================================
+//void
+//Graph::addRestrictions(
+//    Configuration* pConfiguration)
+//{
+//
+//    delete mpConfiguration;
+//    mpConfiguration = pConfiguration;
+//    mUseRestrictions = true;
+//
+//    mGraph.clear();
+//    mLineGraph.clear();
+//    mIdToVertexMap.clear();
+//    mIdToEdgeMap.clear();
+//    mEdgeIdToNodeMap.clear();
+//
+//    buildGraph();
+//    buildLineGraph();
+//}
+
 void
-Graph::addRestrictions(
-    Configuration* pConfiguration)
+Graph::useRestrictions(bool shouldUseRestrictions)
 {
+    if(shouldUseRestrictions != mUseRestrictions)
+    {
+        mUseRestrictions = shouldUseRestrictions;
 
-    delete mpConfiguration;
-    mpConfiguration = pConfiguration;
-    mUseRestrictions = true;
+        mGraph.clear();
+        mLineGraph.clear();
+        mIdToVertexMap.clear();
+        mIdToEdgeMap.clear();
+        mEdgeIdToNodeMap.clear();
 
-    mGraph.clear();
-    mLineGraph.clear();
-    mIdToVertexMap.clear();
-    mIdToEdgeMap.clear();
-    mEdgeIdToNodeMap.clear();
-
-    buildGraph();
-    buildLineGraph();
+        buildGraph();
+        buildLineGraph();
+    }
 }
 //============================= ACESS      ===================================
 size_t
@@ -125,6 +144,12 @@ Graph::hasNode(EdgeIdType nodeId) const
     return (it != mEdgeIdToNodeMap.end());
 }
 
+bool
+Graph::isRestricted() const
+{
+    return mUseRestrictions;
+}
+
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
@@ -159,8 +184,8 @@ Graph::addTopoEdgesToGraph()
         const Edge& e = edgepair.second;
 
         if(mUseRestrictions
-            && mpConfiguration != nullptr
-            && e.isRestricted(*mpConfiguration))
+//            && mpConfiguration != nullptr
+            && e.isRestricted(mrConfiguration))
 //        if(isEdgeRestricted(e))
         {
             BOOST_LOG_SEV(mLog, boost::log::trivial::info)
@@ -397,8 +422,8 @@ Graph::getRestrictedTargets(EdgeIdType edgeId) const
     std::vector<EdgeIdType> restricted_targets;
 
 //    if(mpRestrictions != r && mpConfiguration != nullptr)
-    if(mpConfiguration != nullptr)
-    {
+//    if(mpConfiguration != nullptr)
+//    {
         // We don't know the direction of the the travel on the edge here so
         // we must find out edges from both source and target vertex.
         std::vector<EdgeIdType> targets;
@@ -420,7 +445,7 @@ Graph::getRestrictedTargets(EdgeIdType edgeId) const
 
             Edge& e = mrTopology.getEdge(e_id);
 
-            if(e.isRestricted(*mpConfiguration))
+            if(e.isRestricted(mrConfiguration))
 //            if(isEdgeRestricted(e))
             {
                 BOOST_LOG_SEV(mLog, boost::log::trivial::info)
@@ -470,14 +495,9 @@ Graph::getRestrictedTargets(EdgeIdType edgeId) const
 //            restricted_targets.insert(restricted_targets.end(),
 //                turn_restricted_targets.begin(), turn_restricted_targets.end());
 //        }
-    }
+//    }
     return restricted_targets;
 }
-
-//////////////////////
-// TODO
-// Ask Edge self if it is restricted given a configuration.
-/////////////////////
 
 //bool
 //Graph::isEdgeRestricted(const Edge& rEdge) const

@@ -68,9 +68,9 @@ public:
 
 // OPERATORS
 // OPERATIONS
-    virtual void    getTopology(Topology& rTopology);
+    virtual void    getMapData(Topology& rTopology);
 
-    virtual void    addRestrictionsAndCosts(Topology& rTopology);
+//    virtual void    addRestrictionsAndCosts(Topology& rTopology);
 
 //    virtual void    getRestrictions(
 //        Restrictions&  rRestrictions,
@@ -93,6 +93,7 @@ private:
 //     * @throws	MapProviderException
 //     */
 //    void    getEdgesFromDb(pqxx::result& rEdgeResult);
+
 
     /** Get edges from database.
      * @param   rEdgeResult   Result of db query for Edges.
@@ -168,6 +169,12 @@ private:
 
 
     // Restriction helpers ---------------------------------------------------
+    /** Add restrictions and costs to the edges of the topology.
+     * @param   rTopology  The Edges in topology to mark.
+     * @throw   MapProviderException
+     */
+    void    addRestrictionsAndCosts(Topology& rTopology);
+
     /** Add restrictions to edges.
      * @param   rTopology  Adding EdgeRestricion to Edges in topology.
      * @throw   MapProviderException
@@ -305,6 +312,7 @@ private:
 //                Topology&              rTopology);
 
 // ATTRIBUTES
+    const Configuration&    mConfig;
     const DatabaseConfig&   mDbConfig;
     const TopologyConfig&   mTopoConfig;
     pqxx::connection        mConnection;

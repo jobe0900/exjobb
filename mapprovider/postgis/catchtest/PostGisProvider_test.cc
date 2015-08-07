@@ -103,7 +103,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 
 				THEN ("we should not get an exception")
 				{
-					REQUIRE_NOTHROW (db_handler.getTopology(topology););
+					REQUIRE_NOTHROW (db_handler.getMapData(topology););
 				}
 			}
 
@@ -111,7 +111,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			WHEN ("we try to fetch topology ")
 			{
 			    Topology topology;
-			    db_handler.getTopology(topology);
+			    db_handler.getMapData(topology);
 
 				THEN ("we should receive a vertices and edges")
 				{
@@ -124,8 +124,9 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			WHEN ("we try to build a graph ")
 			{
 			    Topology topology;
-			    db_handler.getTopology(topology);
-			    Graph graph(topology);
+			    db_handler.getMapData(topology);
+			    Configuration config;
+			    Graph graph(topology, config);
 			    std::ostringstream oss;
 
 			    THEN ("we should be able to print some information")
@@ -140,7 +141,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			WHEN ("fetching an edge from topology")
 			{
 			    Topology topology;
-			    db_handler.getTopology(topology);
+			    db_handler.getMapData(topology);
 			    const Edge& edge = topology.getEdge(1);
 
 				THEN ("we should be able to print it out")

@@ -121,8 +121,9 @@ public:
     /** Constructor.
      * Graph should be based on the supplied topology.
      * @param   rTopology       The topology to use as basis for the graph.
+     * @param   rConfig         The configuration used for topology and all.
      */
-    Graph(Topology& rTopology);
+    Graph(Topology& rTopology, const Configuration& rConfig);
 
     /** Copy constructor.
      * Disabled.
@@ -140,10 +141,16 @@ public:
     std::ostream&         operator<<(std::ostream& os, const Graph& rGraph);
 
 // OPERATIONS
-    /** Add restrictions to the topology and rebuilds the graph.
-     * @param   pConfiguration  Configuration to compare restrictions against.
+//    /** Add restrictions to the topology and rebuilds the graph.
+//     * @param   pConfiguration  Configuration to compare restrictions against.
+//     */
+//    void                  addRestrictions(Configuration*  pConfiguration);
+
+    /** Flag if restrictions should be used when building the graph or not.
+     *
+     * @param   shouldUseRestrictions   If true, build graph with restrictions.
      */
-    void                  addRestrictions(Configuration*  pConfiguration);
+    void                  useRestrictions(bool shouldUseRestrictions);
 
 // ACCESS
     /**
@@ -188,6 +195,11 @@ public:
      * @return  true    If LineGraph has a node with given id.
      */
     bool                  hasNode(EdgeIdType nodeId) const;
+
+    /**
+     * @return  true    If graph was built with restrictions.
+     */
+    bool                  isRestricted() const;
 
     /** Output information about # vertices, edges, nodes, lines.
      */
@@ -329,15 +341,15 @@ private:
     TopoEdgeIdToGraphEdgeMapType      mIdToEdgeMap;       // map original id to GraphEdge
     GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode
     Topology&                         mrTopology;
+    const Configuration&              mrConfiguration;
 //    Restrictions*                     mpRestrictions;
-    Configuration*                    mpConfiguration;
+//    Configuration*                    mpConfiguration;
 //    OsmBarrier::RestrictionsRule      mBarrierRule; // TODO read in config?
 //    OsmAccess::AccessRule             mAccessRule;  // TODO read in config?
     mutable boost::log::sources::severity_logger
         <boost::log::trivial::severity_level>
                                       mLog;
-    bool                              mUseRestrictions {false};
-    bool                              mUseCosts {false};
+    bool                              mUseRestrictions;
 
 // CONSTANTS
 };
