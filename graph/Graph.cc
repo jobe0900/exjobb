@@ -59,6 +59,8 @@ void
 Graph::addRestrictions(
     Configuration* pConfiguration)
 {
+
+    delete mpConfiguration;
     mpConfiguration = pConfiguration;
     mUseRestrictions = true;
 

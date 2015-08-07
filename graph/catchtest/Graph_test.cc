@@ -137,10 +137,10 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
         {
             std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
             ConfigurationReader config_reader(config_file);
-            Configuration config;
-            config_reader.fillConfiguration(config);
+            Configuration* p_config = new Configuration();
+            config_reader.fillConfiguration(*p_config);
 
-            PostGisProvider pgp(config);
+            PostGisProvider pgp(*p_config);
 
             Topology topology_unrestr;
             pgp.getTopology(topology_unrestr);
@@ -148,17 +148,16 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
             Topology topology_restr;
             pgp.getTopology(topology_restr);
 
-
-//            Restrictions restrictions;
             pgp.addRestrictionsAndCosts(topology_restr);
 
             Graph graph_unrestr(topology_unrestr);
             Graph graph_restr(topology_restr);
+//            graph_restr.addRestrictions(p_config);
 
             // ...............................................................
             WHEN ("Adding a turning restriction and a point restriction (barrier)")
             {
-                graph_restr.addRestrictions(&config);
+                graph_restr.addRestrictions(p_config);
 
                 THEN ("there should be equally many vertices "
                       "in restricted and unrestricted")
@@ -166,33 +165,35 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
                     INFO ("  Restricted # Vertices: " << graph_restr.nrVertices());
                     INFO ("UNRestricted # Vertices: " << graph_unrestr.nrVertices());
                     REQUIRE (graph_restr.nrVertices() == graph_unrestr.nrVertices());
+//                    REQUIRE (graph_unrestr.nrVertices() > 0);
+//                    REQUIRE (graph_restr.nrVertices() > 0);
                 }
 
-//                THEN ("there should be 2 less edges "
-//                      "in restricted and unrestricted")
-//                {
-//                    INFO ("  Restricted # Edges:    " << graph_restr.nrEdges());
-//                    INFO ("UNRestricted # Edges:    " << graph_unrestr.nrEdges());
-//                    REQUIRE (graph_restr.nrEdges() == graph_unrestr.nrEdges() - 2);
-//                }
-//
-//                THEN ("there should be 2 less nodes "
-//                      "in restricted and unrestricted")
-//                {
-//                    INFO ("  Restricted # Nodes:    " << graph_restr.nrNodes());
-//                    INFO ("UNRestricted # Nodes:    " << graph_unrestr.nrNodes());
-//                    REQUIRE (graph_restr.nrNodes() == graph_unrestr.nrNodes() - 2);
-//                }
-//                THEN ("there should be 9 lines less "
-//                      "in restricted than unrestricted")
-//                {
-//                    // 1 turn restriction
-//                    // 3*2 where target is restricted by barrier (lift gate)
-//                    // 2 u-turns on restricted edge
-//                    INFO ("  Restricted # Lines:    " << graph_restr.nrLines());
-//                    INFO ("UNRestricted # Lines:    " << graph_unrestr.nrLines());
-//                    REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 9);
-//                }
+                THEN ("there should be 2 less edges "
+                      "in restricted and unrestricted")
+                {
+                    INFO ("  Restricted # Edges:    " << graph_restr.nrEdges());
+                    INFO ("UNRestricted # Edges:    " << graph_unrestr.nrEdges());
+                    REQUIRE (graph_restr.nrEdges() == graph_unrestr.nrEdges() - 2);
+                }
+
+                THEN ("there should be 2 less nodes "
+                      "in restricted and unrestricted")
+                {
+                    INFO ("  Restricted # Nodes:    " << graph_restr.nrNodes());
+                    INFO ("UNRestricted # Nodes:    " << graph_unrestr.nrNodes());
+                    REQUIRE (graph_restr.nrNodes() == graph_unrestr.nrNodes() - 2);
+                }
+                THEN ("there should be 9 lines less "
+                      "in restricted than unrestricted")
+                {
+                    // 1 turn restriction
+                    // 3*2 where target is restricted by barrier (lift gate)
+                    // 2 u-turns on restricted edge
+                    INFO ("  Restricted # Lines:    " << graph_restr.nrLines());
+                    INFO ("UNRestricted # Lines:    " << graph_unrestr.nrLines());
+                    REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 9);
+                }
             }
         }
     }
