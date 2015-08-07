@@ -64,7 +64,8 @@ Edge::Edge(EdgeIdType       id,
       mTarget(target),
       mGeomData(geomData),
       mRoadData(roadData),
-      mpRestrictions(nullptr)
+      mpRestrictions(nullptr),
+      mCost(0)
 //      mHasRestrictions(false),
 //      mHasViaWayRestriction(false)
 { }
@@ -79,7 +80,8 @@ Edge::Edge(EdgeIdType       id,
       mTarget(target),
       mGeomData(),
       mRoadData(),
-      mpRestrictions(nullptr)
+      mpRestrictions(nullptr),
+      mCost(0)
 //      mHasRestrictions(false),
 //      mHasViaWayRestriction(false)
 { }
@@ -109,6 +111,7 @@ operator<<(std::ostream& os, const Edge& rEdge)
 	    << ", osmId: " << rEdge.osmId()
 		<< ", source: " << rEdge.source()
 		<< ", target: " << rEdge.target()
+		<< ", cost: " << rEdge.cost()
 		<< "\n   road data: ";
 	rEdge.roadData().print(os);
 
@@ -144,6 +147,12 @@ Edge::clearRestrictions()
 {
     delete mpRestrictions;
     mpRestrictions = nullptr;
+}
+
+void
+Edge::addCost(EdgeCost cost)
+{
+    mCost += cost;
 }
 
 //void
@@ -218,6 +227,12 @@ Edge::restrictions() const
             + std::to_string(mId));
     }
     return *mpRestrictions;
+}
+
+EdgeCost
+Edge::cost() const
+{
+    return mCost;
 }
 
 //const EdgeRestriction&

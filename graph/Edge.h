@@ -27,7 +27,8 @@
 // FORWARD REFERENCES
 //
 typedef long            EdgeIdType;
-class EdgeRestriction;
+typedef double          EdgeCost;
+class                   EdgeRestriction;
 
 /**
  * Data structure for edges in the topology.
@@ -158,6 +159,11 @@ public:
      */
     void              clearRestrictions();
 
+    /** Add to the cost/weight of the edge.
+     * @param   cost    A cost component.
+     */
+    void              addCost(EdgeCost cost);
+
 //    /** Flag that there exists restrictions for this edge and they need
 //     * to be taken into account when building graph.
 //     */
@@ -220,6 +226,8 @@ public:
     const EdgeRestriction&
                         restrictions() const;
 
+    EdgeCost            cost() const;
+
 // INQUIRY
     /**
      * @return  true if there exists restrictions for this edge.
@@ -245,13 +253,14 @@ public:
 
 private:
 // ATTRIBUTES
-    EdgeIdType		mId;
-    OsmIdType       mOsmId;
-    VertexIdType	mSource;
-    VertexIdType	mTarget;
-    GeomData        mGeomData;
-    RoadData        mRoadData;
+    EdgeIdType		  mId;
+    OsmIdType         mOsmId;
+    VertexIdType	  mSource;
+    VertexIdType	  mTarget;
+    GeomData          mGeomData;
+    RoadData          mRoadData;
     EdgeRestriction*  mpRestrictions;
+    EdgeCost          mCost;
 //    bool            mHasRestrictions;
 //    bool            mHasViaWayRestriction;
 
