@@ -141,13 +141,8 @@ public:
     std::ostream&         operator<<(std::ostream& os, const Graph& rGraph);
 
 // OPERATIONS
-//    /** Add restrictions to the topology and rebuilds the graph.
-//     * @param   pConfiguration  Configuration to compare restrictions against.
-//     */
-//    void                  addRestrictions(Configuration*  pConfiguration);
 
     /** Flag if restrictions should be used when building the graph or not.
-     *
      * @param   shouldUseRestrictions   If true, build graph with restrictions.
      */
     void                  useRestrictions(bool shouldUseRestrictions);
@@ -305,23 +300,6 @@ private:
     std::vector<EdgeIdType>
                         getRestrictedTargets(EdgeIdType edgeId) const;
 
-//    /**
-//     * @param   edgeId      Examine restricted travel from this edge.
-//     * @param   barrierRule Rule for which barrier types are blocking access.
-//     * @param   accessRule  Rule for which access types are blocking.
-//     * @return  A vector of all restricted edges from this Edge.
-//     */
-//    std::vector<EdgeIdType> getRestrictedTargets(
-//        EdgeIdType                           edgeId,
-//        const OsmBarrier::RestrictionsRule&  barrierRule,
-//        const OsmAccess::AccessRule&         accessRule) const;
-
-//    /** Look if an edge is restricted with the current configuration.
-//     * @param   rEdge       The edge to examine
-//     * @return  true        If the edge is restricted
-//     */
-//    bool                isEdgeRestricted(const Edge& rEdge) const;
-
     /**
      * @return  true if this target edge has restricted access from the source.
      */
@@ -342,10 +320,6 @@ private:
     GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode
     Topology&                         mrTopology;
     const Configuration&              mrConfiguration;
-//    Restrictions*                     mpRestrictions;
-//    Configuration*                    mpConfiguration;
-//    OsmBarrier::RestrictionsRule      mBarrierRule; // TODO read in config?
-//    OsmAccess::AccessRule             mAccessRule;  // TODO read in config?
     mutable boost::log::sources::severity_logger
         <boost::log::trivial::severity_level>
                                       mLog;

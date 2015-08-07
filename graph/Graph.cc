@@ -18,8 +18,6 @@ Graph::Graph(Topology& rTopology, const Configuration& rConfig)
       mIdToEdgeMap(),
       mrTopology(rTopology),
       mrConfiguration(rConfig),
-//      mBarrierRule(),
-//      mAccessRule(),
       mLog(),
       mUseRestrictions(true)
 {
@@ -32,7 +30,6 @@ Graph::Graph(Topology& rTopology, const Configuration& rConfig)
 
 Graph::~Graph()
 {
-//    delete mpConfiguration;
 }
 
 //============================= OPERATORS ====================================
@@ -56,25 +53,6 @@ operator<<(std::ostream& os, const Graph& rGraph)
     return os;
 }
 //============================= OPERATIONS ===================================
-//void
-//Graph::addRestrictions(
-//    Configuration* pConfiguration)
-//{
-//
-//    delete mpConfiguration;
-//    mpConfiguration = pConfiguration;
-//    mUseRestrictions = true;
-//
-//    mGraph.clear();
-//    mLineGraph.clear();
-//    mIdToVertexMap.clear();
-//    mIdToEdgeMap.clear();
-//    mEdgeIdToNodeMap.clear();
-//
-//    buildGraph();
-//    buildLineGraph();
-//}
-
 void
 Graph::useRestrictions(bool shouldUseRestrictions)
 {
@@ -183,30 +161,13 @@ Graph::addTopoEdgesToGraph()
     {
         const Edge& e = edgepair.second;
 
-        if(mUseRestrictions
-//            && mpConfiguration != nullptr
-            && e.isRestricted(mrConfiguration))
-//        if(isEdgeRestricted(e))
+        if(mUseRestrictions && e.isRestricted(mrConfiguration))
         {
             BOOST_LOG_SEV(mLog, boost::log::trivial::info)
                         << "Graph:addTopoEdgeToGraph(): "
                         << "Restricted Source id " << e.id();
             continue;
         }
-
-//        // TODO should we really add restricted edges or not?
-//        if(mpRestrictions != nullptr && mpConfiguration != nullptr)
-//        {
-//            const EdgeRestrictions& er = mpRestrictions->edgeRestrictions();
-//            if(er.isEdgeRestricted(e.id(), mpConfiguration->getVehicleConfig(),
-//                                 mBarrierRule, mAccessRule))
-//            {
-//                BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-//                    << "Graph:addTopoEdgeToGraph(): "
-//                    << "Restricted Source id " << e.id();
-//                continue;
-//            }
-//        }
 
         const VertexType& s = getGraphVertex(e.source());
         const VertexType& t = getGraphVertex(e.target());
@@ -396,11 +357,6 @@ Graph::edgeHasNoExit(EdgeIdType edgeId)
     {
         return true;
     }
-//    if(mpRestrictions != nullptr
-//    && mpRestrictions->edgeRestrictions().hasNoExitRestriction(edgeId))
-//    {
-//        return true;
-//    }
     return false;
 }
 
@@ -424,148 +380,53 @@ Graph::getRestrictedTargets(EdgeIdType edgeId) const
 {
     std::vector<EdgeIdType> restricted_targets;
 
-//    if(mpRestrictions != r && mpConfiguration != nullptr)
-//    if(mpConfiguration != nullptr)
-//    {
-        // We don't know the direction of the the travel on the edge here so
-        // we must find out edges from both source and target vertex.
-        std::vector<EdgeIdType> targets;
-        VertexIdType source_vertex = mrTopology.getEdge(edgeId).source();
-        VertexIdType target_vertex = mrTopology.getEdge(edgeId).target();
+    // We don't know the direction of the the travel on the edge here so
+    // we must find out edges from both source and target vertex.
+    std::vector<EdgeIdType> targets;
+    VertexIdType source_vertex = mrTopology.getEdge(edgeId).source();
+    VertexIdType target_vertex = mrTopology.getEdge(edgeId).target();
 
-        std::vector<EdgeIdType> out_edges = getOutEdges(source_vertex);
-        targets.insert(targets.end(), out_edges.begin(), out_edges.end());
+    std::vector<EdgeIdType> out_edges = getOutEdges(source_vertex);
+    targets.insert(targets.end(), out_edges.begin(), out_edges.end());
 
-        out_edges = getOutEdges(target_vertex);
-        targets.insert(targets.end(), out_edges.begin(), out_edges.end());
+    out_edges = getOutEdges(target_vertex);
+    targets.insert(targets.end(), out_edges.begin(), out_edges.end());
 
-        for(EdgeIdType e_id : targets)
+    for(EdgeIdType e_id : targets)
+    {
+        if(e_id == edgeId)
         {
-            if(e_id == edgeId)
-            {
-                continue;
-            }
-
-            Edge& e = mrTopology.getEdge(e_id);
-
-            if(e.isRestricted(mrConfiguration))
-//            if(isEdgeRestricted(e))
-            {
-                BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-                    << "Graph:getRestrictedTargets(): "
-                    << "Source id " << edgeId
-                    << " has restricted target: " << e_id;
-                restricted_targets.push_back(e_id);
-            }
-
-//            if(mpRestrictions->edgeRestrictions()
-//                .isEdgeRestricted(
-//                    edge,
-//                    mpConfiguration->getVehicleConfig(),
-//                    mBarrierRule,
-//                    mAccessRule))
-//            {
-//                BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-//                    << "Graph:getRestrictedTargets(): "
-//                    << "Source id " << edgeId
-//                    << " has restricted target: " << e_id;
-//                restricted_targets.push_back(e_id);
-//            }
-
+            continue;
         }
 
-        Edge& edge = mrTopology.getEdge(edgeId);
+        Edge& e = mrTopology.getEdge(e_id);
 
-        if(edge.hasRestrictions() && edge.restrictions().hasTurningRestriction())
+        if(e.isRestricted(mrConfiguration))
         {
             BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-                << "Graph:getRestrictedTargets(): "
-                << "Source id " << edgeId << " has TURN restricted targets. ";
-            std::vector<EdgeIdType> turn_restricted_targets =
-                edge.restrictions().restrictedTargetEdges();
-            restricted_targets.insert(restricted_targets.end(),
-                turn_restricted_targets.begin(), turn_restricted_targets.end());
-
+                        << "Graph:getRestrictedTargets(): "
+                        << "Source id " << edgeId
+                        << " has restricted target: " << e_id;
+            restricted_targets.push_back(e_id);
         }
+    }
 
-//        if(mpRestrictions->edgeRestrictions().hasTurningRestriction(edgeId))
-//        {
-//            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-//                << "Graph:getRestrictedTargets(): "
-//                << "Source id " << edgeId << " has TURN restricted targets. ";
-//            std::vector<EdgeIdType> turn_restricted_targets =
-//                mpRestrictions->edgeRestrictions().restrictedTargetEdges(edgeId);
-//            restricted_targets.insert(restricted_targets.end(),
-//                turn_restricted_targets.begin(), turn_restricted_targets.end());
-//        }
-//    }
+    Edge& edge = mrTopology.getEdge(edgeId);
+
+    if(edge.hasRestrictions() && edge.restrictions().hasTurningRestriction())
+    {
+        BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                    << "Graph:getRestrictedTargets(): "
+                    << "Source id " << edgeId << " has TURN restricted targets. ";
+        std::vector<EdgeIdType> turn_restricted_targets =
+            edge.restrictions().restrictedTargetEdges();
+        restricted_targets.insert(restricted_targets.end(),
+            turn_restricted_targets.begin(), turn_restricted_targets.end());
+
+    }
+
     return restricted_targets;
 }
-
-//bool
-//Graph::isEdgeRestricted(const Edge& rEdge) const
-//{
-//    // check preliminaries
-//    if(!mUseRestrictions
-//        || mpConfiguration == nullptr
-//        || !rEdge.hasRestrictions())
-//    {
-//        return false;
-//    }
-//
-//    // check actual restrictions.
-//    const auto& restriction_types = rEdge.restrictions().restrictionTypes();
-//    const EdgeRestriction& r_restrictions = rEdge.restrictions();
-//    const VehicleConfig& r_vehicle_config = mpConfiguration->getVehicleConfig();
-//
-//    bool is_restricted = false;
-//    bool is_generally_restricted = false;
-//    bool is_vehicle_banned = false;
-//
-//    for(const auto& r : restriction_types)
-//    {
-//        switch (r)
-//        {
-//            case EdgeRestriction::DISUSED:
-//                is_restricted = true; break;
-//            case EdgeRestriction::VEHICLE_PROPERTIES:
-//                if(r_restrictions.vehicleProperties().restrictsAccess(r_vehicle_config))
-//                {
-//                    is_restricted = true;
-//                }
-//                break;
-//            case EdgeRestriction::BARRIER:
-//                if(r_restrictions.barrier().restrictsAccess(mBarrierRule))
-//                {
-//                    is_restricted = true;
-//                }
-//                break;
-//            case EdgeRestriction::GENERAL_ACCESS:
-//                if(!r_restrictions.generalAccess().allowsAccess(mAccessRule))
-//                {
-//                    is_generally_restricted = true;
-//                }
-//                continue;
-//            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
-//                if(!r_restrictions.vehicleTypeAccess(r_vehicle_config.category)
-//                    .allowsAccess(mAccessRule))
-//                {
-//                    is_vehicle_banned = true;
-//                }
-//                continue;
-//            default:
-//                continue;
-//        }
-//    }
-//
-//    if(is_restricted
-//        || (is_generally_restricted && is_vehicle_banned)
-//        || is_vehicle_banned)
-//    {
-//        return true; // this edge should not be added.
-//    }
-//    return false;
-//}
 
 bool
 Graph::isTargetRestricted(
