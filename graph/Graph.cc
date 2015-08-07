@@ -349,7 +349,16 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
         const EdgeType& target = *(target_it.first);
         EdgeIdType topo_target_id = boost::get(&GraphEdge::topoEdgeId, mGraph, target);
 
-        if(!isTargetRestricted(restricted_targets, topo_target_id))
+        if(mUseRestrictions && isTargetRestricted(restricted_targets, topo_target_id))
+        {
+            Edge& s = mrTopology.getEdge(topo_source_id);
+            Edge& t = mrTopology.getEdge(topo_target_id);
+            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+            << "Graph:connectSourceNodeToTargetNodesViaVertex(): Restricted: "
+            << "Source: " << topo_source_id << " (osm: " << s.osmId()
+            << ") , Target: " << topo_target_id << " (osm: " << t.osmId() << ")";
+        }
+        else
         {
             NodeType target_node;
             addGraphEdgeAsLineGraphNode(target, target_node);
@@ -375,12 +384,6 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
                     + std::to_string(source_node_id)
                     + ", target: " + std::to_string(target_node_id));
             }
-        }
-        else
-        {
-            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-                << "Graph:connectSourceNodeToTargetNodesViaVertex(): Restricted: "
-                << "Source: " << topo_source_id << " , Target: " << topo_target_id;
         }
     }
 }

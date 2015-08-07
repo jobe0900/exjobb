@@ -139,36 +139,22 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
         {
             std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
             ConfigurationReader config_reader(config_file);
-//            Configuration* p_config = new Configuration();
             Configuration config;
-//            config_reader.fillConfiguration(*p_config);
             config_reader.fillConfiguration(config);
 
-//            PostGisProvider pgp(*p_config);
             PostGisProvider pgp(config);
 
-//            Topology topology_unrestr;
-//            pgp.getTopology(topology_unrestr);
-//
-//            Topology topology_restr;
-//            pgp.getTopology(topology_restr);
-
-//            pgp.addRestrictionsAndCosts(topology_restr);
-
-//            Graph graph_unrestr(topology_unrestr);
-//            Graph graph_restr(topology_restr);
-//            graph_restr.addRestrictions(p_config);
             Topology topology;
             pgp.getMapData(topology);
 
             Graph graph_restr(topology, config);
+
             Graph graph_unrestr(topology, config);
             graph_unrestr.useRestrictions(false);
 
             // ...............................................................
             WHEN ("Adding a turning restriction and a point restriction (barrier)")
             {
-//                graph_restr.addRestrictions(p_config);
 
                 THEN ("there should be equally many vertices "
                       "in restricted and unrestricted")
@@ -176,8 +162,6 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
                     INFO ("  Restricted # Vertices: " << graph_restr.nrVertices());
                     INFO ("UNRestricted # Vertices: " << graph_unrestr.nrVertices());
                     REQUIRE (graph_restr.nrVertices() == graph_unrestr.nrVertices());
-//                    REQUIRE (graph_unrestr.nrVertices() > 0);
-//                    REQUIRE (graph_restr.nrVertices() > 0);
                 }
 
                 THEN ("there should be 2 less edges "
