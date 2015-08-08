@@ -131,11 +131,11 @@
          "paved":           1000,
          "asphalt":         1000,
          "cobblestone":     20,
-         "cobblestone_flattened": 40,
+         "cobblestone:flattened": 40,
          "sett":            40,
          "concrete":        1000,
-         "concrete_lanes":  40,
-         "concrete_plates": 10,
+         "concrete:lanes":  40,
+         "concrete:plates": 100,
          "paving_stones":   40,
          "metal":           60,
          "wood":            30,
@@ -154,7 +154,8 @@
          "salt":            70,
          "sand":            70,
          "snow":            50,
-         "woodchips":       5
+         "woodchips":       5,
+         "metal_grid":      40
       },
       
       "barriers":

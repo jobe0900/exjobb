@@ -124,53 +124,139 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 		{
 			const CostConfig& r_cost_config = config.getCostConfig();
 
-			THEN ("we get a vehicle configuration filled out")
+			THEN ("we get a cost configuration filled out")
 			{
-			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(OsmHighway::MOTORWAY, CostConfig::DefaultSpeed::HIGH) == 110);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::MOTORWAY, CostConfig::DefaultSpeed::HIGH) == 110);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::MOTORWAY, CostConfig::DefaultSpeed::LOW) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::MOTORWAY_LINK, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::MOTORWAY_LINK, CostConfig::DefaultSpeed::LOW) == 90);
 
-//			    REQUIRE (r_cost_config.defaultSpeed.motorway.high == 110);
-//			    REQUIRE (r_cost_config.defaultSpeed.motorway.low  ==  90);
-//			    REQUIRE (r_cost_config.defaultSpeed.motorway_link.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.motorway_link.low  == 90);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.trunk.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.trunk.low  == 60);
-//			    REQUIRE (r_cost_config.defaultSpeed.trunk_link.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.trunk_link.low  == 60);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.primary.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.primary.low  == 60);
-//			    REQUIRE (r_cost_config.defaultSpeed.primary_link.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.primary_link.low  == 60);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.secondary.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.secondary.low  == 60);
-//			    REQUIRE (r_cost_config.defaultSpeed.secondary_link.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.secondary_link.low  == 60);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.tertiary.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.tertiary.low  == 60);
-//			    REQUIRE (r_cost_config.defaultSpeed.tertiary_link.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.tertiary_link.low  == 60);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.unclassified.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.unclassified.low  == 60);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.residential.high == 90);
-//			    REQUIRE (r_cost_config.defaultSpeed.residential.low  == 60);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.service.high == 40);
-//			    REQUIRE (r_cost_config.defaultSpeed.service.low  == 20);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.living_street.high == 20);
-//			    REQUIRE (r_cost_config.defaultSpeed.living_street.low  == 20);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.bus_guideway.high == 80);
-//			    REQUIRE (r_cost_config.defaultSpeed.bus_guideway.low  == 60);
-//
-//			    REQUIRE (r_cost_config.defaultSpeed.road.high == 80);
-//			    REQUIRE (r_cost_config.defaultSpeed.road.low  == 50);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::TRUNK, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::TRUNK, CostConfig::DefaultSpeed::LOW) == 60);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::TRUNK_LINK, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::TRUNK_LINK, CostConfig::DefaultSpeed::LOW) == 60);
 
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::PRIMARY, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::PRIMARY, CostConfig::DefaultSpeed::LOW) == 60);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::PRIMARY_LINK, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::PRIMARY_LINK, CostConfig::DefaultSpeed::LOW) == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::SECONDARY, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::SECONDARY, CostConfig::DefaultSpeed::LOW) == 60);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::SECONDARY_LINK, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::SECONDARY_LINK, CostConfig::DefaultSpeed::LOW) == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::TERTIARY, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::TERTIARY, CostConfig::DefaultSpeed::LOW) == 60);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::TERTIARY_LINK, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::TERTIARY_LINK, CostConfig::DefaultSpeed::LOW) == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::UNCLASSIFIED, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::UNCLASSIFIED, CostConfig::DefaultSpeed::LOW) == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::RESIDENTIAL, CostConfig::DefaultSpeed::HIGH) == 90);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::RESIDENTIAL, CostConfig::DefaultSpeed::LOW) == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::SERVICE, CostConfig::DefaultSpeed::HIGH) == 40);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::SERVICE, CostConfig::DefaultSpeed::LOW) == 20);
+
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::LIVING_STREET, CostConfig::DefaultSpeed::HIGH) == 20);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::LIVING_STREET, CostConfig::DefaultSpeed::LOW) == 20);
+
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::BUS_GUIDEWAY, CostConfig::DefaultSpeed::HIGH) == 80);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::BUS_GUIDEWAY, CostConfig::DefaultSpeed::LOW) == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::ROAD, CostConfig::DefaultSpeed::HIGH) == 80);
+			    REQUIRE (r_cost_config.defaultSpeed.getDefaultSpeed(
+			        OsmHighway::ROAD, CostConfig::DefaultSpeed::LOW) == 50);
+
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::PAVED) == 1000);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::ASPHALT) == 1000);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::COBBLESTONE) == 20);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::COBBLESTONE_FLATTENED) == 40);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::SETT) == 40);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::CONCRETE) == 1000);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::CONCRETE_LANES) == 40);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::CONCRETE_PLATES) == 100);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::PAVING_STONES) == 40);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::METAL) == 60);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::WOOD) == 30);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::UNPAVED) == 60);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::COMPACTED) == 70);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::DIRT) == 40);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::EARTH) == 40);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::FINE_GRAVEL) == 50);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::GRASS) == 10);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::GRASS_PAVER) == 20);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::GRAVEL) == 60);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::GROUND) == 20);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::ICE) == 70);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::MUD) == 5);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::PEBBLESTONE) == 50);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::SALT) == 70);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::SAND) == 70);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::SNOW) == 50);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::WOODCHIPS) == 5);
+			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
+			        OsmHighway::METAL_GRID) == 40);
 			}
 		}
 

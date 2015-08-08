@@ -117,6 +117,11 @@ private:
 	 * @param   The Cost configuration.
 	 */
 	void    fillDefaultSpeedCost(CostConfig& rCostConfig) const;
+
+	/** Helper to `fillCostConfig()`. Fill in the Surface Max Speed part.
+	 * @param   The Cost configuration.
+	 */
+	void    fillSurfaceMaxSpeedCost(CostConfig& rCostConfig) const;
 };
 
 // INLINE METHODS
