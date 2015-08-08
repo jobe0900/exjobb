@@ -103,8 +103,10 @@ struct CostConfig
             case OsmHighway::ROAD:
                 return getHighOrLow(defaultSpeed.road, highLow); break;
             case OsmHighway::NR_HIGHWAY_TYPES:
+            default:
                 return 0; break;
         }
+        return 0;
     }
 
 // CONSTANTS
@@ -112,7 +114,17 @@ struct CostConfig
 private:
     int     getHighOrLow(
                 DefaultSpeed::HighLowSpeed  speed,
-                DefaultSpeed::HIGH_LOW      highLow) const;
+                DefaultSpeed::HIGH_LOW      highLow) const
+    {
+        if(highLow == DefaultSpeed::HIGH)
+        {
+            return speed.high;
+        }
+        else
+        {
+            return speed.low;
+        }
+    }
 };
 
 // INLINE METHODS

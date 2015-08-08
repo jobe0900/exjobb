@@ -168,6 +168,8 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 
 			    REQUIRE (r_cost_config.defaultSpeed.road.high == 80);
 			    REQUIRE (r_cost_config.defaultSpeed.road.low  == 50);
+
+			    REQUIRE (r_cost_config.getDefaultSpeed(OsmHighway::MOTORWAY, CostConfig::DefaultSpeed::HIGH) == 110);
 			}
 		}
 
