@@ -298,7 +298,7 @@ ConfigurationReader::fillSurfaceMaxSpeedCost(CostConfig& rCostConfig) const
 {
     std::string prefix("cost.surface.");
 
-    CostConfig::Speed speed;
+    Speed speed;
     std::string type_string;
     OsmHighway::SurfaceType type;
 
