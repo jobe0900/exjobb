@@ -514,6 +514,8 @@ PostGisProvider::addEdgeRestrictions(Topology& rTopology)
     getEdgePointRestrictions(result);
     addPointRestrictionsToEdge(result, rTopology);
 
+//    addEdgeCosts(rTopology);
+
 }
 
 //void
@@ -536,6 +538,12 @@ PostGisProvider::addEdgeRestrictions(Topology& rTopology)
 //    result.clear();
 //    getEdgePointRestrictions(result);
 //    addPointResultToEdgeRestrictions(result, rRestrictions, rTopology);
+//}
+
+//void
+//PostGisProvider::addEdgeCosts(Topology& rTopology)
+//{
+//
 //}
 
 void
@@ -606,7 +614,14 @@ PostGisProvider::addVehiclePropertyRestrictionsToEdge(
                 row[TopologyQueries::VehiclePropertiesResult::MINSPEED].as<unsigned>
                 (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN);
 
+            std::string surface_string =
+                row[TopologyQueries::VehiclePropertiesResult::SURFACE].as<std::string>
+                ("");
+
+
             r_restrictions.setVehiclePropertyRestriction(p_vp);
+
+            addSpeedCost(edge, p_vp->maxSpeed, surface_string);
         }
     }
     catch (std::exception& e)
@@ -1240,6 +1255,54 @@ PostGisProvider::addPointRestrictionsToEdge(
         throw MapProviderException(
             std::string("PostGisProvider:addPointResultToEdge..: ") + e.what());
     }
+}
+
+void
+PostGisProvider::addSpeedCost(Edge& rEdge, Speed speed, std::string& surfaceString)
+{
+    if(speed == EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX)
+    {
+        speed = getDefaultSpeedForEdge(rEdge);
+    }
+    // look if surface restricts speed
+    if(surfaceString.length() > 0)
+    {
+        try
+        {
+            OsmHighway::SurfaceType surface =
+                OsmHighway::parseSurfaceString(surfaceString);
+            Speed surfaceSpeed =
+                mConfig.getCostConfig().surfaceMaxSpeed.getSurfaceMaxSpeed(surface);
+            if(surfaceSpeed < speed)
+            {
+                speed = surfaceSpeed;
+            }
+        }
+        catch (OsmException& e)
+        {
+            // ignore
+        }
+    }
+    double speed_mps = speed / 3.6;
+    double travel_time = rEdge.geomData().length/ speed_mps;
+//    if(rEdge.id() == 270)
+//    {
+        std::cerr << "Edge " << rEdge.id()
+            << ": speed (km/h): " << speed
+            << ", (m/s): " << speed_mps
+            << ", traveltime (s):" << travel_time << std::endl;
+//    }
+    rEdge.addCost(travel_time);
+}
+
+Speed
+PostGisProvider::getDefaultSpeedForEdge(const Edge& rEdge) const
+{
+    OsmHighway::HighwayType type = rEdge.roadData().roadType;
+    const CostConfig& costConfig = mConfig.getCostConfig();
+    Speed speed=
+        costConfig.defaultSpeed.getDefaultSpeed(type, CostConfig::DefaultSpeed::LOW);
+    return speed;
 }
 
 //void

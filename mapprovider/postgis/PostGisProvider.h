@@ -181,6 +181,11 @@ private:
      */
     void    addEdgeRestrictions(Topology& rTopology);
 
+//    /** Add costs to the edges.
+//     * @param   rTopology  Add costs to the Edges in the Topology.
+//     */
+//    void    addEdgeCosts(Topology& rTopology);
+
 //    /** Fetch Restrictions for edges.
 //     * @param   rRestrictions   Store restrictions in here.
 //     * @param   rTopology       Might get modified from turn restrictions.
@@ -298,6 +303,21 @@ private:
     void    addPointRestrictionsToEdge(
                 const pqxx::result&    rResult,
                 Topology&              rTopology);
+
+    /** Add cost relating to the maxspeed of the edge.
+     * The cost is the number of seconds to travel the edge
+     * @param   rEdge           The edge to add cost to
+     * @param   speed       The speed for the edge found in the database.
+     * @param   surfaceString   The surface as string or empty if not specified.
+     */
+    void    addSpeedCost(Edge& rEdge, Speed speed, std::string& surfaceString);
+
+    /** If the speed in the db was not set we must fetch the default
+     * for this road category from the configuration.
+     * @param   rEdge   The edge to find the default speed for
+     * @return  The default speed for this type of highway.
+     */
+    Speed   getDefaultSpeedForEdge(const Edge& rEdge) const;
 
 //    /** Add the result of the query for Point restriciotns on Edges to Restrictions.
 //     * Helper for 'getEdgeRestrictions()'

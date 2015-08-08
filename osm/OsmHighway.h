@@ -26,6 +26,7 @@
 
 // FORWARD REFERENCES
 //
+typedef unsigned Speed;
 
 
 class OsmHighway

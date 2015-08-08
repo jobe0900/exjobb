@@ -189,6 +189,13 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
                     INFO ("UNRestricted # Lines:    " << graph_unrestr.nrLines());
                     REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 9);
                 }
+                THEN ("we can print the info for an edge and it should have a cost")
+                {
+                    EdgeIdType id = 270;
+                    const Edge& edge = topology.getEdge(id);
+                    INFO ("Edge " << id << ": " << edge);
+                    REQUIRE (true);
+                }
             }
         }
     }

@@ -85,7 +85,7 @@ public:
             MAXWIDTH,
             MAXSPEED,
             MINSPEED,
-
+            SURFACE
         };
     };
 

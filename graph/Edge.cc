@@ -112,6 +112,7 @@ operator<<(std::ostream& os, const Edge& rEdge)
 		<< ", source: " << rEdge.source()
 		<< ", target: " << rEdge.target()
 		<< ", cost: " << rEdge.cost()
+		<< ", length: " << rEdge.geomData().length
 		<< "\n   road data: ";
 	rEdge.roadData().print(os);
 

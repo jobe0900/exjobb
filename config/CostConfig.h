@@ -29,7 +29,6 @@
 struct CostConfig
 {
 // TYPES
-    typedef int Speed;
 
     struct DefaultSpeed
     {
