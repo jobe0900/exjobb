@@ -278,78 +278,150 @@ ConfigurationReader::fillDefaultSpeedCost(CostConfig& rCostConfig) const
 {
     std::string prefix("cost.default_speed.");
 
-    rCostConfig.defaultSpeed.motorway.high =
-        mPropertyTree.get<int>(prefix + "motorway.high");
-    rCostConfig.defaultSpeed.motorway.low =
-        mPropertyTree.get<int>(prefix + "motorway.low");
-    rCostConfig.defaultSpeed.motorway_link.high =
-        mPropertyTree.get<int>(prefix + "motorway_link.high");
-    rCostConfig.defaultSpeed.motorway_link.low =
-        mPropertyTree.get<int>(prefix + "motorway_link.low");
+    CostConfig::DefaultSpeed::HighLowSpeed hilo;
 
-    rCostConfig.defaultSpeed.trunk.high =
-        mPropertyTree.get<int>(prefix + "trunk.high");
-    rCostConfig.defaultSpeed.trunk.low =
-        mPropertyTree.get<int>(prefix + "trunk.low");
-    rCostConfig.defaultSpeed.trunk_link.high =
-        mPropertyTree.get<int>(prefix + "trunk_link.high");
-    rCostConfig.defaultSpeed.trunk_link.low =
-        mPropertyTree.get<int>(prefix + "trunk_link.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "motorway.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "motorway.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::MOTORWAY, hilo);
 
-    rCostConfig.defaultSpeed.primary.high =
-        mPropertyTree.get<int>(prefix + "primary.high");
-    rCostConfig.defaultSpeed.primary.low =
-        mPropertyTree.get<int>(prefix + "primary.low");
-    rCostConfig.defaultSpeed.primary_link.high =
-        mPropertyTree.get<int>(prefix + "primary_link.high");
-    rCostConfig.defaultSpeed.primary_link.low =
-        mPropertyTree.get<int>(prefix + "primary_link.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "motorway_link.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "motorway_link.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::MOTORWAY_LINK, hilo);
 
-    rCostConfig.defaultSpeed.secondary.high =
-        mPropertyTree.get<int>(prefix + "secondary.high");
-    rCostConfig.defaultSpeed.secondary.low =
-        mPropertyTree.get<int>(prefix + "secondary.low");
-    rCostConfig.defaultSpeed.secondary_link.high =
-        mPropertyTree.get<int>(prefix + "secondary_link.high");
-    rCostConfig.defaultSpeed.secondary_link.low =
-        mPropertyTree.get<int>(prefix + "secondary_link.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "trunk.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "trunk.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::TRUNK, hilo);
 
-    rCostConfig.defaultSpeed.tertiary.high =
-        mPropertyTree.get<int>(prefix + "tertiary.high");
-    rCostConfig.defaultSpeed.tertiary.low =
-        mPropertyTree.get<int>(prefix + "tertiary.low");
-    rCostConfig.defaultSpeed.tertiary_link.high =
-        mPropertyTree.get<int>(prefix + "tertiary_link.high");
-    rCostConfig.defaultSpeed.tertiary_link.low =
-        mPropertyTree.get<int>(prefix + "tertiary_link.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "trunk_link.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "trunk_link.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::TRUNK_LINK, hilo);
 
-    rCostConfig.defaultSpeed.unclassified.high =
-        mPropertyTree.get<int>(prefix + "unclassified.high");
-    rCostConfig.defaultSpeed.unclassified.low =
-        mPropertyTree.get<int>(prefix + "unclassified.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "primary.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "primary.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::PRIMARY, hilo);
 
-    rCostConfig.defaultSpeed.residential.high =
-        mPropertyTree.get<int>(prefix + "residential.high");
-    rCostConfig.defaultSpeed.residential.low =
-        mPropertyTree.get<int>(prefix + "residential.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "primary_link.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "primary_link.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::PRIMARY_LINK, hilo);
 
-    rCostConfig.defaultSpeed.service.high =
-        mPropertyTree.get<int>(prefix + "service.high");
-    rCostConfig.defaultSpeed.service.low =
-        mPropertyTree.get<int>(prefix + "service.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "secondary.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "secondary.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::SECONDARY, hilo);
 
-    rCostConfig.defaultSpeed.living_street.high =
-        mPropertyTree.get<int>(prefix + "living_street.high");
-    rCostConfig.defaultSpeed.living_street.low =
-        mPropertyTree.get<int>(prefix + "living_street.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "secondary_link.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "secondary_link.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::SECONDARY_LINK, hilo);
 
-    rCostConfig.defaultSpeed.bus_guideway.high =
-        mPropertyTree.get<int>(prefix + "bus_guideway.high");
-    rCostConfig.defaultSpeed.bus_guideway.low =
-        mPropertyTree.get<int>(prefix + "bus_guideway.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "tertiary.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "tertiary.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::TERTIARY, hilo);
 
-    rCostConfig.defaultSpeed.road.high =
-        mPropertyTree.get<int>(prefix + "road.high");
-    rCostConfig.defaultSpeed.road.low =
-        mPropertyTree.get<int>(prefix + "road.low");
+    hilo.high = mPropertyTree.get<int>(prefix + "tertiary_link.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "tertiary_link.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::TERTIARY_LINK, hilo);
+
+    hilo.high = mPropertyTree.get<int>(prefix + "unclassified.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "unclassified.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::UNCLASSIFIED, hilo);
+
+    hilo.high = mPropertyTree.get<int>(prefix + "residential.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "residential.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::RESIDENTIAL, hilo);
+
+    hilo.high = mPropertyTree.get<int>(prefix + "service.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "service.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::SERVICE, hilo);
+
+    hilo.high = mPropertyTree.get<int>(prefix + "living_street.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "living_street.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::LIVING_STREET, hilo);
+
+    hilo.high = mPropertyTree.get<int>(prefix + "bus_guideway.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "bus_guideway.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::BUS_GUIDEWAY, hilo);
+
+    hilo.high = mPropertyTree.get<int>(prefix + "road.high");
+    hilo.low  = mPropertyTree.get<int>(prefix + "road.low");
+    rCostConfig.defaultSpeed.addDefaultSpeed(OsmHighway::ROAD, hilo);
 }
+
+//void
+//ConfigurationReader::fillDefaultSpeedCost(CostConfig& rCostConfig) const
+//{
+//    std::string prefix("cost.default_speed.");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "motorway.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "motorway.low");
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "motorway_link.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "motorway_link.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "trunk.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "trunk.low");
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "trunk_link.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "trunk_link.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "primary.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "primary.low");
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "primary_link.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "primary_link.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "secondary.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "secondary.low");
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "secondary_link.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "secondary_link.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "tertiary.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "tertiary.low");
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "tertiary_link.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "tertiary_link.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "unclassified.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "unclassified.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "residential.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "residential.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "service.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "service.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "living_street.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "living_street.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "bus_guideway.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "bus_guideway.low");
+//
+//    hilo.high =
+//        mPropertyTree.get<int>(prefix + "road.high");
+//    hilo.low =
+//        mPropertyTree.get<int>(prefix + "road.low");
+//}

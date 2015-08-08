@@ -126,6 +126,37 @@
           "road":          {"high":  80, "low":  50}
       },
       
+      "surface":
+      {
+         "paved":           1000,
+         "asphalt":         1000,
+         "cobblestone":     20,
+         "cobblestone_flattened": 40,
+         "sett":            40,
+         "concrete":        1000,
+         "concrete_lanes":  40,
+         "concrete_plates": 10,
+         "paving_stones":   40,
+         "metal":           60,
+         "wood":            30,
+         "unpaved":         60,
+         "compacted":       70,
+         "dirt":            40,
+         "earth":           40,
+         "fine_gravel":     50,
+         "grass":           10,
+         "grass_paver":     20,
+         "gravel":          60,
+         "ground":          20,
+         "ice":             70,
+         "mud":             5,
+         "pebblestone":     50,
+         "salt":            70,
+         "sand":            70,
+         "snow":            50,
+         "woodchips":       5
+      },
+      
       "barriers":
       [
          ["border_control",    120],
