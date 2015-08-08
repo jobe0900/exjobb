@@ -157,8 +157,17 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 			    REQUIRE (r_cost_config.defaultSpeed.residential.high == 90);
 			    REQUIRE (r_cost_config.defaultSpeed.residential.low  == 60);
 
+			    REQUIRE (r_cost_config.defaultSpeed.service.high == 40);
+			    REQUIRE (r_cost_config.defaultSpeed.service.low  == 20);
+
 			    REQUIRE (r_cost_config.defaultSpeed.living_street.high == 20);
 			    REQUIRE (r_cost_config.defaultSpeed.living_street.low  == 20);
+
+			    REQUIRE (r_cost_config.defaultSpeed.bus_guideway.high == 80);
+			    REQUIRE (r_cost_config.defaultSpeed.bus_guideway.low  == 60);
+
+			    REQUIRE (r_cost_config.defaultSpeed.road.high == 80);
+			    REQUIRE (r_cost_config.defaultSpeed.road.low  == 50);
 			}
 		}
 

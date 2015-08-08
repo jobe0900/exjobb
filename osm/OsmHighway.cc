@@ -114,19 +114,18 @@ OsmHighway::typesAsCommaSeparatedString()
 const std::vector<std::string> OsmHighway::sTypeStrings
 {
     "motorway",
+    "motorway_link",
     "trunk",
+    "trunk_link",
     "primary",
+    "primary_link",
     "secondary",
+    "secondary_link",
     "tertiary",
+    "tertiary_link",
     "unclassified",
     "residential",
     "service",
-
-    "motorway_link",
-    "trunk_link",
-    "primary_link",
-    "secondary_link",
-    "tertiary_link",
 
     "living_street",
     "bus_guideway",

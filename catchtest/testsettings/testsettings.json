@@ -120,7 +120,10 @@
           "tertiary_link": {"high":  90, "low":  60},
           "unclassified":  {"high":  90, "low":  60},
           "residential":   {"high":  90, "low":  60},
-          "living_street": {"high":  20, "low":  20}
+          "service":       {"high":  40, "low":  20},
+          "living_street": {"high":  20, "low":  20},
+          "bus_guideway":  {"high":  80, "low":  60},
+          "road":          {"high":  80, "low":  50}
       },
       
       "barriers":

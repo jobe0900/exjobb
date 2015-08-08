@@ -55,6 +55,10 @@ public:
 
 // OPERATORS
 // OPERATIONS
+//    /** Get the default speed
+//    int                   getDefaultSpeedForHighway(
+//        OsmHighway::HighwayType type) const;
+// ACCESS
     /** Get the database related parts of the configuration.
      * @return  Reference to a DatabaseConfig.
      */
@@ -94,7 +98,6 @@ public:
      */
     const CostConfig&     getCostConfig() const;
 
-// ACCESS
 // INQUIRY
 
 protected:

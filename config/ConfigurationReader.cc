@@ -333,8 +333,23 @@ ConfigurationReader::fillDefaultSpeedCost(CostConfig& rCostConfig) const
     rCostConfig.defaultSpeed.residential.low =
         mPropertyTree.get<int>(prefix + "residential.low");
 
+    rCostConfig.defaultSpeed.service.high =
+        mPropertyTree.get<int>(prefix + "service.high");
+    rCostConfig.defaultSpeed.service.low =
+        mPropertyTree.get<int>(prefix + "service.low");
+
     rCostConfig.defaultSpeed.living_street.high =
         mPropertyTree.get<int>(prefix + "living_street.high");
     rCostConfig.defaultSpeed.living_street.low =
         mPropertyTree.get<int>(prefix + "living_street.low");
+
+    rCostConfig.defaultSpeed.bus_guideway.high =
+        mPropertyTree.get<int>(prefix + "bus_guideway.high");
+    rCostConfig.defaultSpeed.bus_guideway.low =
+        mPropertyTree.get<int>(prefix + "bus_guideway.low");
+
+    rCostConfig.defaultSpeed.road.high =
+        mPropertyTree.get<int>(prefix + "road.high");
+    rCostConfig.defaultSpeed.road.low =
+        mPropertyTree.get<int>(prefix + "road.low");
 }

@@ -36,20 +36,18 @@ public:
     {
         // roads
         MOTORWAY,
+        MOTORWAY_LINK,
         TRUNK,
+        TRUNK_LINK,
         PRIMARY,
+        PRIMARY_LINK,
         SECONDARY,
+        SECONDARY_LINK,
         TERTIARY,
+        TERTIARY_LINK,
         UNCLASSIFIED,
         RESIDENTIAL,
         SERVICE,
-
-        // link roads
-        MOTORWAY_LINK,
-        TRUNK_LINK,
-        PRIMARY_LINK,
-        SECONDARY_LINK,
-        TERTIARY_LINK,
 
         // special types
         LIVING_STREET,
