@@ -4,16 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CC_SRCS += \
+../graph/catchtest/EdgeCost_test.cc \
 ../graph/catchtest/EdgeRestrictions_test.cc \
 ../graph/catchtest/Graph_test.cc \
 ../graph/catchtest/Topology_test.cc 
 
 CC_DEPS += \
+./graph/catchtest/EdgeCost_test.d \
 ./graph/catchtest/EdgeRestrictions_test.d \
 ./graph/catchtest/Graph_test.d \
 ./graph/catchtest/Topology_test.d 
 
 OBJS += \
+./graph/catchtest/EdgeCost_test.o \
 ./graph/catchtest/EdgeRestrictions_test.o \
 ./graph/catchtest/Graph_test.o \
 ./graph/catchtest/Topology_test.o 
