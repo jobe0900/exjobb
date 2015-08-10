@@ -44,7 +44,7 @@ public:
 // TYPES
     enum CostType
     {
-        TRAVEL,
+        TRAVEL_TIME,
         BARRIER,
         INCLINE,
         SURFACE,

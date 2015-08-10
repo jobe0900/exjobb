@@ -15,7 +15,7 @@ EdgeCost::addCost(CostType type, Cost cost)
 {
     if(hasCost(type))
     {
-        if(type != EdgeCost::TRAVEL)
+        if(type != EdgeCost::TRAVEL_TIME)
         {
             cost += getCost(type);
         }
