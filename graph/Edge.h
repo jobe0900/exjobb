@@ -22,12 +22,13 @@
 #include "../config/Configuration.h"
 #include "../osm/OsmHighway.h"
 #include "../osm/OsmId.h"
+#include "EdgeCost.h"
 //#include "EdgeRestriction.h"
 
 // FORWARD REFERENCES
 //
 typedef long            EdgeIdType;
-typedef double          EdgeCost;
+//typedef double          EdgeCost;
 class                   EdgeRestriction;
 
 /**
@@ -162,7 +163,7 @@ public:
     /** Add to the cost/weight of the edge.
      * @param   cost    A cost component.
      */
-    void              addCost(EdgeCost cost);
+//    void              addCost(EdgeCost cost);
 
 //    /** Flag that there exists restrictions for this edge and they need
 //     * to be taken into account when building graph.
@@ -226,7 +227,16 @@ public:
     const EdgeRestriction&
                         restrictions() const;
 
-    EdgeCost            cost() const;
+    /**
+     * @return  Reference to EdgeCost
+     */
+    EdgeCost&           edgeCost();
+    const EdgeCost&     edgeCost() const;
+
+    /**
+     * @return  The cost or weight for this edge.
+     */
+    Cost                cost() const;
 
 // INQUIRY
     /**

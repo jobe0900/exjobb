@@ -1292,7 +1292,7 @@ PostGisProvider::addSpeedCost(Edge& rEdge, Speed speed, std::string& surfaceStri
             << ", (m/s): " << speed_mps
             << ", traveltime (s):" << travel_time << std::endl;
 //    }
-    rEdge.addCost(travel_time);
+//    rEdge.addCost(travel_time);
 }
 
 Speed

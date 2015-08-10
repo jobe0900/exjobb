@@ -65,7 +65,7 @@ Edge::Edge(EdgeIdType       id,
       mGeomData(geomData),
       mRoadData(roadData),
       mpRestrictions(nullptr),
-      mCost(0)
+      mCost()
 //      mHasRestrictions(false),
 //      mHasViaWayRestriction(false)
 { }
@@ -81,7 +81,7 @@ Edge::Edge(EdgeIdType       id,
       mGeomData(),
       mRoadData(),
       mpRestrictions(nullptr),
-      mCost(0)
+      mCost()
 //      mHasRestrictions(false),
 //      mHasViaWayRestriction(false)
 { }
@@ -150,11 +150,11 @@ Edge::clearRestrictions()
     mpRestrictions = nullptr;
 }
 
-void
-Edge::addCost(EdgeCost cost)
-{
-    mCost += cost;
-}
+//void
+//Edge::addCost(EdgeCost cost)
+//{
+//    mCost += cost;
+//}
 
 //void
 //Edge::setHasRestrictions(bool hasRestrictions)
@@ -230,10 +230,22 @@ Edge::restrictions() const
     return *mpRestrictions;
 }
 
-EdgeCost
-Edge::cost() const
+EdgeCost&
+Edge::edgeCost()
 {
     return mCost;
+}
+
+const EdgeCost&
+Edge::edgeCost() const
+{
+    return mCost;
+}
+
+Cost
+Edge::cost() const
+{
+    return mCost.getCost();
 }
 
 //const EdgeRestriction&
