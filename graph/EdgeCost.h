@@ -47,7 +47,7 @@ public:
         TRAVEL_TIME,
         BARRIER,
         INCLINE,
-        SURFACE,
+//        SURFACE,
         TRAFFIC_CALMING,
         BUS_STOP,
         CROSSING,

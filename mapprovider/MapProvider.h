@@ -64,22 +64,22 @@ public:
 //     * @param   rTopology   The Topology to fill with data.
 //     * @throws  MapProviderException, TopologyException
 //     */
-//    virtual void    getTopology(Topology& rTopology) = 0;
+    virtual void    getTopology(Topology& rTopology) = 0;
 
     /** Fill the topology with data from the MapProvider,
      * and mark the edges in the topology with restrictions and costs.
      * @param   rTopology   The Topology to fill with data.
      * @throws  MapProviderException, TopologyException
      */
-    virtual void    getMapData(Topology& rTopology) = 0;
+//    virtual void    getMapData(Topology& rTopology) = 0;
 
-//    /** Read tags that might impose restrictions and costs and add them to
-//     * the edges in the topology.
-//     * @param   rTopology       The Topology with edges to get updated.
-//     * @throws  MapProviderException, RestrictionsException
-//     */
-//    virtual void    addRestrictionsAndCosts(
-//        Topology&      rTopology) = 0;
+    /** Read tags that might impose restrictions and costs and add them to
+     * the edges in the topology.
+     * @param   rTopology       The Topology with edges to get updated.
+     * @throws  MapProviderException, RestrictionsException
+     */
+    virtual void    setRestrictionsAndCosts(
+        Topology&      rTopology) = 0;
 
 //    /** Fill the Restrictions with restrictions for edges and vertices.
 //     * Might also update Edges in the topology.

@@ -106,7 +106,7 @@ LineGraphUtility::initMapProvider()
 void
 LineGraphUtility::initTopology()
 {
-    mpMapProvider->getMapData(mTopology);
+    mpMapProvider->getTopology(mTopology);
 }
 
 void

@@ -116,8 +116,7 @@ RestrictionQueries::getVehiclePropertyEdgeRestrictions(
         "maxweight",
         "maxwidth",
         "maxspeed",
-        "minspeed",
-        "surface"
+        "minspeed"
     };
 
     rResult = rTrans.exec(

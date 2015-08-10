@@ -145,7 +145,7 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
             PostGisProvider pgp(config);
 
             Topology topology;
-            pgp.getMapData(topology);
+            pgp.getTopology(topology);
 
             Graph graph_restr(topology, config);
 

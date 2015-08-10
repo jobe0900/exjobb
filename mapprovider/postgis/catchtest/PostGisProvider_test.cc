@@ -103,7 +103,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 
 				THEN ("we should not get an exception")
 				{
-					REQUIRE_NOTHROW (db_handler.getMapData(topology););
+					REQUIRE_NOTHROW (db_handler.getTopology(topology););
 				}
 			}
 
@@ -111,7 +111,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			WHEN ("we try to fetch topology ")
 			{
 			    Topology topology;
-			    db_handler.getMapData(topology);
+			    db_handler.getTopology(topology);
 
 				THEN ("we should receive a vertices and edges")
 				{
@@ -124,7 +124,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			WHEN ("we try to build a graph ")
 			{
 			    Topology topology;
-			    db_handler.getMapData(topology);
+			    db_handler.getTopology(topology);
 			    Configuration config;
 			    Graph graph(topology, config);
 			    std::ostringstream oss;
@@ -141,7 +141,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			WHEN ("fetching an edge from topology")
 			{
 			    Topology topology;
-			    db_handler.getMapData(topology);
+			    db_handler.getTopology(topology);
 			    const Edge& edge = topology.getEdge(1);
 
 				THEN ("we should be able to print it out")
@@ -184,6 +184,58 @@ $ psql -U jonas -d mikh_0522 -c
 		REQUIRE (false);	// force output of error and failure
 
 	}
+}
+
+SCENARIO ("Set costs on Edges", "[postgis][cost]")
+{
+	try
+	{
+		// ===================================================================
+		GIVEN ("a valid database configuration structure and "
+				"name to existing topology")
+		{
+		    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
+		    ConfigurationReader config_reader(config_file);
+		    Configuration config;
+		    config_reader.fillConfiguration(config);
+
+			PostGisProvider pgp(config);
+
+			Topology topology;
+			pgp.getTopology(topology);
+
+			// ...............................................................
+			WHEN ("we try to set restrictions and costs on topology")
+			{
+			    pgp.setRestrictionsAndCosts(topology);
+
+			    THEN ("we should be able to read travel time cost on edges")
+			    {
+			        EdgeIdType id = 237;
+			        const Edge& edge = topology.getEdge(id);
+			        INFO ("edge " << id
+			            << ", length: " << edge.geomData().length
+			            << ", travel time: "
+			            << edge.edgeCost().getCost(EdgeCost::TRAVEL_TIME)
+			            << ", total cost: " << edge.cost());
+			        REQUIRE (edge.cost() > 0);
+			    }
+
+			}
+		}
+	}
+	catch (ConfigurationException& e)
+	{
+		INFO(e.what());
+		REQUIRE (false);	// force output of error and failure
+	}
+	catch (MapProviderException& dbe)
+	{
+		INFO(dbe.what());
+		REQUIRE (false);	// force output of error and failure
+
+	}
+
 }
 
 //SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")

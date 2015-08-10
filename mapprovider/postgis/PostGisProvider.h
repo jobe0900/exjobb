@@ -68,9 +68,10 @@ public:
 
 // OPERATORS
 // OPERATIONS
-    virtual void    getMapData(Topology& rTopology);
+//    virtual void    getMapData(Topology& rTopology);
+    virtual void    getTopology(Topology& rTopology);
 
-//    virtual void    addRestrictionsAndCosts(Topology& rTopology);
+    virtual void    setRestrictionsAndCosts(Topology& rTopology);
 
 //    virtual void    getRestrictions(
 //        Restrictions&  rRestrictions,
@@ -169,11 +170,11 @@ private:
 
 
     // Restriction helpers ---------------------------------------------------
-    /** Add restrictions and costs to the edges of the topology.
-     * @param   rTopology  The Edges in topology to mark.
-     * @throw   MapProviderException
-     */
-    void    addRestrictionsAndCosts(Topology& rTopology);
+//    /** Add restrictions and costs to the edges of the topology.
+//     * @param   rTopology  The Edges in topology to mark.
+//     * @throw   MapProviderException
+//     */
+//    void    addRestrictionsAndCosts(Topology& rTopology);
 
     /** Add restrictions to edges.
      * @param   rTopology  Adding EdgeRestricion to Edges in topology.
@@ -304,13 +305,42 @@ private:
                 const pqxx::result&    rResult,
                 Topology&              rTopology);
 
-    /** Add cost relating to the maxspeed of the edge.
-     * The cost is the number of seconds to travel the edge
-     * @param   rEdge           The edge to add cost to
-     * @param   speed       The speed for the edge found in the database.
-     * @param   surfaceString   The surface as string or empty if not specified.
+    // Costs -----------------------------------------------------------------
+    /** Add costs to the edge.
+     * @param   The Topology with Edges to add cost to.
      */
-    void    addSpeedCost(Edge& rEdge, Speed speed, std::string& surfaceString);
+    void    addEdgeCosts(Topology& rTopology);
+
+    /** Get costs for the travel time along an edge.
+     * The length is constant in the topology but we need to find out if
+     * there is a max speed restriction or if there is a bad surface.
+     * If no such restrictions are in the database then the default speed
+     * for the road category is used.
+     * @param   rResult     Store the result of the query here.
+     * @throw   MapProviderException
+     */
+    void    getTravelTimeCosts(pqxx::result& rResult);
+
+    /** Add costs for travel time along the edge.
+     * First set the speed of those with explicit restrictions in database,
+     * then set the default speed for those without explicit speeds.
+     * @param   rResult     The results of the query.
+     * @param   rTopology   The topology with edges to set cost for.
+     * @throw   MapProviderException
+     */
+    void    addTravelTimeCosts(const pqxx::result& rResult, Topology& rTopology);
+
+    /** Add cost relating to the maxspeed of the edge.
+     * The cost is the number of seconds to travel the edge.
+     * @param   rEdge           The edge to add cost to
+     * @param   speed           The speed for the edge found in the database.
+     * @param   surfaceString   The surface as string or empty if not specified.
+     * @throw   MapProviderException
+     */
+    void    addTravelTimeCostToEdge(
+                Edge& rEdge,
+                Speed speed,
+                std::string& surfaceString);
 
     /** If the speed in the db was not set we must fetch the default
      * for this road category from the configuration.

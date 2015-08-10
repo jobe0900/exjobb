@@ -7,6 +7,8 @@
 
 #include "PostGisProvider.h"  // class implemented
 #include "TopologyQueries.h"
+#include "RestrictionQueries.h"
+#include "CostQueries.h"
 
 #include <fstream>
 #include <iostream>
@@ -16,6 +18,7 @@
 #include "../../graph/Edge.h"
 #include "../../osm/OsmId.h"
 #include "../../graph/EdgeRestriction.h"
+#include "../../graph/EdgeCost.h"
 
 
 
@@ -113,7 +116,7 @@ PostGisProvider::~PostGisProvider()
 
 //============================= OPERATIONS ===================================
 void
-PostGisProvider::getMapData(Topology& rTopology)
+PostGisProvider::getTopology(Topology& rTopology)
 {
 //    getVerticesFromDb(mVertexResult);
 //    getEdgesFromDb(mEdgeResult);
@@ -126,7 +129,13 @@ PostGisProvider::getMapData(Topology& rTopology)
     getTopologyEdges(edge_result);
     addEdgeResultToTopology(edge_result, rTopology);
 
-    addRestrictionsAndCosts(rTopology);
+}
+
+void
+PostGisProvider::setRestrictionsAndCosts(Topology& rTopology)
+{
+    addEdgeRestrictions(rTopology);
+    addEdgeCosts(rTopology);
 }
 
 
@@ -488,11 +497,11 @@ PostGisProvider::setTopoBaseName(std::string& rTopoBaseName)
 
 
 // Restrictions --------------------------------------------------------------
-void
-PostGisProvider::addRestrictionsAndCosts(Topology& rTopology)
-{
-    addEdgeRestrictions(rTopology);
-}
+//void
+//PostGisProvider::addRestrictionsAndCosts(Topology& rTopology)
+//{
+//    addEdgeRestrictions(rTopology);
+//}
 
 void
 PostGisProvider::addEdgeRestrictions(Topology& rTopology)
@@ -614,14 +623,14 @@ PostGisProvider::addVehiclePropertyRestrictionsToEdge(
                 row[TopologyQueries::VehiclePropertiesResult::MINSPEED].as<unsigned>
                 (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN);
 
-            std::string surface_string =
-                row[TopologyQueries::VehiclePropertiesResult::SURFACE].as<std::string>
-                ("");
+//            std::string surface_string =
+//                row[TopologyQueries::VehiclePropertiesResult::SURFACE].as<std::string>
+//                ("");
 
 
             r_restrictions.setVehiclePropertyRestriction(p_vp);
 
-            addSpeedCost(edge, p_vp->maxSpeed, surface_string);
+//            addSpeedCost(edge, p_vp->maxSpeed, surface_string);
         }
     }
     catch (std::exception& e)
@@ -1257,15 +1266,95 @@ PostGisProvider::addPointRestrictionsToEdge(
     }
 }
 
+// Costs ---------------------------------------------------------------------
 void
-PostGisProvider::addSpeedCost(Edge& rEdge, Speed speed, std::string& surfaceString)
+PostGisProvider::addEdgeCosts(Topology& rTopology)
 {
-    if(speed == EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX)
+    pqxx::result result;
+
+    getTravelTimeCosts(result);
+    addTravelTimeCosts(result, rTopology);
+
+    result.clear();
+}
+
+void
+PostGisProvider::getTravelTimeCosts(pqxx::result& rResult)
+{
+    try
+    {
+        if(!mConnection.is_open())
+        {
+            throw MapProviderException(
+                std::string("Could not open ") + mDbConfig.database);
+        }
+
+        // NON-TRANSACTION START
+        pqxx::nontransaction transaction(mConnection);
+
+        CostQueries::getTravelTimeEdgeCosts(
+            transaction,
+            rResult,
+            mEdgeTable,
+            mHighwayTableName,
+            mSchemaName
+        );
+    }
+    catch(const std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:getVehiclePropertyEdgeRestrictions: ")
+                        + e.what());
+    }
+}
+
+void
+PostGisProvider::addTravelTimeCosts(const pqxx::result& rResult, Topology& rTopology)
+{
+    try
+    {
+        for(const pqxx::tuple& row : rResult)
+        {
+            // throw exception if no edgeId
+            EdgeIdType edgeId =
+                row[CostQueries::TravelTimeCostResult::EDGE_ID]
+                    .as<EdgeIdType>();
+
+            Edge& edge = rTopology.getEdge(edgeId);
+
+//            std::string highway_string =
+//                row[CostQueries::TravelTimeCostResult::HIGHWAY].as<std::string>("");
+//            OsmHighway::HighwayType highwayType =
+//                edge.roadData().roadType;
+//                OsmHighway::parseString(highway_string);
+            Speed speed =
+                row[CostQueries::TravelTimeCostResult::MAXSPEED].as<Speed>(
+                    EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
+            std::string surface_string =
+                row[CostQueries::TravelTimeCostResult::SURFACE].as<std::string>("");
+
+            addTravelTimeCostToEdge(edge, speed, surface_string);
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:addTravelTimeCost: ") + e.what());
+    }
+}
+
+
+void
+PostGisProvider::addTravelTimeCostToEdge(Edge& rEdge, Speed speed, std::string& surfaceString)
+{
+    bool hasMaxSpeed = (speed != EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
+    bool hasSurface = surfaceString.length() > 0;
+    if(!(hasMaxSpeed || hasSurface))
     {
         speed = getDefaultSpeedForEdge(rEdge);
     }
     // look if surface restricts speed
-    if(surfaceString.length() > 0)
+    else if(hasSurface)
     {
         try
         {
@@ -1280,19 +1369,20 @@ PostGisProvider::addSpeedCost(Edge& rEdge, Speed speed, std::string& surfaceStri
         }
         catch (OsmException& e)
         {
-            // ignore
+            throw MapProviderException(std::string("PostGisProvider:addTravelTime... ") +
+                "could not parse surface " + surfaceString);
         }
     }
     double speed_mps = speed / 3.6;
     double travel_time = rEdge.geomData().length/ speed_mps;
 //    if(rEdge.id() == 270)
 //    {
-        std::cerr << "Edge " << rEdge.id()
-            << ": speed (km/h): " << speed
-            << ", (m/s): " << speed_mps
-            << ", traveltime (s):" << travel_time << std::endl;
+//        std::cerr << "Edge " << rEdge.id()
+//            << ": speed (km/h): " << speed
+//            << ", (m/s): " << speed_mps
+//            << ", traveltime (s):" << travel_time << std::endl;
 //    }
-//    rEdge.addCost(travel_time);
+    rEdge.edgeCost().addCost(EdgeCost::TRAVEL_TIME, travel_time);
 }
 
 Speed

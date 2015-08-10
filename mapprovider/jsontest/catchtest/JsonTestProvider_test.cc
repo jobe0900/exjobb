@@ -49,7 +49,7 @@ SCENARIO ("JsonTest topology handling", "[jsontest]")
                 // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
                 THEN ("we should not receive an exception")
                 {
-                    REQUIRE_NOTHROW (jtp.getMapData(topology));
+                    REQUIRE_NOTHROW (jtp.getTopology(topology));
                 }
             }
             // ...............................................................
@@ -57,7 +57,7 @@ SCENARIO ("JsonTest topology handling", "[jsontest]")
             {
                 Topology topology;
                 JsonTestProvider jtp(config);
-                jtp.getMapData(topology);
+                jtp.getTopology(topology);
 
                 size_t nr_vertices = 13;
                 size_t nr_edges = 16;

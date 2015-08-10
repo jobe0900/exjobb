@@ -36,8 +36,8 @@ JsonTestProvider::~JsonTestProvider()
 
 //============================= OPERATIONS ===================================
 void
-//JsonTestProvider::getTopology(Topology& rTopology)
-JsonTestProvider::getMapData(Topology& rTopology)
+JsonTestProvider::getTopology(Topology& rTopology)
+//JsonTestProvider::getMapData(Topology& rTopology)
 {
     using namespace boost::property_tree;
 
@@ -96,11 +96,11 @@ JsonTestProvider::getMapData(Topology& rTopology)
     }
 }
 
-//void
-//JsonTestProvider::addRestrictionsAndCosts(Topology& rTopology)
-//{
-//    //none
-//}
+void
+JsonTestProvider::setRestrictionsAndCosts(Topology& rTopology)
+{
+    //none
+}
 
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
