@@ -14,8 +14,8 @@ The software module does not fulfill the specification yet.
 
 #### NOT implemented features
 - Costs.
+- Inclinnation, different speed uphill or down hill.
 - Conditional restrictions.
-- Point restrictions, i.e. restrictions not connected to an edge, but to a point (but they perhaps might have something to do with the nearest edge?).
 - Turning restrictions that are not one-to-one, but one-to-many.
 - Turning restrictions via ways (not via nodes).
 - Parsing units, i.e. assuming all dimensions are meters and weight in metric tons and speed in km/h.

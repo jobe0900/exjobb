@@ -15,11 +15,9 @@ The Edge holds some relevant data from the topology. It has an `id`, and a field
 ### Vertex
 The Vertex class is simple with just an `id` and a `point` location, plus a flag for restrictions.
 
-### Restrictions
-The `Restrictions` class is a container for `EdgeRestrictions` (there are no specific `VertexRestrictions`).
-
-### EdgeRestrictions
-The `EdgeRestrictions` are a bunch of maps, mapping and `EdgeId` to restrictions that can be imposed on edges. Those restrictions are:
+### EdgeRestriction
+The `EdgeRestriction` keeps track of restrictions that can be imposed on 
+an edge. Those restrictions are:
 
 - **Vehicle properties**: weight, height, length, width, maxspeed.
 - **General access**: [OSM wiki for access](http://wiki.openstreetmap.org/wiki/Key:access).
@@ -31,7 +29,7 @@ The `EdgeRestrictions` are a bunch of maps, mapping and `EdgeId` to restrictions
 
 (Turn restriction via other edges and not just via a vertex are difficult. At the time when converting the topology to a line graph it is impossible to have the relevant information. The solution is to set a flag on the Edge that there exist a VIA_WAY restriction that must be taken into account when routing, and the routing module must look up and make its own decisions somehow.)
 
-### PointRestrictions
+#### PointRestrictions
 There can be tags at a point (node) but not necessarily at a vertex. Can be a barrier or a sign. They need to be related to the corresponding edge. Those tags that might impose restrictions on travel are
 
 - **Access**: to specify a `barrier` more
@@ -40,5 +38,11 @@ There can be tags at a point (node) but not necessarily at a vertex. Can be a ba
 Traffic signs must add tags on the edge so there is no need to try to figure out which edge or vertex the sign belongs to.
 
 Edges that somehow are restricted are not included in the LineGraph as possible to travel to, but travel from that edge are allowed. This is to make it possible to use LineGraph routing in cooperation to some other technique, so it is possible to get routed somewhere along an edge that has a barrier restriction in the end, which makes the edge unsuitable for travel to.
+
+### EdgeCost
+The cost for travel among an edge can be the number of seconds it takes. The base for this calculation is of course dependent on the length of the edge, and the speed. The speed an be set as an explicit `maxspeed` restriction, or by looking up the configuration for a `surface` if such is stated, else the speed is found by a look up for the default speed for the "highway type" (road category).
+
+The travel time cost can than be modified by barriers, speed bumps, traffic lights ... on the edge (or points that can be applied on the edge).
+
 ### Exceptions
 `GraphException` is the main public exception to be thrown from this package. `RestrictionsException` and `TopologyException` are thrown when building those classes, but not as exposed externally.
