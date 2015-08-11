@@ -596,7 +596,7 @@ PostGisProvider::addVehiclePropertyRestrictionsToEdge(
         {
             // throw exception if no edgeId
             EdgeIdType edgeId =
-                row[TopologyQueries::VehiclePropertiesResult::EDGE_ID]
+                row[RestrictionQueries::VehiclePropertiesRestrictions::EDGE_ID]
                     .as<EdgeIdType>();
 
             Edge& edge = rTopology.getEdge(edgeId);
@@ -605,26 +605,26 @@ PostGisProvider::addVehiclePropertyRestrictionsToEdge(
             EdgeRestriction::VehicleProperties* p_vp = new EdgeRestriction::VehicleProperties();
 
             p_vp->maxHeight =
-                row[TopologyQueries::VehiclePropertiesResult::MAXHEIGHT].as<double>
+                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXHEIGHT].as<double>
                 (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
             p_vp->maxLength =
-                row[TopologyQueries::VehiclePropertiesResult::MAXLENGTH].as<double>
+                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXLENGTH].as<double>
                 (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
             p_vp->maxWeight =
-                row[TopologyQueries::VehiclePropertiesResult::MAXWEIGHT].as<double>
+                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXWEIGHT].as<double>
                 (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
             p_vp->maxWidth =
-                row[TopologyQueries::VehiclePropertiesResult::MAXWIDTH].as<double>
+                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXWIDTH].as<double>
                 (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
             p_vp->maxSpeed =
-                row[TopologyQueries::VehiclePropertiesResult::MAXSPEED].as<unsigned>
+                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXSPEED].as<unsigned>
                 (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
             p_vp->minSpeed =
-                row[TopologyQueries::VehiclePropertiesResult::MINSPEED].as<unsigned>
+                row[RestrictionQueries::VehiclePropertiesRestrictions::MINSPEED].as<unsigned>
                 (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN);
 
 //            std::string surface_string =
-//                row[TopologyQueries::VehiclePropertiesResult::SURFACE].as<std::string>
+//                row[TopologyQueries::VehiclePropertiesRestrictions::SURFACE].as<std::string>
 //                ("");
 
 
@@ -655,27 +655,27 @@ PostGisProvider::addVehiclePropertyRestrictionsToEdge(
 //        {
 //            // throw exception if no edgeId
 //            EdgeIdType edgeId =
-//                row[TopologyQueries::VehiclePropertiesResult::EDGE_ID]
+//                row[TopologyQueries::VehiclePropertiesRestrictions::EDGE_ID]
 //                    .as<EdgeIdType>();
 //
 //            EdgeRestrictions::VehicleProperties vp;
 //            vp.maxHeight =
-//                row[TopologyQueries::VehiclePropertiesResult::MAXHEIGHT].as<double>
+//                row[TopologyQueries::VehiclePropertiesRestrictions::MAXHEIGHT].as<double>
 //                (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
 //            vp.maxLength =
-//                row[TopologyQueries::VehiclePropertiesResult::MAXLENGTH].as<double>
+//                row[TopologyQueries::VehiclePropertiesRestrictions::MAXLENGTH].as<double>
 //                (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
 //            vp.maxWeight =
-//                row[TopologyQueries::VehiclePropertiesResult::MAXWEIGHT].as<double>
+//                row[TopologyQueries::VehiclePropertiesRestrictions::MAXWEIGHT].as<double>
 //                (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
 //            vp.maxWidth =
-//                row[TopologyQueries::VehiclePropertiesResult::MAXWIDTH].as<double>
+//                row[TopologyQueries::VehiclePropertiesRestrictions::MAXWIDTH].as<double>
 //                (EdgeRestrictions::VehicleProperties::DEFAULT_DIMENSION_MAX);
 //            vp.maxSpeed =
-//                row[TopologyQueries::VehiclePropertiesResult::MAXSPEED].as<unsigned>
+//                row[TopologyQueries::VehiclePropertiesRestrictions::MAXSPEED].as<unsigned>
 //                (EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MAX);
 //            vp.minSpeed =
-//                row[TopologyQueries::VehiclePropertiesResult::MINSPEED].as<unsigned>
+//                row[TopologyQueries::VehiclePropertiesRestrictions::MINSPEED].as<unsigned>
 //                (EdgeRestrictions::VehicleProperties::DEFAULT_SPEED_MIN);
 //
 //            edgeRestr.setVehiclePropertyRestrictionForEdge(edgeId, vp);
@@ -732,13 +732,13 @@ PostGisProvider::addAccessRestrictionsToEdge(
         {
             // throw exception if no edgeId
             EdgeIdType edgeId =
-                row[TopologyQueries::AccessResult::EDGE_ID].as<EdgeIdType>();
+                row[RestrictionQueries::AccessRestrictions::EDGE_ID].as<EdgeIdType>();
 
             Edge& edge = rTopology.getEdge(edgeId);
             EdgeRestriction& r_restrictions = edge.restrictions();
 
             std::string colString;
-            colString = row[TopologyQueries::AccessResult::ACCESS]
+            colString = row[RestrictionQueries::AccessRestrictions::ACCESS]
                             .as<std::string>("");
             if(colString != "")
             {
@@ -746,7 +746,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
                 r_restrictions.setGeneralAccessRestriction(type);
             }
 
-            colString = row[TopologyQueries::AccessResult::MOTORCAR]
+            colString = row[RestrictionQueries::AccessRestrictions::MOTORCAR]
                             .as<std::string>("");
             if(colString != "")
             {
@@ -757,7 +757,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
                 );
             }
 
-            colString = row[TopologyQueries::AccessResult::GOODS]
+            colString = row[RestrictionQueries::AccessRestrictions::GOODS]
                             .as<std::string>("");
             if(colString != "")
             {
@@ -768,7 +768,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
                 );
             }
 
-            colString = row[TopologyQueries::AccessResult::HGV]
+            colString = row[RestrictionQueries::AccessRestrictions::HGV]
                             .as<std::string>("");
             if(colString != "")
             {
@@ -779,7 +779,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
                 );
             }
 
-            colString = row[TopologyQueries::AccessResult::PSV]
+            colString = row[RestrictionQueries::AccessRestrictions::PSV]
                             .as<std::string>("");
             if(colString != "")
             {
@@ -790,7 +790,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
                 );
             }
 
-            colString = row[TopologyQueries::AccessResult::LHV]
+            colString = row[RestrictionQueries::AccessRestrictions::LHV]
                             .as<std::string>("");
             if(colString != "")
             {
@@ -801,7 +801,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
                 );
             }
 
-            colString = row[TopologyQueries::AccessResult::MOTOR_VEHICLE]
+            colString = row[RestrictionQueries::AccessRestrictions::MOTOR_VEHICLE]
                             .as<std::string>("");
             if(colString != "")
             {
@@ -812,7 +812,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
                 );
             }
 
-            colString = row[TopologyQueries::AccessResult::VEHICLE]
+            colString = row[RestrictionQueries::AccessRestrictions::VEHICLE]
                             .as<std::string>("");
             if(colString != "")
             {
@@ -823,7 +823,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
                 );
             }
 
-            colString = row[TopologyQueries::AccessResult::BARRIER]
+            colString = row[RestrictionQueries::AccessRestrictions::BARRIER]
                             .as<std::string>("");
             if(colString != "")
             {
@@ -831,14 +831,14 @@ PostGisProvider::addAccessRestrictionsToEdge(
                 r_restrictions.setBarrierRestriction(type);
             }
 
-            colString = row[TopologyQueries::AccessResult::DISUSED]
+            colString = row[RestrictionQueries::AccessRestrictions::DISUSED]
                             .as<std::string>("");
             if(colString == "yes")
             {
                 r_restrictions.setDisusedRestriction();
             }
 
-            colString = row[TopologyQueries::AccessResult::NOEXIT]
+            colString = row[RestrictionQueries::AccessRestrictions::NOEXIT]
                             .as<std::string>("");
             if(colString == "yes")
             {
@@ -867,10 +867,10 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //        {
 //            // throw exception if no edgeId
 //            EdgeIdType edgeId =
-//                row[TopologyQueries::AccessResult::EDGE_ID].as<EdgeIdType>();
+//                row[TopologyQueries::AccessRestrictions::EDGE_ID].as<EdgeIdType>();
 //
 //            std::string colString;
-//            colString = row[TopologyQueries::AccessResult::ACCESS]
+//            colString = row[TopologyQueries::AccessRestrictions::ACCESS]
 //                            .as<std::string>("");
 //            if(colString != "")
 //            {
@@ -878,7 +878,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //                edgeRestr.setGeneralAccessRestrictionForEdge(edgeId, type);
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::MOTORCAR]
+//            colString = row[TopologyQueries::AccessRestrictions::MOTORCAR]
 //                            .as<std::string>("");
 //            if(colString != "")
 //            {
@@ -890,7 +890,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //                );
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::GOODS]
+//            colString = row[TopologyQueries::AccessRestrictions::GOODS]
 //                            .as<std::string>("");
 //            if(colString != "")
 //            {
@@ -902,7 +902,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //                );
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::HGV]
+//            colString = row[TopologyQueries::AccessRestrictions::HGV]
 //                            .as<std::string>("");
 //            if(colString != "")
 //            {
@@ -914,7 +914,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //                );
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::PSV]
+//            colString = row[TopologyQueries::AccessRestrictions::PSV]
 //                            .as<std::string>("");
 //            if(colString != "")
 //            {
@@ -926,7 +926,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //                );
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::LHV]
+//            colString = row[TopologyQueries::AccessRestrictions::LHV]
 //                            .as<std::string>("");
 //            if(colString != "")
 //            {
@@ -938,7 +938,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //                );
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::MOTOR_VEHICLE]
+//            colString = row[TopologyQueries::AccessRestrictions::MOTOR_VEHICLE]
 //                            .as<std::string>("");
 //            if(colString != "")
 //            {
@@ -950,7 +950,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //                );
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::VEHICLE]
+//            colString = row[TopologyQueries::AccessRestrictions::VEHICLE]
 //                            .as<std::string>("");
 //            if(colString != "")
 //            {
@@ -962,7 +962,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //                );
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::BARRIER]
+//            colString = row[TopologyQueries::AccessRestrictions::BARRIER]
 //                            .as<std::string>("");
 //            if(colString != "")
 //            {
@@ -970,14 +970,14 @@ PostGisProvider::addAccessRestrictionsToEdge(
 //                edgeRestr.setBarrierRestrictionForEdge(edgeId, type);
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::DISUSED]
+//            colString = row[TopologyQueries::AccessRestrictions::DISUSED]
 //                            .as<std::string>("");
 //            if(colString == "yes")
 //            {
 //                edgeRestr.setDisusedRestrictionForEdge(edgeId);
 //            }
 //
-//            colString = row[TopologyQueries::AccessResult::NOEXIT]
+//            colString = row[TopologyQueries::AccessRestrictions::NOEXIT]
 //                            .as<std::string>("");
 //            if(colString == "yes")
 //            {

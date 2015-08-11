@@ -35,13 +35,51 @@ class RestrictionQueries
 {
 public:
 // TYPES
-    enum TurningRestrictionsColumns
+    struct VehiclePropertiesRestrictions
     {
-        FROM_OSM_ID,
-        TO_OSM_ID,
-        VIA_OSM,
-        EDGE_IDS,
-        RESTRICTION_TYPE
+        enum Columns
+        {
+            EDGE_ID,
+            ELEMENT_ID,
+            MAXHEIGHT,
+            MAXLENGTH,
+            MAXWEIGHT,
+            MAXWIDTH,
+            MAXSPEED,
+            MINSPEED,
+        };
+    };
+
+    struct AccessRestrictions
+    {
+        enum Columns
+        {
+            EDGE_ID,
+            ELEMENT_ID,
+            ACCESS,
+            BARRIER,
+            DISUSED,
+            NOEXIT,
+            MOTORCAR,
+            GOODS,
+            HGV,
+            PSV,
+            LHV,
+            MOTOR_VEHICLE,
+            VEHICLE,
+        };
+    };
+
+    struct TurningRestrictions
+    {
+        enum Columns
+        {
+            FROM_OSM_ID,
+            TO_OSM_ID,
+            VIA_OSM,
+            EDGE_IDS,
+            RESTRICTION_TYPE
+        };
     };
 
     struct EdgePointRestrictions

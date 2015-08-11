@@ -16,17 +16,17 @@ RestrictionQueries::Results::parseTurningRestrictionResultRow(
     Topology&             rTopology)
 {
     OsmIdType fromOsmId =
-        rRow[RestrictionQueries::FROM_OSM_ID].as<OsmIdType>();
+        rRow[RestrictionQueries::TurningRestrictions::FROM_OSM_ID].as<OsmIdType>();
     OsmIdType toOsmId =
-        rRow[RestrictionQueries::TO_OSM_ID].as<OsmIdType>();
+        rRow[RestrictionQueries::TurningRestrictions::TO_OSM_ID].as<OsmIdType>();
     std::string typeString =
-        rRow[RestrictionQueries::RESTRICTION_TYPE].as<std::string>();
+        rRow[RestrictionQueries::TurningRestrictions::RESTRICTION_TYPE].as<std::string>();
     OsmTurningRestriction::TurningRestrictionType type =
         OsmTurningRestriction::parseString(typeString);
     std::string edgeIdsString =
-        rRow[RestrictionQueries::EDGE_IDS].as<std::string>();
+        rRow[RestrictionQueries::TurningRestrictions::EDGE_IDS].as<std::string>();
     std::string viaOsmIdsString =
-        rRow[RestrictionQueries::VIA_OSM].as<std::string>("");
+        rRow[RestrictionQueries::TurningRestrictions::VIA_OSM].as<std::string>("");
 
     std::vector<EdgeIdType> edgeIds = parseEdgeIdsString(edgeIdsString);
 
