@@ -7,7 +7,6 @@ CC_SRCS += \
 ../graph/Edge.cc \
 ../graph/EdgeCost.cc \
 ../graph/EdgeRestriction.cc \
-../graph/EdgeRestrictions.cc \
 ../graph/Graph.cc \
 ../graph/Topology.cc \
 ../graph/Vertex.cc 
@@ -16,7 +15,6 @@ CC_DEPS += \
 ./graph/Edge.d \
 ./graph/EdgeCost.d \
 ./graph/EdgeRestriction.d \
-./graph/EdgeRestrictions.d \
 ./graph/Graph.d \
 ./graph/Topology.d \
 ./graph/Vertex.d 
@@ -25,7 +23,6 @@ OBJS += \
 ./graph/Edge.o \
 ./graph/EdgeCost.o \
 ./graph/EdgeRestriction.o \
-./graph/EdgeRestrictions.o \
 ./graph/Graph.o \
 ./graph/Topology.o \
 ./graph/Vertex.o 
