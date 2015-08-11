@@ -632,6 +632,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
             {
                 OsmBarrier::BarrierType type = OsmBarrier::parseString(colString);
                 r_restrictions.setBarrierRestriction(type);
+                addBarrierCostToEdge(edge, type);
             }
 
             colString = row[RestrictionQueries::AccessRestrictions::DISUSED]
@@ -775,6 +776,7 @@ PostGisProvider::addPointRestrictionsToEdge(
             OsmBarrier::BarrierType barrierType =
                 OsmBarrier::parseString(barrierTypeString);
             r_restrictions.setBarrierRestriction(barrierType);
+            addBarrierCostToEdge(edge, barrierType);
 
             std::string colString;
             colString = row[RestrictionQueries::EdgePointRestrictions::ACCESS]
@@ -937,6 +939,16 @@ PostGisProvider::addTravelTimeCosts(const pqxx::result& rResult, Topology& rTopo
     {
         throw MapProviderException(
             std::string("PostGisProvider:addTravelTimeCost: ") + e.what());
+    }
+}
+
+void
+PostGisProvider::addBarrierCostToEdge(Edge& rEdge, OsmBarrier::BarrierType type)
+{
+    if(mConfig.getBarrierCostsRule().costsToPass(type))
+    {
+        Cost cost = mConfig.getBarrierCostsRule().getCost(type);
+        rEdge.edgeCost().addCost(EdgeCost::BARRIER, cost);
     }
 }
 

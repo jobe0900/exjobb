@@ -18,10 +18,11 @@
 
 // LOCAL INCLUDES
 //
+#include "Cost.h"
 
 // FORWARD REFERENCES
 //
-typedef double Cost;
+//typedef double Cost;
 
 /** Costs for edges:
  * - speed (either set explicitly or default  from road category)

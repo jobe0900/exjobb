@@ -22,6 +22,7 @@
 // LOCAL INCLUDES
 //
 #include "OsmException.h"
+#include "../graph/Cost.h"
 
 // FORWARD REFERENCES
 //
@@ -122,10 +123,10 @@ public:
 //        CostsRule(std::initializer_list<BarrierCostType> costsTypes);
 
         bool        costsToPass(BarrierType type) const;
-        unsigned    getCost(BarrierType type) const;
-        void        addCost(BarrierType type, unsigned cost);
+        Cost        getCost(BarrierType type) const;
+        void        addCost(BarrierType type, Cost cost);
 
-        std::map<BarrierType, unsigned> costs;
+        std::map<BarrierType, Cost> costs;
 
 //        std::vector<BarrierCostType> costsTypes;
 //        {

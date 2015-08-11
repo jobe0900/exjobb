@@ -36,7 +36,7 @@ OsmBarrier::CostsRule::costsToPass(OsmBarrier::BarrierType type) const
     return it != costs.end();
 }
 
-unsigned
+Cost
 OsmBarrier::CostsRule::getCost(OsmBarrier::BarrierType type) const
 {
     const auto& it  = costs.find(type);
@@ -52,7 +52,7 @@ OsmBarrier::CostsRule::getCost(OsmBarrier::BarrierType type) const
 }
 
 void
-OsmBarrier::CostsRule::addCost(OsmBarrier::BarrierType type, unsigned cost)
+OsmBarrier::CostsRule::addCost(OsmBarrier::BarrierType type, Cost cost)
 {
     costs.erase(type);
     costs.insert({type, cost});
