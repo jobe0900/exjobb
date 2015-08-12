@@ -61,7 +61,6 @@ SCENARIO ("Keeping track of costs for an Edge", "[edgecost]")
                 REQUIRE (costs.hasCost(EdgeCost::TRAVEL_TIME) == true);
                 REQUIRE (costs.hasCost(EdgeCost::BARRIER) == true);
                 REQUIRE (costs.hasCost(EdgeCost::TRAFFIC_CALMING) == false);
-                REQUIRE (costs.getCost(EdgeCost::INCLINE) == 0);
             }
         }
     }

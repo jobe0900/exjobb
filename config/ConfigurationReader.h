@@ -122,6 +122,11 @@ private:
 	 * @param   The Cost configuration.
 	 */
 	void    fillSurfaceMaxSpeedCost(CostConfig& rCostConfig) const;
+
+	/** Helper to `fillCostConfig()`. Fill in the cost for other edge costs.
+	 * @param   The Cost configuration.
+	 */
+	void    fillOtherEdgeCosts(CostConfig& rCostConfig) const;
 };
 
 // INLINE METHODS

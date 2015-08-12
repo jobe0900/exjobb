@@ -257,6 +257,42 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 			        OsmHighway::WOODCHIPS) == 5);
 			    REQUIRE (r_cost_config.surfaceMaxSpeed.getSurfaceMaxSpeed(
 			        OsmHighway::METAL_GRID) == 40);
+
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "highway=bus_stop") == 5);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "highway=crossing") == 5);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "highway=give_way") == 20);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "highway=mini_roundabout") == 20);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "highway=stop") == 30);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "highway=traffic_signals") == 30);
+
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "railway=level_crossing") == 20);
+
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "public_transport=stop_position") == 5);
+
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "traffic_calming=yes") == 10);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "traffic_calming=bump") == 10);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "traffic_calming=table") == 10);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "traffic_calming=cushion") == 10);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "traffic_calming=rumble_strip") == 10);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "traffic_calming=chicane") == 10);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "traffic_calming=choker") == 10);
+			    REQUIRE(r_cost_config.otherEdgeCosts.getOtherCost(
+			        "traffic_calming=island") == 5);
 			}
 		}
 

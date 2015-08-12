@@ -263,6 +263,7 @@ ConfigurationReader::fillCostConfiguration(CostConfig& rCostConfig) const
     {
         fillDefaultSpeedCost(rCostConfig);
         fillSurfaceMaxSpeedCost(rCostConfig);
+        fillOtherEdgeCosts(rCostConfig);
     }
     catch (ConfigurationException& e)
     {
@@ -309,5 +310,58 @@ ConfigurationReader::fillSurfaceMaxSpeedCost(CostConfig& rCostConfig) const
         type = static_cast<OsmHighway::SurfaceType>(i);
         rCostConfig.surfaceMaxSpeed.addSurfaceMaxSpeed(type, speed);
     }
+}
 
+void
+ConfigurationReader::fillOtherEdgeCosts(CostConfig& rCostConfig) const
+{
+    std::string section("cost.");
+    std::vector<std::string> subsections {
+        "highway",
+        "railway",
+        "public_transport",
+        "traffic_calming"
+    };
+
+    try
+    {
+        for(const auto& sub : subsections)
+        {
+            std::string prefix(section + sub + ".");
+
+            for(auto& row : mPropertyTree.get_child(prefix))
+            {
+                int i = 0;
+                std::string key;
+                Cost cost;
+                for(auto& item : row.second)
+                {
+                    if(i == 0)
+                    {
+                        key = item.second.get_value<std::string>();
+                    }
+                    else
+                    {
+                        cost = item.second.get_value<Cost>();
+                    }
+                    ++i;
+                }
+                rCostConfig.otherEdgeCosts.addOtherCost(
+                    sub + "=" + key, cost);
+            }
+        }
+    }
+    catch (ConfigurationException& e)
+    {
+        throw e;
+    }
+    catch (OsmException& ose)
+    {
+        throw ConfigurationException(std::string("Could not read config") +
+            ", error parsing other costs: " + ose.what());
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
 }

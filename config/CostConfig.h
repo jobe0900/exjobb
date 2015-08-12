@@ -19,6 +19,7 @@
 // LOCAL INCLUDES
 //
 #include "../osm/OsmHighway.h"
+#include "../graph/Cost.h"
 
 // FORWARD REFERENCES
 //
@@ -30,6 +31,10 @@ struct CostConfig
 {
 // TYPES
 
+    /** Keep track of default speeds for different categories of roads.
+     * The values are a high and a low value, depending of if we are inside or
+     * outside of an urban area.
+     */
     struct DefaultSpeed
     {
         enum HIGH_LOW
@@ -46,6 +51,10 @@ struct CostConfig
 
         std::map<OsmHighway::HighwayType, HighLowSpeed> defaultSpeed;
 
+        /** Add a speed far a specific road category (highway type).
+         * @param   type    The highway type
+         * @param   speed   The high and low speed limits.
+         */
         void            addDefaultSpeed(
                             OsmHighway::HighwayType type,
                             HighLowSpeed speed)
@@ -54,6 +63,9 @@ struct CostConfig
             defaultSpeed.insert({type, speed});
         }
 
+        /**
+         * @return  The high/low speed for this type of highway.
+         */
         HighLowSpeed    getDefaultSpeed(OsmHighway::HighwayType type) const
         {
             const auto& it = defaultSpeed.find(type);
@@ -78,37 +90,28 @@ struct CostConfig
                 return hl.low;
             }
         }
-
-
-//        HighLowSpeed motorway;
-//        HighLowSpeed motorway_link;
-//        HighLowSpeed trunk;
-//        HighLowSpeed trunk_link;
-//        HighLowSpeed primary;
-//        HighLowSpeed primary_link;
-//        HighLowSpeed secondary;
-//        HighLowSpeed secondary_link;
-//        HighLowSpeed tertiary;
-//        HighLowSpeed tertiary_link;
-//        HighLowSpeed unclassified;
-//        HighLowSpeed residential;
-//        HighLowSpeed service;
-//        HighLowSpeed living_street;
-//        HighLowSpeed bus_guideway;
-//        HighLowSpeed road;
     };
 
+    /** Keep track of max speed that are suitable for different kind of
+     * surfaces.
+     */
     struct SurfaceMaxSpeed
     {
-
         std::map<OsmHighway::SurfaceType, Speed> surfaceSpeed;
 
+        /** Add a surface type and the max speed.
+         * @param   type    The type of surface.
+         * @param   speed   The max suitable speed for the surface type.
+         */
         void    addSurfaceMaxSpeed(OsmHighway::SurfaceType type, Speed speed)
         {
             surfaceSpeed.erase(type);
             surfaceSpeed.insert({type, speed});
         }
 
+        /**
+         * @return  The suitable max speed for a surface type.
+         */
         Speed   getSurfaceMaxSpeed(OsmHighway::SurfaceType type) const
         {
             const auto& it = surfaceSpeed.find(type);
@@ -120,72 +123,48 @@ struct CostConfig
         }
     };
 
+    /** Other edge costs are kept track of simply by strings as keys and
+     * Costs as values. The costs are "penalties" added to the travel time.
+     * The string that make up the keys are simply constructed as "tag=value",
+     * e.g. "highway=give_way".
+     */
+    struct OtherEdgeCosts
+    {
+        std::map<std::string, Cost> otherCostValues;
+
+        /** Add a 'penalty' for another kind of EdgeCost.
+         * @param   key     String of "tag=value" that makes up the cost.
+         * @param   cost    The cost for this kind of hindrance.
+         */
+        void    addOtherCost(std::string key, Cost cost)
+        {
+            otherCostValues.erase(key);
+            otherCostValues.insert({key, cost});
+        }
+
+        /**
+         * @return  The cost for this key.
+         */
+        Cost    getOtherCost(std::string key) const
+        {
+            const auto& it = otherCostValues.find(key);
+            if(it !=otherCostValues.end())
+            {
+                return it->second;
+            }
+            return 0;
+        }
+    };
+
 // ATTRIBUTES
     DefaultSpeed    defaultSpeed;
     SurfaceMaxSpeed surfaceMaxSpeed;
+    OtherEdgeCosts  otherEdgeCosts;
 
 // ACCESS
-//    int     getDefaultSpeed(
-//                OsmHighway::HighwayType     highwayType,
-//                DefaultSpeed::HIGH_LOW      highLow) const
-//    {
-//        switch(highwayType)
-//        {
-//            case OsmHighway::MOTORWAY:
-//                return getHighOrLow(defaultSpeed.motorway, highLow); break;
-//            case OsmHighway::MOTORWAY_LINK:
-//                return getHighOrLow(defaultSpeed.motorway_link, highLow); break;
-//            case OsmHighway::TRUNK:
-//                return getHighOrLow(defaultSpeed.trunk, highLow); break;
-//            case OsmHighway::TRUNK_LINK:
-//                return getHighOrLow(defaultSpeed.trunk_link, highLow); break;
-//            case OsmHighway::PRIMARY:
-//                return getHighOrLow(defaultSpeed.primary, highLow); break;
-//            case OsmHighway::PRIMARY_LINK:
-//                return getHighOrLow(defaultSpeed.primary_link, highLow); break;
-//            case OsmHighway::SECONDARY:
-//                return getHighOrLow(defaultSpeed.secondary, highLow); break;
-//            case OsmHighway::SECONDARY_LINK:
-//                return getHighOrLow(defaultSpeed.secondary_link, highLow); break;
-//            case OsmHighway::TERTIARY:
-//                return getHighOrLow(defaultSpeed.tertiary, highLow); break;
-//            case OsmHighway::TERTIARY_LINK:
-//                return getHighOrLow(defaultSpeed.tertiary_link, highLow); break;
-//            case OsmHighway::UNCLASSIFIED:
-//                return getHighOrLow(defaultSpeed.unclassified, highLow); break;
-//            case OsmHighway::RESIDENTIAL:
-//                return getHighOrLow(defaultSpeed.residential, highLow); break;
-//            case OsmHighway::SERVICE:
-//                return getHighOrLow(defaultSpeed.service, highLow); break;
-//            case OsmHighway::LIVING_STREET:
-//                return getHighOrLow(defaultSpeed.living_street, highLow); break;
-//            case OsmHighway::BUS_GUIDEWAY:
-//                return getHighOrLow(defaultSpeed.bus_guideway, highLow); break;
-//            case OsmHighway::ROAD:
-//                return getHighOrLow(defaultSpeed.road, highLow); break;
-//            case OsmHighway::NR_HIGHWAY_TYPES:
-//            default:
-//                return 0; break;
-//        }
-//        return 0;
-//    }
-
 // CONSTANTS
 
 private:
-//    int     getHighOrLow(
-//                DefaultSpeed::HighLowSpeed  speed,
-//                DefaultSpeed::HIGH_LOW      highLow) const
-//    {
-//        if(highLow == DefaultSpeed::HIGH)
-//        {
-//            return speed.high;
-//        }
-//        else
-//        {
-//            return speed.low;
-//        }
-//    }
 };
 
 // INLINE METHODS
