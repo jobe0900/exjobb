@@ -35,6 +35,32 @@ CostQueries::getTravelTimeEdgeCosts(
     );
 }
 
+void
+CostQueries::getOtherCosts(
+    pqxx::transaction_base& rTrans,
+    pqxx::result&           rResult,
+    const std::string&      rOsmPointTable,
+    const std::string&      rTopoEdgeTable)
+{
+    rResult = rTrans.exec(
+        "SELECT p.osm_id, "
+        "       p.highway, "
+        "       p.railway, "
+        "       e.edge_id "
+        "FROM  " + rOsmPointTable + " p, "
+        "      " + rTopoEdgeTable + " e "
+        "WHERE  (p.highway = 'bus_stop' OR "
+        "       p.highway = 'crossing' OR "
+        "       p.highway = 'give_way' OR"
+        "       p.highway = 'mini_roundabout' OR"
+        "       p.highway = 'stop' OR"
+        "       p.highway = 'traffic_signals' OR"
+        "       p.railway = 'level_crossing' "
+        "       p.public_transport = 'stop_position')"
+        "AND    ST_Intersects(p.way, e.geom)"
+    );
+}
+
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

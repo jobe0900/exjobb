@@ -105,6 +105,28 @@ public:
         const std::string&      rOsmEdgeTable,
         const std::string&      rSchemaName);
 
+    /** Query for costs under the highway and railway tags:
+     * Highway:
+     *  - bus_stop
+     *  - crossing
+     *  - give_way
+     *  - mini_roundabout
+     *  - stop
+     *  - traffic_signals
+     * Railway:
+     *  - level_crossing
+     *
+     * @param   rTrans          Transaction to perform query in
+     * @param   rResult         Store the result of the query here
+     * @param   rOsmPointTable  Name of table with OSM points (nodes)
+     * @param   rTopoEdgeTable  Name of table with topology edges.
+     */
+    static void             getOtherCosts(
+        pqxx::transaction_base&     rTrans,
+        pqxx::result&               rResult,
+        const std::string&          rOsmPointTable,
+        const std::string&          rTopoEdgeTable);
+
 // ACCESS
 // INQUIRY
 
