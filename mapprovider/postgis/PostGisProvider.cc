@@ -874,7 +874,11 @@ PostGisProvider::addEdgeCosts(Topology& rTopology)
     getTravelTimeCosts(result);
     addTravelTimeCosts(result, rTopology);
 
+    // barrier costs are added while looking for restrictions
+
     result.clear();
+    getOtherEdgeCosts(result);
+    addOtherCosts(result, rTopology);
 }
 
 void
@@ -905,6 +909,33 @@ PostGisProvider::getTravelTimeCosts(pqxx::result& rResult)
             std::string("PostGisProvider:getVehiclePropertyEdgeRestrictions: ")
                         + e.what());
     }
+}
+
+void
+PostGisProvider::getOtherEdgeCosts(pqxx::result& rResult)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw MapProviderException(
+					std::string("Could not open ") + mDbConfig.database);
+		}
+
+		// NON-TRANSACTION START
+		pqxx::nontransaction transaction(mConnection);
+
+		CostQueries::getOtherCosts(
+		    transaction,
+		    rResult,
+		    mPointTableName,
+		    mEdgeTable);
+	}
+	catch(const std::exception& e)
+	{
+        throw MapProviderException(
+            std::string("PostGisProvider:getOtherEdgeCosts: ") + e.what());
+	}
 }
 
 void
@@ -939,6 +970,56 @@ PostGisProvider::addTravelTimeCosts(const pqxx::result& rResult, Topology& rTopo
     {
         throw MapProviderException(
             std::string("PostGisProvider:addTravelTimeCost: ") + e.what());
+    }
+}
+
+void
+PostGisProvider::addOtherCosts(
+    const pqxx::result&     rResult,
+    Topology&               rTopology)
+{
+    try
+    {
+
+//        Edge& e = rTopology.getEdge(869);
+//        std::string str("highway=");          // test nr 1
+//        std::string str("highway=bus_stop");  // test nr 2
+//        addOtherCostToEdge(e,str);
+
+        for(const pqxx::tuple& row : rResult)
+        {
+            // throw exception if no edgeId
+            EdgeIdType edgeId =
+                row[CostQueries::OtherCostResult::EDGE_ID]
+                    .as<EdgeIdType>();
+
+            Edge& edge = rTopology.getEdge(edgeId);
+
+            std::string type_string = "highway=" +
+                row[CostQueries::OtherCostResult::HIGHWAY]
+                    .as<std::string>("");
+            addOtherCostToEdge(edge, type_string);
+
+            type_string = "railway=" +
+                row[CostQueries::OtherCostResult::RAILWAY]
+                    .as<std::string>("");
+            addOtherCostToEdge(edge, type_string);
+
+            type_string = "public_transport=" +
+                row[CostQueries::OtherCostResult::PUBLIC_TRANSPORT]
+                    .as<std::string>("");
+            addOtherCostToEdge(edge, type_string);
+
+            type_string = "traffic_calming=" +
+                row[CostQueries::OtherCostResult::TRAFFIC_CALMING]
+                    .as<std::string>("");
+            addOtherCostToEdge(edge, type_string);
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:addPointResultToEdge..: ") + e.what());
     }
 }
 
@@ -985,6 +1066,20 @@ PostGisProvider::addTravelTimeCostToEdge(Edge& rEdge, Speed speed, std::string& 
     double speed_mps = speed / 3.6;
     double travel_time = rEdge.geomData().length/ speed_mps;
     rEdge.edgeCost().addCost(EdgeCost::TRAVEL_TIME, travel_time);
+}
+
+void
+PostGisProvider::addOtherCostToEdge(Edge& rEdge, const std::string& key)
+{
+    size_t eq_char = key.find('=');
+    if((eq_char == std::string::npos) || (eq_char == key.length() - 1))
+    {
+//        std::cerr << "No key supplied: " << key << std::endl;
+        return;
+    }
+
+    Cost cost = mConfig.getCostConfig().otherEdgeCosts.getOtherCost(key);
+    rEdge.edgeCost().addCost(EdgeCost::OTHER, cost);
 }
 
 Speed

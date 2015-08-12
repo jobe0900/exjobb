@@ -321,6 +321,13 @@ private:
      */
     void    getTravelTimeCosts(pqxx::result& rResult);
 
+    /** Get other costs for the edge other than speed and barriers, those
+     * include slowdown at stop and yield signs, zebra crossings, railway
+     * crossings, bus stops, speed bumps, traffic lights...
+     * @param   rResult     Store the result of the query here.
+     */
+    void    getOtherEdgeCosts(pqxx::result& rResult);
+
     /** Add costs for travel time along the edge.
      * First set the speed of those with explicit restrictions in database,
      * then set the default speed for those without explicit speeds.
@@ -329,6 +336,15 @@ private:
      * @throw   MapProviderException
      */
     void    addTravelTimeCosts(const pqxx::result& rResult, Topology& rTopology);
+
+    /** Add costs for speed bumps and such to affected edges.
+     * @param   rResult     The results of the query.
+     * @param   rTopology   The topology with edges to set cost for.
+     * @throw   MapProviderException
+     */
+    void    addOtherCosts(
+                const pqxx::result& rResult,
+                Topology& rTopology);
 
     /** While looking for restrictions and we come across barriers,
      * add the costs for barriers if they incur costs.
@@ -348,6 +364,15 @@ private:
                 Edge& rEdge,
                 Speed speed,
                 std::string& surfaceString);
+
+    /** Add a cost of an other type to the edge.
+     * Look up the value in the configuration.
+     * @param   rEdge   The Edge to add a cost to.
+     * @param   key     The type of cost as a string
+     */
+    void    addOtherCostToEdge(
+                Edge&               rEdge,
+                const std::string&  key);
 
     /** If the speed in the db was not set we must fetch the default
      * for this road category from the configuration.

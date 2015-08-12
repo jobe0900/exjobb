@@ -47,15 +47,16 @@ public:
     {
         TRAVEL_TIME,
         BARRIER,
+        OTHER
 //        INCLINE,
-        TRAFFIC_CALMING,
-        BUS_STOP,
-        CROSSING,
-        GIVE_WAY,
-        MINI_ROUNDABOUT,
-        STOP,
-        TRAFFIC_SIGNALS,
-        RAILWAY_CROSSING
+//        TRAFFIC_CALMING,
+//        BUS_STOP,
+//        CROSSING,
+//        GIVE_WAY,
+//        MINI_ROUNDABOUT,
+//        STOP,
+//        TRAFFIC_SIGNALS,
+//        RAILWAY_CROSSING
     };
 
 // LIFECYCLE

@@ -44,6 +44,19 @@ public:
             SURFACE
         };
     };
+
+    struct OtherCostResult
+    {
+        enum Columns
+        {
+            OSM_ID,
+            HIGHWAY,
+            RAILWAY,
+            PUBLIC_TRANSPORT,
+            TRAFFIC_CALMING,
+            EDGE_ID
+        };
+    };
 //
 //    /** Results from queries are handled by these functions. */
 //    struct Results

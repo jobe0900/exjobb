@@ -234,6 +234,22 @@ SCENARIO ("Set costs on Edges", "[postgis][cost]")
                         << ", total cost: " << edge.cost());
                     REQUIRE (edge.cost() > 0);
                 }
+
+                THEN ("we should be able to find cost for other hindrances")
+                {
+                    EdgeIdType id = 869;
+                    const Edge& edge = topology.getEdge(id);
+                    INFO ("edge " << id
+                        << ", length: " << edge.geomData().length
+                        << ", travel time: "
+                        << edge.edgeCost().getCost(EdgeCost::TRAVEL_TIME)
+                        << ", barrier cost: "
+                        << edge.edgeCost().getCost(EdgeCost::BARRIER)
+                        << ", other cost: "
+                        << edge.edgeCost().getCost(EdgeCost::OTHER)
+                        << ", total cost: " << edge.cost());
+                    REQUIRE (edge.cost() > 0);
+                }
 			}
 		}
 	}
