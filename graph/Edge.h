@@ -76,7 +76,6 @@ public:
         DirectionType               direction {BOTH};
         size_t                      nrLanes   {1};
         OsmHighway::HighwayType     roadType  {OsmHighway::HighwayType::ROAD};
-        Speed                       speed;
 
         /** Constructor. */
         RoadData() = default;
@@ -157,6 +156,11 @@ public:
      * @param   pRestrictions   The restrictions for this edge.
      */
     void              setRestrictions(EdgeRestriction* pRestrictions);
+
+    /** Set the speed for the edge in this actual configuration.
+     * @param   speed   The speed to set.
+     */
+    void              setSpeed(Speed speed);
 
     /** Remove the restrictions for this edge.
      */
@@ -240,6 +244,13 @@ public:
      */
     Cost                cost() const;
 
+    /** The speed must be kept track of because of turn cost calculations,
+     * but they are not  part of `RoadData` which are meant to be constant,
+     * while the speed varies with configuration.
+     * @return  The speed for this edge.
+     */
+    Speed               speed() const;
+
 // INQUIRY
     /**
      * @return  true if there exists restrictions for this edge.
@@ -273,6 +284,7 @@ private:
     RoadData          mRoadData;
     EdgeRestriction*  mpRestrictions;
     EdgeCost          mCost;
+    Speed             mSpeed;
 //    bool            mHasRestrictions;
 //    bool            mHasViaWayRestriction;
 

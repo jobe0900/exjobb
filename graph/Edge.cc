@@ -113,6 +113,7 @@ operator<<(std::ostream& os, const Edge& rEdge)
 		<< ", target: " << rEdge.target()
 		<< ", cost: " << rEdge.cost()
 		<< ", length: " << rEdge.geomData().length
+		<< ", speed: " << rEdge.speed()
 		<< "\n   road data: ";
 	rEdge.roadData().print(os);
 
@@ -141,6 +142,12 @@ Edge::setRestrictions(EdgeRestriction* pRestrictions)
 {
     delete mpRestrictions;
     mpRestrictions = pRestrictions;
+}
+
+void
+Edge::setSpeed(Speed speed)
+{
+    mSpeed = speed;
 }
 
 void
@@ -246,6 +253,12 @@ Cost
 Edge::cost() const
 {
     return mCost.getCost();
+}
+
+Speed
+Edge::speed() const
+{
+    return mSpeed;
 }
 
 //const EdgeRestriction&
