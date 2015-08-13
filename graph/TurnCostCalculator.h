@@ -13,6 +13,8 @@
 #include <initializer_list>
 #include <cstdlib> // abs()
 
+#include <iostream>
+
 // PROJECT INCLUDES
 //
 
@@ -58,7 +60,7 @@ public:
                         const Edge& rTarget,
                         const Configuration& rConfig);
 // INQUIRY
-private:
+//private:
 // HELPERS
     /**
      * @param   rSource     Source edge.
@@ -70,17 +72,17 @@ private:
                         const Edge& rTarget);
 
     /**
-     * @param   rSource     Source edge.
-     * @param   rTarget     Target edge.
-     * @param   rConfig     Configuration with vehicle config info.
-     * @param   angleSpeed  The angle dependent speed
+     * @param   rSource         Source edge.
+     * @param   rTarget         Target edge.
+     * @param   vehicle_length  Length of the vehicle.
+     * @param   angleSpeed      The angle dependent speed
      * @return  The speed dependent on the size of the routed vehicle.
      */
     static Speed    getVehicleSizeSpeed(
-                        const Edge&             rSource,
-                        const Edge&             rTarget,
-                        const Configuration&    rConfig,
-                        Speed                   angleSpeed);
+                        const Edge& rSource,
+                        const Edge& rTarget,
+                        double      vehicle_length,
+                        Speed       angleSpeed);
 
     /**
 //     * @param   rSource     Source edge.
@@ -92,7 +94,7 @@ private:
 //                        const Edge& rTarget);
 
     /**
-     * @param   speeds      A list of speeds.
+     * @param   speeds      A set of speeds.
      * @return  The smallest speed
      */
     static Speed    getSmallestSpeed(std::initializer_list<Speed> speeds);
@@ -109,7 +111,7 @@ private:
     /** Calculate a penalty for making sharp right turns with long vehicles.
      * @param   turnAngle       The turning angle in degrees (-180 < a < 180).
      * @param   vehicleLength   The length of the vehicle.
-     * @return  A factor 0 - 1.0
+     * @return  A factor 0.33 - 1.0
      */
     static double   calculateLengthPenaltyFactor(
                         int     turnAngle,
