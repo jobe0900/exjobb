@@ -57,11 +57,13 @@
         "category":   "motorcar",
         "motorcar": 
         {
-           "height":   1.6,
-           "length":   4.5,
-           "width":    1.9,
-           "weight":   2.0,
-           "maxspeed": 200
+           "height":       1.6,
+           "length":       4.5,
+           "width":        1.9,
+           "weight":       2.0,
+           "maxspeed":     200,
+           "acceleration": 10,
+           "deceleration": 7
         }
     },
     

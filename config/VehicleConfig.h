@@ -33,6 +33,8 @@ struct VehicleConfig
 	double			            weight;
 	double			            width;
 	unsigned                    maxspeed;
+	unsigned                    acceleration; // seconds 0 - 100 km/h
+	unsigned                    deceleration; // seconds 100 - 0 km/h
 };
 
 // INLINE METHODS
