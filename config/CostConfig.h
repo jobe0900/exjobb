@@ -20,6 +20,7 @@
 //
 #include "../osm/OsmHighway.h"
 #include "../graph/Cost.h"
+#include "../graph/Speed.h"
 
 // FORWARD REFERENCES
 //

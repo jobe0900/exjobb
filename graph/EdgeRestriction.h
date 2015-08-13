@@ -28,6 +28,7 @@
 #include "Edge.h"
 #include "Vertex.h"
 #include "../config/VehicleConfig.h"
+#include "Speed.h"
 
 // FORWARD REFERENCES
 //
@@ -56,10 +57,10 @@ public:
         static double DEFAULT_DIMENSION_MAX;
         // = {std::numeric_limits<double>::max()};
 
-        static unsigned DEFAULT_SPEED_MAX;
+        static Speed DEFAULT_SPEED_MAX;
         // = {std::numeric_limits<unsigned>::max()};
 
-        static unsigned DEFAULT_SPEED_MIN;
+        static Speed DEFAULT_SPEED_MIN;
         // = {0};
 
         double      maxHeight   {DEFAULT_DIMENSION_MAX};
@@ -67,8 +68,8 @@ public:
         double      maxWeight   {DEFAULT_DIMENSION_MAX};
         double      maxWidth    {DEFAULT_DIMENSION_MAX};
 
-        unsigned    maxSpeed    {DEFAULT_SPEED_MAX};
-        unsigned    minSpeed    {DEFAULT_SPEED_MIN};
+        Speed       maxSpeed    {DEFAULT_SPEED_MAX};
+        Speed       minSpeed    {DEFAULT_SPEED_MIN};
 
         /** Look if the vehicle properties restricts
          * vehicle with given configuration.
@@ -209,7 +210,7 @@ public:
      * if there exists an explicit limit with  `hasMaxSpeedRestriction()`
      * @return  Either the explicit speed limit or a default if not set.
      */
-    unsigned            maxSpeed() const;
+    Speed               maxSpeed() const;
 
 //    /** Get the map of all VehicleProperty Restrictions.
 //     * @return  Map of all property restrictions.

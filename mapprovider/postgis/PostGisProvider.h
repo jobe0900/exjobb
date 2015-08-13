@@ -27,6 +27,7 @@
 #include "../../graph/Restrictions.h"
 #include "../../graph/Topology.h"
 #include "../../graph/Vertex.h"
+#include "../../graph/Speed.h"
 #include "../MapProvider.h"
 #include "../MapProviderException.h"
 #include "../../util/TimeToStringMaker.h"

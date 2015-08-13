@@ -23,6 +23,7 @@
 #include "../osm/OsmHighway.h"
 #include "../osm/OsmId.h"
 #include "EdgeCost.h"
+#include "Speed.h"
 //#include "EdgeRestriction.h"
 
 // FORWARD REFERENCES
@@ -75,6 +76,7 @@ public:
         DirectionType               direction {BOTH};
         size_t                      nrLanes   {1};
         OsmHighway::HighwayType     roadType  {OsmHighway::HighwayType::ROAD};
+        Speed                       speed;
 
         /** Constructor. */
         RoadData() = default;

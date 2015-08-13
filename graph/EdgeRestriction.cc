@@ -10,10 +10,10 @@
 /*static*/ double EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX
     = std::numeric_limits<double>::max();
 
-/*static*/ unsigned EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX
+/*static*/ Speed  EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX
     = std::numeric_limits<unsigned>::max();
 
-/*static*/ unsigned EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN
+/*static*/ Speed  EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN
     = 0;
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
@@ -171,7 +171,7 @@ EdgeRestriction::vehicleProperties()
 //        static_cast<const EdgeRestriction&>(*this).vehicleProperties() );
 }
 
-unsigned
+Speed
 EdgeRestriction::maxSpeed() const
 {
     if(hasVehiclePropertyRestriction())
