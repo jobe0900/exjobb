@@ -30,6 +30,7 @@
 #include "../config/Configuration.h"
 #include "../util/Logging.h"
 #include "EdgeRestriction.h"
+#include "TurnCostCalculator.h"
 
 // FORWARD REFERENCES
 //
@@ -281,6 +282,15 @@ private:
     void                connectSourceNodeToTargetNodesViaVertex(
         const NodeType& rSourceNode,
         const VertexType& rViaVertex);
+
+    /** Calculate the cost for making a turn from source edge to target.
+     * Helper to `connectSourceNodeToTargetNodesViaVertex()`.
+     * @param   sourceEdgeId    The edge (and node) id of the source.
+     * @param   targetEdgeId    The edge (and node) id of the target.
+     */
+    double              calculateTurnCost(
+        EdgeIdType sourceEdgeId,
+        EdgeIdType targetEdgeId) const;
 
     /**
      * @param   edgeId  Id to edge to look up.

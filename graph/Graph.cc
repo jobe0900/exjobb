@@ -337,6 +337,8 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
                 mLineGraph[line].lgTargetNodeId = target_node_id;
                 mLineGraph[line].topoViaVertexId = via_topo_vertex_id;
                 // TODO cost
+                mLineGraph[line].cost =
+                    calculateTurnCost(source_node_id, target_node_id);
             }
             else
             {
@@ -347,6 +349,14 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
             }
         }
     }
+}
+
+double
+Graph::calculateTurnCost(EdgeIdType sourceEdgeId, EdgeIdType targetEdgeId) const
+{
+    const Edge& source = mrTopology.getEdge(sourceEdgeId);
+    const Edge& target = mrTopology.getEdge(targetEdgeId);
+    return TurnCostCalculator::getTurnCost(source, target, mrConfiguration);
 }
 
 bool
