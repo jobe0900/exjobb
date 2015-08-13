@@ -57,44 +57,6 @@ public:
             EDGE_ID
         };
     };
-//
-//    /** Results from queries are handled by these functions. */
-//    struct Results
-//    {
-//        /** Parse a row in the results from turning restrictions.
-//         * @param   rRow        The row with results.
-//         * @param   rTopology   The topology that needs to be queried.
-//         * @return  A turning restriction object.
-//         * @throw   pqxx::pqxx_exception
-//         * @throw   TopologyException
-//         * @throw   MapProviderException
-//         */
-//        static OsmTurningRestriction*
-//                            parseTurningRestrictionResultRow(
-//            const pqxx::tuple&    rRow,
-//            Topology&             rTopology);
-//
-//
-//        /** Try to parse the column 'edge_ids' from the 'turning_restrictions'.
-//         * Split the string of edge ids and convert them to a vector of EdgeIds.
-//         * @param   rEdgeIds    A string like "{123, 456}". Gets trimmed of {}.
-//         * @return  A vector of the EdgeIds separately.
-//         * @throw   std::invalid_argument
-//         * @throw   std::out_of_range
-//         */
-//        static std::vector<EdgeIdType>
-//                            parseEdgeIdsString(std::string& rEdgeIds);
-//
-//        /** Find the Edge that matches the OsmId in turning restriction.
-//         * @param   osmId       The original edge osm id.
-//         * @param   rEdgeIds    The candidate edges that are near restriction.
-//         * @param   rTopology   The Topology to ask for edges.
-//         */
-//        static Edge&        findEdgeMatchingOsmId(
-//            OsmIdType                       osmId,
-//            const std::vector<EdgeIdType>&  rEdgeIds,
-//            Topology&                       rTopology);
-//    };
 
 // LIFECYCLE
     CostQueries() = delete;
@@ -128,6 +90,7 @@ public:
      *  - traffic_signals
      * Railway:
      *  - level_crossing
+     * Traffic calming
      *
      * @param   rTrans          Transaction to perform query in
      * @param   rResult         Store the result of the query here
