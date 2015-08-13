@@ -211,13 +211,14 @@ SCENARIO ("Set costs on Edges", "[postgis][cost]")
 
 			    THEN ("we should be able to read travel time cost on edges")
 			    {
-			        EdgeIdType id = 237;
+			        EdgeIdType id = 1;
 			        const Edge& edge = topology.getEdge(id);
 			        INFO ("edge " << id
 			            << ", length: " << edge.geomData().length
 			            << ", travel time: "
 			            << edge.edgeCost().getCost(EdgeCost::TRAVEL_TIME)
 			            << ", total cost: " << edge.cost());
+                    INFO ("edge " << edge);
 			        REQUIRE (edge.cost() > 0);
 			    }
 

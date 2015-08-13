@@ -1066,6 +1066,7 @@ PostGisProvider::addTravelTimeCostToEdge(Edge& rEdge, Speed speed, std::string& 
     double speed_mps = speed / 3.6;
     double travel_time = rEdge.geomData().length/ speed_mps;
     rEdge.edgeCost().addCost(EdgeCost::TRAVEL_TIME, travel_time);
+    rEdge.setSpeed(speed);
 }
 
 void

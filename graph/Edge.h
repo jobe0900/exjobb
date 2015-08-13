@@ -158,7 +158,7 @@ public:
     void              setRestrictions(EdgeRestriction* pRestrictions);
 
     /** Set the speed for the edge in this actual configuration.
-     * @param   speed   The speed to set.
+     * @param   speed   The speed to set in km/h.
      */
     void              setSpeed(Speed speed);
 
@@ -247,7 +247,7 @@ public:
     /** The speed must be kept track of because of turn cost calculations,
      * but they are not  part of `RoadData` which are meant to be constant,
      * while the speed varies with configuration.
-     * @return  The speed for this edge.
+     * @return  The speed for this edge in km/h
      */
     Speed               speed() const;
 
