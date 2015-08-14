@@ -58,7 +58,13 @@ public:
 // OPERATIONS
     /** Return a LineGraph
      */
-    Graph::LineGraphType*  getLineGraph();
+    Graph::LineGraphType*   getLineGraph() const;
+
+    /** Re-read the topology if there has been a change in the database.
+     */
+    void                    updateTopology();
+
+    void                    updateRestrictionsAndCosts();
 
 // ACCESS
 // INQUIRY
@@ -70,6 +76,7 @@ private:
     void    initConfiguration();
     void    initMapProvider();
     void    initTopology();
+    void    initRestrictionsAndCosts();
     void    buildGraph();
 //    void    transformGraph();
 

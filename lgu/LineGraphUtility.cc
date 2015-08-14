@@ -42,10 +42,26 @@ LineGraphUtility::~LineGraphUtility()
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
 Graph::LineGraphType*
-LineGraphUtility::getLineGraph()
+LineGraphUtility::getLineGraph() const
 {
-    return new Graph::LineGraphType(*(mpGraph->getBoostLineGraph()));
-//    return mpGraph->getBoostLineGraph();
+    return mpGraph->getBoostLineGraph();
+}
+
+void
+LineGraphUtility::updateTopology()
+{
+    mTopology = Topology();
+    initTopology();
+    initRestrictionsAndCosts();
+    buildGraph();
+}
+
+void
+LineGraphUtility::updateRestrictionsAndCosts()
+{
+    mTopology.clearEdgeCostAndRestrictions();
+    initRestrictionsAndCosts();
+    buildGraph();
 }
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
@@ -58,6 +74,7 @@ LineGraphUtility::init()
     initConfiguration();
     initMapProvider();
     initTopology();
+    initRestrictionsAndCosts();
     buildGraph();
 }
 
@@ -74,7 +91,7 @@ LineGraphUtility::initConfiguration()
         delete mpMapProvider;
         delete mpGraph;
         throw LineGraphUtilityException(
-            std::string("Error in Configuration: ") + ce.what());
+            std::string("LineGraphUtility:initConfiguration: ") + ce.what());
     }
 }
 
@@ -109,14 +126,42 @@ LineGraphUtility::initMapProvider()
         delete mpGraph;
 
         throw LineGraphUtilityException(
-            std::string("Error in MapProvider: ") + mpe.what());
+            std::string("LineGraphUtility:initMapProvider: ") + mpe.what());
     }
 }
 
 void
 LineGraphUtility::initTopology()
 {
-    mpMapProvider->getTopology(mTopology);
+    try
+    {
+        mpMapProvider->getTopology(mTopology);
+    }
+    catch (MapProviderException& mpe)
+    {
+        delete mpMapProvider;
+        delete mpGraph;
+
+        throw LineGraphUtilityException(
+            std::string("LineGraphUtility:initTopology ") + mpe.what());
+    }
+}
+
+void
+LineGraphUtility::initRestrictionsAndCosts()
+{
+    try
+    {
+        mpMapProvider->setRestrictionsAndCosts(mTopology);
+    }
+    catch (MapProviderException& mpe)
+    {
+        delete mpMapProvider;
+        delete mpGraph;
+
+        throw LineGraphUtilityException(
+            std::string("LineGraphUtility:initRestrictionsAndCosts ") + mpe.what());
+    }
 }
 
 void
@@ -124,6 +169,7 @@ LineGraphUtility::buildGraph()
 {
     try
     {
+        delete mpGraph;
         mpGraph = new Graph(mTopology, mConfig);
     }
     catch (const std::exception& e)
@@ -132,7 +178,7 @@ LineGraphUtility::buildGraph()
         delete mpGraph;
 
         throw LineGraphUtilityException(
-            std::string("Error when building Graph: ") + e.what());
+            std::string("LineGraphUtility:buildGraph: ") + e.what());
     }
 }
 
