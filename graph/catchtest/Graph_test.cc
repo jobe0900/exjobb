@@ -21,7 +21,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 	{
 	    size_t nr_vertices = 3;
 	    size_t nr_edges = 2;
-	    OsmIdType osm_id(0);
+	    OsmIdType osm_id(1);
 
 	    Topology topology;
 	    const Vertex& v1 = topology.addVertex(1, Point(0,0));
@@ -37,6 +37,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		{
 			THEN ("we should not get an Exception")
 			{
+			    INFO ("calling Graph constructor");
 				REQUIRE_NOTHROW (Graph g(topology, config));
 			}
 		}
@@ -46,7 +47,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		{
 		    Graph g(topology, config);
 		    const auto& boost_graph = g.getBoostGraph();
-		    const auto& boost_line_graph = g.getBoostLineGraph();
+		    Graph::LineGraphType* p_boost_line_graph = g.getBoostLineGraph();
 
 		    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 			THEN ("the # of vertices in the graph representation"
@@ -61,9 +62,11 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 			THEN ("the number of nodes in the LineGraph"
 			      " should be as many as edges in the graph")
 			{
-			    REQUIRE (boost::num_vertices(boost_line_graph) ==
+			    REQUIRE (boost::num_vertices(*p_boost_line_graph) ==
 			             boost::num_edges(boost_graph));
 			}
+
+			delete p_boost_line_graph;
 		}
 
 		// ...................................................................

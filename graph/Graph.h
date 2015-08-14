@@ -175,31 +175,35 @@ public:
      */
     const GraphType&      getBoostGraph();
 
-    /** Builds graph if necessary before returning.
+    /** Get a pointer to a line graph. The caller assumes responsibility
+     *  fo managing the memory.
+     * Builds graph if necessary before returning.
+     *
      * @return  The Boost Graph representation of the LineGraph.
      * @throws  GraphException if something goes wrong building the graph.
      */
-    const LineGraphType&  getBoostLineGraph();
+    LineGraphType*      getBoostLineGraph();
+//    const LineGraphType&  getBoostLineGraph();
 
 // INQUIRY
     /**
      * @return  true    If graph has a vertex with given id.
      */
-    bool                  hasVertex(VertexIdType vertexId) const;
+    bool                hasVertex(VertexIdType vertexId) const;
 
     /**
      * @return  true    If LineGraph has a node with given id.
      */
-    bool                  hasNode(EdgeIdType nodeId) const;
+    bool                hasNode(EdgeIdType nodeId) const;
 
     /**
      * @return  true    If graph was built with restrictions.
      */
-    bool                  isRestricted() const;
+    bool                isRestricted() const;
 
     /** Output information about # vertices, edges, nodes, lines.
      */
-    void                  printGraphInformation(std::ostream& os) const;
+    void                printGraphInformation(std::ostream& os) const;
 
 protected:
 
@@ -324,7 +328,7 @@ private:
 
 // ATTRIBUTES
     GraphType                         mGraph;
-    LineGraphType                     mLineGraph;
+    LineGraphType*                    mpLineGraph;
     TopoVertexIdToGraphVertexMapType  mIdToVertexMap;     // map original id to GraphVertex
     TopoEdgeIdToGraphEdgeMapType      mIdToEdgeMap;       // map original id to GraphEdge
     GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode

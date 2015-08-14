@@ -25,34 +25,34 @@ SCENARIO ("PostGis topology handling", "[postgis][topology]")
 {
 	try
 	{
-		// ===================================================================
-		GIVEN ("a valid configuration structure with a temporary name")
-		{
-		    std::string config_file("catchtest/testsettings/temptable-testsettings.json");
-		    ConfigurationReader config_reader(config_file);
-		    Configuration config;
-		    config_reader.fillConfiguration(config);
-		    PostGisProvider* p_pgp(nullptr);
-
-			// ...............................................................
-			WHEN ("we try to create postgis topology")
-			{
-				THEN ("we should not receive an exception")
-				{
-					REQUIRE_NOTHROW ( p_pgp = new PostGisProvider(config));
-				}
-			}
-
-			// ...............................................................
-			WHEN ("we try to remove postgis topology with valid arguments")
-			{
-				THEN ("we should not receive an exception")
-				{
-					REQUIRE_NOTHROW (delete p_pgp);
-				}
-			}
-			delete p_pgp;
-		}
+//		// ===================================================================
+//		GIVEN ("a valid configuration structure with a temporary name")
+//		{
+//		    std::string config_file("catchtest/testsettings/temptable-testsettings.json");
+//		    ConfigurationReader config_reader(config_file);
+//		    Configuration config;
+//		    config_reader.fillConfiguration(config);
+//		    PostGisProvider* p_pgp(nullptr);
+//
+//			// ...............................................................
+//			WHEN ("we try to create postgis topology")
+//			{
+//				THEN ("we should not receive an exception")
+//				{
+//					REQUIRE_NOTHROW ( p_pgp = new PostGisProvider(config));
+//				}
+//			}
+//
+//			// ...............................................................
+//			WHEN ("we try to remove postgis topology with valid arguments")
+//			{
+//				THEN ("we should not receive an exception")
+//				{
+//					REQUIRE_NOTHROW (delete p_pgp);
+//				}
+//			}
+//			delete p_pgp;
+//		}
 
 		// ===================================================================
 		GIVEN ("a configuration file with NO topology name")

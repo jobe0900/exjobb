@@ -214,7 +214,7 @@ public:
      * @return The geometric data for this edge.
      */
     const GeomData&   geomData()  const;
-    topology
+
     /**
      * @return The road data for this edge.
      */
