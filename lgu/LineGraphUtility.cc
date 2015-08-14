@@ -41,10 +41,18 @@ LineGraphUtility::~LineGraphUtility()
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
+//Graph::LineGraphType*
+//LineGraphUtility::getLineGraph() const
+//{
+//    Graph::LineGraphType* p_lg = new Graph::LineGraphType(*(mpGraph->getBoostLineGraph()));
+//    return p_lg;
+//}
+
 Graph::LineGraphType*
 LineGraphUtility::getLineGraph() const
 {
-    return new Graph::LineGraphType(mpGraph->getBoostLineGraph());
+    return new Graph::LineGraphType(*(mpGraph->getBoostLineGraph()));
+//    return mpGraph->getBoostLineGraph();
 }
 
 void
