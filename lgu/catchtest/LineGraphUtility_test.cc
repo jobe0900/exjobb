@@ -38,8 +38,42 @@ SCENARIO ("LineGraphUtility construction", "[lgu][construction]")
     {
         INFO(e.what());
         REQUIRE (false);    // force output of error and failure
-
     }
 }
 
+SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
+{
+    try
+    {
+        GIVEN ("a valid config file")
+        {
+		    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
+		    LineGraphUtility lgu(config_file);
+
+            WHEN ("asking for a LineGraph")
+            {
+                Graph::LineGraphType* p_lg {nullptr};
+                p_lg = lgu.getLineGraph();
+
+                THEN ("we should have a line graph")
+                {
+                    REQUIRE (p_lg != nullptr);
+                    REQUIRE (boost::num_edges(*p_lg) > 0);
+                }
+
+                delete p_lg;
+            }
+        }
+    }
+    catch (LineGraphUtilityException& lgue)
+    {
+        INFO(lgue.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+    catch (const std::exception& e)
+    {
+        INFO(e.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+}
 

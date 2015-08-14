@@ -41,6 +41,12 @@ LineGraphUtility::~LineGraphUtility()
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
+Graph::LineGraphType*
+LineGraphUtility::getLineGraph()
+{
+    return new Graph::LineGraphType(*(mpGraph->getBoostLineGraph()));
+//    return mpGraph->getBoostLineGraph();
+}
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
@@ -51,6 +57,7 @@ LineGraphUtility::init()
 {
     initConfiguration();
     initMapProvider();
+    initTopology();
     buildGraph();
 }
 
@@ -64,6 +71,8 @@ LineGraphUtility::initConfiguration()
     }
     catch (ConfigurationException& ce)
     {
+        delete mpMapProvider;
+        delete mpGraph;
         throw LineGraphUtilityException(
             std::string("Error in Configuration: ") + ce.what());
     }
@@ -97,6 +106,7 @@ LineGraphUtility::initMapProvider()
     catch (MapProviderException& mpe)
     {
         delete mpMapProvider;
+        delete mpGraph;
 
         throw LineGraphUtilityException(
             std::string("Error in MapProvider: ") + mpe.what());
@@ -114,12 +124,13 @@ LineGraphUtility::buildGraph()
 {
     try
     {
-        initTopology();
         mpGraph = new Graph(mTopology, mConfig);
     }
     catch (const std::exception& e)
     {
+        delete mpMapProvider;
         delete mpGraph;
+
         throw LineGraphUtilityException(
             std::string("Error when building Graph: ") + e.what());
     }
