@@ -65,6 +65,7 @@ struct CostConfig
         }
 
         /**
+         * @param   type    The highway type
          * @return  The high/low speed for this type of highway.
          */
         HighLowSpeed    getDefaultSpeed(OsmHighway::HighwayType type) const
@@ -77,9 +78,14 @@ struct CostConfig
             return HighLowSpeed();
         }
 
+        /** Get a high or low speed limit for a highway type.
+         * @param   type        The Type of highway.
+         * @param   highOrLow   Either HIGH or LOW speed
+         * @return  Either the high or low speed for a highway type.
+         */
         Speed           getDefaultSpeed(
                             OsmHighway::HighwayType type,
-                            HIGH_LOW highOrLow) const
+                            HIGH_LOW                highOrLow) const
         {
             HighLowSpeed hl = getDefaultSpeed(type);
             if(highOrLow == HIGH)
@@ -143,7 +149,8 @@ struct CostConfig
             otherCostValues.insert({key, cost});
         }
 
-        /**
+        /** Get other costs associated with the key.
+         * @param   key
          * @return  The cost for this key.
          */
         Cost    getOtherCost(std::string key) const
