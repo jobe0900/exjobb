@@ -102,10 +102,12 @@ Graph::getBoostGraph()
     return mGraph;
 }
 
-Graph::LineGraphType*
+//Graph::LineGraphType*
+Graph::LineGraphType&
 Graph::getBoostLineGraph()
 {
-    return new LineGraphType(mLineGraph);
+    return mLineGraph;
+//    return new LineGraphType(mLineGraph);
 }
 
 //============================= INQUIRY    ===================================

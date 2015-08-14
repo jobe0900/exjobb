@@ -65,7 +65,8 @@ Edge::Edge(EdgeIdType       id,
       mGeomData(geomData),
       mRoadData(roadData),
       mpRestrictions(nullptr),
-      mCost()
+      mCost(),
+      mSpeed()
 //      mHasRestrictions(false),
 //      mHasViaWayRestriction(false)
 { }
@@ -81,7 +82,8 @@ Edge::Edge(EdgeIdType       id,
       mGeomData(),
       mRoadData(),
       mpRestrictions(nullptr),
-      mCost()
+      mCost(),
+      mSpeed()
 //      mHasRestrictions(false),
 //      mHasViaWayRestriction(false)
 { }

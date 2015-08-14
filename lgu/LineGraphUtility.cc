@@ -44,7 +44,7 @@ LineGraphUtility::~LineGraphUtility()
 Graph::LineGraphType*
 LineGraphUtility::getLineGraph() const
 {
-    return mpGraph->getBoostLineGraph();
+    return new Graph::LineGraphType(mpGraph->getBoostLineGraph());
 }
 
 void

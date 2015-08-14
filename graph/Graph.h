@@ -182,7 +182,8 @@ public:
      * @return  The Boost Graph representation of the LineGraph.
      * @throws  GraphException if something goes wrong building the graph.
      */
-    LineGraphType*      getBoostLineGraph();
+//    LineGraphType*      getBoostLineGraph();
+    LineGraphType&  getBoostLineGraph();
 //    const LineGraphType&  getBoostLineGraph();
 
 // INQUIRY
