@@ -328,7 +328,7 @@ private:
 
 // ATTRIBUTES
     GraphType                         mGraph;
-    LineGraphType*                    mpLineGraph;
+    LineGraphType                     mLineGraph;
     TopoVertexIdToGraphVertexMapType  mIdToVertexMap;     // map original id to GraphVertex
     TopoEdgeIdToGraphEdgeMapType      mIdToEdgeMap;       // map original id to GraphEdge
     GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode

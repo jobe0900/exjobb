@@ -14,7 +14,7 @@
 //============================= LIFECYCLE ====================================
 Graph::Graph(Topology& rTopology, const Configuration& rConfig)
     : mGraph(),
-      mpLineGraph(nullptr),
+      mLineGraph(),
       mIdToVertexMap(),
       mIdToEdgeMap(),
       mrTopology(rTopology),
@@ -62,10 +62,7 @@ Graph::useRestrictions(bool shouldUseRestrictions)
         mUseRestrictions = shouldUseRestrictions;
 
         mGraph.clear();
-        if(mpLineGraph != nullptr)
-        {
-            mpLineGraph->clear();
-        }
+        mLineGraph.clear();
         mIdToVertexMap.clear();
         mIdToEdgeMap.clear();
         mEdgeIdToNodeMap.clear();
@@ -90,21 +87,13 @@ Graph::nrEdges() const
 size_t
 Graph::nrNodes() const
 {
-    if(mpLineGraph != nullptr)
-    {
-        return boost::num_vertices(*mpLineGraph);
-    }
-    return 0;
+    return boost::num_vertices(mLineGraph);
 }
 
 size_t
 Graph::nrLines() const
 {
-    if(mpLineGraph != nullptr)
-    {
-        return boost::num_edges(*mpLineGraph);
-    }
-    return 0;
+    return boost::num_edges(mLineGraph);
 }
 
 const Graph::GraphType&
@@ -116,7 +105,7 @@ Graph::getBoostGraph()
 Graph::LineGraphType*
 Graph::getBoostLineGraph()
 {
-    return mpLineGraph;
+    return new LineGraphType(mLineGraph);
 }
 
 //============================= INQUIRY    ===================================
@@ -239,8 +228,6 @@ Graph::getGraphVertex(VertexIdType id) const
 void
 Graph::buildLineGraph()
 {
-    delete mpLineGraph;
-    mpLineGraph = new LineGraphType();
     addGraphEdgesToLineGraph();
 }
 
@@ -273,9 +260,9 @@ Graph::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
 
     if(!hasNode(e_graph_id))
     {
-        rNode = boost::add_vertex(*mpLineGraph);
-        (*mpLineGraph)[rNode].graphEdgeId = e_graph_id;
-        (*mpLineGraph)[rNode].topoEdgeId = e_topo_id;
+        rNode = boost::add_vertex(mLineGraph);
+        mLineGraph[rNode].graphEdgeId = e_graph_id;
+        mLineGraph[rNode].topoEdgeId = e_topo_id;
         mEdgeIdToNodeMap.insert({e_graph_id, rNode});
     }
     else
@@ -290,8 +277,6 @@ Graph::getLineGraphNode(NodeIdType id) const
     const auto& res = mEdgeIdToNodeMap.find(id);
     if(res == mEdgeIdToNodeMap.end())
     {
-        delete mpLineGraph;
-
         throw GraphException("Graph:getLineGraphNode: Missing node: "
             + std::to_string(id));
     }
@@ -304,9 +289,9 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
     const VertexType& rViaVertex)
 {
     EdgeIdType topo_source_id =
-        boost::get(&LineGraphNode::topoEdgeId, *mpLineGraph, rSourceNode);
+        boost::get(&LineGraphNode::topoEdgeId, mLineGraph, rSourceNode);
     NodeIdType source_node_id =
-        boost::get(&LineGraphNode::graphEdgeId, *mpLineGraph, rSourceNode);
+        boost::get(&LineGraphNode::graphEdgeId, mLineGraph, rSourceNode);
 
     if(edgeHasNoExit(topo_source_id))
     {
@@ -341,23 +326,22 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
             addGraphEdgeAsLineGraphNode(target, target_node);
 
             NodeIdType target_node_id =
-                boost::get(&LineGraphNode::graphEdgeId, *mpLineGraph, target_node);
+                boost::get(&LineGraphNode::graphEdgeId, mLineGraph, target_node);
 
             // add Line between Nodes
             const auto& line_add =
-                boost::add_edge(rSourceNode, target_node, *mpLineGraph);
+                boost::add_edge(rSourceNode, target_node, mLineGraph);
             if(line_add.second == true)
             {
                 const LineType& line  = line_add.first;
-                (*mpLineGraph)[line].lgSourceNodeId = source_node_id;
-                (*mpLineGraph)[line].lgTargetNodeId = target_node_id;
-                (*mpLineGraph)[line].topoViaVertexId = via_topo_vertex_id;
-                (*mpLineGraph)[line].cost =
+                mLineGraph[line].lgSourceNodeId = source_node_id;
+                mLineGraph[line].lgTargetNodeId = target_node_id;
+                mLineGraph[line].topoViaVertexId = via_topo_vertex_id;
+                mLineGraph[line].cost =
                     calculateTurnCost(topo_source_id, topo_target_id);
             }
             else
             {
-                delete mpLineGraph;
                 throw GraphException(
                     "Graph:connectSourceNodeToTargetNodesViaVertex: source: "
                     + std::to_string(source_node_id)
@@ -527,15 +511,15 @@ Graph::printEdges(std::ostream& os) const
 void
 Graph::printNodes(std::ostream& os) const
 {
-    for(auto n_it = boost::vertices(*mpLineGraph);
+    for(auto n_it = boost::vertices(mLineGraph);
         n_it.first != n_it.second;
         ++n_it.first)
     {
         const NodeType& node = *(n_it.first);
         NodeIdType lg_node_id =
-            boost::get(&LineGraphNode::graphEdgeId, *mpLineGraph, node);
+            boost::get(&LineGraphNode::graphEdgeId, mLineGraph, node);
         EdgeIdType topo_edge_id  =
-            boost::get(&LineGraphNode::graphEdgeId, *mpLineGraph, node);
+            boost::get(&LineGraphNode::graphEdgeId, mLineGraph, node);
 
         os << "   lg_node_id (graph_edge_id): " << lg_node_id
            << ", topo_edge_id: " << topo_edge_id << std::endl;
@@ -545,17 +529,17 @@ Graph::printNodes(std::ostream& os) const
 void
 Graph::printLines(std::ostream& os) const
 {
-    for(auto line_it = boost::edges(*mpLineGraph);
+    for(auto line_it = boost::edges(mLineGraph);
         line_it.first != line_it.second;
         ++line_it.first)
     {
         const LineType& line = *(line_it.first);
         NodeIdType lg_source_id =
-            boost::get(&LineGraphLine::lgSourceNodeId, *mpLineGraph, line);
+            boost::get(&LineGraphLine::lgSourceNodeId, mLineGraph, line);
         NodeIdType lg_target_id =
-            boost::get(&LineGraphLine::lgTargetNodeId, *mpLineGraph, line);
+            boost::get(&LineGraphLine::lgTargetNodeId, mLineGraph, line);
         VertexIdType topo_via_vertex_id =
-            boost::get(&LineGraphLine::topoViaVertexId, *mpLineGraph, line);
+            boost::get(&LineGraphLine::topoViaVertexId, mLineGraph, line);
 
         os << "   lg_source_id: " << lg_source_id
            << ", lg_target_id: " << lg_target_id
