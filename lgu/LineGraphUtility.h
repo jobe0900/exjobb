@@ -58,12 +58,12 @@ public:
 // OPERATIONS
     /** Return a LineGraph
      */
-    Graph::LineGraphType*   getLineGraph() const;
+    Graph::LineGraphType*   getLineGraph();
 
     /** Re-read the topology if there has been a change in the database.
      */
-    void                    updateTopology();
-
+//    void                    updateTopology();
+//
     void                    updateRestrictionsAndCosts();
 
 // ACCESS

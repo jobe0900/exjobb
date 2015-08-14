@@ -31,7 +31,7 @@ Graph::Graph(Topology& rTopology, const Configuration& rConfig)
 
 Graph::~Graph()
 {
-    delete mpLineGraph();
+    delete mpLineGraph;
 }
 
 //============================= OPERATORS ====================================

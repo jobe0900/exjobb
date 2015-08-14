@@ -49,21 +49,21 @@ LineGraphUtility::~LineGraphUtility()
 //}
 
 Graph::LineGraphType*
-LineGraphUtility::getLineGraph() const
+LineGraphUtility::getLineGraph()
 {
     return new Graph::LineGraphType(*(mpGraph->getBoostLineGraph()));
 //    return mpGraph->getBoostLineGraph();
 }
 
-void
-LineGraphUtility::updateTopology()
-{
-    mTopology = Topology();
-    initTopology();
-    initRestrictionsAndCosts();
-    buildGraph();
-}
-
+//void
+//LineGraphUtility::updateTopology()
+//{
+//    mTopology = Topology();
+//    initTopology();
+//    initRestrictionsAndCosts();
+//    buildGraph();
+//}
+//
 void
 LineGraphUtility::updateRestrictionsAndCosts()
 {
