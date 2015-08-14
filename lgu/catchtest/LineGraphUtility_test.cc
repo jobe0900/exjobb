@@ -78,6 +78,21 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
 
                 delete p_lg;
             }
+
+            WHEN ("asking to update topology")
+            {
+                lgu.updateTopology();
+                Graph::LineGraphType* p_lg {nullptr};
+                p_lg = lgu.getLineGraph();
+
+                THEN ("we should still be able to have a line graph")
+                {
+                    REQUIRE (p_lg != nullptr);
+                    REQUIRE (boost::num_edges(*p_lg) > 0);
+                }
+
+                delete p_lg;
+            }
         }
     }
     catch (LineGraphUtilityException& lgue)

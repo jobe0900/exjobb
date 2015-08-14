@@ -55,15 +55,15 @@ LineGraphUtility::getLineGraph()
 //    return mpGraph->getBoostLineGraph();
 }
 
-//void
-//LineGraphUtility::updateTopology()
-//{
-//    mTopology = Topology();
-//    initTopology();
-//    initRestrictionsAndCosts();
-//    buildGraph();
-//}
-//
+void
+LineGraphUtility::updateTopology()
+{
+    mTopology.clearTopology();
+    initTopology();
+    initRestrictionsAndCosts();
+    buildGraph();
+}
+
 void
 LineGraphUtility::updateRestrictionsAndCosts()
 {

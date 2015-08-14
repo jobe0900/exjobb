@@ -104,6 +104,14 @@ Topology::getEdge(EdgeIdType id) const
 }
 
 void
+Topology::clearTopology()
+{
+    mVertexMap.clear();
+    mEdgeMap.clear();
+    mOsmEdgeMap.clear();
+}
+
+void
 Topology::clearEdgeCostAndRestrictions()
 {
     for(auto& it : mEdgeMap)

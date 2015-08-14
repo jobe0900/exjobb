@@ -62,8 +62,10 @@ public:
 
     /** Re-read the topology if there has been a change in the database.
      */
-//    void                    updateTopology();
-//
+    void                    updateTopology();
+
+    /** Re-apply restrictions and costs on the topology fi there has been changes.
+     */
     void                    updateRestrictionsAndCosts();
 
 // ACCESS

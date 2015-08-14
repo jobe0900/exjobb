@@ -113,6 +113,10 @@ public:
 	Edge&           getEdge(EdgeIdType id);
 	const Edge&     getEdge(EdgeIdType id) const;
 
+	/** Clear everything in the topology: edges and vertices.
+	 */
+	void            clearTopology();
+
 	/** Remove restrictions and costs on all edges in the topology.
 	 */
 	void            clearEdgeCostAndRestrictions();
