@@ -60,7 +60,7 @@ public:
                         const Edge& rTarget,
                         const Configuration& rConfig);
 // INQUIRY
-//private:
+private:
 // HELPERS
     /**
      * @param   rSource     Source edge.
