@@ -57,11 +57,13 @@
         "category":   "motorcar",
         "motorcar": 
         {
-           "height":   1.6,
-           "length":   4.5,
-           "width":    1.9,
-           "weight":   2.0,
-           "maxspeed": 200
+           "height":       1.6,
+           "length":       4.5,
+           "width":        1.9,
+           "weight":       2.0,
+           "maxspeed":     200,
+           "acceleration": 10,
+           "deceleration": 7
         }
     },
     
@@ -173,6 +175,39 @@
          ["sump_buster",        30],
          ["swing_gate",         60],
          ["toll_booth",         40]
+      ],
+      
+      "highway":
+      [
+         ["bus_stop",            5],
+         ["crossing",            5],
+         ["give_way",           20],
+         ["mini_roundabout",    20],
+         ["stop",               30],
+         ["traffic_signals",    30]      
+      ],
+      
+      "railway":
+      [
+         ["level_crossing",     20]
+      ],
+      
+      "public_transport":
+      [
+         ["stop_position",       5]
+      ],
+      
+      "traffic_calming":
+      [
+         ["yes",                10],
+         ["bump",               10],
+         ["hump",               10],
+         ["table",              10],
+         ["cushion",            10],
+         ["rumble_strip",       10],
+         ["chicane",            10],
+         ["choker",             10],
+         ["island",              5]
       ]
    }
 }   
