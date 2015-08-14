@@ -164,7 +164,7 @@ public:
 
     /** Remove the restrictions for this edge.
      */
-    void              clearRestrictions();
+    void              clearCostsAndRestrictions();
 
     /** Add to the cost/weight of the edge.
      * @param   cost    A cost component.
@@ -214,7 +214,7 @@ public:
      * @return The geometric data for this edge.
      */
     const GeomData&   geomData()  const;
-
+    topology
     /**
      * @return The road data for this edge.
      */
@@ -229,27 +229,27 @@ public:
      * @return  Reference to EdgeRestriction
      * @throw   RestrictionException if no restriction is applied on Edge.
      */
-    EdgeRestriction&    restrictions();
+    EdgeRestriction&  restrictions();
     const EdgeRestriction&
-                        restrictions() const;
+                      restrictions() const;
 
     /**
      * @return  Reference to EdgeCost
      */
-    EdgeCost&           edgeCost();
-    const EdgeCost&     edgeCost() const;
+    EdgeCost&         edgeCost();
+    const EdgeCost&   edgeCost() const;
 
     /**
      * @return  The cost or weight for this edge.
      */
-    Cost                cost() const;
+    Cost              cost() const;
 
     /** The speed must be kept track of because of turn cost calculations,
      * but they are not  part of `RoadData` which are meant to be constant,
      * while the speed varies with configuration.
      * @return  The speed for this edge in km/h
      */
-    Speed               speed() const;
+    Speed             speed() const;
 
 // INQUIRY
     /**
@@ -267,7 +267,7 @@ public:
      * @param   rConfig     Configuration with restriction rules.
      * @return  true        If travel is restricted.
      */
-    bool                isRestricted(const Configuration& rConfig) const;
+    bool              isRestricted(const Configuration& rConfig) const;
 
 //    /** Check if the edge has an explicit max speed limit or if we must resort
 //     * to using the speed implied by the highway type.

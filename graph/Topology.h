@@ -113,6 +113,10 @@ public:
 	Edge&           getEdge(EdgeIdType id);
 	const Edge&     getEdge(EdgeIdType id) const;
 
+	/** Remove restrictions and costs on all edges in the topology.
+	 */
+	void            clearEdgeCostAndRestrictions();
+
 // ACCESS
 	/**
 	 * @return	the Number of vertices in topology.

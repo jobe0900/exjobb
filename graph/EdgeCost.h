@@ -87,6 +87,10 @@ public:
      */
     void    addCost(CostType type, Cost cost);
 
+    /** Clear out all costs.
+     */
+    void    clearCosts();
+
 // OPERATIONS
 // ACCESS
 

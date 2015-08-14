@@ -208,7 +208,7 @@ private:
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
      * @param   rTopology       Update affected edges in the topology.
-     * @throw   MapProviderException
+     * @throw   MapProviderExceptionhttp://www.idg.se/2.1121
      */
     void    addVehiclePropertyRestrictionsToEdge(
                 const pqxx::result&    rResult,

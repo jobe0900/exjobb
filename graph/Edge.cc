@@ -151,10 +151,14 @@ Edge::setSpeed(Speed speed)
 }
 
 void
-Edge::clearRestrictions()
+Edge::clearCostsAndRestrictions()
 {
+    mCost.clearCosts();
+
     delete mpRestrictions;
     mpRestrictions = nullptr;
+
+    mSpeed = 0;
 }
 
 //void

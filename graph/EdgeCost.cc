@@ -23,6 +23,12 @@ EdgeCost::addCost(CostType type, Cost cost)
     }
     costs.insert({type, cost});
 }
+
+void
+EdgeCost::clearCosts()
+{
+    costs.clear();
+}
 //============================= OPERATIONS ===================================
 //============================= ACESS      ===================================
 Cost

@@ -103,6 +103,15 @@ Topology::getEdge(EdgeIdType id) const
 //    return const_cast<Topology&>(*this).getEdge(id);
 }
 
+void
+Topology::clearEdgeCostAndRestrictions()
+{
+    for(auto& it : mEdgeMap)
+    {
+        it.second.clearCostsAndRestrictions();
+    }
+}
+
 
 //============================= ACESS      ===================================
 size_t
