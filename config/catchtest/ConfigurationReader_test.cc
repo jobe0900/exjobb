@@ -458,8 +458,6 @@ SCENARIO ("Use ConfigurationReader to read configuration from json file",
 
 		    THEN ("we get CostssRule filled out")
 		    {
-//		        std::vector<OsmBarrier::BarrierType> types =
-//		            r_costs_rule.costsTypes;
 		        REQUIRE (r_costs_rule.costs.size() == 13);
 
 		        INFO("Costs: border control");
