@@ -1,8 +1,8 @@
-/*
+/* The Cost type.
+ *
  * Cost.h
  *
- *  Created on: 11 aug 2015
- *      Author: jonas
+ * Author: Jonas Bergman
  */
 
 #ifndef GRAPH_COST_H_
