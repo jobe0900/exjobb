@@ -20,15 +20,15 @@
 
 // LOCAL INCLUDES
 //
+#include "Edge.h"
 #include "RestrictionsException.h"
+#include "Speed.h"
+#include "Vertex.h"
+#include "../config/VehicleConfig.h"
 #include "../osm/OsmAccess.h"
 #include "../osm/OsmBarrier.h"
 #include "../osm/OsmTurningRestriction.h"
 #include "../osm/OsmVehicle.h"
-#include "Edge.h"
-#include "Vertex.h"
-#include "../config/VehicleConfig.h"
-#include "Speed.h"
 
 // FORWARD REFERENCES
 //
@@ -55,13 +55,8 @@ public:
     struct VehicleProperties
     {
         static double DEFAULT_DIMENSION_MAX;
-        // = {std::numeric_limits<double>::max()};
-
-        static Speed DEFAULT_SPEED_MAX;
-        // = {std::numeric_limits<unsigned>::max()};
-
-        static Speed DEFAULT_SPEED_MIN;
-        // = {0};
+        static Speed  DEFAULT_SPEED_MAX;
+        static Speed  DEFAULT_SPEED_MIN;
 
         double      maxHeight   {DEFAULT_DIMENSION_MAX};
         double      maxLength   {DEFAULT_DIMENSION_MAX};
@@ -73,6 +68,7 @@ public:
 
         /** Look if the vehicle properties restricts
          * vehicle with given configuration.
+         * @return  True if these vehicle properties restricts access.
          */
         bool    restrictsAccess(const VehicleConfig& rVehicleConfig) const
         {
@@ -84,6 +80,8 @@ public:
         }
     };
 
+    /** Types of restrictions.
+     */
     enum RestrictionType
     {
         VEHICLE_PROPERTIES,
@@ -203,20 +201,19 @@ public:
      */
     const VehicleProperties&
                         vehicleProperties() const;
+
+    /** Try to fetch the vehicle property restrictions for an Edge.
+     * @return  The Vehicle properties
+     * @throw   RestrictionException if no entry exists for Edge.
+     */
     VehicleProperties&  vehicleProperties();
 
-    /** Fetch the max speed for this edge. If no explicitcit speed is set it
+    /** Fetch the max speed for this edge. If no explicit speed is set it
      * returns `VehicleProperties::DEFAULT_SPEED_MAX`. One can query to see if
      * if there exists an explicit limit with  `hasMaxSpeedRestriction()`
      * @return  Either the explicit speed limit or a default if not set.
      */
     Speed               maxSpeed() const;
-
-//    /** Get the map of all VehicleProperty Restrictions.
-//     * @return  Map of all property restrictions.
-//     */
-//    const std::map<EdgeIdType, VehicleProperties>&
-//                        vehicleProperties() const;
 
     /** Try to fetch the general access restrictions for this edge.
      * @param   edgeId  The id of the edge.
@@ -224,13 +221,13 @@ public:
      * @throw   RestrictionException if no entry exists for Edge.
      */
     const OsmAccess&    generalAccess() const;
-    OsmAccess&          generalAccess();
 
-//    /** Get all the general access restrictions.
-//     * @return map of edges with barriers.
-//     */
-//    const std::map<EdgeIdType, OsmAccess>&
-//                        generalAccess() const;
+    /** Try to fetch the general access restrictions for this edge.
+     * @param   edgeId  The id of the edge.
+     * @return  reference to the OsmAccess object.
+     * @throw   RestrictionException if no entry exists for Edge.
+     */
+    OsmAccess&          generalAccess();
 
     /** Try to fetch the vehicle type specific access restrictions for this edge.
      * @param   vehiceltType    The type of Vehicle to get access restriction
@@ -239,6 +236,12 @@ public:
      */
     const OsmAccess&    vehicleTypeAccess(
                             OsmVehicle::VehicleType vehicleType) const;
+
+    /** Try to fetch the vehicle type specific access restrictions for this edge.
+     * @param   vehiceltType    The type of Vehicle to get access restriction
+     * @return  reference to the OsmAccess object.
+     * @throw   RestrictionException if no entry exists for Edge.
+     */
     OsmAccess&          vehicleTypeAccess(
                             OsmVehicle::VehicleType vehicleType);
 
@@ -248,23 +251,11 @@ public:
     std::vector<OsmVehicle::VehicleType>
                         vehicleTypesWithRestrictions() const;
 
-//    /**
-//     * @return Get the map of vehicle type restrictions for edges.
-//     */
-//    const std::map<EdgeIdType, std::map<OsmVehicle::VehicleType, OsmAccess> >&
-//                        vehicleTypeAccessEdges() const;
-
     /** Fetch the barrier restricting this edge.
      * @return  reference to a OsmBarrier object.
      * @throw   RestrictionException if no entry exists for this Edge.
      */
     const OsmBarrier&   barrier() const;
-
-//    /** Get all the barrier restrictions.
-//     * @return map of edges with barriers.
-//     */
-//    const std::map<EdgeIdType, OsmBarrier>&
-//                        barriers() const;
 
     /** Get a list of the turning restrictions from this edge.
      * @return  a Vector with turning restrictions.
@@ -279,30 +270,7 @@ public:
     std::vector<EdgeIdType>
                         restrictedTargetEdges() const;
 
-//    /** Get all edges marked as disused.
-//     * @return  The set of disused edges (ids).
-//     */
-//    const std::set<EdgeIdType>&
-//                        disusedEdges() const;
-//
-//    /** Get all edges marked as 'noexit'.
-//     * @return  The set of 'noexit' edges (ids).
-//     */
-//    const std::set<EdgeIdType>&
-//                        noExitEdges() const;
 // INQUIRY
-
-//    /** Check the restrictions for an edge.
-//     * @param   rVehicleConfig  Configuration for the current vehicle.
-//     * @param   rBarrierRule    Rules for which Barrier types restricts access.
-//     * @param   rAccessRule     Rules for which Access types restricts access.
-//     * @return  true if access is allowed, false if access restricted
-//     */
-//    bool                isEdgeRestricted(
-//        const VehicleConfig& rVehicleConfig,
-//        const OsmBarrier::RestrictionsRule& rBarrierRule,
-//        const OsmAccess::AccessRule& rAccessRule) const;
-
 
     /** Ask if an Edge has restriction of a certain type.
      * @param   restrictionType     The type of restriction
@@ -375,16 +343,6 @@ private:
     bool                    mIsDisusedEdge {false};
     bool                    mIsNoExitEdge {false};
     bool                    mHasViaWayRestriction {false};
-//    std::map<EdgeIdType, VehicleProperties>         mVehiclePropertiesMap;
-//    std::map<EdgeIdType, OsmAccess>                 mGeneralAccessMap;
-//    std::map<EdgeIdType, std::map<OsmVehicle::VehicleType, OsmAccess> >
-//                                                    mVehicleTypeAccessMap;
-//    std::map<EdgeIdType, OsmBarrier>                mBarrierMap;
-    // from edge id => turning restriction to several target edges
-//    std::map<EdgeIdType, std::vector<OsmTurningRestriction> >
-//                                                    mTurningRestrictionsMap;
-//    std::set<EdgeIdType>                            mDisusedEdges;
-//    std::set<EdgeIdType>                            mNoExitEdges;
 };
 
 // INLINE METHODS

@@ -78,13 +78,6 @@ EdgeRestriction::addVehicleTypeAccessRestriction(
     OsmAccess::AccessType    accessType)
 {
     addVehicleTypeAccessRestriction(vehicleType, new OsmAccess(accessType));
-//    if(hasVehicleTypeAccessRestriction(vehicleType))
-//    {
-//        auto old_access = mVehicleTypeAccessMap.find(vehicleType);
-//        delete old_access->second;
-//        mVehicleTypeAccessMap.erase(vehicleType);
-//    }
-//    mVehicleTypeAccessMap.insert({vehicleType, new OsmAccess(accessType)});
 }
 
 void
@@ -167,8 +160,6 @@ EdgeRestriction::vehicleProperties()
             "Restrictions:vehicleProperties: no restriction for edge");
     }
     return *mpVehicleProperties;
-//    return const_cast<EdgeRestriction::VehicleProperties&>(
-//        static_cast<const EdgeRestriction&>(*this).vehicleProperties() );
 }
 
 Speed
@@ -180,12 +171,6 @@ EdgeRestriction::maxSpeed() const
     }
     return VehicleProperties::DEFAULT_SPEED_MAX;
 }
-
-//const std::map<EdgeIdType, EdgeRestrictions::VehicleProperties>&
-//EdgeRestriction::vehicleProperties() const
-//{
-//    return mVehiclePropertiesMap;
-//}
 
 const OsmAccess&
 EdgeRestriction::generalAccess() const
@@ -207,15 +192,7 @@ EdgeRestriction::generalAccess()
             "Restrictions:generalAccess: no restriction for edge");
     }
     return *mpGeneralAccess;
-//    return const_cast<OsmAccess&>(
-//        static_cast<const EdgeRestrictions&>(*this).generalAccess(edgeId) );
 }
-
-//const std::map<EdgeIdType, OsmAccess>&
-//EdgeRestrictions::generalAccess() const
-//{
-//    return mGeneralAccessMap;
-//}
 
 const OsmAccess&
 EdgeRestriction::vehicleTypeAccess(
@@ -259,12 +236,6 @@ EdgeRestriction::vehicleTypesWithRestrictions() const
     return types;
 }
 
-//const std::map<EdgeIdType, std::map<OsmVehicle::VehicleType, OsmAccess> >&
-//EdgeRestrictions::vehicleTypeAccessEdges() const
-//{
-//    return mVehicleTypeAccessMap;
-//}
-
 const OsmBarrier&
 EdgeRestriction::barrier() const
 {
@@ -275,12 +246,6 @@ EdgeRestriction::barrier() const
     }
     return *mpBarrier;
 }
-
-//const std::map<EdgeIdType, OsmBarrier>&
-//EdgeRestrictions::barriers() const
-//{
-//    return mBarrierMap;
-//}
 
 const std::vector<OsmTurningRestriction*>&
 EdgeRestriction::turningRestrictions() const
@@ -313,76 +278,6 @@ EdgeRestriction::restrictedTargetEdges() const
     }
     return restricted_targets;
 }
-
-//const std::set<EdgeIdType>&
-//EdgeRestriction::disusedEdges() const
-//{
-//    return mDisusedEdges;
-//}
-//
-//const std::set<EdgeIdType>&
-//EdgeRestrictions::noExitEdges() const
-//{
-//    return mNoExitEdges;
-//}
-
-//bool
-//EdgeRestriction::isEdgeRestricted(
-//        const VehicleConfig& rVehicleConfig,
-//        const OsmBarrier::RestrictionsRule& rBarrierRule,
-//        const OsmAccess::AccessRule& rAccessRule) const
-//{
-//    const auto& restriction_types = restrictionTypes();
-//
-//    bool is_restricted = false;
-//    bool is_generally_restricted = false;
-//    bool is_vehicle_banned = false;
-//
-//    for(const auto& r : restriction_types)
-//    {
-//        switch (r)
-//        {
-//            case EdgeRestriction::DISUSED:
-//                is_restricted = true; break;
-//            case EdgeRestriction::VEHICLE_PROPERTIES:
-//                if(vehicleProperties().restrictsAccess(rVehicleConfig))
-//                {
-//                    is_restricted = true;
-//                }
-//                break;
-//            case EdgeRestriction::BARRIER:
-//                if(barrier().restrictsAccess(rBarrierRule))
-//                {
-//                    is_restricted = true;
-//                }
-//                break;
-//            case EdgeRestriction::GENERAL_ACCESS:
-//                if(!generalAccess().allowsAccess(rAccessRule))
-//                {
-//                    is_generally_restricted = true;
-//                }
-//                continue;
-//            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
-//                if(!vehicleTypeAccess(rVehicleConfig.category)
-//                    .allowsAccess(rAccessRule))
-//                {
-//                    is_vehicle_banned = true;
-//                }
-//                continue;
-//            default:
-//                continue;
-//        }
-//    }
-//
-//    if(is_restricted
-//        || (is_generally_restricted && is_vehicle_banned)
-//        || is_vehicle_banned)
-//    {
-//        return true; // this edge should not be added.
-//    }
-//    return false;
-//}
-
 
 //============================= INQUIRY    ===================================
 bool
@@ -482,5 +377,3 @@ EdgeRestriction::hasViaWayRestriction() const
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
-
