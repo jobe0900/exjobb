@@ -21,7 +21,6 @@
 #include "../graph/Topology.h"
 #include "../config/Configuration.h"
 #include "../graph/Edge.h"
-#include "../graph/Restrictions.h"
 #include "../graph/Vertex.h"
 
 // FORWARD REFERENCES
