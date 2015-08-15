@@ -59,18 +59,11 @@ public:
 
 // OPERATORS
 // OPERATIONS
-//    /** Fill the topology with data from the MapProvider.
-//     * @param   rTopology   The Topology to fill with data.
-//     * @throws  MapProviderException, TopologyException
-//     */
-    virtual void    getTopology(Topology& rTopology) = 0;
-
-    /** Fill the topology with data from the MapProvider,
-     * and mark the edges in the topology with restrictions and costs.
+    /** Fill the topology with data from the MapProvider.
      * @param   rTopology   The Topology to fill with data.
      * @throws  MapProviderException, TopologyException
      */
-//    virtual void    getMapData(Topology& rTopology) = 0;
+    virtual void    getTopology(Topology& rTopology) = 0;
 
     /** Read tags that might impose restrictions and costs and add them to
      * the edges in the topology.
@@ -80,15 +73,6 @@ public:
     virtual void    setRestrictionsAndCosts(
         Topology&      rTopology) = 0;
 
-//    /** Fill the Restrictions with restrictions for edges and vertices.
-//     * Might also update Edges in the topology.
-//     * @param   rRestrictions   The Restrictions to fill with data.
-//     * @param   rTopology       The Topology that might get updated.
-//     * @throws  MapProviderException, RestrictionsException
-//     */
-//    virtual void    getRestrictions(
-//        Restrictions&  rRestrictions,
-//        Topology&      rTopology) = 0;
 // ACCESS
 // INQUIRY
 
