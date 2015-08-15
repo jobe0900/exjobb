@@ -12,7 +12,7 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Graph::Graph(Topology& rTopology, const Configuration& rConfig)
+Graph::Graph(Topology& rTopology, const Configuration& rConfig, bool useRestrictions)
     : mGraph(),
       mLineGraph(),
 //      mpLineGraph(nullptr),
@@ -21,7 +21,7 @@ Graph::Graph(Topology& rTopology, const Configuration& rConfig)
       mrTopology(rTopology),
       mrConfiguration(rConfig),
       mLog(),
-      mUseRestrictions(true)
+      mUseRestrictions(useRestrictions)
 {
     Logging::initLogging();
     boost::log::add_common_attributes();

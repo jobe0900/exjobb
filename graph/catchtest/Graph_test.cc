@@ -151,11 +151,11 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
 
             Topology topology;
             pgp.getTopology(topology);
+            pgp.setRestrictionsAndCosts(topology);
 
             Graph graph_restr(topology, config);
 
-            Graph graph_unrestr(topology, config);
-            graph_unrestr.useRestrictions(false);
+            Graph graph_unrestr(topology, config, false);
 
             // ...............................................................
             WHEN ("Adding a turning restriction and a point restriction (barrier)")

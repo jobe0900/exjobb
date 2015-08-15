@@ -123,8 +123,9 @@ public:
      * Graph should be based on the supplied topology.
      * @param   rTopology       The topology to use as basis for the graph.
      * @param   rConfig         The configuration used for topology and all.
+     * @param   useRestrictions If the graph should be built with restrictions or not.
      */
-    Graph(Topology& rTopology, const Configuration& rConfig);
+    Graph(Topology& rTopology, const Configuration& rConfig, bool useRestrictions = true);
 
     /** Copy constructor.
      * Disabled.
