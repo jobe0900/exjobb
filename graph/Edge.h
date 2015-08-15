@@ -24,13 +24,11 @@
 #include "../osm/OsmId.h"
 #include "EdgeCost.h"
 #include "Speed.h"
-//#include "EdgeRestriction.h"
 
 // FORWARD REFERENCES
 //
-typedef long            EdgeIdType;
-//typedef double          EdgeCost;
-class                   EdgeRestriction;
+typedef long    EdgeIdType;
+class           EdgeRestriction;
 
 /**
  * Data structure for edges in the topology.
@@ -166,21 +164,6 @@ public:
      */
     void              clearCostsAndRestrictions();
 
-    /** Add to the cost/weight of the edge.
-     * @param   cost    A cost component.
-     */
-//    void              addCost(EdgeCost cost);
-
-//    /** Flag that there exists restrictions for this edge and they need
-//     * to be taken into account when building graph.
-//     */
-//    void              setHasRestrictions(bool hasRestrictions = true);
-//
-//    /** Flag that there exists restrictions for this edge and they need
-//     * to be taken into account when building graph.
-//     */
-//    void              setHasViaWayRestriction(bool hasViaWayRestriction = true);
-
     /** Parse a string into an EdgeIdType.
      *  @param  idString    The string representing the id.
      *  @return The corresponding edge id.
@@ -220,23 +203,27 @@ public:
      */
     const RoadData&   roadData()  const;
 
-//    /** Return pointer to either existing or a new set of restrictions.
-//     * @return  Pointer to EdgeRestriction
-//     */
-//    EdgeRestriction*  getRestrictions();
-
-    /**
+    /** Get hold of the restrictions associated with the edge.
      * @return  Reference to EdgeRestriction
      * @throw   RestrictionException if no restriction is applied on Edge.
      */
     EdgeRestriction&  restrictions();
+
+    /** Get hold of the restrictions associated with the edge.
+     * @return  Reference to EdgeRestriction
+     * @throw   RestrictionException if no restriction is applied on Edge.
+     */
     const EdgeRestriction&
                       restrictions() const;
 
-    /**
+    /** Get the structure of different costs for traveling the edge.
      * @return  Reference to EdgeCost
      */
     EdgeCost&         edgeCost();
+
+    /** Get the structure of different costs for traveling the edge.
+     * @return  Reference to EdgeCost
+     */
     const EdgeCost&   edgeCost() const;
 
     /**
@@ -269,11 +256,6 @@ public:
      */
     bool              isRestricted(const Configuration& rConfig) const;
 
-//    /** Check if the edge has an explicit max speed limit or if we must resort
-//     * to using the speed implied by the highway type.
-//     */
-//    bool              hasMaxSpeedRestriction() const;
-
 private:
 // ATTRIBUTES
     EdgeIdType		  mId;
@@ -285,9 +267,6 @@ private:
     EdgeRestriction*  mpRestrictions;
     EdgeCost          mCost;
     Speed             mSpeed;
-//    bool            mHasRestrictions;
-//    bool            mHasViaWayRestriction;
-
 };
 
 // INLINE METHODS

@@ -67,8 +67,6 @@ Edge::Edge(EdgeIdType       id,
       mpRestrictions(nullptr),
       mCost(),
       mSpeed()
-//      mHasRestrictions(false),
-//      mHasViaWayRestriction(false)
 { }
 
 Edge::Edge(EdgeIdType       id,
@@ -84,8 +82,6 @@ Edge::Edge(EdgeIdType       id,
       mpRestrictions(nullptr),
       mCost(),
       mSpeed()
-//      mHasRestrictions(false),
-//      mHasViaWayRestriction(false)
 { }
 
 Edge::Edge(Edge&& from)
@@ -95,7 +91,9 @@ Edge::Edge(Edge&& from)
         mTarget(from.mTarget),
         mGeomData(from.mGeomData),
         mRoadData(from.mRoadData),
-        mpRestrictions(from.mpRestrictions)
+        mpRestrictions(from.mpRestrictions),
+        mCost(),
+        mSpeed()
 {
     from.mpRestrictions = nullptr;
 }
@@ -163,24 +161,6 @@ Edge::clearCostsAndRestrictions()
     mSpeed = 0;
 }
 
-//void
-//Edge::addCost(EdgeCost cost)
-//{
-//    mCost += cost;
-//}
-
-//void
-//Edge::setHasRestrictions(bool hasRestrictions)
-//{
-//    mHasRestrictions = hasRestrictions;
-//}
-//
-//void
-//Edge::setHasViaWayRestriction(bool hasViaWayRestriction)
-//{
-//    mHasViaWayRestriction = hasViaWayRestriction;
-//}
-
 //static
 EdgeIdType
 Edge::parse(const std::string& idStr)
@@ -213,21 +193,11 @@ const Edge::RoadData&
 Edge::roadData() const
 { return mRoadData; }
 
-//EdgeRestriction*
-//Edge::getRestrictions()
-//{
-//    if(!hasRestrictions()) {
-//        mpRestrictions = new EdgeRestriction();
-//    }
-//    return mpRestrictions;
-//}
 
 EdgeRestriction&
 Edge::restrictions()
 {
     if(mpRestrictions == nullptr) {
-//        throw RestrictionsException(std::string("No restriction on edge ")
-//            + std::to_string(mId));
         mpRestrictions = new EdgeRestriction();
     }
     return *mpRestrictions;
@@ -266,15 +236,6 @@ Edge::speed() const
 {
     return mSpeed;
 }
-
-//const EdgeRestriction&
-//Edge::restrictions() const
-//{
-//    if(!hasRestrictions()) {
-//        mpRestrictions = new EdgeRestriction();
-//    }
-//    return *mpRestrictions;
-//}
 
 //============================= INQUIRY    ===================================
 bool
@@ -351,18 +312,8 @@ Edge::isRestricted(const Configuration& rConfig) const
     }
     return false;
 }
-//bool
-//Edge::hasMaxSpeedRestriction() const
-//{
-//    if(hasRestrictions())
-//    {
-//        return mpRestrictions->hasMaxSpeedRestriction();
-//    }
-//    return false;
-//}
+
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
-
 
