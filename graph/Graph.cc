@@ -320,6 +320,8 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
     VertexIdType via_topo_vertex_id =
         boost::get(&GraphVertex::topoVertexId, mGraph, rViaVertex);
 
+    Edge& source_edge = mrTopology.getEdge(topo_source_id);
+
     for(auto target_it = boost::out_edges(rViaVertex, mGraph);
         target_it.first != target_it.second;
         ++target_it.first)
@@ -354,6 +356,7 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
                 (*mpLineGraph)[line].lgTargetNodeId = target_node_id;
                 (*mpLineGraph)[line].topoViaVertexId = via_topo_vertex_id;
                 (*mpLineGraph)[line].cost =
+                    source_edge.cost() +
                     calculateTurnCost(topo_source_id, topo_target_id);
             }
             else
