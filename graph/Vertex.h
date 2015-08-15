@@ -36,10 +36,13 @@ public:
 	/** Constructor.
 	 * @param	id		         Id for this vertex.
 	 * @param	point	         The Point (geometry).
-	 * @param   hasRestrictions  false by default
 	 */
-	Vertex(VertexIdType id, Point point, bool hasRestrictions = false);
+	Vertex(VertexIdType id, Point point);
+
+	/** Default constructor. Deleted */
 	Vertex() = delete;
+
+	/** Copy constructor. Default. */
 	Vertex(const Vertex&) = default;
 
 // OPERATORS
@@ -49,20 +52,27 @@ public:
 	bool			operator==(const Vertex& rhs) const;
 
 // OPERATIONS
-	void            setHasRestrictions(bool restrictions);
-
 // ACCESS
+	/**
+	 * @return  The id of this Vertex.
+	 */
 	VertexIdType	id() const;
+
+	/**
+	 * @return  The coordinates for this Vertex.
+	 */
 	Point		    point() const;
 
 //INQUIRY
+	/**
+	 * @return  True if the Vertex has restrictions.
+	 */
 	bool            hasRestrictions() const;
 
 private:
 // ATTRIBUTES
 	VertexIdType	mId;
 	Point		    mPoint;
-	bool            mHasRestrictions;
 };
 
 // INLINE METHODS
