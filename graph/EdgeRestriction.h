@@ -197,14 +197,14 @@ public:
 
     /** Try to fetch the vehicle property restrictions for an Edge.
      * @return  The Vehicle properties
-     * @throw   RestrictionException if no entry exists for Edge.
+     * @throw   RestrictionsException if no entry exists for Edge.
      */
     const VehicleProperties&
                         vehicleProperties() const;
 
     /** Try to fetch the vehicle property restrictions for an Edge.
      * @return  The Vehicle properties
-     * @throw   RestrictionException if no entry exists for Edge.
+     * @throw   RestrictionsException if no entry exists for Edge.
      */
     VehicleProperties&  vehicleProperties();
 
@@ -218,21 +218,21 @@ public:
     /** Try to fetch the general access restrictions for this edge.
      * @param   edgeId  The id of the edge.
      * @return  reference to the OsmAccess object.
-     * @throw   RestrictionException if no entry exists for Edge.
+     * @throw   RestrictionsException if no entry exists for Edge.
      */
     const OsmAccess&    generalAccess() const;
 
     /** Try to fetch the general access restrictions for this edge.
      * @param   edgeId  The id of the edge.
      * @return  reference to the OsmAccess object.
-     * @throw   RestrictionException if no entry exists for Edge.
+     * @throw   RestrictionsException if no entry exists for Edge.
      */
     OsmAccess&          generalAccess();
 
     /** Try to fetch the vehicle type specific access restrictions for this edge.
      * @param   vehiceltType    The type of Vehicle to get access restriction
      * @return  reference to the OsmAccess object.
-     * @throw   RestrictionException if no entry exists for Edge.
+     * @throw   RestrictionsException if no entry exists for Edge.
      */
     const OsmAccess&    vehicleTypeAccess(
                             OsmVehicle::VehicleType vehicleType) const;
@@ -240,7 +240,7 @@ public:
     /** Try to fetch the vehicle type specific access restrictions for this edge.
      * @param   vehiceltType    The type of Vehicle to get access restriction
      * @return  reference to the OsmAccess object.
-     * @throw   RestrictionException if no entry exists for Edge.
+     * @throw   RestrictionsException if no entry exists for Edge.
      */
     OsmAccess&          vehicleTypeAccess(
                             OsmVehicle::VehicleType vehicleType);
@@ -253,13 +253,13 @@ public:
 
     /** Fetch the barrier restricting this edge.
      * @return  reference to a OsmBarrier object.
-     * @throw   RestrictionException if no entry exists for this Edge.
+     * @throw   RestrictionsException if no entry exists for this Edge.
      */
     const OsmBarrier&   barrier() const;
 
     /** Get a list of the turning restrictions from this edge.
      * @return  a Vector with turning restrictions.
-     * @throw   RestrictionException if edge has no turning restrictions.
+     * @throw   RestrictionsException if edge has no turning restrictions.
      */
     const std::vector<OsmTurningRestriction*>&
                         turningRestrictions() const;
