@@ -52,7 +52,7 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
 
             WHEN ("asking for a LineGraph")
             {
-                Graph::LineGraphType* p_lg = lgu.getLineGraph();
+                LineGraphType* p_lg = lgu.getLineGraph();
 
                 THEN ("we should have a line graph")
                 {
@@ -92,7 +92,7 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
             WHEN ("asking to update restrictions and costs")
             {
                 lgu.updateRestrictionsAndCosts();
-                Graph::LineGraphType* p_lg {nullptr};
+                LineGraphType* p_lg {nullptr};
                 p_lg = lgu.getLineGraph();
 
                 THEN ("we should still be able to have a line graph")
@@ -107,7 +107,7 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
             WHEN ("asking to update topology")
             {
                 lgu.updateTopology();
-                Graph::LineGraphType* p_lg {nullptr};
+                LineGraphType* p_lg {nullptr};
                 p_lg = lgu.getLineGraph();
 
                 THEN ("we should still be able to have a line graph")

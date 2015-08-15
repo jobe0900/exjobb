@@ -14,23 +14,20 @@
 #include <map>
 #include <ostream>
 
-#include <iostream>
-
 // PROJECT INCLUDES
 //
 #include <boost/graph/adjacency_list.hpp>
 
 // LOCAL INCLUDES
 //
-#include "GraphException.h"
-#include "Vertex.h"
 #include "Edge.h"
+#include "EdgeRestriction.h"
+#include "GraphException.h"
 #include "Topology.h"
-#include "Restrictions.h"
+#include "TurnCostCalculator.h"
+#include "Vertex.h"
 #include "../config/Configuration.h"
 #include "../util/Logging.h"
-#include "EdgeRestriction.h"
-#include "TurnCostCalculator.h"
 
 // FORWARD REFERENCES
 //
@@ -81,6 +78,24 @@ struct LineGraphLine
     double          cost;
 };
 
+typedef boost::adjacency_list
+    < boost::listS, boost::vecS, boost::directedS,
+    GraphVertex, GraphEdge >                                   GraphType;
+typedef boost::adjacency_list
+    < boost::listS, boost::vecS, boost::directedS,
+    LineGraphNode, LineGraphLine >                             LineGraphType;
+
+typedef boost::graph_traits<GraphType>::vertex_descriptor      VertexType;
+typedef boost::graph_traits<GraphType>::edge_descriptor        EdgeType;
+
+typedef boost::graph_traits<LineGraphType>::vertex_descriptor  NodeType;
+typedef boost::graph_traits<LineGraphType>::edge_descriptor    LineType;
+
+typedef std::map<VertexIdType, VertexType>   TopoVertexIdToGraphVertexMapType;
+typedef std::multimap<EdgeIdType, EdgeType>  TopoEdgeIdToGraphEdgeMapType;
+typedef std::map<EdgeIdType, NodeType>       GraphEdgeIdToNodeMapType;
+
+
 
 /**
  * A class for a keeping Topology and optional Restrictions and Costs, and
@@ -91,26 +106,26 @@ class Graph
 {
 public:
 // TYPES
-    typedef boost::adjacency_list
-        < boost::listS, boost::vecS, boost::directedS,
-          GraphVertex, GraphEdge >                      GraphType;
-    typedef boost::adjacency_list
-        < boost::listS, boost::vecS, boost::directedS,
-          LineGraphNode, LineGraphLine >                LineGraphType;
-
-    typedef boost::graph_traits<GraphType>
-                                ::vertex_descriptor     VertexType;
-    typedef boost::graph_traits<GraphType>
-                                ::edge_descriptor       EdgeType;
-
-    typedef boost::graph_traits<LineGraphType>
-                                ::vertex_descriptor     NodeType;
-    typedef boost::graph_traits<LineGraphType>
-                                ::edge_descriptor       LineType;
-
-    typedef std::map<VertexIdType, VertexType>          TopoVertexIdToGraphVertexMapType;
-    typedef std::multimap<EdgeIdType, EdgeType>         TopoEdgeIdToGraphEdgeMapType;
-    typedef std::map<EdgeIdType, NodeType>              GraphEdgeIdToNodeMapType;
+//    typedef boost::adjacency_list
+//        < boost::listS, boost::vecS, boost::directedS,
+//          GraphVertex, GraphEdge >                      GraphType;
+//    typedef boost::adjacency_list
+//        < boost::listS, boost::vecS, boost::directedS,
+//          LineGraphNode, LineGraphLine >                LineGraphType;
+//
+//    typedef boost::graph_traits<GraphType>
+//                                ::vertex_descriptor     VertexType;
+//    typedef boost::graph_traits<GraphType>
+//                                ::edge_descriptor       EdgeType;
+//
+//    typedef boost::graph_traits<LineGraphType>
+//                                ::vertex_descriptor     NodeType;
+//    typedef boost::graph_traits<LineGraphType>
+//                                ::edge_descriptor       LineType;
+//
+//    typedef std::map<VertexIdType, VertexType>          TopoVertexIdToGraphVertexMapType;
+//    typedef std::multimap<EdgeIdType, EdgeType>         TopoEdgeIdToGraphEdgeMapType;
+//    typedef std::map<EdgeIdType, NodeType>              GraphEdgeIdToNodeMapType;
 
 
 // LIFECYCLE

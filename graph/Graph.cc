@@ -112,14 +112,13 @@ Graph::nrLines() const
 //    return 0;
 }
 
-const Graph::GraphType&
+const GraphType&
 Graph::getBoostGraph()
 {
     return mGraph;
 }
 
-//Graph::LineGraphType*
-Graph::LineGraphType&
+LineGraphType&
 Graph::getBoostLineGraph()
 {
     return mLineGraph;
@@ -231,7 +230,7 @@ Graph::addDirectedEdge(EdgeIdType id,
     }
 }
 
-const Graph::VertexType&
+const VertexType&
 Graph::getGraphVertex(VertexIdType id) const
 {
     const auto& res = mIdToVertexMap.find(id);
@@ -295,7 +294,7 @@ Graph::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
     }
 }
 
-const Graph::NodeType&
+const NodeType&
 Graph::getLineGraphNode(NodeIdType id) const
 {
     const auto& res = mEdgeIdToNodeMap.find(id);

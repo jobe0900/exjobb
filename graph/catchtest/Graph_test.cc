@@ -47,7 +47,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		{
 		    Graph g(topology, config);
 		    const auto& boost_graph = g.getBoostGraph();
-		    Graph::LineGraphType& r_boost_line_graph = g.getBoostLineGraph();
+		    LineGraphType& r_boost_line_graph = g.getBoostLineGraph();
 
 		    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 			THEN ("the # of vertices in the graph representation"
