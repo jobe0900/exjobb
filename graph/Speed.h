@@ -1,8 +1,7 @@
-/*
+/** The Speed type.
  * Speed.h
  *
- *  Created on: 13 aug 2015
- *      Author: jonas
+ *      Author: Jonas Bergman
  */
 
 #ifndef GRAPH_SPEED_H_
