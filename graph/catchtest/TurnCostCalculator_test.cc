@@ -32,6 +32,31 @@ SCENARIO ("Keeping track of costs for Turn", "[turncost]")
 
     GIVEN ("two edges and a configuration")
     {
+        WHEN ("asking for turn cost for turn between bearing 80 and 350")
+        {
+            source_geom.targetBearing = 80;
+            source.setGeomData(source_geom);
+            source.setSpeed(90);
+
+            target_geom.sourceBearing = 350;
+            target.setGeomData(target_geom);
+            target.setSpeed(60);
+
+            THEN ("we should get a cost")
+            {
+                double cost =
+                    TurnCostCalculator::getTurnCost(
+                        source, target, config);
+                INFO ("Turn cost " << cost);
+                REQUIRE (cost > 0);
+            }
+        }
+
+        /*********************************************************************
+         * Must comment the `private` part of the TurnCostCalculator class
+         * to run the following tests.
+         ********************************************************************/
+
 //        WHEN ("asking for angle between bearing 80 and bearing 20")
 //        {
 //            source_geom.targetBearing = 80;
@@ -265,26 +290,6 @@ SCENARIO ("Keeping track of costs for Turn", "[turncost]")
 //                REQUIRE (cost > 0);
 //            }
 //        }
-
-        WHEN ("asking for turn cost for turn between bearing 80 and 350")
-        {
-            source_geom.targetBearing = 80;
-            source.setGeomData(source_geom);
-            source.setSpeed(90);
-
-            target_geom.sourceBearing = 350;
-            target.setGeomData(target_geom);
-            target.setSpeed(60);
-
-            THEN ("we should get a cost")
-            {
-                double cost =
-                    TurnCostCalculator::getTurnCost(
-                        source, target, config);
-                INFO ("Turn cost " << cost);
-                REQUIRE (cost > 0);
-            }
-        }
     }
 }
 
