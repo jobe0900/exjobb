@@ -143,7 +143,7 @@ public:
     /** Set the Road data for this edge.
      * @param   roadData    The RoadData to use.
      */
-    void              setRoadData(RoadData geomData);
+    void              setRoadData(RoadData roadData);
 
     /** Set the OsmId corresponding to this edge.
      * @param   osmId   The OsmId to set.
