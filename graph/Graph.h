@@ -78,23 +78,31 @@ struct LineGraphLine
     double          cost;
 };
 
+/** The 'normal' vertex based graph type. */
 typedef boost::adjacency_list
     < boost::listS, boost::vecS, boost::directedS,
     GraphVertex, GraphEdge >                                   GraphType;
+/** The edge based graph type. */
 typedef boost::adjacency_list
     < boost::listS, boost::vecS, boost::directedS,
     LineGraphNode, LineGraphLine >                             LineGraphType;
 
+/** A vertex in the normal graph. */
 typedef boost::graph_traits<GraphType>::vertex_descriptor      VertexType;
+/** An edge in the normal graph. */
 typedef boost::graph_traits<GraphType>::edge_descriptor        EdgeType;
 
+/** A node in the line graph. */
 typedef boost::graph_traits<LineGraphType>::vertex_descriptor  NodeType;
+/** An edge in the line graph. */
 typedef boost::graph_traits<LineGraphType>::edge_descriptor    LineType;
 
+/** Mapping of a topology vertex id and graph vertex object. */
 typedef std::map<VertexIdType, VertexType>   TopoVertexIdToGraphVertexMapType;
+/** Mapping of a topology edge id and graph edge object. */
 typedef std::multimap<EdgeIdType, EdgeType>  TopoEdgeIdToGraphEdgeMapType;
+/** Mapping of a graph edge id and linegraph node object. */
 typedef std::map<EdgeIdType, NodeType>       GraphEdgeIdToNodeMapType;
-
 
 
 /**
@@ -105,29 +113,6 @@ typedef std::map<EdgeIdType, NodeType>       GraphEdgeIdToNodeMapType;
 class Graph
 {
 public:
-// TYPES
-//    typedef boost::adjacency_list
-//        < boost::listS, boost::vecS, boost::directedS,
-//          GraphVertex, GraphEdge >                      GraphType;
-//    typedef boost::adjacency_list
-//        < boost::listS, boost::vecS, boost::directedS,
-//          LineGraphNode, LineGraphLine >                LineGraphType;
-//
-//    typedef boost::graph_traits<GraphType>
-//                                ::vertex_descriptor     VertexType;
-//    typedef boost::graph_traits<GraphType>
-//                                ::edge_descriptor       EdgeType;
-//
-//    typedef boost::graph_traits<LineGraphType>
-//                                ::vertex_descriptor     NodeType;
-//    typedef boost::graph_traits<LineGraphType>
-//                                ::edge_descriptor       LineType;
-//
-//    typedef std::map<VertexIdType, VertexType>          TopoVertexIdToGraphVertexMapType;
-//    typedef std::multimap<EdgeIdType, EdgeType>         TopoEdgeIdToGraphEdgeMapType;
-//    typedef std::map<EdgeIdType, NodeType>              GraphEdgeIdToNodeMapType;
-
-
 // LIFECYCLE
     /** Constructor.
      * Disabled.
@@ -155,52 +140,41 @@ public:
     /** Output operator to print to a stream.
      */
     friend
-    std::ostream&         operator<<(std::ostream& os, const Graph& rGraph);
+    std::ostream&       operator<<(std::ostream& os, const Graph& rGraph);
 
 // OPERATIONS
-
-    /** Flag if restrictions should be used when building the graph or not.
-     * @param   shouldUseRestrictions   If true, build graph with restrictions.
-     */
-    void                  useRestrictions(bool shouldUseRestrictions);
-
 // ACCESS
     /**
      * @return  The number of Vertices in the Graph.
      */
-    size_t                nrVertices() const;
+    size_t              nrVertices() const;
 
     /**
      * @return  The number of Edges in the Graph.
      */
-    size_t                nrEdges() const;
+    size_t              nrEdges() const;
 
     /**
      * @return  The number of Nodes in the LineGraph.
      */
-    size_t                nrNodes() const;
+    size_t              nrNodes() const;
 
     /**
      * @return  The number of Nodes in the LineGraph.
      */
-    size_t                nrLines() const;
+    size_t              nrLines() const;
 
     /** Builds graph if necessary before returning.
      * @return  The Boost Graph representation of the Graph.
      * @throws  GraphException if something goes wrong building the graph.
      */
-    const GraphType&      getBoostGraph();
+    const GraphType&    getBoostGraph();
 
-    /** Get a pointer to a line graph. The caller assumes responsibility
-     *  fo managing the memory.
-     * Builds graph if necessary before returning.
-     *
+    /** Get a reference to the line graph.
      * @return  The Boost Graph representation of the LineGraph.
      * @throws  GraphException if something goes wrong building the graph.
      */
     LineGraphType&      getBoostLineGraph();
-//    LineGraphType*      getBoostLineGraph();
-//    const LineGraphType&  getBoostLineGraph();
 
 // INQUIRY
     /**
@@ -252,10 +226,10 @@ private:
      * @param   e_ix    The running index amongst edges added to graph.
      */
     void                addDirectedEdge(
-        EdgeIdType id,
-        const VertexType& source,
-        const VertexType& target,
-        EdgeIdType ix);
+                            EdgeIdType id,
+                            const VertexType& source,
+                            const VertexType& target,
+                            EdgeIdType ix);
 
     /** Get the graph vertex corresponding to a given id.
      * @param   id      The vertex' topology id.
@@ -282,8 +256,8 @@ private:
      * @param   rNode       The Node corresponding to the edge returned here.
      */
     void                addGraphEdgeAsLineGraphNode(
-        const EdgeType& rGraphEdge,
-        NodeType&       rNode);
+                            const EdgeType& rGraphEdge,
+                            NodeType&       rNode);
 
     /** Get an already existing Node from the LineGraph.
      * @param   id  The Edge id (== the Node id).
@@ -301,8 +275,8 @@ private:
      * @throw   GraphException
      */
     void                connectSourceNodeToTargetNodesViaVertex(
-        const NodeType& rSourceNode,
-        const VertexType& rViaVertex);
+                            const NodeType& rSourceNode,
+                            const VertexType& rViaVertex);
 
     /** Calculate the cost for making a turn from source edge to target.
      * Helper to `connectSourceNodeToTargetNodesViaVertex()`.
@@ -310,8 +284,8 @@ private:
      * @param   targetEdgeId    The edge (and node) id of the target.
      */
     double              calculateTurnCost(
-        EdgeIdType sourceEdgeId,
-        EdgeIdType targetEdgeId) const;
+                            EdgeIdType sourceEdgeId,
+                            EdgeIdType targetEdgeId) const;
 
     /**
      * @param   edgeId  Id to edge to look up.
