@@ -13,8 +13,6 @@
 #include <initializer_list>
 #include <cstdlib> // abs()
 
-#include <iostream>
-
 // PROJECT INCLUDES
 //
 
@@ -85,15 +83,6 @@ private:
                         Speed       angleSpeed);
 
     /**
-//     * @param   rSource     Source edge.
-//     * @param   rTarget     Target edge.
-//     * @return  The angle between edges.
-//     */
-//    static int      getAngle(
-//                        const Edge& rSource,
-//                        const Edge& rTarget);
-
-    /**
      * @param   speeds      A set of speeds.
      * @return  The smallest speed
      */
@@ -116,6 +105,17 @@ private:
     static double   calculateLengthPenaltyFactor(
                         int     turnAngle,
                         double  vehicleLength);
+
+    /** Look if target is of a more important highway type than the source,
+     * in that case we must add a penalty for giving way when entering
+     * the target road.
+     * @param   rSource     The source edge.
+     * @param   rTarget     The target edge.
+     * @return  A cost for giving way.
+     */
+    static Cost     giveWayToHigherRoadCategoryCost(
+                        const Edge& rSource,
+                        const Edge& rTarget);
 
 // ATTRIBUTES
 // CONSTANTS

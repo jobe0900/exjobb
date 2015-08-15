@@ -27,7 +27,7 @@ TurnCostCalculator::getTurnCost(
 
     Cost deceleration_cost = decel_factor * (rSource.speed() - turn_speed);
     Cost acceleration_cost = accel_factor * (rTarget.speed() - turn_speed);
-    Cost additional_cost = 0;
+    Cost additional_cost = giveWayToHigherRoadCategoryCost(rSource, rTarget);
 
     Cost turn_cost = deceleration_cost + acceleration_cost + additional_cost;
 
@@ -61,9 +61,9 @@ TurnCostCalculator::getVehicleSizeSpeed(
     double      vehicle_length,
     Speed       angleSpeed)
 {
-//    double vehicle_length = rConfig.getVehicleConfig().length;
     int turn_angle (getTurnAngle(rSource, rTarget));
-    double length_penalty_factor = calculateLengthPenaltyFactor(turn_angle, vehicle_length);
+    double length_penalty_factor =
+        calculateLengthPenaltyFactor(turn_angle, vehicle_length);
 
     Speed speed = angleSpeed
                     * (VEHICLE_PENALTY_LENGTH / vehicle_length)
@@ -79,10 +79,8 @@ TurnCostCalculator::getSmallestSpeed(std::initializer_list<Speed> speeds)
 
     if(speeds.size() > 0)
     {
-//        std::cerr << "Has several speeds" << std::endl;
         for(const auto& s : speeds)
         {
-//            std::cerr << "    Speed: " << s << std::endl;
             if(s < min)
             {
                 min = s;
@@ -119,14 +117,24 @@ TurnCostCalculator::calculateLengthPenaltyFactor(
 
     if(vehicleLength > VEHICLE_PENALTY_LENGTH)
     {
-//        std::cerr << "Vehicle is long " << std::endl;
         if(turnAngle > 0)
         {
-//            std::cerr << "Vehicle is turning right " << std::endl;
             factor = 1.0 - ((2.0/3.0) * (turnAngle/180.0));
-//            std::cerr << "    Factor: " << factor << std::endl;
         }
     }
     return factor;
+}
+
+/* static */
+Cost
+TurnCostCalculator::giveWayToHigherRoadCategoryCost(
+    const Edge& rSource,
+    const Edge& rTarget)
+{
+    if(rSource.roadData().roadType > rTarget.roadData().roadType)
+    {
+        return 5;
+    }
+    return 0;
 }
 

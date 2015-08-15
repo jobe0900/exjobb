@@ -24,6 +24,12 @@ SCENARIO ("Keeping track of costs for Turn", "[turncost]")
     Edge::GeomData source_geom;
     Edge::GeomData target_geom;
 
+    Edge::RoadData primary;
+    Edge::RoadData secondary;
+
+    primary.roadType = OsmHighway::HighwayType::PRIMARY;
+    secondary.roadType = OsmHighway::HighwayType::SECONDARY;
+
 
     std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
     ConfigurationReader config_reader(config_file);
@@ -56,7 +62,51 @@ SCENARIO ("Keeping track of costs for Turn", "[turncost]")
          * Must comment the `private` part of the TurnCostCalculator class
          * to run the following tests.
          ********************************************************************/
-
+//        WHEN ("getting cost for lower priority source turning into"
+//            " higher priority target")
+//        {
+//            source.setRoadData(secondary);
+//            target.setRoadData(primary);
+//
+//            THEN ("we should get a cost")
+//            {
+//                double cost =
+//                    TurnCostCalculator::giveWayToHigherRoadCategoryCost(
+//                    source, target);
+//                REQUIRE (cost > 0);
+//            }
+//        }
+//
+//        WHEN ("getting cost for higher priority source turning into"
+//            " lower priority target")
+//        {
+//            source.setRoadData(primary);
+//            target.setRoadData(secondary);
+//
+//            THEN ("we should not get a cost")
+//            {
+//                double cost =
+//                    TurnCostCalculator::giveWayToHigherRoadCategoryCost(
+//                    source, target);
+//                REQUIRE (cost == Approx(0.0));
+//            }
+//        }
+//
+//        WHEN ("getting cost for source turning into"
+//            " equal priority target")
+//        {
+//            source.setRoadData(primary);
+//            target.setRoadData(primary);
+//
+//            THEN ("we should not get a cost")
+//            {
+//                double cost =
+//                    TurnCostCalculator::giveWayToHigherRoadCategoryCost(
+//                    source, target);
+//                REQUIRE (cost == Approx(0.0));
+//            }
+//        }
+//
 //        WHEN ("asking for angle between bearing 80 and bearing 20")
 //        {
 //            source_geom.targetBearing = 80;
