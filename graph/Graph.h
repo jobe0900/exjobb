@@ -182,7 +182,8 @@ public:
      * @return  The Boost Graph representation of the LineGraph.
      * @throws  GraphException if something goes wrong building the graph.
      */
-    LineGraphType*      getBoostLineGraph();
+    LineGraphType&      getBoostLineGraph();
+//    LineGraphType*      getBoostLineGraph();
 //    const LineGraphType&  getBoostLineGraph();
 
 // INQUIRY
@@ -328,7 +329,7 @@ private:
 
 // ATTRIBUTES
     GraphType                         mGraph;
-    LineGraphType*                    mpLineGraph;
+    LineGraphType                     mLineGraph;
     TopoVertexIdToGraphVertexMapType  mIdToVertexMap;     // map original id to GraphVertex
     TopoEdgeIdToGraphEdgeMapType      mIdToEdgeMap;       // map original id to GraphEdge
     GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode

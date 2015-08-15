@@ -51,10 +51,12 @@ LineGraphUtility::~LineGraphUtility()
 Graph::LineGraphType*
 LineGraphUtility::getLineGraph()
 {
-    Graph::LineGraphType* p_orig = mpGraph->getBoostLineGraph();
+//    Graph::LineGraphType* p_orig = mpGraph->getBoostLineGraph();
+    Graph::LineGraphType& r_orig = mpGraph->getBoostLineGraph();
     Graph::LineGraphType* p_new = new Graph::LineGraphType();
 
-    boost::copy_graph(*p_orig, *p_new);
+    boost::copy_graph(r_orig, *p_new);
+//    boost::copy_graph(*p_orig, *p_new);
 
     return p_new;
 

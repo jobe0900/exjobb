@@ -47,7 +47,8 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		{
 		    Graph g(topology, config);
 		    const auto& boost_graph = g.getBoostGraph();
-		    Graph::LineGraphType* p_boost_line_graph = g.getBoostLineGraph();
+//		    Graph::LineGraphType* p_boost_line_graph = g.getBoostLineGraph();
+		    Graph::LineGraphType& r_boost_line_graph = g.getBoostLineGraph();
 
 		    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 			THEN ("the # of vertices in the graph representation"
@@ -62,11 +63,12 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 			THEN ("the number of nodes in the LineGraph"
 			      " should be as many as edges in the graph")
 			{
-			    REQUIRE (boost::num_vertices(*p_boost_line_graph) ==
+//			    REQUIRE (boost::num_vertices(*p_boost_line_graph) ==
+			    REQUIRE (boost::num_vertices(r_boost_line_graph) ==
 			             boost::num_edges(boost_graph));
 			}
 
-			delete p_boost_line_graph;
+//			delete p_boost_line_graph;
 		}
 
 		// ...................................................................
