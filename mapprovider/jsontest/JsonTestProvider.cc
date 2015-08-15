@@ -9,8 +9,6 @@
 #include "../../graph/Vertex.h"
 #include "../../graph/Edge.h"
 
-#include <iostream>
-#include <sstream>
 #include <string>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -25,8 +23,6 @@ JsonTestProvider::JsonTestProvider(const Configuration& rConfig)
     : MapProvider(rConfig)
 {
 }
-
-
 
 JsonTestProvider::~JsonTestProvider()
 {
