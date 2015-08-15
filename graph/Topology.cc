@@ -42,9 +42,6 @@ Topology::addEdge(EdgeIdType        id,
 	    getVertex(target);
 	    Edge edge(id, osmId, source, target, geomData, roadData);
 		auto res = mEdgeMap.emplace(id, std::move(edge));
-//		auto res = mEdgeMap.emplace(
-//		    id, Edge(id, osmId, source, target, geomData, roadData));
-//		    id, id, osmId, source, target, geomData, roadData);
 		mOsmEdgeMap.insert({osmId, id});
 		return res.first->second;
 	}
@@ -100,7 +97,6 @@ Topology::getEdge(EdgeIdType id) const
         throw TopologyException("Edge not found: " + std::to_string(id));
     }
     return it->second;
-//    return const_cast<Topology&>(*this).getEdge(id);
 }
 
 void
