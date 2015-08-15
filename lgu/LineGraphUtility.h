@@ -13,6 +13,7 @@
 
 // PROJECT INCLUDES
 //
+#include <boost/graph/copy.hpp>
 
 // LOCAL INCLUDES
 //
