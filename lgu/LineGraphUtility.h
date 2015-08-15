@@ -1,4 +1,4 @@
-/**  A helper class for building and transforming Graphs.
+/**  The class to call to request a linegraph for routing.
  *
  * #include "LineGraphUtility.h"
  *
@@ -81,7 +81,6 @@ private:
     void    initTopology();
     void    initRestrictionsAndCosts();
     void    buildGraph();
-//    void    transformGraph();
 
 // ATTRIBUTES
     const std::string&  mrSettingsfile;
@@ -91,7 +90,6 @@ private:
     Graph*              mpGraph;
 
 // CONSTANTS
-//    static constexpr const char* SETTINGSFILE = "settings.json";
 };
 
 // INLINE METHODS

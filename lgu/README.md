@@ -7,6 +7,6 @@ The main class in this utility. It calls other classes:
 - `MapProvider` to get topology and other data for the graph. 
 - `Graph` is created from the data obtained.
 
-All variables are kept as local variable in the class and passed by reference and not created dynamically and passed as pointers to ease memory handling. The only exception is the final linegraph representation that are the final product of this component. That linegraph is handed out as a pointer and the responsibility for its destruction as well.
+The goal is to fetch a linegraph that is built according to the data found in the database and the configuration settings found in the configuration file.
 
-This class is not really done yet.
+A requirement for this utility was to be able to update data in the database which means this utility can also be requested to re-read the topology if there has been a change to them, or the restrictions and costs if there has been a change to them. 

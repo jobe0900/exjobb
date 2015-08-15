@@ -1,7 +1,6 @@
 /*
  * LineGraphUtility.cc
  *
- *  Created on: 2015-05-18
  *      Author: Jonas Bergman
  */
 
@@ -41,27 +40,16 @@ LineGraphUtility::~LineGraphUtility()
 
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
-//Graph::LineGraphType*
-//LineGraphUtility::getLineGraph() const
-//{
-//    Graph::LineGraphType* p_lg = new Graph::LineGraphType(*(mpGraph->getBoostLineGraph()));
-//    return p_lg;
-//}
-
 LineGraphType*
 LineGraphUtility::getLineGraph()
 {
-//    Graph::LineGraphType* p_orig = mpGraph->getBoostLineGraph();
     LineGraphType& r_orig = mpGraph->getBoostLineGraph();
     LineGraphType* p_new = new LineGraphType();
 
+    // make a copy of the old graph into a new
     boost::copy_graph(r_orig, *p_new);
-//    boost::copy_graph(*p_orig, *p_new);
 
     return p_new;
-
-//    return new Graph::LineGraphType(*(mpGraph->getBoostLineGraph()));
-//    return mpGraph->getBoostLineGraph();
 }
 
 void
@@ -124,10 +112,6 @@ LineGraphUtility::initMapProvider()
         {
             mpMapProvider = new PostGisProvider(mConfig);
         }
-//        else if(r_provider_name == TopologyConfig::PROVIDER_PGROUTING)
-//        {
-//            //TODO
-//        }
         else if(r_provider_name == TopologyConfig::PROVIDER_JSONTEST)
         {
             mpMapProvider = new JsonTestProvider(mConfig);
@@ -198,6 +182,3 @@ LineGraphUtility::buildGraph()
             std::string("LineGraphUtility:buildGraph: ") + e.what());
     }
 }
-
-
-
