@@ -27,7 +27,7 @@
 /** Costs for edges:
  * - speed (either set explicitly or default  from road category)
  * - barriers (should be imported from the EdgeRestriction)
- * - incline
+ * - incline (not implemented yet)
  * - surface
  * - traffic_calming
  * - highway => bus_stop
@@ -48,15 +48,6 @@ public:
         TRAVEL_TIME,
         BARRIER,
         OTHER
-//        INCLINE,
-//        TRAFFIC_CALMING,
-//        BUS_STOP,
-//        CROSSING,
-//        GIVE_WAY,
-//        MINI_ROUNDABOUT,
-//        STOP,
-//        TRAFFIC_SIGNALS,
-//        RAILWAY_CROSSING
     };
 
 // LIFECYCLE
