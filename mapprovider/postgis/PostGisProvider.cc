@@ -354,56 +354,56 @@ PostGisProvider::addVehiclePropertyRestrictionsToEdge(
     const pqxx::result& rResult,
     Topology&           rTopology)
 {
-    try
-    {
-        for(const pqxx::tuple& row : rResult)
-        {
-            // throw exception if no edgeId
-            EdgeIdType edgeId =
-                row[RestrictionQueries::VehiclePropertiesRestrictions::EDGE_ID]
-                    .as<EdgeIdType>();
-
-            Edge& edge = rTopology.getEdge(edgeId);
-            EdgeRestriction& r_restrictions = edge.restrictions();
-
-            EdgeRestriction::VehicleProperties* p_vp =
-                new EdgeRestriction::VehicleProperties();
-
-            p_vp->maxHeight =
-                row[RestrictionQueries::
-                    VehiclePropertiesRestrictions::MAXHEIGHT].as<double>
-                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
-            p_vp->maxLength =
-                row[RestrictionQueries::
-                    VehiclePropertiesRestrictions::MAXLENGTH].as<double>
-                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
-            p_vp->maxWeight =
-                row[RestrictionQueries::
-                    VehiclePropertiesRestrictions::MAXWEIGHT].as<double>
-                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
-            p_vp->maxWidth =
-                row[RestrictionQueries::
-                    VehiclePropertiesRestrictions::MAXWIDTH].as<double>
-                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
-            p_vp->maxSpeed =
-                row[RestrictionQueries::
-                    VehiclePropertiesRestrictions::MAXSPEED].as<unsigned>
-                (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
-            p_vp->minSpeed =
-                row[RestrictionQueries::
-                    VehiclePropertiesRestrictions::MINSPEED].as<unsigned>
-                (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN);
-
-            r_restrictions.setVehiclePropertyRestriction(p_vp);
-
-        }
-    }
-    catch (std::exception& e)
-    {
-        throw MapProviderException(
-            std::string("PostGisProvider:addVehicleProp..ToEdge..: ") + e.what());
-    }
-
+    RestrictionQueries::addVehiclePropertyRestrictionsToEdge(rResult, rTopology);
+//    try
+//    {
+//        for(const pqxx::tuple& row : rResult)
+//        {
+//            // throw exception if no edgeId
+//            EdgeIdType edgeId =
+//                row[RestrictionQueries::VehiclePropertiesRestrictions::EDGE_ID]
+//                    .as<EdgeIdType>();
+//
+//            Edge& edge = rTopology.getEdge(edgeId);
+//            EdgeRestriction& r_restrictions = edge.restrictions();
+//
+//            EdgeRestriction::VehicleProperties* p_vp =
+//                new EdgeRestriction::VehicleProperties();
+//
+//            p_vp->maxHeight =
+//                row[RestrictionQueries::
+//                    VehiclePropertiesRestrictions::MAXHEIGHT].as<double>
+//                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
+//            p_vp->maxLength =
+//                row[RestrictionQueries::
+//                    VehiclePropertiesRestrictions::MAXLENGTH].as<double>
+//                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
+//            p_vp->maxWeight =
+//                row[RestrictionQueries::
+//                    VehiclePropertiesRestrictions::MAXWEIGHT].as<double>
+//                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
+//            p_vp->maxWidth =
+//                row[RestrictionQueries::
+//                    VehiclePropertiesRestrictions::MAXWIDTH].as<double>
+//                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
+//            p_vp->maxSpeed =
+//                row[RestrictionQueries::
+//                    VehiclePropertiesRestrictions::MAXSPEED].as<unsigned>
+//                (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
+//            p_vp->minSpeed =
+//                row[RestrictionQueries::
+//                    VehiclePropertiesRestrictions::MINSPEED].as<unsigned>
+//                (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN);
+//
+//            r_restrictions.setVehiclePropertyRestriction(p_vp);
+//
+//        }
+//    }
+//    catch (std::exception& e)
+//    {
+//        throw MapProviderException(
+//            std::string("PostGisProvider:addVehicleProp..ToEdge..: ") + e.what());
+//    }
 }
 
 void

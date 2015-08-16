@@ -127,6 +127,56 @@ RestrictionQueries::getVehiclePropertyEdgeRestrictions(
     );
 }
 
+// static
+void
+RestrictionQueries::addVehiclePropertyRestrictionsToEdge(
+    const pqxx::result& rResult,
+    Topology&           rTopology)
+{
+    try
+    {
+        for(const pqxx::tuple& row : rResult)
+        {
+            // throw exception if no edgeId
+            EdgeIdType edgeId =
+                row[VehiclePropertiesRestrictions::EDGE_ID].as<EdgeIdType>();
+
+            Edge& edge = rTopology.getEdge(edgeId);
+            EdgeRestriction& r_restrictions = edge.restrictions();
+
+            EdgeRestriction::VehicleProperties* p_vp =
+                new EdgeRestriction::VehicleProperties();
+
+            p_vp->maxHeight =
+                row[VehiclePropertiesRestrictions::MAXHEIGHT].as<double>
+                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
+            p_vp->maxLength =
+                row[VehiclePropertiesRestrictions::MAXLENGTH].as<double>
+                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
+            p_vp->maxWeight =
+                row[VehiclePropertiesRestrictions::MAXWEIGHT].as<double>
+                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
+            p_vp->maxWidth =
+                row[VehiclePropertiesRestrictions::MAXWIDTH].as<double>
+                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
+            p_vp->maxSpeed =
+                row[VehiclePropertiesRestrictions::MAXSPEED].as<unsigned>
+                (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
+            p_vp->minSpeed =
+                row[VehiclePropertiesRestrictions::MINSPEED].as<unsigned>
+                (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN);
+
+            r_restrictions.setVehiclePropertyRestriction(p_vp);
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("RestrictionQueries:addVehicleProp..ToEdge..: ")
+                        + e.what());
+    }
+}
+
 //static
 void
 RestrictionQueries::getAccessRestrictions(

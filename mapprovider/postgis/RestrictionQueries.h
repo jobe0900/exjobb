@@ -24,6 +24,7 @@
 #include "../../osm/OsmHighway.h"
 #include "../../osm/OsmTurningRestriction.h"
 #include "../../graph/Edge.h"
+#include "../../graph/EdgeRestriction.h"
 #include "../../graph/Topology.h"
 #include "../../graph/Vertex.h"
 #include "../MapProviderException.h"
@@ -164,6 +165,15 @@ public:
                             const std::string&      rTopoEdgeTable,
                             const std::string&      rOsmEdgeTable,
                             const std::string&      rSchemaName);
+
+    /** Add the result of the query for vehicle properties to Edge's restrictions.
+     * @param   rResult         The results of the query
+     * @param   rTopology       Update affected edges in the topology.
+     * @throw   MapProviderException
+     */
+    static void         addVehiclePropertyRestrictionsToEdge(
+                            const pqxx::result&    rResult,
+                            Topology&              rTopology);
 
     /** Query for general access restrictions.
      * @param   rTrans          Transaction to perform query in.
