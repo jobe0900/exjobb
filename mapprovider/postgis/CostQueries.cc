@@ -74,6 +74,20 @@ CostQueries::getOtherCosts(
     );
 }
 
+// static
+void
+CostQueries::addBarrierCostToEdge(
+    Edge&                   rEdge,
+    OsmBarrier::BarrierType type,
+    const Configuration&    rConfig)
+{
+    if(rConfig.getBarrierCostsRule().costsToPass(type))
+    {
+        Cost cost = rConfig.getBarrierCostsRule().getCost(type);
+        rEdge.edgeCost().addCost(EdgeCost::BARRIER, cost);
+    }
+}
+
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

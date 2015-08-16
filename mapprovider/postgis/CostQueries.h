@@ -73,12 +73,12 @@ public:
      * @param   rSchemaName     Name of the topology schema.
      * @throw   pqxx::pqxx_exception
      */
-    static void             getTravelTimeEdgeCosts(
-        pqxx::transaction_base& rTrans,
-        pqxx::result&           rResult,
-        const std::string&      rTopoEdgeTable,
-        const std::string&      rOsmEdgeTable,
-        const std::string&      rSchemaName);
+    static void     getTravelTimeEdgeCosts(
+                        pqxx::transaction_base& rTrans,
+                        pqxx::result&           rResult,
+                        const std::string&      rTopoEdgeTable,
+                        const std::string&      rOsmEdgeTable,
+                        const std::string&      rSchemaName);
 
     /** Query for costs under the highway and railway tags:
      * Highway:
@@ -97,11 +97,22 @@ public:
      * @param   rOsmPointTable  Name of table with OSM points (nodes)
      * @param   rTopoEdgeTable  Name of table with topology edges.
      */
-    static void             getOtherCosts(
-        pqxx::transaction_base&     rTrans,
-        pqxx::result&               rResult,
-        const std::string&          rOsmPointTable,
-        const std::string&          rTopoEdgeTable);
+    static void     getOtherCosts(
+                        pqxx::transaction_base&     rTrans,
+                        pqxx::result&               rResult,
+                        const std::string&          rOsmPointTable,
+                        const std::string&          rTopoEdgeTable);
+
+    /** While looking for restrictions and we come across barriers,
+     * add the costs for barriers if they incur costs.
+     * @param   edge    The edge with a barrier.
+     * @param   type    The type of barrier.
+     * @param   rConfig The Configuration to use for the cost.
+     */
+    static void     addBarrierCostToEdge(
+                        Edge&                   rEdge,
+                        OsmBarrier::BarrierType type,
+                        const Configuration&    rConfig);
 
 // ACCESS
 // INQUIRY
@@ -110,14 +121,18 @@ protected:
 private:
     /** SELECT FROM JOIN */
     static std::string  startOfQuery(const std::string& rTopoEdgeTable);
+
     /** Which columns to pick */
     static std::string  queryColumns(const std::vector<std::string>& rCols);
+
     /** FROM JOIN ON WHERE */
     static std::string  midOfQuery(
         const std::string& rSchemaName,
         const std::string& rOsmEdgeTable);
+
     /** Make sure only to pick rows with content in some column. */
     static std::string  notNullColumns(const std::vector<std::string>& rCols);
+
     /** AS ON ORDER BY */
     static std::string  endOfQuery();
 };
