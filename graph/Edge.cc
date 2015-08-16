@@ -7,6 +7,8 @@
 
 #include "Edge.h"  // class implemented
 
+#include "EdgeRestriction.h"
+
 //============================= TYPES     ====================================
 const EdgeIdType Edge::MAX_ID = std::numeric_limits<EdgeIdType>::max();
 
@@ -62,8 +64,9 @@ Edge::Edge(EdgeIdType       id,
       mTarget(target),
       mGeomData(geomData),
       mRoadData(roadData),
-      mHasRestrictions(false),
-      mHasViaWayRestriction(false)
+      mpRestrictions(nullptr),
+      mCost(),
+      mSpeed()
 { }
 
 Edge::Edge(EdgeIdType       id,
@@ -76,9 +79,29 @@ Edge::Edge(EdgeIdType       id,
       mTarget(target),
       mGeomData(),
       mRoadData(),
-      mHasRestrictions(false),
-      mHasViaWayRestriction(false)
+      mpRestrictions(nullptr),
+      mCost(),
+      mSpeed()
 { }
+
+Edge::Edge(Edge&& from)
+    :   mId(from.mId),
+        mOsmId(from.mOsmId),
+        mSource(from.mSource),
+        mTarget(from.mTarget),
+        mGeomData(from.mGeomData),
+        mRoadData(from.mRoadData),
+        mpRestrictions(from.mpRestrictions),
+        mCost(),
+        mSpeed()
+{
+    from.mpRestrictions = nullptr;
+}
+
+Edge::~Edge()
+{
+    delete mpRestrictions;
+}
 
 //============================= OPERATORS ====================================
 std::ostream&
@@ -88,6 +111,9 @@ operator<<(std::ostream& os, const Edge& rEdge)
 	    << ", osmId: " << rEdge.osmId()
 		<< ", source: " << rEdge.source()
 		<< ", target: " << rEdge.target()
+		<< ", cost: " << rEdge.cost()
+		<< ", length: " << rEdge.geomData().length
+		<< ", speed: " << rEdge.speed()
 		<< "\n   road data: ";
 	rEdge.roadData().print(os);
 
@@ -112,15 +138,27 @@ Edge::setOsmId(OsmIdType osmId)
 { mOsmId = osmId; }
 
 void
-Edge::setHasRestrictions(bool hasRestrictions)
+Edge::setRestrictions(EdgeRestriction* pRestrictions)
 {
-    mHasRestrictions = hasRestrictions;
+    delete mpRestrictions;
+    mpRestrictions = pRestrictions;
 }
 
 void
-Edge::setHasViaWayRestriction(bool hasViaWayRestriction)
+Edge::setSpeed(Speed speed)
 {
-    mHasViaWayRestriction = hasViaWayRestriction;
+    mSpeed = speed;
+}
+
+void
+Edge::clearCostsAndRestrictions()
+{
+    mCost.clearCosts();
+
+    delete mpRestrictions;
+    mpRestrictions = nullptr;
+
+    mSpeed = 0;
 }
 
 //static
@@ -155,17 +193,127 @@ const Edge::RoadData&
 Edge::roadData() const
 { return mRoadData; }
 
+
+EdgeRestriction&
+Edge::restrictions()
+{
+    if(mpRestrictions == nullptr) {
+        mpRestrictions = new EdgeRestriction();
+    }
+    return *mpRestrictions;
+}
+
+const EdgeRestriction&
+Edge::restrictions() const
+{
+    if(mpRestrictions == nullptr) {
+        throw RestrictionsException(std::string("No restriction on edge ")
+            + std::to_string(mId));
+    }
+    return *mpRestrictions;
+}
+
+EdgeCost&
+Edge::edgeCost()
+{
+    return mCost;
+}
+
+const EdgeCost&
+Edge::edgeCost() const
+{
+    return mCost;
+}
+
+Cost
+Edge::cost() const
+{
+    return mCost.getCost();
+}
+
+Speed
+Edge::speed() const
+{
+    return mSpeed;
+}
+
 //============================= INQUIRY    ===================================
 bool
 Edge::hasRestrictions() const
-{ return mHasRestrictions; }
+{ return mpRestrictions != nullptr; }
 
 bool
 Edge::hasViaWayRestriction() const
-{ return mHasViaWayRestriction; }
+{
+    if(hasRestrictions())
+    {
+        return mpRestrictions->hasViaWayRestriction();
+    }
+    return false;
+}
+
+bool
+Edge::isRestricted(const Configuration& rConfig) const
+{
+    if(mpRestrictions == nullptr)
+    {
+        return false;
+    }
+    const auto& restriction_types = mpRestrictions->restrictionTypes();
+
+    bool is_restricted = false;
+    bool is_generally_restricted = false;
+    bool is_vehicle_banned = false;
+
+    for(const auto& r : restriction_types)
+    {
+        switch (r)
+        {
+            case EdgeRestriction::DISUSED:
+                is_restricted = true; break;
+            case EdgeRestriction::VEHICLE_PROPERTIES:
+                if(mpRestrictions->vehicleProperties()
+                    .restrictsAccess(rConfig.getVehicleConfig()))
+                {
+                    is_restricted = true;
+                }
+                break;
+            case EdgeRestriction::BARRIER:
+                if(mpRestrictions->barrier()
+                    .restrictsAccess(rConfig.getBarrierRestrictionsRule()))
+                {
+                    is_restricted = true;
+                }
+                break;
+            case EdgeRestriction::GENERAL_ACCESS:
+                if(!mpRestrictions->generalAccess()
+                    .allowsAccess(rConfig.getAccessRule()))
+                {
+                    is_generally_restricted = true;
+                }
+                continue;
+            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
+                if(!mpRestrictions->vehicleTypeAccess(rConfig.getVehicleConfig().category)
+                    .allowsAccess(rConfig.getAccessRule()))
+                {
+                    is_vehicle_banned = true;
+                }
+                continue;
+            default:
+                continue;
+        }
+    }
+
+    if(is_restricted
+        || (is_generally_restricted && is_vehicle_banned)
+        || is_vehicle_banned)
+    {
+        return true;
+    }
+    return false;
+}
+
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
-
 

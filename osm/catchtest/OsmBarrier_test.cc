@@ -93,7 +93,10 @@ SCENARIO ("OsmBarrier functionality testing", "[osm][barrier]")
         // -------------------------------------------------------------------
         GIVEN ("a cost rule")
         {
-            OsmBarrier::CostsRule rule({OsmBarrier::GATE, OsmBarrier::DEBRIS});
+//            OsmBarrier::CostsRule rule({OsmBarrier::GATE, OsmBarrier::DEBRIS});
+            OsmBarrier::CostsRule rule;
+            rule.addCost(OsmBarrier::GATE, 10);
+            rule.addCost(OsmBarrier::DEBRIS, 10);
 
             //................................................................
             WHEN ("checking if access costs for type not in rule")

@@ -1,4 +1,4 @@
-/**  A helper class for building and transforming Graphs.
+/**  The class to call to request a linegraph for routing.
  *
  * #include "LineGraphUtility.h"
  *
@@ -13,6 +13,7 @@
 
 // PROJECT INCLUDES
 //
+#include <boost/graph/copy.hpp>
 
 // LOCAL INCLUDES
 //
@@ -58,7 +59,15 @@ public:
 // OPERATIONS
     /** Return a LineGraph
      */
-    Graph::LineGraphType*  getLineGraph();
+    LineGraphType*   getLineGraph();
+
+    /** Re-read the topology if there has been a change in the database.
+     */
+    void             updateTopology();
+
+    /** Re-apply restrictions and costs on the topology fi there has been changes.
+     */
+    void             updateRestrictionsAndCosts();
 
 // ACCESS
 // INQUIRY
@@ -70,8 +79,8 @@ private:
     void    initConfiguration();
     void    initMapProvider();
     void    initTopology();
+    void    initRestrictionsAndCosts();
     void    buildGraph();
-//    void    transformGraph();
 
 // ATTRIBUTES
     const std::string&  mrSettingsfile;
@@ -81,7 +90,6 @@ private:
     Graph*              mpGraph;
 
 // CONSTANTS
-//    static constexpr const char* SETTINGSFILE = "settings.json";
 };
 
 // INLINE METHODS

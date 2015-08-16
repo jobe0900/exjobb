@@ -39,8 +39,7 @@ struct DatabaseConfig
 	/** Construct a connection string from the attributes.
 	 * @return	A valid connection string for 'pqxx::conn()'
 	 */
-	std::string
-	getConnectionString() const {
+	std::string     getConnectionString() const {
 	    std::ostringstream oss;
 	    oss << "host=" << hostname
 	        << " port=" << port

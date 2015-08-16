@@ -4,19 +4,22 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CC_SRCS += \
-../graph/catchtest/EdgeRestrictions_test.cc \
+../graph/catchtest/EdgeCost_test.cc \
 ../graph/catchtest/Graph_test.cc \
-../graph/catchtest/Topology_test.cc 
+../graph/catchtest/Topology_test.cc \
+../graph/catchtest/TurnCostCalculator_test.cc 
 
 CC_DEPS += \
-./graph/catchtest/EdgeRestrictions_test.d \
+./graph/catchtest/EdgeCost_test.d \
 ./graph/catchtest/Graph_test.d \
-./graph/catchtest/Topology_test.d 
+./graph/catchtest/Topology_test.d \
+./graph/catchtest/TurnCostCalculator_test.d 
 
 OBJS += \
-./graph/catchtest/EdgeRestrictions_test.o \
+./graph/catchtest/EdgeCost_test.o \
 ./graph/catchtest/Graph_test.o \
-./graph/catchtest/Topology_test.o 
+./graph/catchtest/Topology_test.o \
+./graph/catchtest/TurnCostCalculator_test.o 
 
 
 # Each subdirectory must supply rules for building sources it contributes

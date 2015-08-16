@@ -21,7 +21,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 	{
 	    size_t nr_vertices = 3;
 	    size_t nr_edges = 2;
-	    OsmIdType osm_id(0);
+	    OsmIdType osm_id(1);
 
 	    Topology topology;
 	    const Vertex& v1 = topology.addVertex(1, Point(0,0));
@@ -30,21 +30,24 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 	    Edge& e1 = topology.addEdge(1,osm_id,1,2);
 	    Edge& e2 = topology.addEdge(2,osm_id,2,3);
 
+	    Configuration config;
+
 	    // ...................................................................
 		WHEN ("we try create a Graph from the Topology")
 		{
 			THEN ("we should not get an Exception")
 			{
-				REQUIRE_NOTHROW (Graph g(topology));
+			    INFO ("calling Graph constructor");
+				REQUIRE_NOTHROW (Graph g(topology, config));
 			}
 		}
 
 	    // ...................................................................
 		WHEN ("building a graph from the topology")
 		{
-		    Graph g(topology);
+		    Graph g(topology, config);
 		    const auto& boost_graph = g.getBoostGraph();
-		    const auto& boost_line_graph = g.getBoostLineGraph();
+		    LineGraphType& r_boost_line_graph = g.getBoostLineGraph();
 
 		    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 			THEN ("the # of vertices in the graph representation"
@@ -59,7 +62,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 			THEN ("the number of nodes in the LineGraph"
 			      " should be as many as edges in the graph")
 			{
-			    REQUIRE (boost::num_vertices(boost_line_graph) ==
+			    REQUIRE (boost::num_vertices(r_boost_line_graph) ==
 			             boost::num_edges(boost_graph));
 			}
 		}
@@ -67,7 +70,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		// ...................................................................
 		WHEN ("we try print out a Graph from the Topology")
 		{
-		    Graph g(topology);
+		    Graph g(topology, config);
 
 		    THEN ("we should get a print out")
 		    {
@@ -89,7 +92,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		    rd2.direction = Edge::DirectionType::FROM_TO;
 		    e2.setRoadData(rd2);
 
-		    Graph g2(topology);
+		    Graph g2(topology, config);
 
 		    THEN ("the # of edges in the graph representation"
 		          " should as many as in the topology")
@@ -114,7 +117,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		    rd2.direction = Edge::DirectionType::FROM_TO;
 		    e2.setRoadData(rd2);
 
-		    Graph g2(topology);
+		    Graph g2(topology, config);
 
 		    THEN ("the # of edges in the graph representation"
 		        " should be one more than in the topology")
@@ -135,31 +138,24 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
         // ===================================================================
         GIVEN ("Configuration to build a Graph with restrictions ")
         {
-            std::string config_file("graph/catchtest"
-                "/mikh_restr_0617-testsettings.json");
+            std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
             ConfigurationReader config_reader(config_file);
             Configuration config;
             config_reader.fillConfiguration(config);
 
             PostGisProvider pgp(config);
 
-            Topology topology_unrestr;
-            pgp.getTopology(topology_unrestr);
+            Topology topology;
+            pgp.getTopology(topology);
+            pgp.setRestrictionsAndCosts(topology);
 
-            Topology topology_restr;
-            pgp.getTopology(topology_restr);
+            Graph graph_restr(topology, config);
 
-
-            Restrictions restrictions;
-            pgp.getRestrictions(restrictions, topology_restr);
-
-            Graph graph_unrestr(topology_unrestr);
-            Graph graph_restr(topology_restr);
+            Graph graph_unrestr(topology, config, false);
 
             // ...............................................................
             WHEN ("Adding a turning restriction and a point restriction (barrier)")
             {
-                graph_restr.addRestrictions(restrictions, config);
 
                 THEN ("there should be equally many vertices "
                       "in restricted and unrestricted")
@@ -193,6 +189,13 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
                     INFO ("  Restricted # Lines:    " << graph_restr.nrLines());
                     INFO ("UNRestricted # Lines:    " << graph_unrestr.nrLines());
                     REQUIRE (graph_restr.nrLines() == graph_unrestr.nrLines() - 9);
+                }
+                THEN ("we can print the info for an edge and it should have a cost")
+                {
+                    EdgeIdType id = 270;
+                    const Edge& edge = topology.getEdge(id);
+                    INFO ("Edge " << id << ": " << edge);
+                    REQUIRE (true);
                 }
             }
         }

@@ -18,6 +18,9 @@
 //
 #include "DatabaseConfig.h"
 #include "VehicleConfig.h"
+#include "CostConfig.h"
+#include "../osm/OsmAccess.h"
+#include "../osm/OsmBarrier.h"
 
 // FORWARD REFERENCES
 //
@@ -52,6 +55,7 @@ public:
 
 // OPERATORS
 // OPERATIONS
+// ACCESS
     /** Get the database related parts of the configuration.
      * @return  Reference to a DatabaseConfig.
      */
@@ -67,15 +71,42 @@ public:
      */
     const VehicleConfig&  getVehicleConfig() const;
 
-// ACCESS
+    /** Get the rules for which values of the `access`-tag allows access
+     * and hence which values restricts access to an Edge.
+     * @return  Reference to an AccessRule
+     */
+    const OsmAccess::AccessRule&
+                          getAccessRule() const;
+
+    /** Get the rules for which values of the `barrier`-tag restricts access
+     * @return  Reference to an RestrictionsRule
+     */
+    const OsmBarrier::RestrictionsRule&
+                          getBarrierRestrictionsRule() const;
+
+    /** Get the rules for which values of the `barrier`-tag costs to pass
+     * @return  Reference to an CostsRule
+     */
+    const OsmBarrier::CostsRule&
+                          getBarrierCostsRule() const;
+
+    /** Get the cost related parts of the configuration.
+     * @return  Reference to a CostConfig.
+     */
+    const CostConfig&     getCostConfig() const;
+
 // INQUIRY
 
 protected:
 private:
 // ATTRIBUTES
-    DatabaseConfig mDbConfig;
-    TopologyConfig mTopoConfig;
-    VehicleConfig  mVehicleConfig;
+    DatabaseConfig          mDbConfig;
+    TopologyConfig          mTopoConfig;
+    VehicleConfig           mVehicleConfig;
+    CostConfig              mCostConfig;
+    OsmAccess::AccessRule   mAccessRule;
+    OsmBarrier::CostsRule   mBarrierCostsRule;
+    OsmBarrier::RestrictionsRule mBarrierRestrictionsRule;
 };
 
 // INLINE METHODS

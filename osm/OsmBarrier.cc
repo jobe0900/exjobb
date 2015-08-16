@@ -21,17 +21,32 @@ OsmBarrier::RestrictionsRule::restrictsAccess(OsmBarrier::BarrierType type) cons
     return it != restrictionTypes.end();
 }
 
-// CostsRule -----------------------------------------------------------------
-OsmBarrier::CostsRule::CostsRule(
-    std::initializer_list<OsmBarrier::BarrierType> costsTypes)
-    : costsTypes(costsTypes)
-{ }
-
 bool
-OsmBarrier::CostsRule::costs(OsmBarrier::BarrierType type) const
+OsmBarrier::CostsRule::costsToPass(OsmBarrier::BarrierType type) const
 {
-    auto it = std::find(costsTypes.begin(), costsTypes.end(), type);
-    return it != costsTypes.end();
+    const auto& it  = costs.find(type);
+    return it != costs.end();
+}
+
+Cost
+OsmBarrier::CostsRule::getCost(OsmBarrier::BarrierType type) const
+{
+    const auto& it  = costs.find(type);
+    if(it != costs.end())
+    {
+        return it->second;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+void
+OsmBarrier::CostsRule::addCost(OsmBarrier::BarrierType type, Cost cost)
+{
+    costs.erase(type);
+    costs.insert({type, cost});
 }
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
@@ -62,7 +77,8 @@ OsmBarrier::parseString(const std::string& rTypeString)
     {
         return BarrierType::NONE;
     }
-    throw OsmException("OsmBarrier:parseString: Unknown Barrier Type string.");
+    throw OsmException("OsmBarrier:parseString: Unknown Barrier Type string: "
+        + rTypeString);
 }
 
 //static
@@ -91,7 +107,7 @@ OsmBarrier::restrictsAccess(OsmBarrier::RestrictionsRule rule) const
 bool
 OsmBarrier::costsToPass(OsmBarrier::CostsRule rule) const
 {
-    return rule.costs(mType);
+    return rule.costsToPass(mType);
 }
 
 //============================= OPERATIONS ===================================
@@ -148,9 +164,3 @@ const std::vector<std::string> OsmBarrier::sDisregardedTypes
     "retaining_wall",
     "wall",
 };
-
-
-
-
-
-

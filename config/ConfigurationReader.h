@@ -81,10 +81,52 @@ private:
 	void    fillTopologyConfiguration(TopologyConfig& rTopologyConfig) const;
 
 	/** Read the vehicle part of the configuration and populate config struct.
-	 * @param  The Vehicle configuration
+	 * @param   The Vehicle configuration
 	 * @throw   ConfigurationException  If missing configuration.
 	 */
 	void    fillVehicleConfiguration(VehicleConfig& rVehicleConfig) const;
+
+	/** Read the Access part of the configuration and build the rule for
+	 * which tags allows access (and hence which tags restricts access).
+	 * @param   rAccessRule     The rule to fill out.
+	 * @throw   ConfigurationException  If missing configuration.
+	 */
+	void    fillAccessRule(OsmAccess::AccessRule& rAccessRule) const;
+
+	/** Read the Barrier part of the configuration and build the rule for
+	 * which barriers restricts access.
+	 * @param   rRestrictRule     The rule to fill out.
+	 * @throw   ConfigurationException  If missing configuration.
+	 */
+	void    fillBarrierRestrictRule(OsmBarrier::RestrictionsRule& rRestrictRule) const;
+
+	/** Read the Barrier part of the configuration and build the rule for
+	 * which barriers imposes a cost.
+	 * @param   rCostRule     The rule to fill out.
+	 * @throw   ConfigurationException  If missing configuration.
+	 */
+	void    fillBarrierCostsRule(OsmBarrier::CostsRule& rCostsRule) const;
+
+	/** Read the Cost part of the configuration and populate config struct.
+	 * @param   The Cost configuration
+	 * @throw   ConfigurationException  If missing configuration.
+	 */
+	void    fillCostConfiguration(CostConfig& rCostConfig) const;
+
+	/** Helper to `fillCostConfig()`. Fill in the Default Speed part.
+	 * @param   The Cost configuration.
+	 */
+	void    fillDefaultSpeedCost(CostConfig& rCostConfig) const;
+
+	/** Helper to `fillCostConfig()`. Fill in the Surface Max Speed part.
+	 * @param   The Cost configuration.
+	 */
+	void    fillSurfaceMaxSpeedCost(CostConfig& rCostConfig) const;
+
+	/** Helper to `fillCostConfig()`. Fill in the cost for other edge costs.
+	 * @param   The Cost configuration.
+	 */
+	void    fillOtherEdgeCosts(CostConfig& rCostConfig) const;
 };
 
 // INLINE METHODS

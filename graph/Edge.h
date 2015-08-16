@@ -19,12 +19,16 @@
 // LOCAL INCLUDES
 //
 #include "Vertex.h"
+#include "../config/Configuration.h"
 #include "../osm/OsmHighway.h"
 #include "../osm/OsmId.h"
+#include "EdgeCost.h"
+#include "Speed.h"
 
 // FORWARD REFERENCES
 //
-typedef long            EdgeIdType;
+typedef long    EdgeIdType;
+class           EdgeRestriction;
 
 /**
  * Data structure for edges in the topology.
@@ -115,14 +119,14 @@ public:
          VertexIdType    source,
          VertexIdType    target);
 
-    /** Copy constructor.
-     * @param   from    The Edge to make a copy of.
+    /** Move constructor.
+     * @param   from    The Edge to make a move of.
      */
-    Edge(const Edge& from) = default;
+    Edge(Edge&& from);
 
     /** Destructor.
      */
-    ~Edge() = default;
+    ~Edge();
 
 // OPERATORS
     /** Textual output of Edge.
@@ -139,22 +143,26 @@ public:
     /** Set the Road data for this edge.
      * @param   roadData    The RoadData to use.
      */
-    void              setRoadData(RoadData geomData);
+    void              setRoadData(RoadData roadData);
 
     /** Set the OsmId corresponding to this edge.
      * @param   osmId   The OsmId to set.
      */
     void              setOsmId(OsmIdType osmId);
 
-    /** Flag that there exists restrictions for this edge and they need
-     * to be taken into account when building graph.
+    /** Set the restrictions for this edge.
+     * @param   pRestrictions   The restrictions for this edge.
      */
-    void              setHasRestrictions(bool hasRestrictions = true);
+    void              setRestrictions(EdgeRestriction* pRestrictions);
 
-    /** Flag that there exists restrictions for this edge and they need
-     * to be taken into account when building graph.
+    /** Set the speed for the edge in this actual configuration.
+     * @param   speed   The speed to set in km/h.
      */
-    void              setHasViaWayRestriction(bool hasViaWayRestriction = true);
+    void              setSpeed(Speed speed);
+
+    /** Remove the restrictions for this edge.
+     */
+    void              clearCostsAndRestrictions();
 
     /** Parse a string into an EdgeIdType.
      *  @param  idString    The string representing the id.
@@ -195,6 +203,41 @@ public:
      */
     const RoadData&   roadData()  const;
 
+    /** Get hold of the restrictions associated with the edge.
+     * @return  Reference to EdgeRestriction
+     * @throw   RestrictionException if no restriction is applied on Edge.
+     */
+    EdgeRestriction&  restrictions();
+
+    /** Get hold of the restrictions associated with the edge.
+     * @return  Reference to EdgeRestriction
+     * @throw   RestrictionException if no restriction is applied on Edge.
+     */
+    const EdgeRestriction&
+                      restrictions() const;
+
+    /** Get the structure of different costs for traveling the edge.
+     * @return  Reference to EdgeCost
+     */
+    EdgeCost&         edgeCost();
+
+    /** Get the structure of different costs for traveling the edge.
+     * @return  Reference to EdgeCost
+     */
+    const EdgeCost&   edgeCost() const;
+
+    /**
+     * @return  The cost or weight for this edge.
+     */
+    Cost              cost() const;
+
+    /** The speed must be kept track of because of turn cost calculations,
+     * but they are not  part of `RoadData` which are meant to be constant,
+     * while the speed varies with configuration.
+     * @return  The speed for this edge in km/h
+     */
+    Speed             speed() const;
+
 // INQUIRY
     /**
      * @return  true if there exists restrictions for this edge.
@@ -207,17 +250,23 @@ public:
      */
     bool              hasViaWayRestriction() const;
 
+    /** Check if travel on the Edge is restricted given the configuration.
+     * @param   rConfig     Configuration with restriction rules.
+     * @return  true        If travel is restricted.
+     */
+    bool              isRestricted(const Configuration& rConfig) const;
+
 private:
 // ATTRIBUTES
-    EdgeIdType		mId;
-    OsmIdType       mOsmId;
-    VertexIdType	mSource;
-    VertexIdType	mTarget;
-    GeomData        mGeomData;
-    RoadData        mRoadData;
-    bool            mHasRestrictions;
-    bool            mHasViaWayRestriction;
-
+    EdgeIdType		  mId;
+    OsmIdType         mOsmId;
+    VertexIdType	  mSource;
+    VertexIdType	  mTarget;
+    GeomData          mGeomData;
+    RoadData          mRoadData;
+    EdgeRestriction*  mpRestrictions;
+    EdgeCost          mCost;
+    Speed             mSpeed;
 };
 
 // INLINE METHODS

@@ -14,19 +14,18 @@
 #include <map>
 #include <ostream>
 
-#include <iostream>
-
 // PROJECT INCLUDES
 //
 #include <boost/graph/adjacency_list.hpp>
 
 // LOCAL INCLUDES
 //
-#include "GraphException.h"
-#include "Vertex.h"
 #include "Edge.h"
+#include "EdgeRestriction.h"
+#include "GraphException.h"
 #include "Topology.h"
-#include "Restrictions.h"
+#include "TurnCostCalculator.h"
+#include "Vertex.h"
 #include "../config/Configuration.h"
 #include "../util/Logging.h"
 
@@ -79,6 +78,32 @@ struct LineGraphLine
     double          cost;
 };
 
+/** The 'normal' vertex based graph type. */
+typedef boost::adjacency_list
+    < boost::listS, boost::vecS, boost::directedS,
+    GraphVertex, GraphEdge >                                   GraphType;
+/** The edge based graph type. */
+typedef boost::adjacency_list
+    < boost::listS, boost::vecS, boost::directedS,
+    LineGraphNode, LineGraphLine >                             LineGraphType;
+
+/** A vertex in the normal graph. */
+typedef boost::graph_traits<GraphType>::vertex_descriptor      VertexType;
+/** An edge in the normal graph. */
+typedef boost::graph_traits<GraphType>::edge_descriptor        EdgeType;
+
+/** A node in the line graph. */
+typedef boost::graph_traits<LineGraphType>::vertex_descriptor  NodeType;
+/** An edge in the line graph. */
+typedef boost::graph_traits<LineGraphType>::edge_descriptor    LineType;
+
+/** Mapping of a topology vertex id and graph vertex object. */
+typedef std::map<VertexIdType, VertexType>   TopoVertexIdToGraphVertexMapType;
+/** Mapping of a topology edge id and graph edge object. */
+typedef std::multimap<EdgeIdType, EdgeType>  TopoEdgeIdToGraphEdgeMapType;
+/** Mapping of a graph edge id and linegraph node object. */
+typedef std::map<EdgeIdType, NodeType>       GraphEdgeIdToNodeMapType;
+
 
 /**
  * A class for a keeping Topology and optional Restrictions and Costs, and
@@ -88,29 +113,6 @@ struct LineGraphLine
 class Graph
 {
 public:
-// TYPES
-    typedef boost::adjacency_list
-        < boost::listS, boost::vecS, boost::directedS,
-          GraphVertex, GraphEdge >                      GraphType;
-    typedef boost::adjacency_list
-        < boost::listS, boost::vecS, boost::directedS,
-          LineGraphNode, LineGraphLine >                LineGraphType;
-
-    typedef boost::graph_traits<GraphType>
-                                ::vertex_descriptor     VertexType;
-    typedef boost::graph_traits<GraphType>
-                                ::edge_descriptor       EdgeType;
-
-    typedef boost::graph_traits<LineGraphType>
-                                ::vertex_descriptor     NodeType;
-    typedef boost::graph_traits<LineGraphType>
-                                ::edge_descriptor       LineType;
-
-    typedef std::map<VertexIdType, VertexType>          TopoVertexIdToGraphVertexMapType;
-    typedef std::multimap<EdgeIdType, EdgeType>         TopoEdgeIdToGraphEdgeMapType;
-    typedef std::map<EdgeIdType, NodeType>              GraphEdgeIdToNodeMapType;
-
-
 // LIFECYCLE
     /** Constructor.
      * Disabled.
@@ -120,8 +122,10 @@ public:
     /** Constructor.
      * Graph should be based on the supplied topology.
      * @param   rTopology       The topology to use as basis for the graph.
+     * @param   rConfig         The configuration used for topology and all.
+     * @param   useRestrictions If the graph should be built with restrictions or not.
      */
-    Graph(const Topology& rTopology);
+    Graph(Topology& rTopology, const Configuration& rConfig, bool useRestrictions = true);
 
     /** Copy constructor.
      * Disabled.
@@ -130,70 +134,67 @@ public:
 
     /** Destructor.
      */
-    ~Graph() = default;
+    ~Graph();
 
 // OPERATORS
     /** Output operator to print to a stream.
      */
     friend
-    std::ostream&         operator<<(std::ostream& os, const Graph& rGraph);
+    std::ostream&       operator<<(std::ostream& os, const Graph& rGraph);
 
 // OPERATIONS
-    /** Add restrictions to the topology and rebuilds the graph.
-     * @param   pRestrictions   Restrictions to impose on the graph.
-     * @param   pConfiguration  Configuration to compare restrictions against.
-     */
-    void                  addRestrictions(
-        Restrictions&   rRestrictions,
-        Configuration&  rConfiguration);
-
 // ACCESS
     /**
      * @return  The number of Vertices in the Graph.
      */
-    size_t                nrVertices() const;
+    size_t              nrVertices() const;
 
     /**
      * @return  The number of Edges in the Graph.
      */
-    size_t                nrEdges() const;
+    size_t              nrEdges() const;
 
     /**
      * @return  The number of Nodes in the LineGraph.
      */
-    size_t                nrNodes() const;
+    size_t              nrNodes() const;
 
     /**
      * @return  The number of Nodes in the LineGraph.
      */
-    size_t                nrLines() const;
+    size_t              nrLines() const;
 
     /** Builds graph if necessary before returning.
      * @return  The Boost Graph representation of the Graph.
      * @throws  GraphException if something goes wrong building the graph.
      */
-    const GraphType&      getBoostGraph();
+    const GraphType&    getBoostGraph();
 
-    /** Builds graph if necessary before returning.
+    /** Get a reference to the line graph.
      * @return  The Boost Graph representation of the LineGraph.
      * @throws  GraphException if something goes wrong building the graph.
      */
-    const LineGraphType&  getBoostLineGraph();
+    LineGraphType&      getBoostLineGraph();
 
 // INQUIRY
     /**
      * @return  true    If graph has a vertex with given id.
      */
-    bool                  hasVertex(VertexIdType vertexId) const;
+    bool                hasVertex(VertexIdType vertexId) const;
 
     /**
      * @return  true    If LineGraph has a node with given id.
      */
-    bool                  hasNode(EdgeIdType nodeId) const;
+    bool                hasNode(EdgeIdType nodeId) const;
+
+    /**
+     * @return  true    If graph was built with restrictions.
+     */
+    bool                isRestricted() const;
 
     /** Output information about # vertices, edges, nodes, lines.
      */
-    void                  printGraphInformation(std::ostream& os) const;
+    void                printGraphInformation(std::ostream& os) const;
 
 protected:
 
@@ -225,10 +226,10 @@ private:
      * @param   e_ix    The running index amongst edges added to graph.
      */
     void                addDirectedEdge(
-        EdgeIdType id,
-        const VertexType& source,
-        const VertexType& target,
-        EdgeIdType ix);
+                            EdgeIdType id,
+                            const VertexType& source,
+                            const VertexType& target,
+                            EdgeIdType ix);
 
     /** Get the graph vertex corresponding to a given id.
      * @param   id      The vertex' topology id.
@@ -255,8 +256,8 @@ private:
      * @param   rNode       The Node corresponding to the edge returned here.
      */
     void                addGraphEdgeAsLineGraphNode(
-        const EdgeType& rGraphEdge,
-        NodeType&       rNode);
+                            const EdgeType& rGraphEdge,
+                            NodeType&       rNode);
 
     /** Get an already existing Node from the LineGraph.
      * @param   id  The Edge id (== the Node id).
@@ -274,14 +275,23 @@ private:
      * @throw   GraphException
      */
     void                connectSourceNodeToTargetNodesViaVertex(
-        const NodeType& rSourceNode,
-        const VertexType& rViaVertex);
+                            const NodeType& rSourceNode,
+                            const VertexType& rViaVertex);
+
+    /** Calculate the cost for making a turn from source edge to target.
+     * Helper to `connectSourceNodeToTargetNodesViaVertex()`.
+     * @param   sourceEdgeId    The edge (and node) id of the source.
+     * @param   targetEdgeId    The edge (and node) id of the target.
+     */
+    double              calculateTurnCost(
+                            EdgeIdType sourceEdgeId,
+                            EdgeIdType targetEdgeId) const;
 
     /**
      * @param   edgeId  Id to edge to look up.
      * @return  true if this edge has no exits, meaning it is no use adding it.
      */
-    bool                edgeHasNoExit(EdgeIdType edgeId) const;
+    bool                edgeHasNoExit(EdgeIdType edgeId);
 
     /**
      * @return A vector of all Edges going out from a vertex.
@@ -294,17 +304,6 @@ private:
      */
     std::vector<EdgeIdType>
                         getRestrictedTargets(EdgeIdType edgeId) const;
-
-//    /**
-//     * @param   edgeId      Examine restricted travel from this edge.
-//     * @param   barrierRule Rule for which barrier types are blocking access.
-//     * @param   accessRule  Rule for which access types are blocking.
-//     * @return  A vector of all restricted edges from this Edge.
-//     */
-//    std::vector<EdgeIdType> getRestrictedTargets(
-//        EdgeIdType                           edgeId,
-//        const OsmBarrier::RestrictionsRule&  barrierRule,
-//        const OsmAccess::AccessRule&         accessRule) const;
 
     /**
      * @return  true if this target edge has restricted access from the source.
@@ -324,14 +323,12 @@ private:
     TopoVertexIdToGraphVertexMapType  mIdToVertexMap;     // map original id to GraphVertex
     TopoEdgeIdToGraphEdgeMapType      mIdToEdgeMap;       // map original id to GraphEdge
     GraphEdgeIdToNodeMapType          mEdgeIdToNodeMap;   // map GraphEdge.id to LineGraphNode
-    const Topology&                   mrTopology;
-    Restrictions*                     mpRestrictions;
-    Configuration*                    mpConfiguration;
-    OsmBarrier::RestrictionsRule      mBarrierRule; // TODO read in config?
-    OsmAccess::AccessRule             mAccessRule;  // TODO read in config?
+    Topology&                         mrTopology;
+    const Configuration&              mrConfiguration;
     mutable boost::log::sources::severity_logger
         <boost::log::trivial::severity_level>
                                       mLog;
+    bool                              mUseRestrictions;
 
 // CONSTANTS
 };

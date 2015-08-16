@@ -53,9 +53,7 @@ public:
 // OPERATIONS
     virtual void    getTopology(Topology& rTopology);
 
-    virtual void    getRestrictions(
-        Restrictions&  rRestrictions,
-        Topology&      rTopology);
+    virtual void    setRestrictionsAndCosts(Topology& rTopology);
 
 // ACCESS
 // INQUIRY

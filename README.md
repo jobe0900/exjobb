@@ -11,11 +11,13 @@ The software module does not fulfill the specification yet.
     - General access restrictions.
     - Vehicle type specific restrictions.
     - Vehicle property restrictions (weight, height...).
+- Some restrictions on edges.
+- Turning restrictions via a node, not via other roads.
+- Costs.
 
 #### NOT implemented features
-- Costs.
+- Inclination, different speed uphill or down hill.
 - Conditional restrictions.
-- Point restrictions, i.e. restrictions not connected to an edge, but to a point (but they perhaps might have something to do with the nearest edge?).
 - Turning restrictions that are not one-to-one, but one-to-many.
 - Turning restrictions via ways (not via nodes).
 - Parsing units, i.e. assuming all dimensions are meters and weight in metric tons and speed in km/h.
@@ -30,6 +32,7 @@ The code is organized in folders (kind of "packages") to keep it modularized. Th
 - **`mapprovider`**: The package for code providing access to map data.
 - **`osm`**: Classes representing some concepts in OpenStreetMap data.
 - **`preparation`**: osm-files and sql-files and instructions on how to set up database.
+- **`uml`**: For uml documentation.
 - **`util`**: A few utility classes.
 
 Each folder should have its own `README.md` that describes what the contents and the purpose of that package is. Each package should also have their own tests in a `catchtest` folder, and preferably an *exception class*.
@@ -47,9 +50,7 @@ As mentioned, testing is done with [Catch](https://github.com/philsquared/Catch)
 I have tried to follow the style given in [C++ Coding Standard](http://www.possibility.com/Cpp/CppCodingStandard.html).
 
 ### Design
-I have deliberately tried to avoid passing pointers around, and rather pass in references as IN-OUT parameters. The idea is that the central LGU class has stack variables of `Graph`, `Topology` and `Restrictions` that gets filled in, rather than obtained as pointers to objects on the heap. This to try to reduce risks of complicated memory handling, while not have too much copying of large objects.
-
-To keep a clean separation of `Topology` and `Restrictions`, the Restrictions are now a kind of look up table, instead of each `Edge` having a pointer to an `EdgeRestriction`.
+I have deliberately tried to avoid passing pointers around, and rather pass in references as IN-OUT parameters. The idea is that the central LGU class has stack variables of `Graph`, `Topology` that gets filled in, rather than obtained as pointers to objects on the heap. This is to try to reduce risks of complicated memory handling, while not have too much copying of large objects.
 
 ### Logging
 Boost logging was the last feature added, and is so far only used in the `Graph` class. It needs to be compiled and linked with a lot of libraries:

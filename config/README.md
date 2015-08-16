@@ -7,7 +7,11 @@ Configurations are set in the file `settings.json`. The different parts of the c
 - Database
 - Topology
 - Vehicle
-- TODO: osm_tags, costs, restrictions
+- Access
+- Restrictions
+- Costs
+
+If one wishes to edit the setting, one can freely add and remove objects in _braces_ (`[` and `]`), for example if one wishes to edit which values for a tag inflicts a cost. But the strings in _curly braces_ (`{` and `}`) are keys that must exist, but the values for the keys can of course be edited.
 
 
 Database
@@ -119,10 +123,47 @@ Configuration about the vehicle to route through the topology. Information might
 
 - **"category"**:
     - *name* of OSM catagory of the vehicle. [OSM Access](http://wiki.openstreetmap.org/wiki/Key:access). (E.g. "motorcar"). Definition of the category must state dimensions as below.
-- _**"category_name"**_:
+- **_"category_name"_**:
     - *height* of vehicle in meters.
     - *length* of vehicle in meters.
     - *width* of vehicle in meters.
     - *weight* of vehicle in tons.
     - *maxspeed* of vehicle in km/h.
+    - *acceleration* is the time it takes from 0 to 100 km/h.
+    - *deceleration* is the time it takes from 100 to 0 km/h.
+
+
+Access
+------
+
+- **"allow"**:
+    List of which values for tag `access` that permits access. Those values for `access` that are not listed here are considered to restrict access.
+    
+    
+Restrictions
+------------
+
+- **"barriers"**:
+    - List of which values for `barriers` that restricts access. Those values not listed are assumed to allow access.
+
+
+Cost
+----
+
+Configuration relating to costs when routing through the graph.
+
+- **"default_speed"**:
+    - each road category has default speeds when none is specified. [OSM default speeds](http://wiki.openstreetmap.org/wiki/OSM_tags_for_routing/Maxspeed). Most roads have two speeds, `high` and `low`, which differentiate the speeds inside and outside of a town. `living_street` is always inside so only the low is important. `motorway` is really the `high` number, and the `low` number is the speed on the links (ramps). It is not trivial to find out if a road is inside or outside of that area, so for this application which is meant to be used for routing in urban areas (?), the `low` number is assumed for all cost calculations.
+- **"surface"**:
+    - each surface type is associated with a max speed in km/h over which one should not drive.
+- **"barriers"**:
+    - this is a list of which barriers causes a slow-down, and the number of seconds it is  probable it takes to pass.
+- **"highway"**:
+    - a list of values for the `highway` tag that can mean a time cost in seconds, such as zebra crossings, bus stops, stop or give way sign, and more.
+- **"railway"**:
+    - a list of values for the `railway` tag that can mean a time cost in seconds, such as a crossing between railway and highway (`level_crossing`).
+- **"public_transport"**:
+    - a list of values for the `public_transport` tag that can mean a time cost in seconds, such as a `stop_position` if one thinks it is suitable to slow down when passing a bus stop.
+- **"traffic_calming"**:
+    - a list of traffic calming objects and their time costs in seconds.
     

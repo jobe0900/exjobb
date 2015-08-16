@@ -5,23 +5,29 @@
 # Add inputs and outputs from these tool invocations to the build variables 
 CC_SRCS += \
 ../graph/Edge.cc \
-../graph/EdgeRestrictions.cc \
+../graph/EdgeCost.cc \
+../graph/EdgeRestriction.cc \
 ../graph/Graph.cc \
 ../graph/Topology.cc \
+../graph/TurnCostCalculator.cc \
 ../graph/Vertex.cc 
 
 CC_DEPS += \
 ./graph/Edge.d \
-./graph/EdgeRestrictions.d \
+./graph/EdgeCost.d \
+./graph/EdgeRestriction.d \
 ./graph/Graph.d \
 ./graph/Topology.d \
+./graph/TurnCostCalculator.d \
 ./graph/Vertex.d 
 
 OBJS += \
 ./graph/Edge.o \
-./graph/EdgeRestrictions.o \
+./graph/EdgeCost.o \
+./graph/EdgeRestriction.o \
 ./graph/Graph.o \
 ./graph/Topology.o \
+./graph/TurnCostCalculator.o \
 ./graph/Vertex.o 
 
 

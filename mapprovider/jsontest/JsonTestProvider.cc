@@ -9,8 +9,6 @@
 #include "../../graph/Vertex.h"
 #include "../../graph/Edge.h"
 
-#include <iostream>
-#include <sstream>
 #include <string>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -26,8 +24,6 @@ JsonTestProvider::JsonTestProvider(const Configuration& rConfig)
 {
 }
 
-
-
 JsonTestProvider::~JsonTestProvider()
 {
 }
@@ -37,6 +33,7 @@ JsonTestProvider::~JsonTestProvider()
 //============================= OPERATIONS ===================================
 void
 JsonTestProvider::getTopology(Topology& rTopology)
+//JsonTestProvider::getMapData(Topology& rTopology)
 {
     using namespace boost::property_tree;
 
@@ -96,9 +93,7 @@ JsonTestProvider::getTopology(Topology& rTopology)
 }
 
 void
-JsonTestProvider::getRestrictions(
-    Restrictions&  rRestrictions,
-    Topology&      rTopology)
+JsonTestProvider::setRestrictionsAndCosts(Topology& rTopology)
 {
     //none
 }

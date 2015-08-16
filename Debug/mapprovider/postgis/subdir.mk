@@ -4,16 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CC_SRCS += \
+../mapprovider/postgis/CostQueries.cc \
 ../mapprovider/postgis/PostGisProvider.cc \
 ../mapprovider/postgis/RestrictionQueries.cc \
 ../mapprovider/postgis/TopologyQueries.cc 
 
 CC_DEPS += \
+./mapprovider/postgis/CostQueries.d \
 ./mapprovider/postgis/PostGisProvider.d \
 ./mapprovider/postgis/RestrictionQueries.d \
 ./mapprovider/postgis/TopologyQueries.d 
 
 OBJS += \
+./mapprovider/postgis/CostQueries.o \
 ./mapprovider/postgis/PostGisProvider.o \
 ./mapprovider/postgis/RestrictionQueries.o \
 ./mapprovider/postgis/TopologyQueries.o 

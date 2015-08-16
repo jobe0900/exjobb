@@ -23,7 +23,7 @@ SCENARIO ("MapProvider queries", "[mp-query]")
 {
 	try
 	{
-		std::string config_file("config/catchtest/testsettings.json");
+		std::string config_file("catchtest/testsettings/testsettings.json");
 		ConfigurationReader config_reader(config_file);
 
 		GIVEN ("a valid database configuration structure and "

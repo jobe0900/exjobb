@@ -12,8 +12,8 @@
 const VertexIdType Vertex::MAX_ID = std::numeric_limits<VertexIdType>::max();
 
 //============================= LIFECYCLE ====================================
-Vertex::Vertex(VertexIdType id, Point point, bool hasRestrictions)
-	: mId(id), mPoint(point), mHasRestrictions(hasRestrictions)
+Vertex::Vertex(VertexIdType id, Point point)
+	: mId(id), mPoint(point)
 {}
 
 //============================= OPERATORS ====================================
@@ -32,12 +32,6 @@ Vertex::operator==(const Vertex& rhs) const
 }
 
 //============================= OPERATIONS ===================================
-void
-Vertex::setHasRestrictions(bool restrictions)
-{
-    mHasRestrictions = restrictions;
-}
-
 //============================= ACESS      ===================================
 VertexIdType
 Vertex::id() const
@@ -50,7 +44,7 @@ Vertex::point() const
 //============================= INQUIRY    ===================================
 bool
 Vertex::hasRestrictions() const
-{ return mHasRestrictions; }
+{ return false; }
 
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

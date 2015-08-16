@@ -13,6 +13,7 @@
 //============================= LIFECYCLE ====================================
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
+//============================= ACESS      ===================================
 const DatabaseConfig&
 Configuration::getDatabaseConfig() const
 {
@@ -31,7 +32,30 @@ Configuration::getVehicleConfig() const
     return mVehicleConfig;
 }
 
-//============================= ACESS      ===================================
+const OsmAccess::AccessRule&
+Configuration::getAccessRule() const
+{
+    return mAccessRule;
+}
+
+const OsmBarrier::RestrictionsRule&
+Configuration::getBarrierRestrictionsRule() const
+{
+    return mBarrierRestrictionsRule;
+}
+
+const OsmBarrier::CostsRule&
+Configuration::getBarrierCostsRule() const
+{
+    return mBarrierCostsRule;
+}
+
+const CostConfig&
+Configuration::getCostConfig() const
+{
+    return mCostConfig;
+}
+
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 

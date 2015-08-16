@@ -25,43 +25,41 @@ SCENARIO ("PostGis topology handling", "[postgis][topology]")
 {
 	try
 	{
-		// ===================================================================
-		GIVEN ("a valid configuration structure with a temporary name")
-		{
-		    std::string config_file("mapprovider/postgis"
-		        "/catchtest/temptable-testsettings.json");
-		    ConfigurationReader config_reader(config_file);
-		    Configuration config;
-		    config_reader.fillConfiguration(config);
-		    PostGisProvider* p_pgp(nullptr);
-
-			// ...............................................................
-			WHEN ("we try to create postgis topology")
-			{
-				THEN ("we should not receive an exception")
-				{
-					REQUIRE_NOTHROW ( p_pgp = new PostGisProvider(config));
-				}
-			}
-
-			// ...............................................................
-			WHEN ("we try to remove postgis topology with valid arguments")
-			{
-				THEN ("we should not receive an exception")
-				{
-					REQUIRE_NOTHROW (delete p_pgp);
-				}
-			}
-			delete p_pgp;
-		}
+//		// ===================================================================
+//		GIVEN ("a valid configuration structure with a temporary name")
+//		{
+//		    std::string config_file("catchtest/testsettings/temptable-testsettings.json");
+//		    ConfigurationReader config_reader(config_file);
+//		    Configuration config;
+//		    config_reader.fillConfiguration(config);
+//		    PostGisProvider* p_pgp(nullptr);
+//
+//			// ...............................................................
+//			WHEN ("we try to create postgis topology")
+//			{
+//				THEN ("we should not receive an exception")
+//				{
+//					REQUIRE_NOTHROW ( p_pgp = new PostGisProvider(config));
+//				}
+//			}
+//
+//			// ...............................................................
+//			WHEN ("we try to remove postgis topology with valid arguments")
+//			{
+//				THEN ("we should not receive an exception")
+//				{
+//					REQUIRE_NOTHROW (delete p_pgp);
+//				}
+//			}
+//			delete p_pgp;
+//		}
 
 		// ===================================================================
 		GIVEN ("a configuration file with NO topology name")
 		{
 		    WHEN ("we try to read in topology")
             {
-		        std::string config_file("mapprovider/postgis"
-		            "/catchtest/missing-topo-testsettings.json");
+		        std::string config_file("catchtest/testsettings/missing-topo-testsettings.json");
 		        ConfigurationReader config_reader(config_file);
 		        Configuration config;
 		        config_reader.fillConfiguration(config);
@@ -91,8 +89,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 				"name to existing topology")
 		{
 //		    std::string config_file("config/catchtest/testsettings.json");
-		    std::string config_file("mapprovider/postgis"
-		        "/catchtest/mikh0522-testsettings.json");
+		    std::string config_file("catchtest/testsettings/mikh0522-testsettings.json");
 		    ConfigurationReader config_reader(config_file);
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
@@ -128,7 +125,8 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			{
 			    Topology topology;
 			    db_handler.getTopology(topology);
-			    Graph graph(topology);
+			    Configuration config;
+			    Graph graph(topology, config);
 			    std::ostringstream oss;
 
 			    THEN ("we should be able to print some information")
@@ -188,196 +186,71 @@ $ psql -U jonas -d mikh_0522 -c
 	}
 }
 
-SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
+SCENARIO ("Set costs on Edges", "[postgis][cost]")
 {
 	try
 	{
-
 		// ===================================================================
-		GIVEN ("a valid database configuration to a PostGisProvider ")
+		GIVEN ("a valid database configuration structure and "
+				"name to existing topology")
 		{
-		    std::string config_file("mapprovider/postgis"
-		        "/catchtest/mikh0530-testsettings.json");
+		    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
 		    ConfigurationReader config_reader(config_file);
 		    Configuration config;
 		    config_reader.fillConfiguration(config);
 
 			PostGisProvider pgp(config);
+
 			Topology topology;
 			pgp.getTopology(topology);
 
 			// ...............................................................
-			WHEN ("we try to fetch Restrictions")
+			WHEN ("we try to set restrictions and costs on topology")
 			{
-			    Restrictions restrictions;
+			    pgp.setRestrictionsAndCosts(topology);
 
-			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-				THEN ("we should not get an exception")
-				{
-					REQUIRE_NOTHROW (
-					    pgp.getRestrictions(restrictions, topology));
-				}
-			}
-
-			WHEN ("trying to fetch restrictions")
-			{
-			    Restrictions restrictions;
-			    pgp.getRestrictions(restrictions, topology);
-			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-				THEN ("we should get a map of vehicle property restrictions")
-				{
-
-				    const auto& vpr_map =
-				        restrictions.edgeRestrictions().vehicleProperties();
-				    if(vpr_map.size() > 0)
-				    {
-				        const EdgeRestrictions::VehicleProperties& vp =
-				            vpr_map.begin()->second;
-				        INFO ("# VehiclePropertyRestricitons: " << vpr_map.size());
-				        INFO ("  First restriction on edge id: "
-				              << vpr_map.begin()->first
-				              << "\n   with maxspeed: " << vp.maxSpeed
-				              << ", minspeed: " << vp.minSpeed
-				              << ", maxheight: " << vp.maxHeight
-				              << ", maxlength: " << vp.maxLength
-				              << ", maxweight: " << vp.maxWeight
-				              << ", maxwidth: " << vp.maxWidth
-				              );
-				        REQUIRE (true);
-				    }
-				    else
-				    {
-				        INFO ("No VehiclePropertyRestrictions.");
-				        REQUIRE (true);
-				    }
-				}
-
-			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-				THEN ("we should get a map of general access restrictions")
-				{
-				    const auto& general_map =
-				        restrictions.edgeRestrictions().generalAccess();
-				    if(general_map.size() > 0)
-				    {
-				        EdgeIdType edgeId = general_map.begin()->first;
-				        const OsmAccess& access = general_map.begin()->second;
-				        INFO ("# General access restrictions: "
-				              << general_map.size());
-				        INFO ("  First restriction on edge id: " << edgeId
-				              << ", access restriction: " << access.toString());
-				        REQUIRE (true);
-				    }
-				    else
-				    {
-				        INFO ("No General Access Restrictions.");
-				        REQUIRE (true);
-				    }
-				}
-
-				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-				THEN ("we should get a map of vehicle restrictions")
-				{
-				    const auto& edge_map =
-				        restrictions.edgeRestrictions().vehicleTypeAccessEdges();
-				    if(edge_map.size() > 0)
-				    {
-				        EdgeIdType edgeId = edge_map.begin()->first;
-				        const auto& v_map = edge_map.begin()->second;
-				        INFO ("# edges with vehicle restrictions: "
-				            << edge_map.size());
-				        INFO ("# vehicle restrictions on first edge: "
-				            << v_map.size());
-				        INFO ("  First restriction on edge id: " << edgeId
-				            << ", vehicle restriction: "
-				            << OsmVehicle::toString(v_map.begin()->first)
-				            << " : "
-				            << v_map.begin()->second.toString());
-				        REQUIRE (true);
-				    }
-				    else
-				    {
-				        INFO ("No Vehicle Restrictions.");
-				        REQUIRE (true);
-				    }
-				}
-
-				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-				THEN ("we should get a map of barrier restrictions")
-				{
-				    const auto& barrier_map =
-				        restrictions.edgeRestrictions().barriers();
-				    if(barrier_map.size() > 0)
-				    {
-				        EdgeIdType edgeId = barrier_map.begin()->first;
-				        const OsmBarrier& barrier = barrier_map.begin()->second;
-				        INFO ("# Barrier restrictions: "
-				            << barrier_map.size());
-				        INFO ("  First restriction on edge id: " << edgeId
-				            << ", barrier restriction: " << barrier.toString());
-				        REQUIRE (true);
-				    }
-				    else
-				    {
-				        INFO ("No Barrier Restrictions.");
-				        REQUIRE (true);
-				    }
-				}
-
-				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-				THEN ("we should get a set of edgeIds of disused edges")
-				{
-				    const auto& disused_set =
-				        restrictions.edgeRestrictions().disusedEdges();
-				    if(disused_set.size() > 0)
-				    {
-				        EdgeIdType edgeId = *disused_set.begin();
-				        INFO ("# Disused edges: " << disused_set.size());
-				        INFO ("  First disused edge id: " << edgeId);
-				        REQUIRE (true);
-				    }
-				    else
-				    {
-				        INFO ("No Disused edges.");
-				        REQUIRE (true);
-				    }
-				}
-
-				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-				THEN ("we should get a set of edgeIds of 'noexit' edges")
-				{
-				    const auto& noexit_set =
-				        restrictions.edgeRestrictions().noExitEdges();
-				    if(noexit_set.size() > 0)
-				    {
-				        EdgeIdType edgeId = *noexit_set.begin();
-				        INFO ("# 'Noexit' edges: " << noexit_set.size());
-				        INFO ("  First 'noexit' edge id: " << edgeId);
-				        REQUIRE (true);
-				    }
-				    else
-				    {
-				        INFO ("No 'noexit' edges.");
-				        REQUIRE (true);
-				    }
-				}
-			}
-
-			//................................................................
-			WHEN ("parsing query result of edge ids")
-			{
-			    std::string edgesString("{123,345,567,789}");
-
-			    THEN ("we shoud be able to split the string")
+			    THEN ("we should be able to read travel time cost on edges")
 			    {
-			        std::vector<EdgeIdType> edgeIds =
-			            RestrictionQueries::Results::parseEdgeIdsString(
-			                edgesString);
-			        REQUIRE (edgeIds.size() == 4);
-			        REQUIRE (edgeIds[0] == 123);
-			        REQUIRE (edgeIds[1] == 345);
-			        REQUIRE (edgeIds[2] == 567);
-			        REQUIRE (edgeIds[3] == 789);
+			        EdgeIdType id = 1;
+			        const Edge& edge = topology.getEdge(id);
+			        INFO ("edge " << id
+			            << ", length: " << edge.geomData().length
+			            << ", travel time: "
+			            << edge.edgeCost().getCost(EdgeCost::TRAVEL_TIME)
+			            << ", total cost: " << edge.cost());
+                    INFO ("edge " << edge);
+			        REQUIRE (edge.cost() > 0);
 			    }
+
+                THEN ("we should be able to find cost for barriers")
+                {
+                    EdgeIdType id = 869;
+                    const Edge& edge = topology.getEdge(id);
+                    INFO ("edge " << id
+                        << ", length: " << edge.geomData().length
+                        << ", travel time: "
+                        << edge.edgeCost().getCost(EdgeCost::TRAVEL_TIME)
+                        << ", barrier cost: "
+                        << edge.edgeCost().getCost(EdgeCost::BARRIER)
+                        << ", total cost: " << edge.cost());
+                    REQUIRE (edge.cost() > 0);
+                }
+
+                THEN ("we should be able to find cost for other hindrances")
+                {
+                    EdgeIdType id = 869;
+                    const Edge& edge = topology.getEdge(id);
+                    INFO ("edge " << id
+                        << ", length: " << edge.geomData().length
+                        << ", travel time: "
+                        << edge.edgeCost().getCost(EdgeCost::TRAVEL_TIME)
+                        << ", barrier cost: "
+                        << edge.edgeCost().getCost(EdgeCost::BARRIER)
+                        << ", other cost: "
+                        << edge.edgeCost().getCost(EdgeCost::OTHER)
+                        << ", total cost: " << edge.cost());
+                    REQUIRE (edge.cost() > 0);
+                }
 			}
 		}
 	}
@@ -392,4 +265,210 @@ SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
 		REQUIRE (false);	// force output of error and failure
 
 	}
+
 }
+
+//SCENARIO ("Fetch restrictions from PostGis ", "[postgis][restrictions]")
+//{
+//	try
+//	{
+//
+//		// ===================================================================
+//		GIVEN ("a valid database configuration to a PostGisProvider ")
+//		{
+//		    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
+//		    ConfigurationReader config_reader(config_file);
+//		    Configuration config;
+//		    config_reader.fillConfiguration(config);
+//
+//			PostGisProvider pgp(config);
+//			Topology topology;
+//			pgp.getTopology(topology);
+//
+//			// ...............................................................
+//			WHEN ("we try to fetch Restrictions")
+//			{
+//			    Restrictions restrictions;
+//
+//			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//				THEN ("we should not get an exception")
+//				{
+//					REQUIRE_NOTHROW (
+//					    pgp.getRestrictions(restrictions, topology));
+//				}
+//			}
+//
+//			WHEN ("trying to fetch restrictions")
+//			{
+//			    Restrictions restrictions;
+//			    pgp.getRestrictions(restrictions, topology);
+//			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//				THEN ("we should get a map of vehicle property restrictions")
+//				{
+//
+//				    const auto& vpr_map =
+//				        restrictions.edgeRestrictions().vehicleProperties();
+//				    if(vpr_map.size() > 0)
+//				    {
+//				        const EdgeRestrictions::VehicleProperties& vp =
+//				            vpr_map.begin()->second;
+//				        INFO ("# VehiclePropertyRestricitons: " << vpr_map.size());
+//				        INFO ("  First restriction on edge id: "
+//				              << vpr_map.begin()->first
+//				              << "\n   with maxspeed: " << vp.maxSpeed
+//				              << ", minspeed: " << vp.minSpeed
+//				              << ", maxheight: " << vp.maxHeight
+//				              << ", maxlength: " << vp.maxLength
+//				              << ", maxweight: " << vp.maxWeight
+//				              << ", maxwidth: " << vp.maxWidth
+//				              );
+//				        REQUIRE (true);
+//				    }
+//				    else
+//				    {
+//				        INFO ("No VehiclePropertyRestrictions.");
+//				        REQUIRE (true);
+//				    }
+//				}
+//
+//			    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//				THEN ("we should get a map of general access restrictions")
+//				{
+//				    const auto& general_map =
+//				        restrictions.edgeRestrictions().generalAccess();
+//				    if(general_map.size() > 0)
+//				    {
+//				        EdgeIdType edgeId = general_map.begin()->first;
+//				        const OsmAccess& access = general_map.begin()->second;
+//				        INFO ("# General access restrictions: "
+//				              << general_map.size());
+//				        INFO ("  First restriction on edge id: " << edgeId
+//				              << ", access restriction: " << access.toString());
+//				        REQUIRE (true);
+//				    }
+//				    else
+//				    {
+//				        INFO ("No General Access Restrictions.");
+//				        REQUIRE (true);
+//				    }
+//				}
+//
+//				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//				THEN ("we should get a map of vehicle restrictions")
+//				{
+//				    const auto& edge_map =
+//				        restrictions.edgeRestrictions().vehicleTypeAccessEdges();
+//				    if(edge_map.size() > 0)
+//				    {
+//				        EdgeIdType edgeId = edge_map.begin()->first;
+//				        const auto& v_map = edge_map.begin()->second;
+//				        INFO ("# edges with vehicle restrictions: "
+//				            << edge_map.size());
+//				        INFO ("# vehicle restrictions on first edge: "
+//				            << v_map.size());
+//				        INFO ("  First restriction on edge id: " << edgeId
+//				            << ", vehicle restriction: "
+//				            << OsmVehicle::toString(v_map.begin()->first)
+//				            << " : "
+//				            << v_map.begin()->second.toString());
+//				        REQUIRE (true);
+//				    }
+//				    else
+//				    {
+//				        INFO ("No Vehicle Restrictions.");
+//				        REQUIRE (true);
+//				    }
+//				}
+//
+//				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//				THEN ("we should get a map of barrier restrictions")
+//				{
+//				    const auto& barrier_map =
+//				        restrictions.edgeRestrictions().barriers();
+//				    if(barrier_map.size() > 0)
+//				    {
+//				        EdgeIdType edgeId = barrier_map.begin()->first;
+//				        const OsmBarrier& barrier = barrier_map.begin()->second;
+//				        INFO ("# Barrier restrictions: "
+//				            << barrier_map.size());
+//				        INFO ("  First restriction on edge id: " << edgeId
+//				            << ", barrier restriction: " << barrier.toString());
+//				        REQUIRE (true);
+//				    }
+//				    else
+//				    {
+//				        INFO ("No Barrier Restrictions.");
+//				        REQUIRE (true);
+//				    }
+//				}
+//
+//				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//				THEN ("we should get a set of edgeIds of disused edges")
+//				{
+//				    const auto& disused_set =
+//				        restrictions.edgeRestrictions().disusedEdges();
+//				    if(disused_set.size() > 0)
+//				    {
+//				        EdgeIdType edgeId = *disused_set.begin();
+//				        INFO ("# Disused edges: " << disused_set.size());
+//				        INFO ("  First disused edge id: " << edgeId);
+//				        REQUIRE (true);
+//				    }
+//				    else
+//				    {
+//				        INFO ("No Disused edges.");
+//				        REQUIRE (true);
+//				    }
+//				}
+//
+//				// . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+//				THEN ("we should get a set of edgeIds of 'noexit' edges")
+//				{
+//				    const auto& noexit_set =
+//				        restrictions.edgeRestrictions().noExitEdges();
+//				    if(noexit_set.size() > 0)
+//				    {
+//				        EdgeIdType edgeId = *noexit_set.begin();
+//				        INFO ("# 'Noexit' edges: " << noexit_set.size());
+//				        INFO ("  First 'noexit' edge id: " << edgeId);
+//				        REQUIRE (true);
+//				    }
+//				    else
+//				    {
+//				        INFO ("No 'noexit' edges.");
+//				        REQUIRE (true);
+//				    }
+//				}
+//			}
+//
+//			//................................................................
+//			WHEN ("parsing query result of edge ids")
+//			{
+//			    std::string edgesString("{123,345,567,789}");
+//
+//			    THEN ("we shoud be able to split the string")
+//			    {
+//			        std::vector<EdgeIdType> edgeIds =
+//			            RestrictionQueries::Results::parseEdgeIdsString(
+//			                edgesString);
+//			        REQUIRE (edgeIds.size() == 4);
+//			        REQUIRE (edgeIds[0] == 123);
+//			        REQUIRE (edgeIds[1] == 345);
+//			        REQUIRE (edgeIds[2] == 567);
+//			        REQUIRE (edgeIds[3] == 789);
+//			    }
+//			}
+//		}
+//	}
+//	catch (ConfigurationException& e)
+//	{
+//		INFO(e.what());
+//		REQUIRE (false);	// force output of error and failure
+//	}
+//	catch (MapProviderException& dbe)
+//	{
+//		INFO(dbe.what());
+//		REQUIRE (false);	// force output of error and failure
+//
+//	}
+//}

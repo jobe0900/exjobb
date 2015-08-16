@@ -7,7 +7,6 @@
 
 #include "ConfigurationReader.h"  // class implemented
 
-
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
@@ -34,6 +33,10 @@ ConfigurationReader::fillConfiguration(Configuration& rConfig) const
     fillDatabaseConfiguration(rConfig.mDbConfig);
     fillTopologyConfiguration(rConfig.mTopoConfig);
     fillVehicleConfiguration(rConfig.mVehicleConfig);
+    fillAccessRule(rConfig.mAccessRule);
+    fillBarrierRestrictRule(rConfig.mBarrierRestrictionsRule);
+    fillBarrierCostsRule(rConfig.mBarrierCostsRule);
+    fillCostConfiguration(rConfig.mCostConfig);
 }
 
 
@@ -137,7 +140,9 @@ ConfigurationReader::fillVehicleConfiguration(VehicleConfig& rVehicleConfig) con
         rVehicleConfig.length = mPropertyTree.get<double>(prefix + "length");
         rVehicleConfig.weight = mPropertyTree.get<double>(prefix + "weight");
         rVehicleConfig.width = mPropertyTree.get<double>(prefix + "width");
-        rVehicleConfig.maxspeed = mPropertyTree.get<double>(prefix + "maxspeed");
+        rVehicleConfig.maxspeed = mPropertyTree.get<unsigned>(prefix + "maxspeed");
+        rVehicleConfig.acceleration = mPropertyTree.get<unsigned>(prefix + "acceleration");
+        rVehicleConfig.deceleration = mPropertyTree.get<unsigned>(prefix + "deceleration");
     }
     catch (ConfigurationException& e)
     {
@@ -149,3 +154,216 @@ ConfigurationReader::fillVehicleConfiguration(VehicleConfig& rVehicleConfig) con
     }
 }
 
+
+void
+ConfigurationReader::fillAccessRule(OsmAccess::AccessRule& rAccessRule) const
+{
+    std::string prefix("access.allow");
+
+    try
+    {
+        std::vector<OsmAccess::AccessType> allow_tags;
+        for(auto& item : mPropertyTree.get_child(prefix))
+        {
+            std::string tag_string = item.second.get_value<std::string>();
+            allow_tags.push_back(OsmAccess::parseString(tag_string));
+        }
+        rAccessRule.allowAccessToTypes = allow_tags;
+    }
+    catch (ConfigurationException& e)
+    {
+        throw e;
+    }
+    catch (OsmException& ose)
+    {
+        throw ConfigurationException(std::string("Could not read config") +
+            ", error parsing access tag: " + ose.what());
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
+
+void
+ConfigurationReader::fillBarrierRestrictRule(OsmBarrier::RestrictionsRule& rRestrictRule) const
+{
+    std::string prefix("restrict.barriers");
+
+    try
+    {
+        std::vector<OsmBarrier::BarrierType> restrict_barriers;
+        for(auto& item : mPropertyTree.get_child(prefix))
+        {
+            std::string restrict_string = item.second.get_value<std::string>();
+            restrict_barriers.push_back(OsmBarrier::parseString(restrict_string));
+        }
+        rRestrictRule.restrictionTypes = restrict_barriers;
+    }
+    catch (ConfigurationException& e)
+    {
+        throw e;
+    }
+    catch (OsmException& ose)
+    {
+        throw ConfigurationException(std::string("Could not read config") +
+            ", error parsing barrier restrictions: " + ose.what());
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
+
+void
+ConfigurationReader::fillBarrierCostsRule(OsmBarrier::CostsRule& rCostsRule) const
+{
+    std::string prefix("cost.barriers");
+
+    try
+    {
+        for(auto& row : mPropertyTree.get_child(prefix))
+        {
+            int i = 0;
+            std::string type_string;
+            unsigned cost;
+            for(auto& item : row.second)
+            {
+                if(i == 0)
+                {
+                    type_string = item.second.get_value<std::string>();
+                }
+                else
+                {
+                    cost = item.second.get_value<unsigned>();
+                }
+                ++i;
+            }
+            OsmBarrier::BarrierType barrier_type = OsmBarrier::parseString(type_string);
+            rCostsRule.addCost(barrier_type, cost);
+        }
+    }
+    catch (ConfigurationException& e)
+    {
+        throw e;
+    }
+    catch (OsmException& ose)
+    {
+        throw ConfigurationException(std::string("Could not read config") +
+            ", error parsing barrier costs: " + ose.what());
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
+
+void
+ConfigurationReader::fillCostConfiguration(CostConfig& rCostConfig) const
+{
+    try
+    {
+        fillDefaultSpeedCost(rCostConfig);
+        fillSurfaceMaxSpeedCost(rCostConfig);
+        fillOtherEdgeCosts(rCostConfig);
+    }
+    catch (ConfigurationException& e)
+    {
+        throw e;
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}
+
+void
+ConfigurationReader::fillDefaultSpeedCost(CostConfig& rCostConfig) const
+{
+    std::string prefix("cost.default_speed.");
+
+    CostConfig::DefaultSpeed::HighLowSpeed hilo;
+    std::string type_string;
+    OsmHighway::HighwayType type;
+
+    for(size_t i = 0; i < OsmHighway::NR_HIGHWAY_TYPES; ++i)
+    {
+        type_string = OsmHighway::typeStrings().at(i);
+        hilo.high = mPropertyTree.get<int>(prefix + type_string + ".high");
+        hilo.low  = mPropertyTree.get<int>(prefix + type_string + ".low");
+        type = static_cast<OsmHighway::HighwayType>(i);
+        rCostConfig.defaultSpeed.addDefaultSpeed(type, hilo);
+    }
+}
+
+void
+ConfigurationReader::fillSurfaceMaxSpeedCost(CostConfig& rCostConfig) const
+{
+    std::string prefix("cost.surface.");
+
+    Speed speed;
+    std::string type_string;
+    OsmHighway::SurfaceType type;
+
+    for(size_t i = 0; i < OsmHighway::NR_SURFACE_TYPES; ++i)
+    {
+        type_string = OsmHighway::surfaceTypeStrings().at(i);
+        speed = mPropertyTree.get<int>(prefix + type_string);
+        type = static_cast<OsmHighway::SurfaceType>(i);
+        rCostConfig.surfaceMaxSpeed.addSurfaceMaxSpeed(type, speed);
+    }
+}
+
+void
+ConfigurationReader::fillOtherEdgeCosts(CostConfig& rCostConfig) const
+{
+    std::string section("cost.");
+    std::vector<std::string> subsections {
+        "highway",
+        "railway",
+        "public_transport",
+        "traffic_calming"
+    };
+
+    try
+    {
+        for(const auto& sub : subsections)
+        {
+            std::string prefix(section + sub + ".");
+
+            for(auto& row : mPropertyTree.get_child(prefix))
+            {
+                int i = 0;
+                std::string key;
+                Cost cost;
+                for(auto& item : row.second)
+                {
+                    if(i == 0)
+                    {
+                        key = item.second.get_value<std::string>();
+                    }
+                    else
+                    {
+                        cost = item.second.get_value<Cost>();
+                    }
+                    ++i;
+                }
+                rCostConfig.otherEdgeCosts.addOtherCost(
+                    sub + "=" + key, cost);
+            }
+        }
+    }
+    catch (ConfigurationException& e)
+    {
+        throw e;
+    }
+    catch (OsmException& ose)
+    {
+        throw ConfigurationException(std::string("Could not read config") +
+            ", error parsing other costs: " + ose.what());
+    }
+    catch (boost::property_tree::ptree_error& e)
+    {
+        throw ConfigurationException(std::string("Could not read config ") + e.what());
+    }
+}

@@ -12,22 +12,25 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Graph::Graph(const Topology& rTopology)
+Graph::Graph(Topology& rTopology, const Configuration& rConfig, bool useRestrictions)
     : mGraph(),
+      mLineGraph(),
       mIdToVertexMap(),
       mIdToEdgeMap(),
       mrTopology(rTopology),
-      mpRestrictions(nullptr),
-      mpConfiguration(nullptr),
-      mBarrierRule(),
-      mAccessRule(),
-      mLog()
+      mrConfiguration(rConfig),
+      mLog(),
+      mUseRestrictions(useRestrictions)
 {
     Logging::initLogging();
     boost::log::add_common_attributes();
 
     buildGraph();
     buildLineGraph();
+}
+
+Graph::~Graph()
+{
 }
 
 //============================= OPERATORS ====================================
@@ -51,21 +54,6 @@ operator<<(std::ostream& os, const Graph& rGraph)
     return os;
 }
 //============================= OPERATIONS ===================================
-void
-Graph::addRestrictions(
-    Restrictions&   rRestrictions,
-    Configuration&  rConfiguration)
-{
-    mpRestrictions =  &rRestrictions;
-    mpConfiguration = &rConfiguration;
-    mGraph.clear();
-    mLineGraph.clear();
-    mIdToVertexMap.clear();
-    mIdToEdgeMap.clear();
-    mEdgeIdToNodeMap.clear();
-    buildGraph();
-    buildLineGraph();
-}
 //============================= ACESS      ===================================
 size_t
 Graph::nrVertices() const
@@ -91,13 +79,13 @@ Graph::nrLines() const
     return boost::num_edges(mLineGraph);
 }
 
-const Graph::GraphType&
+const GraphType&
 Graph::getBoostGraph()
 {
     return mGraph;
 }
 
-const Graph::LineGraphType&
+LineGraphType&
 Graph::getBoostLineGraph()
 {
     return mLineGraph;
@@ -116,6 +104,12 @@ Graph::hasNode(EdgeIdType nodeId) const
 {
     const auto& it = mEdgeIdToNodeMap.find(nodeId);
     return (it != mEdgeIdToNodeMap.end());
+}
+
+bool
+Graph::isRestricted() const
+{
+    return mUseRestrictions;
 }
 
 /////////////////////////////// PROTECTED  ///////////////////////////////////
@@ -151,18 +145,12 @@ Graph::addTopoEdgesToGraph()
     {
         const Edge& e = edgepair.second;
 
-        // TODO should we really add restricted edges or not?
-        if(mpRestrictions != nullptr && mpConfiguration != nullptr)
+        if(mUseRestrictions && e.isRestricted(mrConfiguration))
         {
-            const EdgeRestrictions& er = mpRestrictions->edgeRestrictions();
-            if(er.isEdgeRestricted(e.id(), mpConfiguration->getVehicleConfig(),
-                                 mBarrierRule, mAccessRule))
-            {
-                BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-                    << "Graph:addTopoEdgeToGraph(): "
-                    << "Restricted Source id " << e.id();
-                continue;
-            }
+            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                        << "Graph:addTopoEdgeToGraph(): "
+                        << "Restricted Source id " << e.id();
+            continue;
         }
 
         const VertexType& s = getGraphVertex(e.source());
@@ -208,7 +196,7 @@ Graph::addDirectedEdge(EdgeIdType id,
     }
 }
 
-const Graph::VertexType&
+const VertexType&
 Graph::getGraphVertex(VertexIdType id) const
 {
     const auto& res = mIdToVertexMap.find(id);
@@ -223,6 +211,7 @@ Graph::getGraphVertex(VertexIdType id) const
 void
 Graph::buildLineGraph()
 {
+    mLineGraph.clear();
     addGraphEdgesToLineGraph();
 }
 
@@ -253,8 +242,6 @@ Graph::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
     EdgeIdType e_graph_id = boost::get(&GraphEdge::graphEdgeId, mGraph, rGraphEdge);
     EdgeIdType e_topo_id  = boost::get(&GraphEdge::topoEdgeId, mGraph, rGraphEdge);
 
-    // TODO don't add a restricted edge!
-
     if(!hasNode(e_graph_id))
     {
         rNode = boost::add_vertex(mLineGraph);
@@ -268,7 +255,7 @@ Graph::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
     }
 }
 
-const Graph::NodeType&
+const NodeType&
 Graph::getLineGraphNode(NodeIdType id) const
 {
     const auto& res = mEdgeIdToNodeMap.find(id);
@@ -301,6 +288,8 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
     VertexIdType via_topo_vertex_id =
         boost::get(&GraphVertex::topoVertexId, mGraph, rViaVertex);
 
+    Edge& source_edge = mrTopology.getEdge(topo_source_id);
+
     for(auto target_it = boost::out_edges(rViaVertex, mGraph);
         target_it.first != target_it.second;
         ++target_it.first)
@@ -308,7 +297,16 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
         const EdgeType& target = *(target_it.first);
         EdgeIdType topo_target_id = boost::get(&GraphEdge::topoEdgeId, mGraph, target);
 
-        if(!isTargetRestricted(restricted_targets, topo_target_id))
+        if(mUseRestrictions && isTargetRestricted(restricted_targets, topo_target_id))
+        {
+            Edge& s = mrTopology.getEdge(topo_source_id);
+            Edge& t = mrTopology.getEdge(topo_target_id);
+            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+            << "Graph:connectSourceNodeToTargetNodesViaVertex(): Restricted: "
+            << "Source: " << topo_source_id << " (osm: " << s.osmId()
+            << ") , Target: " << topo_target_id << " (osm: " << t.osmId() << ")";
+        }
+        else
         {
             NodeType target_node;
             addGraphEdgeAsLineGraphNode(target, target_node);
@@ -325,7 +323,9 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
                 mLineGraph[line].lgSourceNodeId = source_node_id;
                 mLineGraph[line].lgTargetNodeId = target_node_id;
                 mLineGraph[line].topoViaVertexId = via_topo_vertex_id;
-                // TODO cost
+                mLineGraph[line].cost =
+                    source_edge.cost() +
+                    calculateTurnCost(topo_source_id, topo_target_id);
             }
             else
             {
@@ -335,20 +335,22 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
                     + ", target: " + std::to_string(target_node_id));
             }
         }
-        else
-        {
-            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-                << "Graph:connectSourceNodeToTargetNodesViaVertex(): Restricted: "
-                << "Source: " << topo_source_id << " , Target: " << topo_target_id;
-        }
     }
 }
 
-bool
-Graph::edgeHasNoExit(EdgeIdType edgeId) const
+double
+Graph::calculateTurnCost(EdgeIdType sourceEdgeId, EdgeIdType targetEdgeId) const
 {
-    if(mpRestrictions != nullptr
-    && mpRestrictions->edgeRestrictions().hasNoExitRestriction(edgeId))
+    const Edge& source = mrTopology.getEdge(sourceEdgeId);
+    const Edge& target = mrTopology.getEdge(targetEdgeId);
+    return TurnCostCalculator::getTurnCost(source, target, mrConfiguration);
+}
+
+bool
+Graph::edgeHasNoExit(EdgeIdType edgeId)
+{
+    Edge& e = mrTopology.getEdge(edgeId);
+    if(e.hasRestrictions() && e.restrictions().hasNoExitRestriction())
     {
         return true;
     }
@@ -375,54 +377,51 @@ Graph::getRestrictedTargets(EdgeIdType edgeId) const
 {
     std::vector<EdgeIdType> restricted_targets;
 
-    if(mpRestrictions != nullptr && mpConfiguration != nullptr)
+    // We don't know the direction of the the travel on the edge here so
+    // we must find out edges from both source and target vertex.
+    std::vector<EdgeIdType> targets;
+    VertexIdType source_vertex = mrTopology.getEdge(edgeId).source();
+    VertexIdType target_vertex = mrTopology.getEdge(edgeId).target();
+
+    std::vector<EdgeIdType> out_edges = getOutEdges(source_vertex);
+    targets.insert(targets.end(), out_edges.begin(), out_edges.end());
+
+    out_edges = getOutEdges(target_vertex);
+    targets.insert(targets.end(), out_edges.begin(), out_edges.end());
+
+    for(EdgeIdType e_id : targets)
     {
-        // We don't know the direction of the the travel on the edge here so
-        // we must find out edges from both source and target vertex.
-        std::vector<EdgeIdType> targets;
-        VertexIdType source_vertex = mrTopology.getEdge(edgeId).source();
-        VertexIdType target_vertex = mrTopology.getEdge(edgeId).target();
-
-        std::vector<EdgeIdType> out_edges = getOutEdges(source_vertex);
-        targets.insert(targets.end(), out_edges.begin(), out_edges.end());
-
-        out_edges = getOutEdges(target_vertex);
-        targets.insert(targets.end(), out_edges.begin(), out_edges.end());
-
-        for(EdgeIdType edge : targets)
+        if(e_id == edgeId)
         {
-            if(edge == edgeId)
-            {
-                continue;
-            }
-
-            if(mpRestrictions->edgeRestrictions()
-                .isEdgeRestricted(
-                    edge,
-                    mpConfiguration->getVehicleConfig(),
-                    mBarrierRule,
-                    mAccessRule))
-            {
-                BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-                    << "Graph:getRestrictedTargets(): "
-                    << "Source id " << edgeId
-                    << " has restricted target: " << edge;
-                restricted_targets.push_back(edge);
-            }
-
+            continue;
         }
 
-        if(mpRestrictions->edgeRestrictions().hasTurningRestriction(edgeId))
+        Edge& e = mrTopology.getEdge(e_id);
+
+        if(e.isRestricted(mrConfiguration))
         {
             BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-                << "Graph:getRestrictedTargets(): "
-                << "Source id " << edgeId << " has TURN restricted targets. ";
-            std::vector<EdgeIdType> turn_restricted_targets =
-                mpRestrictions->edgeRestrictions().restrictedTargetEdges(edgeId);
-            restricted_targets.insert(restricted_targets.end(),
-                turn_restricted_targets.begin(), turn_restricted_targets.end());
+                        << "Graph:getRestrictedTargets(): "
+                        << "Source id " << edgeId
+                        << " has restricted target: " << e_id;
+            restricted_targets.push_back(e_id);
         }
     }
+
+    Edge& edge = mrTopology.getEdge(edgeId);
+
+    if(edge.hasRestrictions() && edge.restrictions().hasTurningRestriction())
+    {
+        BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                    << "Graph:getRestrictedTargets(): "
+                    << "Source id " << edgeId << " has TURN restricted targets. ";
+        std::vector<EdgeIdType> turn_restricted_targets =
+            edge.restrictions().restrictedTargetEdges();
+        restricted_targets.insert(restricted_targets.end(),
+            turn_restricted_targets.begin(), turn_restricted_targets.end());
+
+    }
+
     return restricted_targets;
 }
 

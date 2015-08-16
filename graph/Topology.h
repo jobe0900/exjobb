@@ -19,17 +19,27 @@
 
 // LOCAL INCLUDES
 //
-#include "TopologyException.h"
-#include "../util/Point.h"
 #include "Edge.h"
+#include "TopologyException.h"
 #include "Vertex.h"
+#include "../util/Point.h"
 
 
 // FORWARD REFERENCES
 //
 
+// TYPES
+//
+/** Mapping of topology vertex id and topology Vertex object. */
 typedef std::map<VertexIdType, Vertex>          TopoVertexMapType;
+
+/** Mapping of topology edge id and topology Edge object. */
 typedef std::map<EdgeIdType, Edge>              TopoEdgeMapType;
+
+/** Keep track of which topology edges that make up an edge in the original
+ * OSM map data, as the OSM edge might have been split into several edges when
+ * building the topology.
+ */
 typedef std::multimap<OsmIdType, EdgeIdType>    OsmIdToTopoIdEdgeMap;
 
 /** This class holds Edges and Vertices such as they are in the database.
@@ -112,6 +122,14 @@ public:
 	 */
 	Edge&           getEdge(EdgeIdType id);
 	const Edge&     getEdge(EdgeIdType id) const;
+
+	/** Clear everything in the topology: edges and vertices.
+	 */
+	void            clearTopology();
+
+	/** Remove restrictions and costs on all edges in the topology.
+	 */
+	void            clearEdgeCostAndRestrictions();
 
 // ACCESS
 	/**

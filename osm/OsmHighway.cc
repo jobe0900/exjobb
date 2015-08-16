@@ -33,6 +33,20 @@ OsmHighway::parseString(const std::string& rTypeString)
 }
 
 //static
+OsmHighway::SurfaceType
+OsmHighway::parseSurfaceString(const std::string& rSurfaceString)
+{
+    for(size_t i = 0; i < NR_SURFACE_TYPES; ++i)
+    {
+        if(rSurfaceString == OsmHighway::sSurfaceTypeStrings[i])
+        {
+            return static_cast<SurfaceType>(i);
+        }
+    }
+    throw OsmException("OsmHighway:parseSurfaceString: Unknown Surface Type string.");
+}
+
+//static
 std::string
 OsmHighway::toString(OsmHighway::HighwayType highwayType)
 {
@@ -41,6 +55,17 @@ OsmHighway::toString(OsmHighway::HighwayType highwayType)
         throw OsmException("OsmHighway:toString: Unknown Highway Type");
     }
     return OsmHighway::sTypeStrings[highwayType];
+}
+
+//static
+std::string
+OsmHighway::toSurfaceString(OsmHighway::SurfaceType surfaceType)
+{
+    if(surfaceType >= NR_SURFACE_TYPES)
+    {
+        throw OsmException("OsmHighway:toSurfaceString: Unknown Surface Type");
+    }
+    return OsmHighway::sSurfaceTypeStrings[surfaceType];
 }
 
 std::string
@@ -55,6 +80,13 @@ const std::vector<std::string>&
 OsmHighway::typeStrings()
 {
     return OsmHighway::sTypeStrings;
+}
+
+//static
+const std::vector<std::string>&
+OsmHighway::surfaceTypeStrings()
+{
+    return OsmHighway::sSurfaceTypeStrings;
 }
 
 // static
@@ -82,21 +114,54 @@ OsmHighway::typesAsCommaSeparatedString()
 const std::vector<std::string> OsmHighway::sTypeStrings
 {
     "motorway",
+    "motorway_link",
     "trunk",
+    "trunk_link",
     "primary",
+    "primary_link",
     "secondary",
+    "secondary_link",
     "tertiary",
+    "tertiary_link",
     "unclassified",
     "residential",
     "service",
 
-    "motorway_link",
-    "trunk_link",
-    "primary_link",
-    "secondary_link",
-    "tertiary_link",
-
     "living_street",
     "bus_guideway",
     "road"
+};
+
+const std::vector<std::string> OsmHighway::sSurfaceTypeStrings
+{
+    "paved",
+    "asphalt",
+    "cobblestone",
+    "cobblestone:flattened",
+    "sett",
+    "concrete",
+    "concrete:lanes",
+    "concrete:plates",
+    "paving_stones",
+    "metal",
+    "wood",
+
+    "unpaved",
+    "compacted",
+    "dirt",
+    "earth",
+    "fine_gravel",
+    "grass",
+    "grass_paver",
+    "gravel",
+    "ground",
+    "ice",
+    "mud",
+    "pebblestone",
+    "salt",
+    "sand",
+    "snow",
+    "woodchips",
+
+    "metal_grid"
 };

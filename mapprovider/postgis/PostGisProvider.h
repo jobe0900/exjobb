@@ -22,18 +22,20 @@
 
 // LOCAL INCLUDES
 //
-#include "../../config/DatabaseConfig.h"
-#include "../../graph/Edge.h"
-#include "../../graph/Restrictions.h"
-#include "../../graph/Topology.h"
-#include "../../graph/Vertex.h"
+#include "CostQueries.h"
+#include "RestrictionQueries.h"
+#include "TopologyQueries.h"
 #include "../MapProvider.h"
 #include "../MapProviderException.h"
-#include "../../util/TimeToStringMaker.h"
+#include "../../config/DatabaseConfig.h"
+#include "../../graph/Edge.h"
+#include "../../graph/Topology.h"
+#include "../../graph/Vertex.h"
+#include "../../graph/Speed.h"
 #include "../../osm/OsmAccess.h"
 #include "../../osm/OsmHighway.h"
 #include "../../osm/OsmVehicle.h"
-#include "RestrictionQueries.h"
+#include "../../util/TimeToStringMaker.h"
 
 // FORWARD REFERENCES
 //
@@ -70,9 +72,7 @@ public:
 // OPERATIONS
     virtual void    getTopology(Topology& rTopology);
 
-    virtual void    getRestrictions(
-        Restrictions&  rRestrictions,
-        Topology&      rTopology);
+    virtual void    setRestrictionsAndCosts(Topology& rTopology);
 
 // INQUIRY
 
@@ -80,7 +80,7 @@ protected:
 
 private:
 // HELPERS
-    // Helpers for 'getTopology()'
+
     /** Get edges from database.
      * @param   rEdgeResult   Result of db query for Edges.
      * @throws	MapProviderException
@@ -95,49 +95,22 @@ private:
     void    addEdgeResultToTopology(const pqxx::result& rEdgeResult,
                                     Topology& rTopology);
 
-    /** Helper to add basic data from db to Edge.
-     * @param   rRow        Row with data for an Edge.
-     * @param   rTopology   Topology to add edge to.
-     * @return  Reference to the newly added Edge.
-     * @throws  TopologyException
-     */
-    Edge&   addBasicResultToEdge(const pqxx::tuple& rRow, Topology& rTopology);
-
-    /** Add geometric result from query to an Edge.
-     * @param   rEdge   Reference to Edge to set Geom data on.
-     * @param   rRow    Reference to Row with Geom data in it.
-     */
-    void    addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow);
-
-    /** Add road related result from query to an Edge.
-     * @param   rEdge   Reference to Edge to set road data on.
-     * @param   rRow    Reference to Row with road data in it.
-     */
-    void    addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow);
-
-    /** Extract highway type from database result and store in RoadData.
-     * @param   rRoadData   The RoadData to store in.
-     * @param   rRow    Reference to Row with road data in it.
-     * @throw   MapProviderException
-     */
-    void    addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
-                                         const pqxx::tuple& rRow);
-
-    /** Get the names of the highway columns we are interested in from OsmConst.
-     * @return  String to put in query.
-     */
-    std::string getInterestingHighwayColumns() const;
-
     /** Get vertices from database.
      * @throws	MapProviderException
      */
     void    getTopologyVertices(pqxx::result& rVertexResult);
+
     /** Add vertices to topology.
      * @throws  TopologyException
      */
-    void    addVertexResultToTopology(const pqxx::result&, Topology& rTopology);
+    void    addVertexResultToTopology(
+                const pqxx::result& rResult,
+                Topology&           rTopology);
 
     // Helpers for constructor
+    /** Set the base name for the topology, either a string from config
+     * or a timestamp.
+     */
     void    setTopoBaseName(std::string& rTopoBaseName);
 
     /** Build a PostGIS topology with name given in constructor.
@@ -154,14 +127,12 @@ private:
 
 
     // Restriction helpers ---------------------------------------------------
-    /** Fetch Restrictions for edges.
-     * @param   rRestrictions   Store restrictions in here.
-     * @param   rTopology       Might get modified from turn restrictions.
+
+    /** Add restrictions to edges.
+     * @param   rTopology  Adding EdgeRestricion to Edges in topology.
      * @throw   MapProviderException
      */
-    void    getEdgeRestrictions(
-        Restrictions& rRestrictions,
-        Topology& rTopology);
+    void    addEdgeRestrictions(Topology& rTopology);
 
     /** Get VehicleProperty restrictions
      * Helper for 'getEdgeRestrictions()'
@@ -170,16 +141,14 @@ private:
      */
     void    getVehiclePropertyEdgeRestrictions(pqxx::result& rResult);
 
-    /** Add the result of the query for vehicle properties to restrictions.
+    /** Add the result of the query for vehicle properties to Edge's restrictions.
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
-     * @param   rRestrictions   Store the restrictions here.
      * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
-    void    addVehiclePropertyResultToEdgeRestrictions(
+    void    addVehiclePropertyRestrictionsToEdge(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions,
                 Topology&              rTopology);
 
     /** Get Access restrictions to edge.
@@ -192,13 +161,11 @@ private:
     /** Add the result of the query for Access to restrictions.
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
-     * @param   rRestrictions   Store the restrictions here.
      * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
-    void    addAccessResultToEdgeRestrictions(
+    void    addAccessRestrictionsToEdge(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions,
                 Topology&              rTopology);
 
     /** Get Turning restrictions for traveling from edge.
@@ -213,16 +180,14 @@ private:
      */
     void    getTurningRestrictions(pqxx::result& rResult);
 
-    /** Add the result of the query for Turning to restrictions.
+    /** Add the result of the query for Turning restrictions.
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
-     * @param   rRestrictions   Store the restrictions here.
      * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
-    void    addTurningResultToEdgeRestrictions(
+    void    addTurningRestrictionsToEdge(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions,
                 Topology&              rTopology);
 
     /** Get restrictions defined at points but applicable to edges,
@@ -232,31 +197,71 @@ private:
      */
     void    getEdgePointRestrictions(pqxx::result& rResult);
 
-    /** Add the result of the query for Point restriciotns on Edges to Restrictions.
+    /** Add the result of the query for Point restrictions on Edges .
      * Helper for 'getEdgeRestrictions()'
      * @param   rResult         The results of the query
-     * @param   rRestrictions   Store the restrictions here.
      * @param   rTopology       Update affected edges in the topology.
      * @throw   MapProviderException
      */
-    void    addPointResultToEdgeRestrictions(
+    void    addPointRestrictionsToEdge(
                 const pqxx::result&    rResult,
-                Restrictions&          rRestrictions,
                 Topology&              rTopology);
 
+    // Costs -----------------------------------------------------------------
+    /** Add costs to the edge.
+     * @param   The Topology with Edges to add cost to.
+     */
+    void    addEdgeCosts(Topology& rTopology);
+
+    /** Get costs for the travel time along an edge.
+     * The length is constant in the topology but we need to find out if
+     * there is a max speed restriction or if there is a bad surface.
+     * If no such restrictions are in the database then the default speed
+     * for the road category is used.
+     * @param   rResult     Store the result of the query here.
+     * @throw   MapProviderException
+     */
+    void    getTravelTimeCosts(pqxx::result& rResult);
+
+    /** Add costs for travel time along the edge.
+     * First set the speed of those with explicit restrictions in database,
+     * then set the default speed for those without explicit speeds.
+     * @param   rResult     The results of the query.
+     * @param   rTopology   The topology with edges to set cost for.
+     * @throw   MapProviderException
+     */
+    void    addTravelTimeCosts(const pqxx::result& rResult, Topology& rTopology);
+
+    /** Get other costs for the edge other than speed and barriers, those
+     * include slowdown at stop and yield signs, zebra crossings, railway
+     * crossings, bus stops, speed bumps, traffic lights...
+     * @param   rResult     Store the result of the query here.
+     */
+    void    getOtherEdgeCosts(pqxx::result& rResult);
+
+    /** Add costs for speed bumps and such to affected edges.
+     * @param   rResult     The results of the query.
+     * @param   rTopology   The topology with edges to set cost for.
+     * @throw   MapProviderException
+     */
+    void    addOtherCosts(const pqxx::result& rResult, Topology& rTopology);
+
+
+
 // ATTRIBUTES
+    const Configuration&    mConfig;
     const DatabaseConfig&   mDbConfig;
     const TopologyConfig&   mTopoConfig;
     pqxx::connection        mConnection;
-    std::string             mHighwayTableName;
+    std::string             mOsmEdgeTable;
     std::string             mPointTableName;
     std::string             mSchemaName;
-    std::string             mEdgeTable;
+    std::string             mTopoEdgeTable;
     std::string             mEdgeIdCol;
     std::string             mSourceCol;
     std::string             mTargetCol;
     std::string             mEdgeGeomCol;
-    std::string             mVertexTable;
+    std::string             mTopoVertexTable;
     std::string             mVertexIdCol;
     std::string             mVertexGeomCol;
 
