@@ -24,6 +24,6 @@ SCENARIO ("Testing this module but not other", "[moduletag]")
 }
 ```
 
-And after building it, write in `Run configuration` `[moduletag]` to run this specific test.
+To specify which test to run, go to `Run` > `Run Configurations...`, select the `Arguments` tab and in `Program arguments` write the tag, e.g. `[moduletag]`, click `Apply` and `Run`.
 
-A useful flag when running tests is `-s` to have print out of every step, else you only get the final report of how many scenarios have run.
+A useful flag to add to the program arguments when running tests is `-s` to have print out of every step, else you only get the final report of how many scenarios have run.
