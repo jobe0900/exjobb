@@ -515,9 +515,17 @@ PostGisProvider::getTravelTimeCosts(pqxx::result& rResult)
     catch(const std::exception& e)
     {
         throw MapProviderException(
-            std::string("PostGisProvider:getVehiclePropertyEdgeRestrictions: ")
+            std::string("PostGisProvider:getTravelTimCost: ")
                         + e.what());
     }
+}
+
+void
+PostGisProvider::addTravelTimeCosts(
+    const pqxx::result& rResult,
+    Topology&           rTopology)
+{
+    CostQueries::addTravelTimeCosts(rResult, rTopology, mConfig);
 }
 
 void
@@ -545,38 +553,6 @@ PostGisProvider::getOtherEdgeCosts(pqxx::result& rResult)
         throw MapProviderException(
             std::string("PostGisProvider:getOtherEdgeCosts: ") + e.what());
 	}
-}
-
-void
-PostGisProvider::addTravelTimeCosts(
-    const pqxx::result& rResult,
-    Topology&           rTopology)
-{
-    try
-    {
-        for(const pqxx::tuple& row : rResult)
-        {
-            // throw exception if no edgeId
-            EdgeIdType edgeId =
-                row[CostQueries::TravelTimeCostResult::EDGE_ID]
-                    .as<EdgeIdType>();
-
-            Edge& edge = rTopology.getEdge(edgeId);
-
-            Speed speed =
-                row[CostQueries::TravelTimeCostResult::MAXSPEED].as<Speed>(
-                    EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
-            std::string surface_string =
-                row[CostQueries::TravelTimeCostResult::SURFACE].as<std::string>("");
-
-            addTravelTimeCostToEdge(edge, speed, surface_string);
-        }
-    }
-    catch (std::exception& e)
-    {
-        throw MapProviderException(
-            std::string("PostGisProvider:addTravelTimeCost: ") + e.what());
-    }
 }
 
 void
@@ -624,46 +600,6 @@ PostGisProvider::addOtherCosts(
 }
 
 void
-PostGisProvider::addTravelTimeCostToEdge(
-    Edge&           rEdge,
-    Speed           speed,
-    std::string&    surfaceString)
-{
-    bool hasMaxSpeed =
-        (speed != EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
-    bool hasSurface = surfaceString.length() > 0;
-    if(!(hasMaxSpeed || hasSurface))
-    {
-        speed = getDefaultSpeedForEdge(rEdge);
-    }
-    // look if surface restricts speed
-    else if(hasSurface)
-    {
-        try
-        {
-            OsmHighway::SurfaceType surface =
-                OsmHighway::parseSurfaceString(surfaceString);
-            Speed surfaceSpeed =
-                mConfig.getCostConfig().surfaceMaxSpeed.getSurfaceMaxSpeed(surface);
-            if(surfaceSpeed < speed)
-            {
-                speed = surfaceSpeed;
-            }
-        }
-        catch (OsmException& e)
-        {
-            throw MapProviderException(
-                std::string("PostGisProvider:addTravelTime... ") +
-                "could not parse surface " + surfaceString);
-        }
-    }
-    double speed_mps = speed / 3.6;
-    double travel_time = rEdge.geomData().length/ speed_mps;
-    rEdge.edgeCost().addCost(EdgeCost::TRAVEL_TIME, travel_time);
-    rEdge.setSpeed(speed);
-}
-
-void
 PostGisProvider::addOtherCostToEdge(Edge& rEdge, const std::string& key)
 {
     size_t eq_char = key.find('=');
@@ -676,13 +612,4 @@ PostGisProvider::addOtherCostToEdge(Edge& rEdge, const std::string& key)
     rEdge.edgeCost().addCost(EdgeCost::OTHER, cost);
 }
 
-Speed
-PostGisProvider::getDefaultSpeedForEdge(const Edge& rEdge) const
-{
-    OsmHighway::HighwayType type = rEdge.roadData().roadType;
-    const CostConfig& costConfig = mConfig.getCostConfig();
-    Speed speed=
-        costConfig.defaultSpeed.getDefaultSpeed(type, CostConfig::DefaultSpeed::LOW);
-    return speed;
-}
 

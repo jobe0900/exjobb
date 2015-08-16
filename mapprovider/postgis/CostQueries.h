@@ -22,6 +22,7 @@
 //
 #include "../../osm/OsmHighway.h"
 #include "../../graph/Edge.h"
+#include "../../graph/EdgeRestriction.h"
 #include "../../graph/Topology.h"
 #include "../../graph/Vertex.h"
 #include "../MapProviderException.h"
@@ -79,6 +80,43 @@ public:
                         const std::string&      rTopoEdgeTable,
                         const std::string&      rOsmEdgeTable,
                         const std::string&      rSchemaName);
+
+    /** Add costs for travel time along the edge.
+     * First set the speed of those with explicit restrictions in database,
+     * then set the default speed for those without explicit speeds.
+     * @param   rResult     The results of the query.
+     * @param   rTopology   The topology with edges to set cost for.
+     * @param   rConfig         Configuration
+     * @throw   MapProviderException
+     */
+    static void     addTravelTimeCosts(
+                        const pqxx::result&     rResult,
+                        Topology&               rTopology,
+                        const Configuration&    rConfig);
+
+    /** Add cost relating to the maxspeed of the edge.
+     * The cost is the number of seconds to travel the edge.
+     * @param   rEdge           The edge to add cost to
+     * @param   speed           The speed for the edge found in the database.
+     * @param   surfaceString   The surface as string or empty if not specified.
+     * @param   rConfig         Configuration
+     * @throw   MapProviderException
+     */
+    static void     addTravelTimeCostToEdge(
+                        Edge&                   rEdge,
+                        Speed                   speed,
+                        std::string&            surfaceString,
+                        const Configuration&    rConfig);
+
+    /** If the speed in the db was not set we must fetch the default
+     * for this road category from the configuration.
+     * @param   rEdge   The edge to find the default speed for
+     * @param   rConfig         Configuration
+     * @return  The default speed for this type of highway.
+     */
+    static Speed    getDefaultSpeedForEdge(
+                        const Edge&             rEdge,
+                        const Configuration&    rConfig);
 
     /** Query for costs under the highway and railway tags:
      * Highway:

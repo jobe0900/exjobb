@@ -223,13 +223,6 @@ private:
      */
     void    getTravelTimeCosts(pqxx::result& rResult);
 
-    /** Get other costs for the edge other than speed and barriers, those
-     * include slowdown at stop and yield signs, zebra crossings, railway
-     * crossings, bus stops, speed bumps, traffic lights...
-     * @param   rResult     Store the result of the query here.
-     */
-    void    getOtherEdgeCosts(pqxx::result& rResult);
-
     /** Add costs for travel time along the edge.
      * First set the speed of those with explicit restrictions in database,
      * then set the default speed for those without explicit speeds.
@@ -239,24 +232,20 @@ private:
      */
     void    addTravelTimeCosts(const pqxx::result& rResult, Topology& rTopology);
 
+    /** Get other costs for the edge other than speed and barriers, those
+     * include slowdown at stop and yield signs, zebra crossings, railway
+     * crossings, bus stops, speed bumps, traffic lights...
+     * @param   rResult     Store the result of the query here.
+     */
+    void    getOtherEdgeCosts(pqxx::result& rResult);
+
+
     /** Add costs for speed bumps and such to affected edges.
      * @param   rResult     The results of the query.
      * @param   rTopology   The topology with edges to set cost for.
      * @throw   MapProviderException
      */
     void    addOtherCosts(const pqxx::result& rResult, Topology& rTopology);
-
-    /** Add cost relating to the maxspeed of the edge.
-     * The cost is the number of seconds to travel the edge.
-     * @param   rEdge           The edge to add cost to
-     * @param   speed           The speed for the edge found in the database.
-     * @param   surfaceString   The surface as string or empty if not specified.
-     * @throw   MapProviderException
-     */
-    void    addTravelTimeCostToEdge(
-                Edge& rEdge,
-                Speed speed,
-                std::string& surfaceString);
 
     /** Add a cost of an other type to the edge.
      * Look up the value in the configuration.
@@ -267,12 +256,6 @@ private:
                 Edge&               rEdge,
                 const std::string&  key);
 
-    /** If the speed in the db was not set we must fetch the default
-     * for this road category from the configuration.
-     * @param   rEdge   The edge to find the default speed for
-     * @return  The default speed for this type of highway.
-     */
-    Speed   getDefaultSpeedForEdge(const Edge& rEdge) const;
 
 // ATTRIBUTES
     const Configuration&    mConfig;

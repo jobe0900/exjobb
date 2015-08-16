@@ -37,6 +37,94 @@ CostQueries::getTravelTimeEdgeCosts(
 
 // static
 void
+CostQueries::addTravelTimeCosts(
+    const pqxx::result&     rResult,
+    Topology&               rTopology,
+    const Configuration&    rConfig)
+{
+    try
+    {
+        for(const pqxx::tuple& row : rResult)
+        {
+            // throw exception if no edgeId
+            EdgeIdType edgeId =
+                row[TravelTimeCostResult::EDGE_ID].as<EdgeIdType>();
+
+            Edge& edge = rTopology.getEdge(edgeId);
+
+            Speed speed =
+                row[TravelTimeCostResult::MAXSPEED].as<Speed>(
+                    EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
+            std::string surface_string =
+                row[TravelTimeCostResult::SURFACE].as<std::string>("");
+
+            addTravelTimeCostToEdge(edge, speed, surface_string, rConfig);
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:addTravelTimeCost: ") + e.what());
+    }
+}
+
+//static
+void
+CostQueries::addTravelTimeCostToEdge(
+    Edge&                   rEdge,
+    Speed                   speed,
+    std::string&            surfaceString,
+    const Configuration&    rConfig)
+{
+    bool hasMaxSpeed =
+        (speed != EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
+    bool hasSurface = surfaceString.length() > 0;
+    if(!(hasMaxSpeed || hasSurface))
+    {
+        speed = getDefaultSpeedForEdge(rEdge, rConfig);
+    }
+    // look if surface restricts speed
+    else if(hasSurface)
+    {
+        try
+        {
+            OsmHighway::SurfaceType surface =
+                OsmHighway::parseSurfaceString(surfaceString);
+            Speed surfaceSpeed =
+                rConfig.getCostConfig().surfaceMaxSpeed.getSurfaceMaxSpeed(surface);
+            if(surfaceSpeed < speed)
+            {
+                speed = surfaceSpeed;
+            }
+        }
+        catch (OsmException& e)
+        {
+            throw MapProviderException(
+                std::string("CostQueries:addTravelTime... ") +
+                "could not parse surface " + surfaceString);
+        }
+    }
+    double speed_mps = speed / 3.6;
+    double travel_time = rEdge.geomData().length/ speed_mps;
+    rEdge.edgeCost().addCost(EdgeCost::TRAVEL_TIME, travel_time);
+    rEdge.setSpeed(speed);
+}
+
+// static
+Speed
+CostQueries::getDefaultSpeedForEdge(
+    const Edge&             rEdge,
+    const Configuration&    rConfig)
+{
+    OsmHighway::HighwayType type = rEdge.roadData().roadType;
+    const CostConfig& costConfig = rConfig.getCostConfig();
+    Speed speed=
+        costConfig.defaultSpeed.getDefaultSpeed(type, CostConfig::DefaultSpeed::LOW);
+    return speed;
+}
+
+// static
+void
 CostQueries::getOtherCosts(
     pqxx::transaction_base& rTrans,
     pqxx::result&           rResult,
