@@ -179,7 +179,7 @@ TopologyQueries::addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
     catch (OsmException& oe)
     {
         throw MapProviderException(
-            std::string("PostGisProvider:addHighwayTypeToEdgeRoadData:")
+            std::string("TopologyQueries:addHighwayTypeToEdgeRoadData:")
             + oe.what());
     }
 }
