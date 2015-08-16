@@ -10,11 +10,6 @@
 #include "RestrictionQueries.h"
 #include "CostQueries.h"
 
-#include <fstream>
-#include <iostream>
-#include <sstream>
-#include <regex>
-
 #include "../../graph/Edge.h"
 #include "../../osm/OsmId.h"
 #include "../../graph/EdgeRestriction.h"
@@ -50,12 +45,12 @@ try
         }
 
         pqxx::nontransaction nt(mConnection);
-        mHighwayTableName   = nt.esc(mTopoConfig.roadsPrefix + "_" +
+        mOsmEdgeTable       = nt.esc(mTopoConfig.roadsPrefix + "_" +
                                 topoBaseName);
         mPointTableName     = nt.esc("planet_osm_point");
         mSchemaName         = nt.esc(mTopoConfig.topologySchemaPrefix + "_" +
                                 topoBaseName);
-        mEdgeTable          = nt.esc(mSchemaName + "." +
+        mTopoEdgeTable      = nt.esc(mSchemaName + "." +
                                 mTopoConfig.edgeTableName);
         mEdgeIdCol          = nt.esc(mSchemaName + "." +
                                 mTopoConfig.edgeIdColumnName);
@@ -65,7 +60,7 @@ try
                                 mTopoConfig.targetColumnName);
         mEdgeGeomCol        = nt.esc(mSchemaName + "." +
                                 mTopoConfig.edgeGeomColumnName);
-        mVertexTable        = nt.esc(mSchemaName + "." +
+        mTopoVertexTable    = nt.esc(mSchemaName + "." +
                                 mTopoConfig.vertexTableName);
         mVertexIdCol        = nt.esc(mSchemaName + "." +
                                 mTopoConfig.vertexIdColumnName);
@@ -154,7 +149,7 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 		TopologyQueries::getTopologyVertices(
 		    transaction,
 		    rVertexResult,
-		    mVertexTable);
+		    mTopoVertexTable);
 	}
 	catch(const std::exception& e)
 	{
@@ -164,8 +159,9 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 }
 
 void
-PostGisProvider::addVertexResultToTopology(const pqxx::result& result,
-                                           Topology& rTopology)
+PostGisProvider::addVertexResultToTopology(
+    const pqxx::result& result,
+    Topology&           rTopology)
 {
     for(size_t row = 0; row < result.size(); ++row)
     {
@@ -195,9 +191,9 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 		TopologyQueries::getTopologyEdges(
 		    transaction,
 		    rEdgeResult,
-		    mEdgeTable,
+		    mTopoEdgeTable,
 		    mSchemaName,
-		    mHighwayTableName);
+		    mOsmEdgeTable);
 	}
 	catch(const std::exception& e)
 	{
@@ -207,8 +203,9 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 }
 
 void
-PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
-                                         Topology& rTopology)
+PostGisProvider::addEdgeResultToTopology(
+    const pqxx::result& result,
+    Topology&           rTopology)
 {
     for(const pqxx::tuple& row : result)
     {
@@ -219,8 +216,9 @@ PostGisProvider::addEdgeResultToTopology(const pqxx::result& result,
 }
 
 Edge&
-PostGisProvider::addBasicResultToEdge(const pqxx::tuple& rRow,
-                                      Topology& rTopology)
+PostGisProvider::addBasicResultToEdge(
+    const pqxx::tuple&  rRow,
+    Topology&           rTopology)
 {
     EdgeIdType
         edge_id(rRow[TopologyQueries::EdgeResult::EDGE_ID]
@@ -317,13 +315,13 @@ PostGisProvider::buildTopology(int srid, double tolerance)
 		{
 		    TopologyQueries::installPostgisTopology(transaction);
 		    TopologyQueries::setSearchPath(transaction);
-		    TopologyQueries::createTemporaryTable(transaction, mHighwayTableName);
+		    TopologyQueries::createTemporaryTable(transaction, mOsmEdgeTable);
 		    TopologyQueries::createTemporarySchema(
 		        transaction, mSchemaName, srid);
 		    TopologyQueries::addTopoGeometryColumn(
-		        transaction, mSchemaName, mHighwayTableName);
+		        transaction, mSchemaName, mOsmEdgeTable);
 		    TopologyQueries::fillTopoGeometryColumn(
-		        transaction, mSchemaName, mHighwayTableName, tolerance);
+		        transaction, mSchemaName, mOsmEdgeTable, tolerance);
 
 		    // TRANSACTION END
 		    transaction.commit();
@@ -358,9 +356,9 @@ PostGisProvider::removeTopology()
 
 		try
 		{
-		    TopologyQueries::dropTemporaryTable(transaction, mHighwayTableName);
+		    TopologyQueries::dropTemporaryTable(transaction, mOsmEdgeTable);
 		    TopologyQueries::dropTemporarySchema(transaction, mSchemaName);
-		    TopologyQueries::deleteTemporaryLayerRecord(transaction, mHighwayTableName);
+		    TopologyQueries::deleteTemporaryLayerRecord(transaction, mOsmEdgeTable);
 		    TopologyQueries::deleteTemporaryTopoRecord(transaction, mSchemaName);
 
 		    // TRANSACTION END
@@ -432,8 +430,8 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
         RestrictionQueries::getVehiclePropertyEdgeRestrictions(
             transaction,
             rResult,
-            mEdgeTable,
-            mHighwayTableName,
+            mTopoEdgeTable,
+            mOsmEdgeTable,
             mSchemaName
         );
     }
@@ -462,25 +460,32 @@ PostGisProvider::addVehiclePropertyRestrictionsToEdge(
             Edge& edge = rTopology.getEdge(edgeId);
             EdgeRestriction& r_restrictions = edge.restrictions();
 
-            EdgeRestriction::VehicleProperties* p_vp = new EdgeRestriction::VehicleProperties();
+            EdgeRestriction::VehicleProperties* p_vp =
+                new EdgeRestriction::VehicleProperties();
 
             p_vp->maxHeight =
-                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXHEIGHT].as<double>
+                row[RestrictionQueries::
+                    VehiclePropertiesRestrictions::MAXHEIGHT].as<double>
                 (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
             p_vp->maxLength =
-                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXLENGTH].as<double>
+                row[RestrictionQueries::
+                    VehiclePropertiesRestrictions::MAXLENGTH].as<double>
                 (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
             p_vp->maxWeight =
-                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXWEIGHT].as<double>
+                row[RestrictionQueries::
+                    VehiclePropertiesRestrictions::MAXWEIGHT].as<double>
                 (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
             p_vp->maxWidth =
-                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXWIDTH].as<double>
+                row[RestrictionQueries::
+                    VehiclePropertiesRestrictions::MAXWIDTH].as<double>
                 (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
             p_vp->maxSpeed =
-                row[RestrictionQueries::VehiclePropertiesRestrictions::MAXSPEED].as<unsigned>
+                row[RestrictionQueries::
+                    VehiclePropertiesRestrictions::MAXSPEED].as<unsigned>
                 (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
             p_vp->minSpeed =
-                row[RestrictionQueries::VehiclePropertiesRestrictions::MINSPEED].as<unsigned>
+                row[RestrictionQueries::
+                    VehiclePropertiesRestrictions::MINSPEED].as<unsigned>
                 (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN);
 
             r_restrictions.setVehiclePropertyRestriction(p_vp);
@@ -512,8 +517,8 @@ PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
         RestrictionQueries::getAccessRestrictions(
             transaction,
             rResult,
-            mEdgeTable,
-            mHighwayTableName,
+            mTopoEdgeTable,
+            mOsmEdgeTable,
             mSchemaName);
     }
     catch(const std::exception& e)
@@ -535,7 +540,8 @@ PostGisProvider::addAccessRestrictionsToEdge(
         {
             // throw exception if no edgeId
             EdgeIdType edgeId =
-                row[RestrictionQueries::AccessRestrictions::EDGE_ID].as<EdgeIdType>();
+                row[RestrictionQueries::
+                    AccessRestrictions::EDGE_ID].as<EdgeIdType>();
 
             Edge& edge = rTopology.getEdge(edgeId);
             EdgeRestriction& r_restrictions = edge.restrictions();
@@ -676,8 +682,8 @@ PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
             RestrictionQueries::dropCreateTurningRestrictionsTable(transaction);
             RestrictionQueries::identifyTurningRestrictions(
                 transaction,
-                mHighwayTableName,
-                mEdgeTable);
+                mOsmEdgeTable,
+                mTopoEdgeTable);
             RestrictionQueries::getTurningRestrictions(transaction, rResult);
         }
         catch (const std::exception& e)
@@ -744,7 +750,7 @@ PostGisProvider::getEdgePointRestrictions(pqxx::result& rResult)
 		    transaction,
 		    rResult,
 		    mPointTableName,
-		    mEdgeTable);
+		    mTopoEdgeTable);
 	}
 	catch(const std::exception& e)
 	{
@@ -898,8 +904,8 @@ PostGisProvider::getTravelTimeCosts(pqxx::result& rResult)
         CostQueries::getTravelTimeEdgeCosts(
             transaction,
             rResult,
-            mEdgeTable,
-            mHighwayTableName,
+            mTopoEdgeTable,
+            mOsmEdgeTable,
             mSchemaName
         );
     }
@@ -929,7 +935,7 @@ PostGisProvider::getOtherEdgeCosts(pqxx::result& rResult)
 		    transaction,
 		    rResult,
 		    mPointTableName,
-		    mEdgeTable);
+		    mTopoEdgeTable);
 	}
 	catch(const std::exception& e)
 	{
@@ -939,7 +945,9 @@ PostGisProvider::getOtherEdgeCosts(pqxx::result& rResult)
 }
 
 void
-PostGisProvider::addTravelTimeCosts(const pqxx::result& rResult, Topology& rTopology)
+PostGisProvider::addTravelTimeCosts(
+    const pqxx::result& rResult,
+    Topology&           rTopology)
 {
     try
     {
@@ -952,11 +960,6 @@ PostGisProvider::addTravelTimeCosts(const pqxx::result& rResult, Topology& rTopo
 
             Edge& edge = rTopology.getEdge(edgeId);
 
-//            std::string highway_string =
-//                row[CostQueries::TravelTimeCostResult::HIGHWAY].as<std::string>("");
-//            OsmHighway::HighwayType highwayType =
-//                edge.roadData().roadType;
-//                OsmHighway::parseString(highway_string);
             Speed speed =
                 row[CostQueries::TravelTimeCostResult::MAXSPEED].as<Speed>(
                     EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
@@ -980,12 +983,6 @@ PostGisProvider::addOtherCosts(
 {
     try
     {
-
-//        Edge& e = rTopology.getEdge(869);
-//        std::string str("highway=");          // test nr 1
-//        std::string str("highway=bus_stop");  // test nr 2
-//        addOtherCostToEdge(e,str);
-
         for(const pqxx::tuple& row : rResult)
         {
             // throw exception if no edgeId
@@ -1035,9 +1032,13 @@ PostGisProvider::addBarrierCostToEdge(Edge& rEdge, OsmBarrier::BarrierType type)
 
 
 void
-PostGisProvider::addTravelTimeCostToEdge(Edge& rEdge, Speed speed, std::string& surfaceString)
+PostGisProvider::addTravelTimeCostToEdge(
+    Edge&           rEdge,
+    Speed           speed,
+    std::string&    surfaceString)
 {
-    bool hasMaxSpeed = (speed != EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
+    bool hasMaxSpeed =
+        (speed != EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
     bool hasSurface = surfaceString.length() > 0;
     if(!(hasMaxSpeed || hasSurface))
     {
@@ -1059,7 +1060,8 @@ PostGisProvider::addTravelTimeCostToEdge(Edge& rEdge, Speed speed, std::string& 
         }
         catch (OsmException& e)
         {
-            throw MapProviderException(std::string("PostGisProvider:addTravelTime... ") +
+            throw MapProviderException(
+                std::string("PostGisProvider:addTravelTime... ") +
                 "could not parse surface " + surfaceString);
         }
     }
@@ -1075,7 +1077,6 @@ PostGisProvider::addOtherCostToEdge(Edge& rEdge, const std::string& key)
     size_t eq_char = key.find('=');
     if((eq_char == std::string::npos) || (eq_char == key.length() - 1))
     {
-//        std::cerr << "No key supplied: " << key << std::endl;
         return;
     }
 
