@@ -250,6 +250,17 @@ public:
                             pqxx::result&           rResult,
                             const std::string&      rOsmPointTable,
                             const std::string&      rTopoEdgeTable);
+
+    /** Add the result of the query for Point restrictions on Edges .
+     * @param   rResult         The results of the query
+     * @param   rTopology       Update affected edges in the topology.
+     * @param   rConfig         Configuration
+     * @throw   MapProviderException
+     */
+    static void         addPointRestrictionsToEdge(
+                            const pqxx::result&    rResult,
+                            Topology&              rTopology,
+                            const Configuration&   rConfig);
 // ACCESS
 // INQUIRY
 

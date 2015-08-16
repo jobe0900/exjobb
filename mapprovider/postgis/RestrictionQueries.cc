@@ -432,6 +432,109 @@ RestrictionQueries::getEdgePointRestrictions(
         "AND    ST_Intersects(p.way, e.geom)"
     );
 }
+// static
+void
+RestrictionQueries::addPointRestrictionsToEdge(
+    const pqxx::result&     rResult,
+    Topology&               rTopology,
+    const Configuration&   rConfig)
+{
+    try
+    {
+        for(const pqxx::tuple& row : rResult)
+        {
+            // throw exception if no edgeId
+            EdgeIdType edgeId =
+                row[EdgePointRestrictions::EDGE_ID].as<EdgeIdType>();
+
+            Edge& edge = rTopology.getEdge(edgeId);
+            EdgeRestriction& r_restrictions = edge.restrictions();
+
+            std::string barrierTypeString =
+                row[EdgePointRestrictions::BARRIER].as<std::string>();
+            OsmBarrier::BarrierType barrierType =
+                OsmBarrier::parseString(barrierTypeString);
+            r_restrictions.setBarrierRestriction(barrierType);
+            CostQueries::addBarrierCostToEdge(edge, barrierType, rConfig);
+
+            std::string colString;
+            colString = row[EdgePointRestrictions::ACCESS].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.setGeneralAccessRestriction(type);
+            }
+
+            colString = row[EdgePointRestrictions::GOODS].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::GOODS,
+                    type);
+            }
+
+            colString = row[EdgePointRestrictions::HGV].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::HGV,
+                    type);
+            }
+
+            colString = row[EdgePointRestrictions::LHV].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::LHV,
+                    type);
+            }
+
+            colString = row[EdgePointRestrictions::MOTORCAR].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::MOTORCAR,
+                    type);
+            }
+
+            colString = row[EdgePointRestrictions::MOTOR_VEHICLE].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::MOTOR_VEHICLE,
+                    type);
+            }
+
+            colString = row[EdgePointRestrictions::PSV].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::PSV,
+                    type);
+            }
+
+            colString = row[EdgePointRestrictions::VEHICLE].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::VEHICLE,
+                    type);
+            }
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("RestrictionQueries:addPointResultToEdge..: ") + e.what());
+    }
+}
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
