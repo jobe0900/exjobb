@@ -229,6 +229,15 @@ public:
                             pqxx::transaction_base& rTrans,
                             pqxx::result&           rResult);
 
+    /** Add the result of the query for Turning restrictions.
+     * @param   rResult         The results of the query
+     * @param   rTopology       Update affected edges in the topology.
+     * @throw   MapProviderException
+     */
+    static void         addTurningRestrictionsToEdge(
+                            const pqxx::result&    rResult,
+                            Topology&              rTopology);
+
     /** Get the restrictions from the 'planet_osm_point' that relates to edges.
      * @param   rTrans          Transaction to perform query in.
      * @param   rResult         Store the result of query here.

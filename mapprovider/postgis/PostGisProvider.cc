@@ -436,31 +436,7 @@ PostGisProvider::addTurningRestrictionsToEdge(
     const pqxx::result&     rResult,
     Topology&               rTopology)
 {
-    try
-    {
-        for(const pqxx::tuple& row : rResult)
-        {
-            OsmTurningRestriction* p_turn =
-                RestrictionQueries::TurningRestrictions::Results::
-                    parseTurningRestrictionResultRow(row, rTopology);
-
-            // mark edge as having a restriction
-            Edge& edge = rTopology.getEdge(p_turn->fromEdgeId());
-            EdgeRestriction& r_restrictions = edge.restrictions();
-            r_restrictions.addTurningRestriction(p_turn);
-
-            // explicit mark "VIA WAY"
-            if(p_turn->viaType() == OsmTurningRestriction::VIA_WAY)
-            {
-                r_restrictions.setViaWayRestriction();
-            }
-        }
-    }
-    catch (std::exception& e)
-    {
-        throw MapProviderException(
-            std::string("PostGisProvider:addTurningResultToEdge..: ") + e.what());
-    }
+    RestrictionQueries::addTurningRestrictionsToEdge(rResult, rTopology);
 }
 
 void
