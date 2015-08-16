@@ -1,11 +1,6 @@
-/**  Access to Highway data from the OSM file.
+/**  Access to `Highway` data from the OSM file.
  *
- * #include "OsmHighway.h" <BR>
- * -llib
- *
- * A longer description.
- *
- * @see something
+ * #include "OsmHighway.h"
  */
 
 #ifndef OSM_OSMHIGHWAY_H_

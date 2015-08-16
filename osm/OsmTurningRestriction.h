@@ -153,8 +153,8 @@ public:
      * @return  true if travle is restricted.
      */
     bool                isRestricted(
-        EdgeIdType fromEdgeId,
-        EdgeIdType toEdgeId) const;
+                            EdgeIdType fromEdgeId,
+                            EdgeIdType toEdgeId) const;
 
 protected:
 private:

@@ -21,18 +21,10 @@ OsmBarrier::RestrictionsRule::restrictsAccess(OsmBarrier::BarrierType type) cons
     return it != restrictionTypes.end();
 }
 
-// CostsRule -----------------------------------------------------------------
-//OsmBarrier::CostsRule::CostsRule(
-//    std::initializer_list<OsmBarrier::BarrierCostType> costsTypes)
-//{
-//    for()
-//}
-
 bool
 OsmBarrier::CostsRule::costsToPass(OsmBarrier::BarrierType type) const
 {
     const auto& it  = costs.find(type);
-//    auto it = std::find(costs.begin(), costs.end(), type);
     return it != costs.end();
 }
 
@@ -40,7 +32,6 @@ Cost
 OsmBarrier::CostsRule::getCost(OsmBarrier::BarrierType type) const
 {
     const auto& it  = costs.find(type);
-//    auto it = std::find(costs.begin(), costs.end(), type);
     if(it != costs.end())
     {
         return it->second;
@@ -173,9 +164,3 @@ const std::vector<std::string> OsmBarrier::sDisregardedTypes
     "retaining_wall",
     "wall",
 };
-
-
-
-
-
-

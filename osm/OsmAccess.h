@@ -1,4 +1,4 @@
-/**  Access to Access data from the OSM file.
+/**  Access to `Access` data from the OSM file.
  *
  * #include "OsmAccess.h"
  *
@@ -60,7 +60,7 @@ public:
 
         bool    hasAccess(AccessType type) const;
 
-        std::vector<AccessType> allowAccessToTypes; //{YES, PERMISSIVE, DESIGNATED};
+        std::vector<AccessType> allowAccessToTypes;
     };
 
 // LIFECYCLE
