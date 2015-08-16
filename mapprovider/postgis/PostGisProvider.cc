@@ -160,18 +160,10 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 
 void
 PostGisProvider::addVertexResultToTopology(
-    const pqxx::result& result,
+    const pqxx::result& rResult,
     Topology&           rTopology)
 {
-    for(size_t row = 0; row < result.size(); ++row)
-    {
-        VertexIdType
-            id(result[row][TopologyQueries::VertexResult::NODE_ID].as<int>());
-        Point
-            point(result[row][TopologyQueries::VertexResult::X].as<double>(),
-                  result[row][TopologyQueries::VertexResult::Y].as<double>());
-        rTopology.addVertex(id, point);
-    }
+    TopologyQueries::addVertexResultToTopology(rResult, rTopology);
 }
 
 
@@ -204,98 +196,12 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 
 void
 PostGisProvider::addEdgeResultToTopology(
-    const pqxx::result& result,
+    const pqxx::result& rResult,
     Topology&           rTopology)
 {
-    for(const pqxx::tuple& row : result)
-    {
-        Edge& edge = addBasicResultToEdge(row, rTopology);
-        addGeomDataResultToEdge(edge, row);
-        addRoadDataResultToEdge(edge, row);
-    }
+    TopologyQueries::addEdgeResultToTopology(rResult, rTopology);
 }
 
-Edge&
-PostGisProvider::addBasicResultToEdge(
-    const pqxx::tuple&  rRow,
-    Topology&           rTopology)
-{
-    EdgeIdType
-        edge_id(rRow[TopologyQueries::EdgeResult::EDGE_ID]
-                .as<EdgeIdType>(Edge::MAX_ID));
-    OsmIdType
-        osm_id(rRow[TopologyQueries::EdgeResult::OSM_ID]
-               .as<OsmIdType>(Osm::MAX_ID));
-    VertexIdType
-        source_id(rRow[TopologyQueries::EdgeResult::START_NODE]
-                  .as<int>(Vertex::MAX_ID));
-    VertexIdType
-        target_id(rRow[TopologyQueries::EdgeResult::END_NODE]
-                  .as<int>(Vertex::MAX_ID));
-    Edge&
-        edge = rTopology.addEdge(edge_id, osm_id, source_id, target_id);
-
-    return edge;
-}
-
-void
-PostGisProvider::addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
-{
-    Edge::GeomData
-        gd(rRow[TopologyQueries::EdgeResult::EDGE_LENGTH].as<double>(0),
-           Point(rRow[TopologyQueries::EdgeResult::CENTER_X].as<double>(0),
-                 rRow[TopologyQueries::EdgeResult::CENTER_Y].as<double>(0)),
-           rRow[TopologyQueries::EdgeResult::SOURCE_BEARING].as<int>(0),
-           rRow[TopologyQueries::EdgeResult::TARGET_BEARING].as<int>(0));
-    rEdge.setGeomData(gd);
-}
-
-void
-PostGisProvider::addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
-{
-    Edge::RoadData rd;
-    std::string
-        onewayStr(rRow[TopologyQueries::EdgeResult::ONEWAY]
-                  .as<std::string>("no"));
-
-    if(rRow[TopologyQueries::EdgeResult::JUNCTION]
-            .as<std::string>("") == OsmHighway::JUNCTION_ROUNDABOUT)
-    {
-        onewayStr = "yes";
-    }
-    if(onewayStr == "yes")
-    {
-        rd.direction = Edge::DirectionType::FROM_TO;
-    }
-    else if(onewayStr == "-1")
-    {
-        rd.direction = Edge::DirectionType::TO_FROM;
-    }
-
-    rd.nrLanes = rRow[TopologyQueries::EdgeResult::LANES].as<size_t>(1);
-
-    addHighwayTypeToEdgeRoadData(rd, rRow);
-
-    rEdge.setRoadData(rd);
-}
-
-void
-PostGisProvider::addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
-                                              const pqxx::tuple& rRow)
-{
-    std::string roadTypeStr(
-        rRow[TopologyQueries::EdgeResult::HIGHWAY].as<std::string>("road"));
-    try
-    {
-        rRoadData.roadType = OsmHighway::parseString(roadTypeStr);
-    }
-    catch (OsmException& oe)
-    {
-        throw MapProviderException(
-            std::string("PostGisProvider:addHighwayTypeToEdgeRoadData:")
-            + oe.what());
-    }
-}
 
 void
 PostGisProvider::buildTopology(int srid, double tolerance)

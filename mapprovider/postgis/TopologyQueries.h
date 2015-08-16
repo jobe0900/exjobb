@@ -19,6 +19,9 @@
 
 // LOCAL INCLUDES
 //
+#include "../../graph/Topology.h"
+#include "../../graph/TopologyException.h"
+#include "../MapProviderException.h"
 
 // FORWARD REFERENCES
 //
@@ -96,6 +99,13 @@ public:
                         pqxx::result&           rResult,
                         const std::string&      rVertexTable);
 
+    /** Add vertices to topology.
+     * @throws  TopologyException
+     */
+    static void     addVertexResultToTopology(
+                        const pqxx::result&     rResult,
+                        Topology&               rTopology);
+
     /** Fetch the edges for the topology.
      * @param   rTrans          Transaction to perform query in.
      * @param   rResult         Store the result of query here.
@@ -109,6 +119,50 @@ public:
                         const std::string&      rTopoEdgeTable,
                         const std::string&      rSchemaName,
                         const std::string&      rOsmEdgeTable);
+
+    /** Add edges to topology.
+     * @param   rEdgeResult    Result of db query for edges.
+     * @param   rTopology      Topology to fill with edges.
+     * @throws  TopologyException
+     */
+    static void     addEdgeResultToTopology(
+                        const pqxx::result&     rResult,
+                        Topology&               rTopology);
+
+    /** Helper to add basic data from db to Edge.
+     * @param   rRow        Row with data for an Edge.
+     * @param   rTopology   Topology to add edge to.
+     * @return  Reference to the newly added Edge.
+     * @throws  TopologyException
+     */
+    static Edge&    addBasicResultToEdge(
+                        const pqxx::tuple&  rRow,
+                        Topology&           rTopology);
+
+    /** Add geometric result from query to an Edge.
+     * @param   rEdge   Reference to Edge to set Geom data on.
+     * @param   rRow    Reference to Row with Geom data in it.
+     */
+    static void     addGeomDataResultToEdge(
+                        Edge&               rEdge,
+                        const pqxx::tuple&  rRow);
+
+    /** Add road related result from query to an Edge.
+     * @param   rEdge   Reference to Edge to set road data on.
+     * @param   rRow    Reference to Row with road data in it.
+     */
+    static void     addRoadDataResultToEdge(
+                        Edge&               rEdge,
+                        const pqxx::tuple&  rRow);
+
+    /** Extract highway type from database result and store in RoadData.
+     * @param   rRoadData   The RoadData to store in.
+     * @param   rRow    Reference to Row with road data in it.
+     * @throw   MapProviderException
+     */
+    static void     addHighwayTypeToEdgeRoadData(
+                        Edge::RoadData&     rRoadData,
+                        const pqxx::tuple&  rRow);
 
     /** Make sure the 'postgis_topology' extension is installed.
      * @param   rTrans          Transaction to perform query in.

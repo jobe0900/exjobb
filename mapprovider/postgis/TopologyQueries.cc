@@ -29,6 +29,21 @@ TopologyQueries::getTopologyVertices(
 		);
 }
 
+// static
+void
+TopologyQueries::addVertexResultToTopology(
+    const pqxx::result& rResult,
+    Topology&           rTopology)
+{
+    for(size_t row = 0; row < rResult.size(); ++row)
+    {
+        VertexIdType id(rResult[row][VertexResult::NODE_ID].as<int>());
+        Point point(rResult[row][VertexResult::X].as<double>(),
+                    rResult[row][VertexResult::Y].as<double>());
+        rTopology.addVertex(id, point);
+    }
+}
+
 //static
 void
 TopologyQueries::getTopologyEdges(
@@ -73,6 +88,100 @@ TopologyQueries::getTopologyEdges(
         "ORDER BY edge_id ASC;"
     );
     rResult = rTrans.exec(sql);
+}
+
+// static
+void
+TopologyQueries::addEdgeResultToTopology(
+    const pqxx::result& rResult,
+    Topology&           rTopology)
+{
+    for(const pqxx::tuple& row : rResult)
+    {
+        Edge& edge = addBasicResultToEdge(row, rTopology);
+        addGeomDataResultToEdge(edge, row);
+        addRoadDataResultToEdge(edge, row);
+    }
+}
+
+// static
+Edge&
+TopologyQueries::addBasicResultToEdge(
+    const pqxx::tuple&  rRow,
+    Topology&           rTopology)
+{
+    EdgeIdType
+        edge_id(rRow[EdgeResult::EDGE_ID].as<EdgeIdType>(Edge::MAX_ID));
+    OsmIdType
+        osm_id(rRow[EdgeResult::OSM_ID].as<OsmIdType>(Osm::MAX_ID));
+    VertexIdType
+        source_id(rRow[EdgeResult::START_NODE].as<int>(Vertex::MAX_ID));
+    VertexIdType
+        target_id(rRow[EdgeResult::END_NODE].as<int>(Vertex::MAX_ID));
+
+    Edge& edge = rTopology.addEdge(edge_id, osm_id, source_id, target_id);
+
+    return edge;
+}
+
+// static
+void
+TopologyQueries::addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
+{
+    Edge::GeomData gd(
+           rRow[EdgeResult::EDGE_LENGTH].as<double>(0),
+           Point(rRow[EdgeResult::CENTER_X].as<double>(0),
+                 rRow[EdgeResult::CENTER_Y].as<double>(0)),
+           rRow[EdgeResult::SOURCE_BEARING].as<int>(0),
+           rRow[EdgeResult::TARGET_BEARING].as<int>(0));
+    rEdge.setGeomData(gd);
+}
+
+// static
+void
+TopologyQueries::addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow)
+{
+    Edge::RoadData rd;
+    std::string
+        onewayStr(rRow[EdgeResult::ONEWAY].as<std::string>("no"));
+
+    if(rRow[EdgeResult::JUNCTION].as<std::string>("") ==
+        OsmHighway::JUNCTION_ROUNDABOUT)
+    {
+        onewayStr = "yes";
+    }
+    if(onewayStr == "yes")
+    {
+        rd.direction = Edge::DirectionType::FROM_TO;
+    }
+    else if(onewayStr == "-1")
+    {
+        rd.direction = Edge::DirectionType::TO_FROM;
+    }
+
+    rd.nrLanes = rRow[EdgeResult::LANES].as<size_t>(1);
+
+    addHighwayTypeToEdgeRoadData(rd, rRow);
+
+    rEdge.setRoadData(rd);
+}
+
+// static
+void
+TopologyQueries::addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
+                                              const pqxx::tuple& rRow)
+{
+    std::string roadTypeStr( rRow[EdgeResult::HIGHWAY].as<std::string>("road"));
+    try
+    {
+        rRoadData.roadType = OsmHighway::parseString(roadTypeStr);
+    }
+    catch (OsmException& oe)
+    {
+        throw MapProviderException(
+            std::string("PostGisProvider:addHighwayTypeToEdgeRoadData:")
+            + oe.what());
+    }
 }
 
 //static

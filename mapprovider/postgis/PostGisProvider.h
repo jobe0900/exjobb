@@ -95,39 +95,6 @@ private:
     void    addEdgeResultToTopology(const pqxx::result& rEdgeResult,
                                     Topology& rTopology);
 
-    /** Helper to add basic data from db to Edge.
-     * @param   rRow        Row with data for an Edge.
-     * @param   rTopology   Topology to add edge to.
-     * @return  Reference to the newly added Edge.
-     * @throws  TopologyException
-     */
-    Edge&   addBasicResultToEdge(const pqxx::tuple& rRow, Topology& rTopology);
-
-    /** Add geometric result from query to an Edge.
-     * @param   rEdge   Reference to Edge to set Geom data on.
-     * @param   rRow    Reference to Row with Geom data in it.
-     */
-    void    addGeomDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow);
-
-    /** Add road related result from query to an Edge.
-     * @param   rEdge   Reference to Edge to set road data on.
-     * @param   rRow    Reference to Row with road data in it.
-     */
-    void    addRoadDataResultToEdge(Edge& rEdge, const pqxx::tuple& rRow);
-
-    /** Extract highway type from database result and store in RoadData.
-     * @param   rRoadData   The RoadData to store in.
-     * @param   rRow    Reference to Row with road data in it.
-     * @throw   MapProviderException
-     */
-    void    addHighwayTypeToEdgeRoadData(Edge::RoadData& rRoadData,
-                                         const pqxx::tuple& rRow);
-
-    /** Get the names of the highway columns we are interested in from OsmConst.
-     * @return  String to put in query.
-     */
-    std::string getInterestingHighwayColumns() const;
-
     /** Get vertices from database.
      * @throws	MapProviderException
      */
@@ -136,7 +103,9 @@ private:
     /** Add vertices to topology.
      * @throws  TopologyException
      */
-    void    addVertexResultToTopology(const pqxx::result&, Topology& rTopology);
+    void    addVertexResultToTopology(
+                const pqxx::result& rResult,
+                Topology&           rTopology);
 
     // Helpers for constructor
     /** Set the base name for the topology, either a string from config
