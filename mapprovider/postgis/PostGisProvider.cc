@@ -355,55 +355,6 @@ PostGisProvider::addVehiclePropertyRestrictionsToEdge(
     Topology&           rTopology)
 {
     RestrictionQueries::addVehiclePropertyRestrictionsToEdge(rResult, rTopology);
-//    try
-//    {
-//        for(const pqxx::tuple& row : rResult)
-//        {
-//            // throw exception if no edgeId
-//            EdgeIdType edgeId =
-//                row[RestrictionQueries::VehiclePropertiesRestrictions::EDGE_ID]
-//                    .as<EdgeIdType>();
-//
-//            Edge& edge = rTopology.getEdge(edgeId);
-//            EdgeRestriction& r_restrictions = edge.restrictions();
-//
-//            EdgeRestriction::VehicleProperties* p_vp =
-//                new EdgeRestriction::VehicleProperties();
-//
-//            p_vp->maxHeight =
-//                row[RestrictionQueries::
-//                    VehiclePropertiesRestrictions::MAXHEIGHT].as<double>
-//                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
-//            p_vp->maxLength =
-//                row[RestrictionQueries::
-//                    VehiclePropertiesRestrictions::MAXLENGTH].as<double>
-//                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
-//            p_vp->maxWeight =
-//                row[RestrictionQueries::
-//                    VehiclePropertiesRestrictions::MAXWEIGHT].as<double>
-//                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
-//            p_vp->maxWidth =
-//                row[RestrictionQueries::
-//                    VehiclePropertiesRestrictions::MAXWIDTH].as<double>
-//                (EdgeRestriction::VehicleProperties::DEFAULT_DIMENSION_MAX);
-//            p_vp->maxSpeed =
-//                row[RestrictionQueries::
-//                    VehiclePropertiesRestrictions::MAXSPEED].as<unsigned>
-//                (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MAX);
-//            p_vp->minSpeed =
-//                row[RestrictionQueries::
-//                    VehiclePropertiesRestrictions::MINSPEED].as<unsigned>
-//                (EdgeRestriction::VehicleProperties::DEFAULT_SPEED_MIN);
-//
-//            r_restrictions.setVehiclePropertyRestriction(p_vp);
-//
-//        }
-//    }
-//    catch (std::exception& e)
-//    {
-//        throw MapProviderException(
-//            std::string("PostGisProvider:addVehicleProp..ToEdge..: ") + e.what());
-//    }
 }
 
 void
@@ -440,133 +391,7 @@ PostGisProvider::addAccessRestrictionsToEdge(
     const pqxx::result& rResult,
     Topology&           rTopology)
 {
-    try
-    {
-        for(const pqxx::tuple& row : rResult)
-        {
-            // throw exception if no edgeId
-            EdgeIdType edgeId =
-                row[RestrictionQueries::
-                    AccessRestrictions::EDGE_ID].as<EdgeIdType>();
-
-            Edge& edge = rTopology.getEdge(edgeId);
-            EdgeRestriction& r_restrictions = edge.restrictions();
-
-            std::string colString;
-            colString = row[RestrictionQueries::AccessRestrictions::ACCESS]
-                            .as<std::string>("");
-            if(colString != "")
-            {
-                OsmAccess::AccessType type = OsmAccess::parseString(colString);
-                r_restrictions.setGeneralAccessRestriction(type);
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::MOTORCAR]
-                            .as<std::string>("");
-            if(colString != "")
-            {
-                OsmAccess::AccessType type = OsmAccess::parseString(colString);
-                r_restrictions.addVehicleTypeAccessRestriction(
-                    OsmVehicle::MOTORCAR,
-                    type
-                );
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::GOODS]
-                            .as<std::string>("");
-            if(colString != "")
-            {
-                OsmAccess::AccessType type = OsmAccess::parseString(colString);
-                r_restrictions.addVehicleTypeAccessRestriction(
-                    OsmVehicle::GOODS,
-                    type
-                );
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::HGV]
-                            .as<std::string>("");
-            if(colString != "")
-            {
-                OsmAccess::AccessType type = OsmAccess::parseString(colString);
-                r_restrictions.addVehicleTypeAccessRestriction(
-                    OsmVehicle::HGV,
-                    type
-                );
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::PSV]
-                            .as<std::string>("");
-            if(colString != "")
-            {
-                OsmAccess::AccessType type = OsmAccess::parseString(colString);
-                r_restrictions.addVehicleTypeAccessRestriction(
-                    OsmVehicle::PSV,
-                    type
-                );
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::LHV]
-                            .as<std::string>("");
-            if(colString != "")
-            {
-                OsmAccess::AccessType type = OsmAccess::parseString(colString);
-                r_restrictions.addVehicleTypeAccessRestriction(
-                    OsmVehicle::LHV,
-                    type
-                );
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::MOTOR_VEHICLE]
-                            .as<std::string>("");
-            if(colString != "")
-            {
-                OsmAccess::AccessType type = OsmAccess::parseString(colString);
-                r_restrictions.addVehicleTypeAccessRestriction(
-                    OsmVehicle::MOTOR_VEHICLE,
-                    type
-                );
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::VEHICLE]
-                            .as<std::string>("");
-            if(colString != "")
-            {
-                OsmAccess::AccessType type = OsmAccess::parseString(colString);
-                r_restrictions.addVehicleTypeAccessRestriction(
-                    OsmVehicle::VEHICLE,
-                    type
-                );
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::BARRIER]
-                            .as<std::string>("");
-            if(colString != "")
-            {
-                OsmBarrier::BarrierType type = OsmBarrier::parseString(colString);
-                r_restrictions.setBarrierRestriction(type);
-                addBarrierCostToEdge(edge, type);
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::DISUSED]
-                            .as<std::string>("");
-            if(colString == "yes")
-            {
-                r_restrictions.setDisusedRestriction();
-            }
-
-            colString = row[RestrictionQueries::AccessRestrictions::NOEXIT]
-                            .as<std::string>("");
-            if(colString == "yes")
-            {
-                r_restrictions.setNoExitRestriction();
-            }
-        }
-    }
-    catch (std::exception& e)
-    {
-        throw MapProviderException(
-            std::string("PostGisProvider:addAccessResultToEdge..: ") + e.what());
-    }
+    RestrictionQueries::addAccessRestrictionsToEdge(rResult, rTopology, mConfig);
 }
 
 void
@@ -688,7 +513,7 @@ PostGisProvider::addPointRestrictionsToEdge(
             OsmBarrier::BarrierType barrierType =
                 OsmBarrier::parseString(barrierTypeString);
             r_restrictions.setBarrierRestriction(barrierType);
-            addBarrierCostToEdge(edge, barrierType);
+            CostQueries::addBarrierCostToEdge(edge, barrierType, mConfig);
 
             std::string colString;
             colString = row[RestrictionQueries::EdgePointRestrictions::ACCESS]
@@ -925,17 +750,6 @@ PostGisProvider::addOtherCosts(
             std::string("PostGisProvider:addPointResultToEdge..: ") + e.what());
     }
 }
-
-void
-PostGisProvider::addBarrierCostToEdge(Edge& rEdge, OsmBarrier::BarrierType type)
-{
-    if(mConfig.getBarrierCostsRule().costsToPass(type))
-    {
-        Cost cost = mConfig.getBarrierCostsRule().getCost(type);
-        rEdge.edgeCost().addCost(EdgeCost::BARRIER, cost);
-    }
-}
-
 
 void
 PostGisProvider::addTravelTimeCostToEdge(

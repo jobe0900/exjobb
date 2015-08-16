@@ -209,6 +209,130 @@ RestrictionQueries::getAccessRestrictions(
     );
 }
 
+// static
+void
+RestrictionQueries::addAccessRestrictionsToEdge(
+    const pqxx::result&     rResult,
+    Topology&               rTopology,
+    const Configuration&    rConfig)
+{
+    try
+    {
+        for(const pqxx::tuple& row : rResult)
+        {
+            // throw exception if no edgeId
+            EdgeIdType edgeId =
+                row[AccessRestrictions::EDGE_ID].as<EdgeIdType>();
+
+            Edge& edge = rTopology.getEdge(edgeId);
+            EdgeRestriction& r_restrictions = edge.restrictions();
+
+            std::string colString;
+            colString = row[AccessRestrictions::ACCESS].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.setGeneralAccessRestriction(type);
+            }
+
+            colString = row[AccessRestrictions::MOTORCAR].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::MOTORCAR,
+                    type
+                );
+            }
+
+            colString = row[AccessRestrictions::GOODS].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::GOODS,
+                    type
+                );
+            }
+
+            colString = row[AccessRestrictions::HGV].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::HGV,
+                    type
+                );
+            }
+
+            colString = row[AccessRestrictions::PSV].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::PSV,
+                    type
+                );
+            }
+
+            colString = row[AccessRestrictions::LHV].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::LHV,
+                    type
+                );
+            }
+
+            colString = row[AccessRestrictions::MOTOR_VEHICLE].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::MOTOR_VEHICLE,
+                    type
+                );
+            }
+
+            colString = row[AccessRestrictions::VEHICLE].as<std::string>("");
+            if(colString != "")
+            {
+                OsmAccess::AccessType type = OsmAccess::parseString(colString);
+                r_restrictions.addVehicleTypeAccessRestriction(
+                    OsmVehicle::VEHICLE,
+                    type
+                );
+            }
+
+            colString = row[AccessRestrictions::BARRIER].as<std::string>("");
+            if(colString != "")
+            {
+                OsmBarrier::BarrierType type = OsmBarrier::parseString(colString);
+                r_restrictions.setBarrierRestriction(type);
+                CostQueries::addBarrierCostToEdge(edge, type, rConfig);
+            }
+
+            colString = row[AccessRestrictions::DISUSED].as<std::string>("");
+            if(colString == "yes")
+            {
+                r_restrictions.setDisusedRestriction();
+            }
+
+            colString = row[AccessRestrictions::NOEXIT].as<std::string>("");
+            if(colString == "yes")
+            {
+                r_restrictions.setNoExitRestriction();
+            }
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("RestrictionQueries:addAccessResultToEdge..: ") + e.what());
+    }
+}
+
 //static
 void
 RestrictionQueries::dropCreateTurningRestrictionsTable(

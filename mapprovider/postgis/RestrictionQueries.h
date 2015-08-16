@@ -21,6 +21,7 @@
 
 // LOCAL INCLUDES
 //
+#include "CostQueries.h"
 #include "../../osm/OsmHighway.h"
 #include "../../osm/OsmTurningRestriction.h"
 #include "../../graph/Edge.h"
@@ -189,6 +190,17 @@ public:
                             const std::string&      rTopoEdgeTable,
                             const std::string&      rOsmEdgeTable,
                             const std::string&      rSchemaName);
+
+    /** Add the result of the query for Access to restrictions.
+     * @param   rResult         The results of the query
+     * @param   rTopology       Update affected edges in the topology.
+     * @param   rConfig         Configuration
+     * @throw   MapProviderException
+     */
+    static void         addAccessRestrictionsToEdge(
+                            const pqxx::result&    rResult,
+                            Topology&              rTopology,
+                            const Configuration&   rConfig);
 
     /** Drop and create the table 'turning_restrictions'.
      * @param   rTrans          Transaction to perform query in.

@@ -246,13 +246,6 @@ private:
      */
     void    addOtherCosts(const pqxx::result& rResult, Topology& rTopology);
 
-    /** While looking for restrictions and we come across barriers,
-     * add the costs for barriers if they incur costs.
-     * @param   edge    The edge with a barrier.
-     * @param   type    The type of barrier.
-     */
-    void    addBarrierCostToEdge(Edge& edge, OsmBarrier::BarrierType type);
-
     /** Add cost relating to the maxspeed of the edge.
      * The cost is the number of seconds to travel the edge.
      * @param   rEdge           The edge to add cost to
