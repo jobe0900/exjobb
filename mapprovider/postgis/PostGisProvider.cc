@@ -704,7 +704,7 @@ PostGisProvider::addTurningRestrictionsToEdge(
         for(const pqxx::tuple& row : rResult)
         {
             OsmTurningRestriction* p_turn =
-                RestrictionQueries::Results::
+                RestrictionQueries::TurningRestrictions::Results::
                     parseTurningRestrictionResultRow(row, rTopology);
 
             // mark edge as having a restriction

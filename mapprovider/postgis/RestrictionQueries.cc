@@ -11,7 +11,8 @@
 // Result --------------------------------------------------------------------
 //static
 OsmTurningRestriction*
-RestrictionQueries::Results::parseTurningRestrictionResultRow(
+RestrictionQueries::TurningRestrictions::
+    Results::parseTurningRestrictionResultRow(
     const pqxx::tuple&    rRow,
     Topology&             rTopology)
 {
@@ -38,8 +39,6 @@ RestrictionQueries::Results::parseTurningRestrictionResultRow(
     // VIA WAY
     if(fromEdge.target() != toEdge.source())
     {
-//        fromEdge.setHasRestrictions(true);
-//        fromEdge.setHasViaWayRestriction(true);
         p_restriction = new OsmTurningRestriction(
             type,
             fromEdge.id(),
@@ -50,7 +49,6 @@ RestrictionQueries::Results::parseTurningRestrictionResultRow(
     else
     {
         VertexIdType vertexId = fromEdge.target();
-//        fromEdge.setHasRestrictions(true);
         p_restriction = new OsmTurningRestriction(
             type,
             fromEdge.id(),
@@ -62,7 +60,8 @@ RestrictionQueries::Results::parseTurningRestrictionResultRow(
 
 //static
 std::vector<EdgeIdType>
-RestrictionQueries::Results::parseEdgeIdsString(std::string& rEdgeIds)
+RestrictionQueries::TurningRestrictions::Results::parseEdgeIdsString(
+    std::string& rEdgeIds)
 {
     boost::trim_if(rEdgeIds, boost::is_any_of("{}"));
     std::vector<std::string> idStrings;
@@ -78,7 +77,7 @@ RestrictionQueries::Results::parseEdgeIdsString(std::string& rEdgeIds)
 
 //static
 Edge&
-RestrictionQueries::Results::findEdgeMatchingOsmId(
+RestrictionQueries::TurningRestrictions::Results::findEdgeMatchingOsmId(
     OsmIdType                       osmId,
     const std::vector<EdgeIdType>&  rEdgeIds,
     Topology&                       rTopology)

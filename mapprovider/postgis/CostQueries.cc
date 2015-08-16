@@ -35,6 +35,7 @@ CostQueries::getTravelTimeEdgeCosts(
     );
 }
 
+// static
 void
 CostQueries::getOtherCosts(
     pqxx::transaction_base& rTrans,
