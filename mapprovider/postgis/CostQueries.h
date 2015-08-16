@@ -141,6 +141,28 @@ public:
                         const std::string&          rOsmPointTable,
                         const std::string&          rTopoEdgeTable);
 
+    /** Add costs for speed bumps and such to affected edges.
+     * @param   rResult     The results of the query.
+     * @param   rTopology   The topology with edges to set cost for.
+     * @param   rConfig     The Configuration
+     * @throw   MapProviderException
+     */
+    static void     addOtherCosts(
+                        const pqxx::result&     rResult,
+                        Topology&               rTopology,
+                        const Configuration&    rConfig);
+
+    /** Add a cost of an other type to the edge.
+     * Look up the value in the configuration.
+     * @param   rEdge   The Edge to add a cost to.
+     * @param   key     The type of cost as a string
+     * @param   rConfig     The Configuration
+     */
+    static void     addOtherCostToEdge(
+                        Edge&                   rEdge,
+                        const std::string&      key,
+                        const Configuration&    rConfig);
+
     /** While looking for restrictions and we come across barriers,
      * add the costs for barriers if they incur costs.
      * @param   edge    The edge with a barrier.

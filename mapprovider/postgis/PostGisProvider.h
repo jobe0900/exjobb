@@ -239,7 +239,6 @@ private:
      */
     void    getOtherEdgeCosts(pqxx::result& rResult);
 
-
     /** Add costs for speed bumps and such to affected edges.
      * @param   rResult     The results of the query.
      * @param   rTopology   The topology with edges to set cost for.
@@ -247,14 +246,6 @@ private:
      */
     void    addOtherCosts(const pqxx::result& rResult, Topology& rTopology);
 
-    /** Add a cost of an other type to the edge.
-     * Look up the value in the configuration.
-     * @param   rEdge   The Edge to add a cost to.
-     * @param   key     The type of cost as a string
-     */
-    void    addOtherCostToEdge(
-                Edge&               rEdge,
-                const std::string&  key);
 
 
 // ATTRIBUTES

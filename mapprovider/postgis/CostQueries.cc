@@ -164,6 +164,64 @@ CostQueries::getOtherCosts(
 
 // static
 void
+CostQueries::addOtherCosts(
+    const pqxx::result&     rResult,
+    Topology&               rTopology,
+    const Configuration&    rConfig)
+{
+    try
+    {
+        for(const pqxx::tuple& row : rResult)
+        {
+            // throw exception if no edgeId
+            EdgeIdType edgeId =
+                row[OtherCostResult::EDGE_ID].as<EdgeIdType>();
+
+            Edge& edge = rTopology.getEdge(edgeId);
+
+            std::string type_string = "highway=" +
+                row[OtherCostResult::HIGHWAY].as<std::string>("");
+            addOtherCostToEdge(edge, type_string, rConfig);
+
+            type_string = "railway=" +
+                row[OtherCostResult::RAILWAY].as<std::string>("");
+            addOtherCostToEdge(edge, type_string, rConfig);
+
+            type_string = "public_transport=" +
+                row[OtherCostResult::PUBLIC_TRANSPORT].as<std::string>("");
+            addOtherCostToEdge(edge, type_string, rConfig);
+
+            type_string = "traffic_calming=" +
+                row[OtherCostResult::TRAFFIC_CALMING].as<std::string>("");
+            addOtherCostToEdge(edge, type_string, rConfig);
+        }
+    }
+    catch (std::exception& e)
+    {
+        throw MapProviderException(
+            std::string("CostQueries:addPointResultToEdge..: ") + e.what());
+    }
+}
+
+// static
+void
+CostQueries::addOtherCostToEdge(
+    Edge&                   rEdge,
+    const std::string&      key,
+    const Configuration&    rConfig)
+{
+    size_t eq_char = key.find('=');
+    if((eq_char == std::string::npos) || (eq_char == key.length() - 1))
+    {
+        return;
+    }
+
+    Cost cost = rConfig.getCostConfig().otherEdgeCosts.getOtherCost(key);
+    rEdge.edgeCost().addCost(EdgeCost::OTHER, cost);
+}
+
+// static
+void
 CostQueries::addBarrierCostToEdge(
     Edge&                   rEdge,
     OsmBarrier::BarrierType type,

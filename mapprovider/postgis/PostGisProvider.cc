@@ -560,56 +560,5 @@ PostGisProvider::addOtherCosts(
     const pqxx::result&     rResult,
     Topology&               rTopology)
 {
-    try
-    {
-        for(const pqxx::tuple& row : rResult)
-        {
-            // throw exception if no edgeId
-            EdgeIdType edgeId =
-                row[CostQueries::OtherCostResult::EDGE_ID]
-                    .as<EdgeIdType>();
-
-            Edge& edge = rTopology.getEdge(edgeId);
-
-            std::string type_string = "highway=" +
-                row[CostQueries::OtherCostResult::HIGHWAY]
-                    .as<std::string>("");
-            addOtherCostToEdge(edge, type_string);
-
-            type_string = "railway=" +
-                row[CostQueries::OtherCostResult::RAILWAY]
-                    .as<std::string>("");
-            addOtherCostToEdge(edge, type_string);
-
-            type_string = "public_transport=" +
-                row[CostQueries::OtherCostResult::PUBLIC_TRANSPORT]
-                    .as<std::string>("");
-            addOtherCostToEdge(edge, type_string);
-
-            type_string = "traffic_calming=" +
-                row[CostQueries::OtherCostResult::TRAFFIC_CALMING]
-                    .as<std::string>("");
-            addOtherCostToEdge(edge, type_string);
-        }
-    }
-    catch (std::exception& e)
-    {
-        throw MapProviderException(
-            std::string("PostGisProvider:addPointResultToEdge..: ") + e.what());
-    }
+    CostQueries::addOtherCosts(rResult, rTopology, mConfig);
 }
-
-void
-PostGisProvider::addOtherCostToEdge(Edge& rEdge, const std::string& key)
-{
-    size_t eq_char = key.find('=');
-    if((eq_char == std::string::npos) || (eq_char == key.length() - 1))
-    {
-        return;
-    }
-
-    Cost cost = mConfig.getCostConfig().otherEdgeCosts.getOtherCost(key);
-    rEdge.edgeCost().addCost(EdgeCost::OTHER, cost);
-}
-
-
