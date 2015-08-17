@@ -129,7 +129,8 @@ CostQueries::getOtherCosts(
     pqxx::transaction_base& rTrans,
     pqxx::result&           rResult,
     const std::string&      rOsmPointTable,
-    const std::string&      rTopoEdgeTable)
+    const std::string&      rTopoEdgeTable,
+    const std::string&      rOsmEdgeTable)
 {
     rResult = rTrans.exec(
         "SELECT p.osm_id, "
@@ -139,7 +140,8 @@ CostQueries::getOtherCosts(
         "       p.traffic_calming, "
         "       e.edge_id "
         "FROM  " + rOsmPointTable + " p, "
-        "      " + rTopoEdgeTable + " e "
+        "      " + rTopoEdgeTable + " e, "
+        "      " + rOsmEdgeTable + " r "
         "WHERE  (p.highway = 'bus_stop' OR "
         "       p.highway = 'crossing' OR "
         "       p.highway = 'give_way' OR"
@@ -158,7 +160,9 @@ CostQueries::getOtherCosts(
         "       p.traffic_calming = 'choker' OR"
         "       p.traffic_calming = 'island' "
         ")"
-        "AND    ST_Intersects(p.way, e.geom)"
+        "AND    ST_Intersects(p.way, e.geom) "
+        "AND    e.geom = r.way "
+        "AND    r.highway IN " + OsmHighway::typesAsCommaSeparatedString()
     );
 }
 
@@ -199,7 +203,7 @@ CostQueries::addOtherCosts(
     catch (std::exception& e)
     {
         throw MapProviderException(
-            std::string("CostQueries:addPointResultToEdge..: ") + e.what());
+            std::string("CostQueries:addOtherCosts..: ") + e.what());
     }
 }
 

@@ -134,12 +134,14 @@ public:
      * @param   rResult         Store the result of the query here
      * @param   rOsmPointTable  Name of table with OSM points (nodes)
      * @param   rTopoEdgeTable  Name of table with topology edges.
+     * @param   rOsmEdgeTable   Name of table with OSM edges.
      */
     static void     getOtherCosts(
                         pqxx::transaction_base&     rTrans,
                         pqxx::result&               rResult,
                         const std::string&          rOsmPointTable,
-                        const std::string&          rTopoEdgeTable);
+                        const std::string&          rTopoEdgeTable,
+                        const std::string&          rOsmEdgeTable);
 
     /** Add costs for speed bumps and such to affected edges.
      * @param   rResult     The results of the query.

@@ -243,13 +243,15 @@ public:
      * @param   rResult         Store the result of query here.
      * @param   rOsmPointTabl   The name of the table with original osm points.
      * @param   rTopoEdgeTable  The name of the table with topology edges.
+     * @param   rOsmEdgeTable   The name of the table with OSM edges.
      * @throw   pqxx::pqxx_exception
      */
     static void         getEdgePointRestrictions(
                             pqxx::transaction_base& rTrans,
                             pqxx::result&           rResult,
                             const std::string&      rOsmPointTable,
-                            const std::string&      rTopoEdgeTable);
+                            const std::string&      rTopoEdgeTable,
+                            const std::string&      rOsmEdgeTable);
 
     /** Add the result of the query for Point restrictions on Edges .
      * @param   rResult         The results of the query

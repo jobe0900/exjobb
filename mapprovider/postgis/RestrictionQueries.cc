@@ -412,7 +412,8 @@ RestrictionQueries::getEdgePointRestrictions(
     pqxx::transaction_base& rTrans,
     pqxx::result&           rResult,
     const std::string&      rOsmPointTable,
-    const std::string&      rTopoEdgeTable)
+    const std::string&      rTopoEdgeTable,
+    const std::string&      rOsmEdgeTable)
 {
     rResult = rTrans.exec(
         "SELECT p.osm_id, "
@@ -427,9 +428,12 @@ RestrictionQueries::getEdgePointRestrictions(
         "       p.vehicle, "
         "       e.edge_id "
         "FROM  " + rOsmPointTable + " p, "
-        "      " + rTopoEdgeTable + " e "
+        "      " + rTopoEdgeTable + " e, "
+        "      " + rOsmEdgeTable + " r "
         "WHERE  p.barrier IS NOT NULL "
-        "AND    ST_Intersects(p.way, e.geom)"
+        "AND    ST_Intersects(p.way, e.geom) "
+        "AND    e.geom = r.way "
+        "AND    r.highway IN " + OsmHighway::typesAsCommaSeparatedString()
     );
 }
 // static
