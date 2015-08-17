@@ -6,6 +6,8 @@
  */
 
 #include "../LineGraphUtility.h"
+#include <chrono>
+using namespace std::chrono;
 
 
 #include "../../catchtest/catch.hpp"
@@ -132,3 +134,95 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
     }
 }
 
+
+SCENARIO ("LineGraphUtility timing", "[lgu][timing]")
+{
+    try
+    {
+        GIVEN ("a valid config file for Mikhailovsk without temporary topology")
+        {
+//		    std::string config_file("catchtest/testsettings/part_0815_settings.json");
+		    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
+//		    std::string config_file("catchtest/testsettings/part_0815_settings.json");
+
+            WHEN ("when timing request for a LineGraph")
+            {
+                // start timing
+                std::chrono::high_resolution_clock::time_point t1 =
+                    std::chrono::high_resolution_clock::now();
+
+                LineGraphUtility lgu(config_file);
+                LineGraphType* p_lg = lgu.getLineGraph();
+
+                // end timing;
+                std::chrono::high_resolution_clock::time_point t2 =
+                    std::chrono::high_resolution_clock::now();
+
+                auto duration =
+                    std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+
+                THEN ("we should have a line graph")
+                {
+                    REQUIRE (p_lg != nullptr);
+                    REQUIRE (boost::num_edges(*p_lg) > 0);
+                }
+
+                THEN ("we should have a timing")
+                {
+                    INFO ("Duration for Mikhailovsk without temporary topology "
+                        << duration << " microseconds");
+                    REQUIRE (true);
+                }
+
+                delete p_lg;
+            }
+        }
+
+        GIVEN ("a valid config file for Partille without temporary topology")
+        {
+		    std::string config_file("catchtest/testsettings/part_0815_settings.json");
+
+            WHEN ("when timing request for a LineGraph")
+            {
+                // start timing
+                std::chrono::high_resolution_clock::time_point t1 =
+                    std::chrono::high_resolution_clock::now();
+
+                LineGraphUtility lgu(config_file);
+                LineGraphType* p_lg = lgu.getLineGraph();
+
+                // end timing;
+                std::chrono::high_resolution_clock::time_point t2 =
+                    std::chrono::high_resolution_clock::now();
+
+                auto duration =
+                    std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+
+                THEN ("we should have a line graph")
+                {
+                    REQUIRE (p_lg != nullptr);
+                    REQUIRE (boost::num_edges(*p_lg) > 0);
+                }
+
+                THEN ("we should have a timing")
+                {
+                    INFO ("Duration for Partille without temporary topology "
+                        << duration << " microseconds");
+                    REQUIRE (true);
+                }
+
+                delete p_lg;
+            }
+        }
+    }
+    catch (LineGraphUtilityException& lgue)
+    {
+        INFO(lgue.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+    catch (const std::exception& e)
+    {
+        INFO(e.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+}
