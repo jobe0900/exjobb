@@ -203,7 +203,7 @@ EdgeRestriction::vehicleTypeAccess(
         throw RestrictionsException(
             std::string("Restrictions:vehicleTypeAccess: no restriction for")
             + " vehicle type " + OsmVehicle::toString(vehicleType)
-            + "  for edge");
+            + " for edge ");
     }
     return *(mVehicleTypeAccessMap.find(vehicleType)->second);
 }

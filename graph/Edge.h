@@ -253,6 +253,7 @@ public:
     /** Check if travel on the Edge is restricted given the configuration.
      * @param   rConfig     Configuration with restriction rules.
      * @return  true        If travel is restricted.
+     * @throws  RestrictionsException
      */
     bool              isRestricted(const Configuration& rConfig) const;
 

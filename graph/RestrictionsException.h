@@ -43,6 +43,7 @@ public:
     {}
 
 // OPERATORS
+    void    addEdgeId(std::string edgeIdString) { mMessage += edgeIdString; }
 // OPERATIONS
 // ACCESS
 // INQUIRY
