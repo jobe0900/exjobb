@@ -1252,3 +1252,145 @@ SCENARIO ("Building graph of Partille with stop for all at crossing",
 
     }
 }
+
+// TRAFFIC CALMING ///////////////////////////////////////////////////////////
+
+SCENARIO ("Building graph of Mikhailovsk with speed bump at node",
+    "[graph][r_and_c][traffic_calming][mikhailovsk]")
+{
+    // additional node on way 158421713 (topo edge id 649)
+    try
+    {
+        std::string orig_config_file("catchtest/testsettings/"
+            "restrictions/mikhailovsk-original.json");
+        ConfigurationReader orig_config_reader(orig_config_file);
+        Configuration orig_config;
+        orig_config_reader.fillConfiguration(orig_config);
+        PostGisProvider orig_pgp(orig_config);
+        Topology orig_topology;
+        orig_pgp.getTopology(orig_topology);
+        orig_pgp.setRestrictionsAndCosts(orig_topology);
+        Graph orig_graph(orig_topology, orig_config);
+
+        // ===================================================================
+        GIVEN ("Configuration that has cost for stops ")
+        {
+            std::string config_file("catchtest/testsettings/"
+                "restrictions/mikhailovsk-traffic_calming_bump.json");
+            ConfigurationReader config_reader(config_file);
+            Configuration config;
+            config_reader.fillConfiguration(config);
+
+            PostGisProvider pgp(config);
+
+            Topology topology;
+            pgp.getTopology(topology);
+            pgp.setRestrictionsAndCosts(topology);
+
+            Graph graph(topology, config);
+
+            // ...............................................................
+            WHEN ("Comparing original to graph with stop signs")
+            {
+                THEN ("there should be equally many lines "
+                      "in original as in restricted")
+                {
+                    INFO ("  Original # Lines:    " << orig_graph.nrLines());
+                    INFO ("Restricted # Lines:    " << graph.nrLines());
+                    REQUIRE ((orig_graph.nrLines()) == graph.nrLines());
+                }
+
+                THEN ("there should be an extra cost of 10 on edge 649")
+                {
+                    EdgeIdType id = 649;
+                    Cost orig_cost = orig_topology.getEdge(id).cost();
+                    Cost rest_cost = topology.getEdge(id).cost();
+                    INFO ("  Original cost:    " << orig_cost);
+                    INFO ("Restricted cost:    " << rest_cost);
+                    REQUIRE (10.0 == Approx((rest_cost - orig_cost)));
+                }
+            }
+        }
+    }
+    catch (ConfigurationException& e)
+    {
+        INFO(e.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+    catch (MapProviderException& dbe)
+    {
+        INFO(dbe.what());
+        REQUIRE (false);    // force output of error and failure
+
+    }
+}
+
+SCENARIO ("Building graph of Partille with speed bump at node",
+    "[graph][r_and_c][traffic_calming][partille]")
+{
+    // additional node on way 28050664 (topo edge id 267)
+    try
+    {
+        std::string orig_config_file("catchtest/testsettings/"
+            "restrictions/partille-original.json");
+        ConfigurationReader orig_config_reader(orig_config_file);
+        Configuration orig_config;
+        orig_config_reader.fillConfiguration(orig_config);
+        PostGisProvider orig_pgp(orig_config);
+        Topology orig_topology;
+        orig_pgp.getTopology(orig_topology);
+        orig_pgp.setRestrictionsAndCosts(orig_topology);
+        Graph orig_graph(orig_topology, orig_config);
+
+        // ===================================================================
+        GIVEN ("Configuration that has cost for stops ")
+        {
+            std::string config_file("catchtest/testsettings/"
+                "restrictions/partille-traffic_calming_hump.json");
+            ConfigurationReader config_reader(config_file);
+            Configuration config;
+            config_reader.fillConfiguration(config);
+
+            PostGisProvider pgp(config);
+
+            Topology topology;
+            pgp.getTopology(topology);
+            pgp.setRestrictionsAndCosts(topology);
+
+            Graph graph(topology, config);
+
+            // ...............................................................
+            WHEN ("Comparing original to graph with stop signs")
+            {
+                THEN ("there should be equally many lines "
+                      "in original as in restricted")
+                {
+                    INFO ("  Original # Lines:    " << orig_graph.nrLines());
+                    INFO ("Restricted # Lines:    " << graph.nrLines());
+                    REQUIRE ((orig_graph.nrLines()) == graph.nrLines());
+                }
+
+                THEN ("there should be an extra cost of 10 on edge 267")
+                {
+                    EdgeIdType id = 267;
+                    Cost orig_cost = orig_topology.getEdge(id).cost();
+                    Cost rest_cost = topology.getEdge(id).cost();
+                    INFO ("  Original cost:    " << orig_cost);
+                    INFO ("Restricted cost:    " << rest_cost);
+                    REQUIRE (10.0 == Approx((rest_cost - orig_cost)));
+                }
+            }
+        }
+    }
+    catch (ConfigurationException& e)
+    {
+        INFO(e.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+    catch (MapProviderException& dbe)
+    {
+        INFO(dbe.what());
+        REQUIRE (false);    // force output of error and failure
+
+    }
+}
