@@ -130,7 +130,8 @@ CostQueries::getOtherCosts(
     pqxx::result&           rResult,
     const std::string&      rOsmPointTable,
     const std::string&      rTopoEdgeTable,
-    const std::string&      rOsmEdgeTable)
+    const std::string&      rOsmEdgeTable,
+    const std::string&      rSchemaName)
 {
     rResult = rTrans.exec(
         "SELECT p.osm_id, "
@@ -142,7 +143,7 @@ CostQueries::getOtherCosts(
         "FROM  " + rOsmPointTable + " p, "
         "      " + rTopoEdgeTable + " t, "
         "      " + rOsmEdgeTable + " o, "
-        "      " + "topo_lgu.relation" + " r "
+        "      " + rSchemaName + ".relation r "
         "WHERE  r.topogeo_id = (topo_geom).id "
         "AND    r.element_id = t.edge_id "
         "AND   (p.highway = 'bus_stop' OR "

@@ -244,6 +244,7 @@ public:
      * @param   rOsmPointTabl   The name of the table with original osm points.
      * @param   rTopoEdgeTable  The name of the table with topology edges.
      * @param   rOsmEdgeTable   The name of the table with OSM edges.
+     * @param   rSchemaName     The name of the schema with topology info.
      * @throw   pqxx::pqxx_exception
      */
     static void         getEdgePointRestrictions(
@@ -251,7 +252,8 @@ public:
                             pqxx::result&           rResult,
                             const std::string&      rOsmPointTable,
                             const std::string&      rTopoEdgeTable,
-                            const std::string&      rOsmEdgeTable);
+                            const std::string&      rOsmEdgeTable,
+                            const std::string&      rSchemaName);
 
     /** Add the result of the query for Point restrictions on Edges .
      * @param   rResult         The results of the query
