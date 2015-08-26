@@ -547,7 +547,7 @@ SCENARIO ("Building graph of Partille with barrier bollard",
 SCENARIO ("Building graph of Mikhailovsk with barrier lift gate",
     "[graph][r_and_c][lift_gate][mikhailovsk]")
 {
-    // block on node 1706164751 on way 158421713
+    // block on node 1706164751 on way 158421713 (topo edge 649)
     try
     {
         std::string orig_config_file("catchtest/testsettings/"
@@ -613,6 +613,16 @@ SCENARIO ("Building graph of Mikhailovsk with barrier lift gate",
                     INFO ("Restricted # Lines:    " << graph.nrLines());
                     REQUIRE ((orig_graph.nrLines()) == graph.nrLines());
                 }
+
+                THEN ("there should be an extra cost of 60 on edge 649")
+                {
+                    EdgeIdType id = 649;
+                    Cost orig_cost = orig_topology.getEdge(id).cost();
+                    Cost rest_cost = topology.getEdge(id).cost();
+                    INFO ("  Original cost:    " << orig_cost);
+                    INFO ("Restricted cost:    " << rest_cost);
+                    REQUIRE (60.0 == Approx((rest_cost - orig_cost)));
+                }
             }
         }
     }
@@ -633,7 +643,7 @@ SCENARIO ("Building graph of Mikhailovsk with barrier lift gate",
 SCENARIO ("Building graph of Partille with barrier lift gate",
     "[graph][r_and_c][lift_gate][partille]")
 {
-    // lift gate on node 249292683 on way 28050664
+    // lift gate on node 249292683 on way 28050664 (topo edge 267)
     try
     {
         std::string orig_config_file("catchtest/testsettings/"
@@ -698,6 +708,16 @@ SCENARIO ("Building graph of Partille with barrier lift gate",
                     INFO ("  Original # Lines:    " << orig_graph.nrLines());
                     INFO ("Restricted # Lines:    " << graph.nrLines());
                     REQUIRE ((orig_graph.nrLines()) == graph.nrLines());
+                }
+
+                THEN ("there should be an extra cost of 60 on edge 267")
+                {
+                    EdgeIdType id = 267;
+                    Cost orig_cost = orig_topology.getEdge(id).cost();
+                    Cost rest_cost = topology.getEdge(id).cost();
+                    INFO ("  Original cost:    " << orig_cost);
+                    INFO ("Restricted cost:    " << rest_cost);
+                    REQUIRE (60.0 == Approx((rest_cost - orig_cost)));
                 }
             }
         }
@@ -787,7 +807,7 @@ SCENARIO ("Building graph of Mikhailovsk with traffic signals",
                     REQUIRE ((orig_graph.nrLines()) == graph.nrLines());
                 }
 
-                THEN ("there should be an extra cost of 30 on node 649")
+                THEN ("there should be an extra cost of 30 on edge 649")
                 {
                     EdgeIdType id = 649;
                     Cost orig_cost = orig_topology.getEdge(id).cost();
@@ -882,7 +902,7 @@ SCENARIO ("Building graph of Partille with traffic signals",
                     REQUIRE ((orig_graph.nrLines()) == graph.nrLines());
                 }
 
-                THEN ("there should be an extra cost of 30 on node 267")
+                THEN ("there should be an extra cost of 30 on edge 267")
                 {
                     EdgeIdType id = 267;
                     Cost orig_cost = orig_topology.getEdge(id).cost();
