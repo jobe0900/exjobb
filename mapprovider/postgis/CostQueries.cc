@@ -138,11 +138,14 @@ CostQueries::getOtherCosts(
         "       p.railway, "
         "       p.public_transport, "
         "       p.traffic_calming, "
-        "       e.edge_id "
+        "       t.edge_id "
         "FROM  " + rOsmPointTable + " p, "
-        "      " + rTopoEdgeTable + " e, "
-        "      " + rOsmEdgeTable + " r "
-        "WHERE  (p.highway = 'bus_stop' OR "
+        "      " + rTopoEdgeTable + " t, "
+        "      " + rOsmEdgeTable + " o, "
+        "      " + "topo_lgu.relation" + " r "
+        "WHERE  r.topogeo_id = (topo_geom).id "
+        "AND    r.element_id = t.edge_id "
+        "AND   (p.highway = 'bus_stop' OR "
         "       p.highway = 'crossing' OR "
         "       p.highway = 'give_way' OR"
         "       p.highway = 'mini_roundabout' OR"
@@ -160,9 +163,8 @@ CostQueries::getOtherCosts(
         "       p.traffic_calming = 'choker' OR"
         "       p.traffic_calming = 'island' "
         ")"
-        "AND    ST_Intersects(p.way, e.geom) "
-        "AND    e.geom = r.way "
-        "AND    r.highway IN " + OsmHighway::typesAsCommaSeparatedString()
+        "AND    ST_Intersects(p.way, t.geom) "
+        "AND    o.highway IN " + OsmHighway::typesAsCommaSeparatedString()
     );
 }
 
