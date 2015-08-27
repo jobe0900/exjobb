@@ -328,7 +328,7 @@ public:
     /**
      * @return true if the edge is part of a turning restriction via another way.
      */
-    bool               hasViaWayRestriction() const;
+    bool                hasViaWayRestriction() const;
 
 
 protected:
