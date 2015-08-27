@@ -6,18 +6,21 @@
 CC_SRCS += \
 ../graph/catchtest/EdgeCost_test.cc \
 ../graph/catchtest/Graph_test.cc \
+../graph/catchtest/RestrictionsAndCosts_test.cc \
 ../graph/catchtest/Topology_test.cc \
 ../graph/catchtest/TurnCostCalculator_test.cc 
 
 CC_DEPS += \
 ./graph/catchtest/EdgeCost_test.d \
 ./graph/catchtest/Graph_test.d \
+./graph/catchtest/RestrictionsAndCosts_test.d \
 ./graph/catchtest/Topology_test.d \
 ./graph/catchtest/TurnCostCalculator_test.d 
 
 OBJS += \
 ./graph/catchtest/EdgeCost_test.o \
 ./graph/catchtest/Graph_test.o \
+./graph/catchtest/RestrictionsAndCosts_test.o \
 ./graph/catchtest/Topology_test.o \
 ./graph/catchtest/TurnCostCalculator_test.o 
 

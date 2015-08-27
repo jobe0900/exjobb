@@ -149,7 +149,7 @@ Graph::addTopoEdgesToGraph()
         {
             BOOST_LOG_SEV(mLog, boost::log::trivial::info)
                         << "Graph:addTopoEdgeToGraph(): "
-                        << "Restricted Source id " << e.id();
+                        << "Restricted Edge id " << e.id();
             continue;
         }
 

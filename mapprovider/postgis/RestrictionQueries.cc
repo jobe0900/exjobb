@@ -8,6 +8,8 @@
 
 #include "RestrictionQueries.h"  // class implemented
 
+#include <iostream>
+
 // Result --------------------------------------------------------------------
 //static
 OsmTurningRestriction*
@@ -413,7 +415,8 @@ RestrictionQueries::getEdgePointRestrictions(
     pqxx::result&           rResult,
     const std::string&      rOsmPointTable,
     const std::string&      rTopoEdgeTable,
-    const std::string&      rOsmEdgeTable)
+    const std::string&      rOsmEdgeTable,
+    const std::string&      rSchemaName)
 {
     rResult = rTrans.exec(
         "SELECT p.osm_id, "
@@ -426,14 +429,16 @@ RestrictionQueries::getEdgePointRestrictions(
         "       p.motor_vehicle, "
         "       p.psv, "
         "       p.vehicle, "
-        "       e.edge_id "
+        "       t.edge_id "
         "FROM  " + rOsmPointTable + " p, "
-        "      " + rTopoEdgeTable + " e, "
-        "      " + rOsmEdgeTable + " r "
-        "WHERE  p.barrier IS NOT NULL "
-        "AND    ST_Intersects(p.way, e.geom) "
-        "AND    e.geom = r.way "
-        "AND    r.highway IN " + OsmHighway::typesAsCommaSeparatedString()
+        "      " + rTopoEdgeTable + " t, "
+        "      " + rOsmEdgeTable + " o, "
+        "      " + rSchemaName + ".relation r "
+        "WHERE  r.topogeo_id = (topo_geom).id "
+        "AND    r.element_id = t.edge_id "
+        "AND    p.barrier IS NOT NULL "
+        "AND    ST_Intersects(p.way, t.geom) "
+        "AND    o.highway IN " + OsmHighway::typesAsCommaSeparatedString()
     );
 }
 // static
@@ -445,6 +450,8 @@ RestrictionQueries::addPointRestrictionsToEdge(
 {
     try
     {
+//        std::cerr << "Number of point restrictions: "<< rResult.size() << std::endl;
+
         for(const pqxx::tuple& row : rResult)
         {
             // throw exception if no edgeId
@@ -460,6 +467,9 @@ RestrictionQueries::addPointRestrictionsToEdge(
                 OsmBarrier::parseString(barrierTypeString);
             r_restrictions.setBarrierRestriction(barrierType);
             CostQueries::addBarrierCostToEdge(edge, barrierType, rConfig);
+
+//            std::cerr << "Edge: " << edgeId
+//                << " has barrier: " << barrierTypeString << std::endl;
 
             std::string colString;
             colString = row[EdgePointRestrictions::ACCESS].as<std::string>("");

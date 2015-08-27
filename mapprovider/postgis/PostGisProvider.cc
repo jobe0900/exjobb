@@ -458,7 +458,8 @@ PostGisProvider::getEdgePointRestrictions(pqxx::result& rResult)
 		    rResult,
 		    mPointTableName,
 		    mTopoEdgeTable,
-		    mOsmEdgeTable);
+		    mOsmEdgeTable,
+		    mSchemaName);
 	}
 	catch(const std::exception& e)
 	{
@@ -548,7 +549,8 @@ PostGisProvider::getOtherEdgeCosts(pqxx::result& rResult)
 		    rResult,
 		    mPointTableName,
 		    mTopoEdgeTable,
-		    mOsmEdgeTable);
+		    mOsmEdgeTable,
+		    mSchemaName);
 	}
 	catch(const std::exception& e)
 	{
