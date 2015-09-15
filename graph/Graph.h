@@ -38,11 +38,14 @@ typedef EdgeIdType  LineIdType;
 
 /**
  * Map the GraphEdges to the original Edge id in the Topology.
+ * Also indicate if the GraphEdge is the same or opposite direction to
+ * the graph in the topology.
  */
 struct GraphEdge
 {
     EdgeIdType      graphEdgeId;
     EdgeIdType      topoEdgeId;
+    bool            oppositeDirection {false};
 };
 
 /**
@@ -224,12 +227,16 @@ private:
      * @param   source  The source vertex.
      * @param   target  The target vertex.
      * @param   e_ix    The running index amongst edges added to graph.
+     * @param   oppositeDirection
+     *                  If the directed edge runs opposite of the original
+     *                  edge direction as specified in the topology.
      */
     void                addDirectedEdge(
                             EdgeIdType id,
                             const VertexType& source,
                             const VertexType& target,
-                            EdgeIdType ix);
+                            EdgeIdType ix,
+                            bool  oppositeDirection);
 
     /** Get the graph vertex corresponding to a given id.
      * @param   id      The vertex' topology id.
@@ -300,10 +307,15 @@ private:
                         getOutEdges(VertexIdType vertexId) const;
 
     /**
+     * @param   edgeId          The topology id of the edge
+     * @param   isOppositeDir   If the graph edge is opposite direction of topo.
      * @return  A vector of all restricted edges from this Edge.
      */
     std::vector<EdgeIdType>
-                        getRestrictedTargets(EdgeIdType edgeId) const;
+//                        getRestrictedTargets(EdgeIdType edgeId) const;
+                        getRestrictedTargets(
+                            EdgeIdType edgeId,
+                            bool       isOppositeDir) const;
 
     /**
      * @return  true if this target edge has restricted access from the source.

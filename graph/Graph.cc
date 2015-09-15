@@ -160,7 +160,7 @@ Graph::addTopoEdgesToGraph()
         || e.roadData().direction == Edge::DirectionType::BOTH)
         {
             for(size_t lane = 1; lane <= e.roadData().nrLanes; ++lane) {
-                addDirectedEdge(e.id(), s, t, e_ix);
+                addDirectedEdge(e.id(), s, t, e_ix, false);
                 ++e_ix;
             }
         }
@@ -169,7 +169,7 @@ Graph::addTopoEdgesToGraph()
         || e.roadData().direction == Edge::DirectionType::BOTH)
         {
             for(size_t lane = 1; lane <= e.roadData().nrLanes; ++lane) {
-                addDirectedEdge(e.id(), t, s, e_ix);
+                addDirectedEdge(e.id(), t, s, e_ix, true);
                 ++e_ix;
             }
         }
@@ -180,7 +180,8 @@ void
 Graph::addDirectedEdge(EdgeIdType id,
                        const VertexType& source,
                        const VertexType& target,
-                       EdgeIdType e_ix)
+                       EdgeIdType e_ix,
+                       bool  oppositeDirection)
 {
     const auto& res = boost::add_edge(source, target, mGraph);
     if(res.second == true)
@@ -188,6 +189,7 @@ Graph::addDirectedEdge(EdgeIdType id,
         mIdToEdgeMap.insert({id, res.first});
         mGraph[res.first].graphEdgeId = e_ix;
         mGraph[res.first].topoEdgeId = id;
+        mGraph[res.first].oppositeDirection = oppositeDirection;
     }
     else
     {
@@ -274,16 +276,21 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
 {
     EdgeIdType topo_source_id =
         boost::get(&LineGraphNode::topoEdgeId, mLineGraph, rSourceNode);
-    NodeIdType source_node_id =
-        boost::get(&LineGraphNode::graphEdgeId, mLineGraph, rSourceNode);
 
     if(edgeHasNoExit(topo_source_id))
     {
         return;
     }
 
+    NodeIdType source_node_id =
+        boost::get(&LineGraphNode::graphEdgeId, mLineGraph, rSourceNode);
+    bool is_opposite_direction =
+        boost::get(&LineGraphNode::oppositeDirection, mLineGraph, rSourceNode);
+
+
     std::vector<EdgeIdType> restricted_targets =
-        getRestrictedTargets(topo_source_id);
+//        getRestrictedTargets(topo_source_id);
+        getRestrictedTargets(topo_source_id, is_opposite_direction);
 
     VertexIdType via_topo_vertex_id =
         boost::get(&GraphVertex::topoVertexId, mGraph, rViaVertex);
@@ -373,21 +380,29 @@ Graph::getOutEdges(VertexIdType vertexId) const
 }
 
 std::vector<EdgeIdType>
-Graph::getRestrictedTargets(EdgeIdType edgeId) const
+//Graph::getRestrictedTargets(EdgeIdType edgeId) const
+Graph::getRestrictedTargets(EdgeIdType edgeId, bool isOppositeDir) const
 {
     std::vector<EdgeIdType> restricted_targets;
 
-    // We don't know the direction of the the travel on the edge here so
-    // we must find out edges from both source and target vertex.
+    // Find all out edges from the target vertex of the edge,
+    // which depends on if the edge is the opposite direction of the topo edge.
+
     std::vector<EdgeIdType> targets;
-    VertexIdType source_vertex = mrTopology.getEdge(edgeId).source();
-    VertexIdType target_vertex = mrTopology.getEdge(edgeId).target();
+    Edge& edge = mrTopology.getEdge(edgeId);
 
-    std::vector<EdgeIdType> out_edges = getOutEdges(source_vertex);
+    VertexIdType target_vertex = isOppositeDir ? edge.source() : edge.target();
+
+//    // We don't know the direction of the the travel on the edge here so
+//    // we must find out edges from both source and target vertex.
+//    VertexIdType source_vertex = mrTopology.getEdge(edgeId).source();
+//    VertexIdType target_vertex = mrTopology.getEdge(edgeId).target();
+
+    std::vector<EdgeIdType> out_edges = getOutEdges(target_vertex);
     targets.insert(targets.end(), out_edges.begin(), out_edges.end());
 
-    out_edges = getOutEdges(target_vertex);
-    targets.insert(targets.end(), out_edges.begin(), out_edges.end());
+//    out_edges = getOutEdges(source_vertex);
+//    targets.insert(targets.end(), out_edges.begin(), out_edges.end());
 
     for(EdgeIdType e_id : targets)
     {
@@ -408,7 +423,6 @@ Graph::getRestrictedTargets(EdgeIdType edgeId) const
         }
     }
 
-    Edge& edge = mrTopology.getEdge(edgeId);
 
     if(edge.hasRestrictions() && edge.restrictions().hasTurningRestriction())
     {
