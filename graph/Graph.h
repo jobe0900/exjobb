@@ -312,7 +312,6 @@ private:
      * @return  A vector of all restricted edges from this Edge.
      */
     std::vector<EdgeIdType>
-//                        getRestrictedTargets(EdgeIdType edgeId) const;
                         getRestrictedTargets(
                             EdgeIdType edgeId,
                             bool       isOppositeDir) const;
@@ -321,8 +320,8 @@ private:
      * @return  true if this target edge has restricted access from the source.
      */
     bool                isTargetRestricted(
-        const std::vector<EdgeIdType>&  rRestrictedTargets,
-        EdgeIdType                      targetId) const;
+                            const std::vector<EdgeIdType>&  rRestrictedTargets,
+                            EdgeIdType                      targetId) const;
 
     void                printVertices(std::ostream& os) const;
     void                printEdges(std::ostream& os)    const;
