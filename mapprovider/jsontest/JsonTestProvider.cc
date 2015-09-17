@@ -98,6 +98,13 @@ JsonTestProvider::setRestrictionsAndCosts(Topology& rTopology)
     //none
 }
 
+void
+JsonTestProvider::persistLineGraph(const LineGraphType& rLineGraph, const Topology& rTopology)
+{
+    throw MapProviderException("JsonTestProvider has not "
+        "implemented persisting a Line graph");
+}
+
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

@@ -69,6 +69,11 @@ public:
      */
     void             updateRestrictionsAndCosts();
 
+    /** Save the LineGraph to storage.
+     * This is a hack to be able to demo the line graph in PostGis and JOSM.
+     */
+    void             persistLineGraph();
+
 // ACCESS
 // INQUIRY
 

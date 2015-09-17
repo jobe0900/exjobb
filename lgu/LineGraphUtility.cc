@@ -68,6 +68,20 @@ LineGraphUtility::updateRestrictionsAndCosts()
     initRestrictionsAndCosts();
     buildGraph();
 }
+
+void
+LineGraphUtility::persistLineGraph()
+{
+    try
+    {
+        mpMapProvider->persistLineGraph(mpGraph->getBoostLineGraph(), mTopology);
+    }
+    catch(MapProviderException& mpe)
+    {
+        throw LineGraphUtilityException(mpe.what());
+
+    }
+}
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

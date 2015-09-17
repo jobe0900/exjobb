@@ -18,9 +18,11 @@
 
 // LOCAL INCLUDES
 //
+#include "MapProviderException.h"
 #include "../graph/Topology.h"
 #include "../config/Configuration.h"
 #include "../graph/Edge.h"
+#include "../graph/Graph.h"
 #include "../graph/Vertex.h"
 
 // FORWARD REFERENCES
@@ -71,6 +73,16 @@ public:
      * @throws  MapProviderException, RestrictionsException
      */
     virtual void    setRestrictionsAndCosts(Topology& rTopology) = 0;
+
+    /** Save the line graph to persistent storage or throw exception if not
+     * implemented.
+     * @param   rLineGraph  The LineGraph to save.
+     * @param   rTopology   Access to the geomtric data in the topology.
+     * @throws  MapProviderException
+     */
+    virtual void    persistLineGraph(
+                        const LineGraphType&    rLineGraph,
+                        const Topology&         rTopology) = 0;
 
 // ACCESS
 // INQUIRY

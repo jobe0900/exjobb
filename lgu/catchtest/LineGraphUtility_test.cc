@@ -88,6 +88,21 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
                     }
                 }
 
+                THEN ("we can try to persist line graph")
+                {
+                    try
+                    {
+                        lgu.persistLineGraph();
+                        INFO ("Persisted line graph");
+                        REQUIRE (true);
+                    }
+                    catch (LineGraphUtilityException& lgue)
+                    {
+                        INFO (lgue.what());
+                        REQUIRE (true);
+                    }
+                }
+
                 delete p_lg;
             }
 

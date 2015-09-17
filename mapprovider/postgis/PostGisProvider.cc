@@ -128,6 +128,15 @@ PostGisProvider::setRestrictionsAndCosts(Topology& rTopology)
     addEdgeCosts(rTopology);
 }
 
+void
+PostGisProvider::persistLineGraph(
+    const LineGraphType& rLineGraph,
+    const Topology& rTopology)
+{
+    throw MapProviderException(
+        "PostGisProvider has not implemented persisting a LineGraph");
+}
+
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////
