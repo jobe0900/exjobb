@@ -70,8 +70,7 @@ public:
      * @param   rTopology       The Topology with edges to get updated.
      * @throws  MapProviderException, RestrictionsException
      */
-    virtual void    setRestrictionsAndCosts(
-        Topology&      rTopology) = 0;
+    virtual void    setRestrictionsAndCosts(Topology& rTopology) = 0;
 
 // ACCESS
 // INQUIRY
