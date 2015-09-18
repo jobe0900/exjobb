@@ -66,6 +66,9 @@ try
                                 mTopoConfig.vertexIdColumnName);
         mVertexGeomCol      = nt.esc(mSchemaName + "." +
                                 mTopoConfig.vertexGeomColumnName);
+        mLineGraphSchema    = nt.esc("line_graph_generated");
+        mLineGraphNodeTable = nt.esc(mLineGraphSchema + ".node");
+        mLineGraphLineTable = nt.esc(mLineGraphSchema + ".line");
         nt.abort();
 
         if(mBuildTempTopology)
@@ -133,8 +136,9 @@ PostGisProvider::persistLineGraph(
     const LineGraphType& rLineGraph,
     const Topology& rTopology)
 {
-    throw MapProviderException(
-        "PostGisProvider has not implemented persisting a LineGraph");
+    dropCreateSchema(mLineGraphSchema);
+//    throw MapProviderException(
+//        "PostGisProvider has not implemented persisting a LineGraph");
 }
 
 //============================= ACESS      ===================================
@@ -574,4 +578,28 @@ PostGisProvider::addOtherCosts(
     Topology&               rTopology)
 {
     CostQueries::addOtherCosts(rResult, rTopology, mConfig);
+}
+
+//  LineGraph persistence ----------------------------------------------------
+void
+PostGisProvider::dropCreateSchema(const std::string& rSchemaName)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw MapProviderException(
+					std::string("Could not open ") + mDbConfig.database);
+		}
+
+		// NON-TRANSACTION START
+		pqxx::nontransaction transaction(mConnection);
+
+		LineGraphSaveQueries::dropCreateSchema(transaction, rSchemaName);
+	}
+	catch(const std::exception& e)
+	{
+        throw MapProviderException(
+            std::string("PostGisProvider:dropCreateSchema: ") + e.what());
+	}
 }

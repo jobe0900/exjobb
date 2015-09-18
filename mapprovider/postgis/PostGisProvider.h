@@ -23,6 +23,7 @@
 // LOCAL INCLUDES
 //
 #include "CostQueries.h"
+#include "LineGraphSaveQueries.h"
 #include "RestrictionQueries.h"
 #include "TopologyQueries.h"
 #include "../MapProvider.h"
@@ -249,6 +250,8 @@ private:
      */
     void    addOtherCosts(const pqxx::result& rResult, Topology& rTopology);
 
+    // LineGraph persistence -------------------------------------------------
+    void    dropCreateSchema(const std::string& rSchemaName);
 
 
 // ATTRIBUTES
@@ -267,6 +270,9 @@ private:
     std::string             mTopoVertexTable;
     std::string             mVertexIdCol;
     std::string             mVertexGeomCol;
+    std::string             mLineGraphSchema;
+    std::string             mLineGraphNodeTable;
+    std::string             mLineGraphLineTable;
 
 // CONSTANTS
 };
