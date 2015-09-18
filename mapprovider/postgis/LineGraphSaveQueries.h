@@ -42,9 +42,32 @@ public:
 // OPERATORS
 // OPERATIONS
 
+    /** Create a new schema, dropping any existing with the same name first.
+     * @param   rTrans      Transaction to perform the query in.
+     * @param   rSchemaName Name of the schema to create.
+     * @throw   pqxx::pqxx_exception
+     */
     static void dropCreateSchema(
         pqxx::transaction_base& rTrans,
-        const std::string& rSchemaName);
+        const std::string&      rSchemaName);
+
+    /** Create a new table for lines, dropping any existing with the same name.
+     * @param   rTrans          Transaction to perform the query in.
+     * @param   rTableName      Name of the table to create.
+     * @throw   pqxx::pqxx_exception
+     */
+    static void dropCreateLineTable(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rTableName);
+
+    /** Create a new table for nodes, dropping any existing with the same name.
+     * @param   rTrans          Transaction to perform the query in.
+     * @param   rTableName      Name of the table to create.
+     * @throw   pqxx::pqxx_exception
+     */
+    static void dropCreateNodeTable(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rTableName);
 
 // ACCESS
 // INQUIRY

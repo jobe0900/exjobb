@@ -136,7 +136,7 @@ PostGisProvider::persistLineGraph(
     const LineGraphType& rLineGraph,
     const Topology& rTopology)
 {
-    dropCreateSchema(mLineGraphSchema);
+    setUpSchemaAndTables();
 //    throw MapProviderException(
 //        "PostGisProvider has not implemented persisting a LineGraph");
 }
@@ -582,7 +582,14 @@ PostGisProvider::addOtherCosts(
 
 //  LineGraph persistence ----------------------------------------------------
 void
-PostGisProvider::dropCreateSchema(const std::string& rSchemaName)
+PostGisProvider::setUpSchemaAndTables()
+{
+    dropCreateLineGraphSchema();
+    dropCreateLineGraphTables();
+}
+
+void
+PostGisProvider::dropCreateLineGraphSchema()
 {
 	try
 	{
@@ -595,11 +602,35 @@ PostGisProvider::dropCreateSchema(const std::string& rSchemaName)
 		// NON-TRANSACTION START
 		pqxx::nontransaction transaction(mConnection);
 
-		LineGraphSaveQueries::dropCreateSchema(transaction, rSchemaName);
+		LineGraphSaveQueries::dropCreateSchema(transaction, mLineGraphSchema);
 	}
 	catch(const std::exception& e)
 	{
         throw MapProviderException(
             std::string("PostGisProvider:dropCreateSchema: ") + e.what());
+	}
+}
+
+void
+PostGisProvider::dropCreateLineGraphTables()
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw MapProviderException(
+					std::string("Could not open ") + mDbConfig.database);
+		}
+
+		// NON-TRANSACTION START
+		pqxx::nontransaction transaction(mConnection);
+
+		LineGraphSaveQueries::dropCreateLineTable(transaction, mLineGraphLineTable);
+		LineGraphSaveQueries::dropCreateNodeTable(transaction, mLineGraphNodeTable);
+	}
+	catch(const std::exception& e)
+	{
+        throw MapProviderException(
+            std::string("PostGisProvider:dropCreateLineGraphTable: ") + e.what());
 	}
 }

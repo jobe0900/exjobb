@@ -251,7 +251,19 @@ private:
     void    addOtherCosts(const pqxx::result& rResult, Topology& rTopology);
 
     // LineGraph persistence -------------------------------------------------
-    void    dropCreateSchema(const std::string& rSchemaName);
+    /** Set up the schema and tables needed to persist the line graph.
+     */
+    void    setUpSchemaAndTables();
+
+    /** Create a new schema in the database
+     * @throw   MapProviderException
+     */
+    void    dropCreateLineGraphSchema();
+
+    /** Create the needed tables in the database
+     * @throw   MapProviderException
+     */
+    void    dropCreateLineGraphTables();
 
 
 // ATTRIBUTES

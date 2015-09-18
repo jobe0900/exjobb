@@ -99,7 +99,7 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
                     catch (LineGraphUtilityException& lgue)
                     {
                         INFO (lgue.what());
-                        REQUIRE (true);
+                        REQUIRE (false);
                     }
                 }
 

@@ -21,7 +21,37 @@ LineGraphSaveQueries::dropCreateSchema(
             "DROP SCHEMA IF EXISTS " + rSchemaName + " CASCADE; "
             "CREATE SCHEMA " + rSchemaName
     );
+}
 
+//static
+void
+LineGraphSaveQueries::dropCreateLineTable(
+    pqxx::transaction_base& rTrans,
+    const std::string&      rTableName)
+{
+    rTrans.exec(
+            "DROP TABLE IF EXISTS " + rTableName + " CASCADE; "
+            "CREATE TABLE " + rTableName + " ( "
+            "    topo_id  bigint, "
+            "    cost     double precision, "
+            "    geom     geometry(LineString, 900913) "
+            "); "
+    );
+}
+
+//static
+void
+LineGraphSaveQueries::dropCreateNodeTable(
+    pqxx::transaction_base& rTrans,
+    const std::string&      rTableName)
+{
+    rTrans.exec(
+            "DROP TABLE IF EXISTS " + rTableName + " CASCADE; "
+            "CREATE TABLE " + rTableName + " ( "
+            "    topo_id  bigint, "
+            "    geom     geometry(Point, 900913) "
+            "); "
+    );
 }
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
