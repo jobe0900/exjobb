@@ -584,12 +584,12 @@ PostGisProvider::addOtherCosts(
 void
 PostGisProvider::setUpSchemaAndTables()
 {
-    dropCreateLineGraphSchema();
-    dropCreateLineGraphTables();
+    createLineGraphSchema();
+    createLineGraphTables();
 }
 
 void
-PostGisProvider::dropCreateLineGraphSchema()
+PostGisProvider::createLineGraphSchema()
 {
 	try
 	{
@@ -607,12 +607,12 @@ PostGisProvider::dropCreateLineGraphSchema()
 	catch(const std::exception& e)
 	{
         throw MapProviderException(
-            std::string("PostGisProvider:dropCreateSchema: ") + e.what());
+            std::string("PostGisProvider:createLineGraphSchema: ") + e.what());
 	}
 }
 
 void
-PostGisProvider::dropCreateLineGraphTables()
+PostGisProvider::createLineGraphTables()
 {
 	try
 	{
@@ -631,6 +631,6 @@ PostGisProvider::dropCreateLineGraphTables()
 	catch(const std::exception& e)
 	{
         throw MapProviderException(
-            std::string("PostGisProvider:dropCreateLineGraphTable: ") + e.what());
+            std::string("PostGisProvider:createLineGraphTables: ") + e.what());
 	}
 }

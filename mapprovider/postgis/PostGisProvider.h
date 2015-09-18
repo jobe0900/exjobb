@@ -258,12 +258,12 @@ private:
     /** Create a new schema in the database
      * @throw   MapProviderException
      */
-    void    dropCreateLineGraphSchema();
+    void    createLineGraphSchema();
 
     /** Create the needed tables in the database
      * @throw   MapProviderException
      */
-    void    dropCreateLineGraphTables();
+    void    createLineGraphTables();
 
 
 // ATTRIBUTES
