@@ -69,6 +69,25 @@ LineGraphSaveQueries::insertNode(
         "    SELECT topo_id FROM " + rTableName +
         "    WHERE topo_id = " + std::to_string(id) + " );";
 
+//    std::cerr << "SQL: " << sql << std::endl;
+
+    rTrans.exec(
+        sql
+    );
+}
+
+//static
+void
+LineGraphSaveQueries::insertLine(
+    pqxx::transaction_base& rTrans,
+    const std::string&      rTableName,
+    Cost                    cost,
+    const std::string&      rGeomString)
+{
+    std::string sql =
+        "INSERT INTO " + rTableName +" (cost, geom) "
+        "VALUES (" + std::to_string(cost) + ", ST_GeomFromText('" + rGeomString + "', 900913)); ";
+
     std::cerr << "SQL: " << sql << std::endl;
 
     rTrans.exec(

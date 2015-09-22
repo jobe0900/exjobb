@@ -711,16 +711,16 @@ PostGisProvider::prepareLineGraphData(
         std::string targetWKT = "POINT(" + std::to_string(targetPoint.x) + " "
                                          + std::to_string(targetPoint.y) + ")";
         std::string lineWKT = "LINESTRING(" + std::to_string(sourcePoint.x) + " " +
-                                              std::to_string(sourcePoint.y) + " " +
+                                              std::to_string(sourcePoint.y) + ", " +
                                               std::to_string(targetPoint.x) + " " +
                                               std::to_string(targetPoint.y) + ")";
 
-        std::cerr << "Saving Line: "
-            << "source node/edge: " << source_node_id << "/" << source_edge_id
-            << ", target node/edge: " << target_node_id << "/" << target_edge_id
-            << ", cost: " << cost << std::endl
-            << "From: " << sourceWKT << ", To: " << targetWKT
-            << ", line: " << lineWKT << std::endl;
+//        std::cerr << "Saving Line: "
+//            << "source node/edge: " << source_node_id << "/" << source_edge_id
+//            << ", target node/edge: " << target_node_id << "/" << target_edge_id
+//            << ", cost: " << cost << std::endl
+//            << "From: " << sourceWKT << ", To: " << targetWKT
+//            << ", line: " << lineWKT << std::endl;
 
         LineGraphSaveQueries::insertNode(
             rTrans,
@@ -733,6 +733,12 @@ PostGisProvider::prepareLineGraphData(
             mLineGraphNodeTable,
             target_edge_id,
             targetWKT);
+
+        LineGraphSaveQueries::insertLine(
+            rTrans,
+            mLineGraphLineTable,
+            cost,
+            lineWKT);
 
     }
 

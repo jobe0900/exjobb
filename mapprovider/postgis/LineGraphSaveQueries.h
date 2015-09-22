@@ -81,6 +81,18 @@ public:
         EdgeIdType              id,
         const std::string&      rGeomString);
 
+    /** Insert a line into the database
+     * @param   rTrans      Transaction to perform the query in.
+     * @param   cost        The cost of traveling the edge
+     * @param   rGeomString WKT (well-known text) representation of the line
+     * @throw   pqxx::pqxx_exception
+     */
+    static void insertLine(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rTableName,
+        Cost                    cost,
+        const std::string&      rGeomString);
+
 // ACCESS
 // INQUIRY
 
