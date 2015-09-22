@@ -48,7 +48,7 @@ LineGraphSaveQueries::dropCreateNodeTable(
     rTrans.exec(
             "DROP TABLE IF EXISTS " + rTableName + " CASCADE; "
             "CREATE TABLE " + rTableName + " ( "
-            "    topo_id  bigint, "
+            "    topo_id  bigint unique, "
             "    geom     geometry(Point, 900913) "
             "); "
     );
@@ -63,12 +63,11 @@ LineGraphSaveQueries::insertNode(
     const std::string&      rGeomString)
 {
     std::string sql =
-        "INSERT INTO " + rTableName +
-        " (topo_id, geom) VALUES (" +
-        std::to_string(id) +
-        ", ST_GeomFromText('" +
-        rGeomString +
-        "', 900913));";
+        "INSERT INTO " + rTableName +" (topo_id, geom) "
+        "SELECT " + std::to_string(id) + ", ST_GeomFromText('" + rGeomString + "', 900913) "
+        "WHERE NOT EXISTS ("
+        "    SELECT topo_id FROM " + rTableName +
+        "    WHERE topo_id = " + std::to_string(id) + " );";
 
     std::cerr << "SQL: " << sql << std::endl;
 
