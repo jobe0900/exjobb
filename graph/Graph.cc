@@ -91,6 +91,18 @@ Graph::getBoostLineGraph()
     return mLineGraph;
 }
 
+const LineGraphType&
+Graph::getBoostLineGraph() const
+{
+    return mLineGraph;
+}
+
+const Topology&
+Graph::getTopology() const
+{
+    return mrTopology;
+}
+
 //============================= INQUIRY    ===================================
 bool
 Graph::hasVertex(VertexIdType vertexId) const

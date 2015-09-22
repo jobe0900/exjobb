@@ -69,6 +69,18 @@ public:
         pqxx::transaction_base& rTrans,
         const std::string&      rTableName);
 
+    /** Insert a node into the database
+     * @param   rTrans      Transaction to perform the query in.
+     * @param   id          The id of the node's corresponding edge in the topology.
+     * @param   rGeomString WKT (well-known text) representation of the node
+     * @throw   pqxx::pqxx_exception
+     */
+    static void insertNode(
+        pqxx::transaction_base& rTrans,
+        const std::string&      rTableName,
+        EdgeIdType              id,
+        const std::string&      rGeomString);
+
 // ACCESS
 // INQUIRY
 

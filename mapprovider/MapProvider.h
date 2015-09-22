@@ -76,13 +76,12 @@ public:
 
     /** Save the line graph to persistent storage or throw exception if not
      * implemented.
-     * @param   rLineGraph  The LineGraph to save.
-     * @param   rTopology   Access to the geomtric data in the topology.
+     * @param   rGraph  The Graph with the LineGraph and topology to save.
      * @throws  MapProviderException
      */
-    virtual void    persistLineGraph(
-                        const LineGraphType&    rLineGraph,
-                        const Topology&         rTopology) = 0;
+    virtual void    persistLineGraph(const Graph& rGraph) = 0;
+//                        const LineGraphType&    rLineGraph,
+//                        const Topology&         rTopology) = 0;
 
 // ACCESS
 // INQUIRY

@@ -177,7 +177,13 @@ public:
      * @return  The Boost Graph representation of the LineGraph.
      * @throws  GraphException if something goes wrong building the graph.
      */
-    LineGraphType&      getBoostLineGraph();
+    LineGraphType&       getBoostLineGraph();
+    const LineGraphType& getBoostLineGraph() const;
+
+    /** Get access to the topology that is the base for the graph.
+     * @return  The Topology
+     */
+    const Topology&     getTopology() const;
 
 // INQUIRY
     /**
@@ -189,6 +195,13 @@ public:
      * @return  true    If LineGraph has a node with given id.
      */
     bool                hasNode(EdgeIdType nodeId) const;
+
+    /** Get an already existing Node from the LineGraph.
+     * @param   id  The Edge id (== the Node id).
+     * @param   The LineGraph Node.
+     * @throw   GraphException if there is no Node with that id.
+     */
+    const NodeType&     getLineGraphNode(NodeIdType id) const;
 
     /**
      * @return  true    If graph was built with restrictions.
@@ -266,12 +279,6 @@ private:
                             const EdgeType& rGraphEdge,
                             NodeType&       rNode);
 
-    /** Get an already existing Node from the LineGraph.
-     * @param   id  The Edge id (== the Node id).
-     * @param   The LineGraph Node.
-     * @throw   GraphException if there is no Node with that id.
-     */
-    const NodeType&     getLineGraphNode(NodeIdType id) const;
 
     /** Connect the newly added Node to all Nodes it should be connected to,
      * that is look up which outgoing edges there are from the Edge's (node's)

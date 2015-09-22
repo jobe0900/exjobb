@@ -132,11 +132,12 @@ PostGisProvider::setRestrictionsAndCosts(Topology& rTopology)
 }
 
 void
-PostGisProvider::persistLineGraph(
-    const LineGraphType& rLineGraph,
-    const Topology& rTopology)
+PostGisProvider::persistLineGraph(const Graph& rGraph)
+//    const LineGraphType& rLineGraph,
+//    const Topology& rTopology)
 {
     setUpSchemaAndTables();
+    insertData(rGraph);
 //    throw MapProviderException(
 //        "PostGisProvider has not implemented persisting a LineGraph");
 }
@@ -633,4 +634,106 @@ PostGisProvider::createLineGraphTables()
         throw MapProviderException(
             std::string("PostGisProvider:createLineGraphTables: ") + e.what());
 	}
+}
+
+void
+PostGisProvider::insertData(const Graph& rGraph)
+//    const LineGraphType& rLineGraph,
+//    const Topology& rTopology)
+{
+	try
+	{
+		if(!mConnection.is_open())
+		{
+			throw MapProviderException(
+					std::string("Could not open ") + mDbConfig.database);
+		}
+
+		pqxx::work transaction(mConnection);
+
+		try
+		{
+		    prepareLineGraphData(transaction, rGraph);
+
+		    // TRANSACTION END
+		    transaction.commit();
+		}
+		catch (const std::exception& e)
+		{
+		    transaction.abort();
+		    throw e;
+		}
+	}
+	catch(const std::exception& e)
+	{
+        throw MapProviderException(
+            std::string("PostGisProvider:insertData: ") + e.what());
+
+	}
+}
+
+void
+PostGisProvider::prepareLineGraphData(
+    pqxx::transaction_base& rTrans,
+    const Graph&            rGraph)
+//    const LineGraphType&    rLineGraph,
+//    const Topology&         rTopology)
+{
+    const LineGraphType& rLineGraph = rGraph.getBoostLineGraph();
+    const Topology&      rTopology  = rGraph.getTopology();
+
+    for(auto line_it = boost::edges(rLineGraph);
+        line_it.first != line_it.second;
+        ++line_it.first)
+    {
+        const LineType& line = *(line_it.first);
+
+        NodeIdType source_node_id = rLineGraph[line].lgSourceNodeId;
+//        NodeIdType target_node_id = line.lgTargetNodeId;
+        NodeIdType target_node_id = rLineGraph[line].lgTargetNodeId;
+        Cost cost = rLineGraph[line].cost;
+
+        const NodeType& source_node = rGraph.getLineGraphNode(source_node_id);
+        const NodeType& target_node = rGraph.getLineGraphNode(target_node_id);
+
+        EdgeIdType source_edge_id = rLineGraph[source_node].topoEdgeId;
+        EdgeIdType target_edge_id = rLineGraph[target_node].topoEdgeId;
+
+
+        const Edge& sourceEdge = rTopology.getEdge(source_edge_id);
+        const Edge& targetEdge = rTopology.getEdge(target_edge_id);
+
+        const Point& sourcePoint = sourceEdge.geomData().centerPoint;
+        const Point& targetPoint = targetEdge.geomData().centerPoint;
+
+        std::string sourceWKT = "POINT(" + std::to_string(sourcePoint.x) + " "
+                                         + std::to_string(sourcePoint.y) + ")";
+        std::string targetWKT = "POINT(" + std::to_string(targetPoint.x) + " "
+                                         + std::to_string(targetPoint.y) + ")";
+        std::string lineWKT = "LINESTRING(" + std::to_string(sourcePoint.x) + " " +
+                                              std::to_string(sourcePoint.y) + " " +
+                                              std::to_string(targetPoint.x) + " " +
+                                              std::to_string(targetPoint.y) + ")";
+
+        std::cerr << "Saving Line: "
+            << "source node/edge: " << source_node_id << "/" << source_edge_id
+            << ", target node/edge: " << target_node_id << "/" << target_edge_id
+            << ", cost: " << cost << std::endl
+            << "From: " << sourceWKT << ", To: " << targetWKT
+            << ", line: " << lineWKT << std::endl;
+
+        LineGraphSaveQueries::insertNode(
+            rTrans,
+            mLineGraphNodeTable,
+            source_edge_id,
+            sourceWKT);
+
+        LineGraphSaveQueries::insertNode(
+            rTrans,
+            mLineGraphNodeTable,
+            target_edge_id,
+            targetWKT);
+
+    }
+
 }
