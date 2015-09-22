@@ -118,6 +118,18 @@ Graph::hasNode(EdgeIdType nodeId) const
     return (it != mEdgeIdToNodeMap.end());
 }
 
+const NodeType&
+Graph::getLineGraphNode(NodeIdType id) const
+{
+    const auto& res = mEdgeIdToNodeMap.find(id);
+    if(res == mEdgeIdToNodeMap.end())
+    {
+        throw GraphException("Graph:getLineGraphNode: Missing node: "
+            + std::to_string(id));
+    }
+    return res->second;
+}
+
 bool
 Graph::isRestricted() const
 {
@@ -267,18 +279,6 @@ Graph::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
     {
         rNode = getLineGraphNode(e_graph_id);
     }
-}
-
-const NodeType&
-Graph::getLineGraphNode(NodeIdType id) const
-{
-    const auto& res = mEdgeIdToNodeMap.find(id);
-    if(res == mEdgeIdToNodeMap.end())
-    {
-        throw GraphException("Graph:getLineGraphNode: Missing node: "
-            + std::to_string(id));
-    }
-    return res->second;
 }
 
 void

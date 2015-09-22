@@ -76,8 +76,7 @@ public:
     virtual void    setRestrictionsAndCosts(Topology& rTopology);
 
     virtual void    persistLineGraph(const Graph& rGraph);
-//                        const LineGraphType&    rLineGraph,
-//                        const Topology&         rTopology);
+
 // INQUIRY
 
 protected:
@@ -267,27 +266,24 @@ private:
 
     /** Insert the data in the database.
      * @param   rGraph      The graph with data.
-//     * @param   rLineGraph  The LineGraph to save.
-//     * @param   rTopology   Topology with some geom data for the linegraph.
      * @throw   MapProviderException
      */
     void    insertData(const Graph& rGraph);
-//                const LineGraphType& rLineGraph,
-//                const Topology& rTopology);
 
     /** Prepare the LineGraph data for inserting into the database.
      * @param   rTrans      The transaction to operate within.
      * @param   rGraph      The graph data
-//     * @param   rLineGraph  The LineGraph to save.
-//     * @param   rTopology   Topology with some geom data for the linegraph.
      * @throw   MapProviderException
      */
     void    prepareLineGraphData(
                 pqxx::transaction_base& rTrans,
                 const Graph&            rGraph);
-//                const LineGraphType&    rLineGraph,
-//                const Topology&         rTopology);
 
+    // Generic helpers to clean up the code some -----------------------------
+    /** Check that the connection with the database is up, or throw exception.
+     * @throw   MapProviderException
+     */
+    void    testConnection();
 
 // ATTRIBUTES
     const Configuration&    mConfig;

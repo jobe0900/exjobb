@@ -56,8 +56,7 @@ public:
     virtual void    setRestrictionsAndCosts(Topology& rTopology);
 
     virtual void    persistLineGraph(const Graph& rGraph);
-//                        const LineGraphType& rLineGraph,
-//                        const Topology& rTopology);
+
 // ACCESS
 // INQUIRY
 

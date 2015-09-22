@@ -74,7 +74,6 @@ LineGraphUtility::persistLineGraph()
 {
     try
     {
-//        mpMapProvider->persistLineGraph(mpGraph->getBoostLineGraph(), mTopology);
         mpMapProvider->persistLineGraph(*mpGraph);
     }
     catch(MapProviderException& mpe)

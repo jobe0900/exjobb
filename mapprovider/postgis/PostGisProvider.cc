@@ -30,11 +30,7 @@ try
 {
     try
     {
-        if(!mConnection.is_open())
-        {
-            throw MapProviderException(
-                std::string("Could not open ") + mDbConfig.database);
-        }
+        testConnection();
 
         std::string topoBaseName;
         setTopoBaseName(topoBaseName);
@@ -133,13 +129,9 @@ PostGisProvider::setRestrictionsAndCosts(Topology& rTopology)
 
 void
 PostGisProvider::persistLineGraph(const Graph& rGraph)
-//    const LineGraphType& rLineGraph,
-//    const Topology& rTopology)
 {
     setUpSchemaAndTables();
     insertData(rGraph);
-//    throw MapProviderException(
-//        "PostGisProvider has not implemented persisting a LineGraph");
 }
 
 //============================= ACESS      ===================================
@@ -151,11 +143,7 @@ PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 {
 	try
 	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+	    testConnection();
 
 		// NON-TRANSACTION START
 		pqxx::nontransaction transaction(mConnection);
@@ -186,14 +174,11 @@ PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 {
 	try
 	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+	    testConnection();
 
 		// NON-TRANSACTION START
 		pqxx::nontransaction transaction(mConnection);
+
 		TopologyQueries::getTopologyEdges(
 		    transaction,
 		    rEdgeResult,
@@ -222,11 +207,7 @@ PostGisProvider::buildTopology(int srid, double tolerance)
 {
 	try
 	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+	    testConnection();
 
 		// TRANSACTION START
 		pqxx::work transaction(mConnection);
@@ -265,11 +246,7 @@ PostGisProvider::removeTopology()
 {
 	try
 	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+	    testConnection();
 
 		// TRANSACTION START
 		pqxx::work transaction(mConnection);
@@ -338,11 +315,7 @@ PostGisProvider::getVehiclePropertyEdgeRestrictions(pqxx::result& rResult)
 {
     try
     {
-        if(!mConnection.is_open())
-        {
-            throw MapProviderException(
-                std::string("Could not open ") + mDbConfig.database);
-        }
+        testConnection();
 
         // NON-TRANSACTION START
         pqxx::nontransaction transaction(mConnection);
@@ -376,11 +349,7 @@ PostGisProvider::getAccessRestrictions(pqxx::result& rResult)
 {
     try
     {
-        if(!mConnection.is_open())
-        {
-            throw MapProviderException(
-                std::string("Could not open ") + mDbConfig.database);
-        }
+        testConnection();
 
         // NON-TRANSACTION START
         pqxx::nontransaction transaction(mConnection);
@@ -413,11 +382,7 @@ PostGisProvider::getTurningRestrictions(pqxx::result& rResult)
 {
     try
     {
-        if(!mConnection.is_open())
-        {
-            throw MapProviderException(
-                std::string("Could not open ") + mDbConfig.database);
-        }
+        testConnection();
 
         // TRANSACTION START
         pqxx::nontransaction transaction(mConnection);
@@ -458,11 +423,7 @@ PostGisProvider::getEdgePointRestrictions(pqxx::result& rResult)
 {
 	try
 	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+	    testConnection();
 
 		// NON-TRANSACTION START
 		pqxx::nontransaction transaction(mConnection);
@@ -511,11 +472,7 @@ PostGisProvider::getTravelTimeCosts(pqxx::result& rResult)
 {
     try
     {
-        if(!mConnection.is_open())
-        {
-            throw MapProviderException(
-                std::string("Could not open ") + mDbConfig.database);
-        }
+        testConnection();
 
         // NON-TRANSACTION START
         pqxx::nontransaction transaction(mConnection);
@@ -549,11 +506,7 @@ PostGisProvider::getOtherEdgeCosts(pqxx::result& rResult)
 {
 	try
 	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+	    testConnection();
 
 		// NON-TRANSACTION START
 		pqxx::nontransaction transaction(mConnection);
@@ -594,11 +547,7 @@ PostGisProvider::createLineGraphSchema()
 {
 	try
 	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+	    testConnection();
 
 		// NON-TRANSACTION START
 		pqxx::nontransaction transaction(mConnection);
@@ -617,11 +566,7 @@ PostGisProvider::createLineGraphTables()
 {
 	try
 	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+	    testConnection();
 
 		// NON-TRANSACTION START
 		pqxx::nontransaction transaction(mConnection);
@@ -638,16 +583,10 @@ PostGisProvider::createLineGraphTables()
 
 void
 PostGisProvider::insertData(const Graph& rGraph)
-//    const LineGraphType& rLineGraph,
-//    const Topology& rTopology)
 {
 	try
 	{
-		if(!mConnection.is_open())
-		{
-			throw MapProviderException(
-					std::string("Could not open ") + mDbConfig.database);
-		}
+	    testConnection();
 
 		pqxx::work transaction(mConnection);
 
@@ -668,7 +607,6 @@ PostGisProvider::insertData(const Graph& rGraph)
 	{
         throw MapProviderException(
             std::string("PostGisProvider:insertData: ") + e.what());
-
 	}
 }
 
@@ -676,8 +614,6 @@ void
 PostGisProvider::prepareLineGraphData(
     pqxx::transaction_base& rTrans,
     const Graph&            rGraph)
-//    const LineGraphType&    rLineGraph,
-//    const Topology&         rTopology)
 {
     const LineGraphType& rLineGraph = rGraph.getBoostLineGraph();
     const Topology&      rTopology  = rGraph.getTopology();
@@ -689,8 +625,8 @@ PostGisProvider::prepareLineGraphData(
         const LineType& line = *(line_it.first);
 
         NodeIdType source_node_id = rLineGraph[line].lgSourceNodeId;
-//        NodeIdType target_node_id = line.lgTargetNodeId;
         NodeIdType target_node_id = rLineGraph[line].lgTargetNodeId;
+
         Cost cost = rLineGraph[line].cost;
 
         const NodeType& source_node = rGraph.getLineGraphNode(source_node_id);
@@ -715,13 +651,6 @@ PostGisProvider::prepareLineGraphData(
                                               std::to_string(targetPoint.x) + " " +
                                               std::to_string(targetPoint.y) + ")";
 
-//        std::cerr << "Saving Line: "
-//            << "source node/edge: " << source_node_id << "/" << source_edge_id
-//            << ", target node/edge: " << target_node_id << "/" << target_edge_id
-//            << ", cost: " << cost << std::endl
-//            << "From: " << sourceWKT << ", To: " << targetWKT
-//            << ", line: " << lineWKT << std::endl;
-
         LineGraphSaveQueries::insertNode(
             rTrans,
             mLineGraphNodeTable,
@@ -741,5 +670,14 @@ PostGisProvider::prepareLineGraphData(
             lineWKT);
 
     }
+}
 
+void
+PostGisProvider::testConnection()
+{
+    if(!mConnection.is_open())
+    {
+        throw MapProviderException(
+            std::string("Could not open ") + mDbConfig.database);
+    }
 }

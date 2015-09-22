@@ -19,13 +19,8 @@
 
 // LOCAL INCLUDES
 //
-//#include "../../osm/OsmHighway.h"
-//#include "../../graph/Edge.h"
-//#include "../../graph/EdgeRestriction.h"
 #include "../../graph/Topology.h"
 #include "../../graph/Graph.h"
-//#include "../../graph/Vertex.h"
-//#include "../MapProviderException.h"
 
 /** Class for holding static queries for saving the line graph to database
  */
