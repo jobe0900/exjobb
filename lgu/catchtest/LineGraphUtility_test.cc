@@ -156,9 +156,7 @@ SCENARIO ("LineGraphUtility timing", "[lgu][timing]")
     {
         GIVEN ("a valid config file for Mikhailovsk without temporary topology")
         {
-//		    std::string config_file("catchtest/testsettings/part_0815_settings.json");
-		    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
-//		    std::string config_file("catchtest/testsettings/part_0815_settings.json");
+		    std::string config_file("catchtest/testsettings/mikhailovsk-original.json");
 
             WHEN ("when timing request for a LineGraph")
             {
@@ -166,36 +164,84 @@ SCENARIO ("LineGraphUtility timing", "[lgu][timing]")
                 std::chrono::high_resolution_clock::time_point t1 =
                     std::chrono::high_resolution_clock::now();
 
-                LineGraphUtility lgu(config_file);
-                LineGraphType* p_lg = lgu.getLineGraph();
+                LineGraphType* p_lg;
+
+                int nr_rounds = 10;
+                for(int i = 0; i < nr_rounds; ++i)
+                {
+                    LineGraphUtility lgu(config_file);
+                    p_lg = lgu.getLineGraph();
+                    delete p_lg;
+                    p_lg = nullptr;
+                }
 
                 // end timing;
                 std::chrono::high_resolution_clock::time_point t2 =
                     std::chrono::high_resolution_clock::now();
 
                 auto duration =
-                    std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+                    std::chrono::duration_cast<std::chrono::microseconds>
+                        ( t2 - t1 ).count();
 
-                THEN ("we should have a line graph")
-                {
-                    REQUIRE (p_lg != nullptr);
-                    REQUIRE (boost::num_edges(*p_lg) > 0);
-                }
 
-                THEN ("we should have a timing")
+                THEN ("we should have an average timing")
                 {
-                    INFO ("Duration for Mikhailovsk without temporary topology "
-                        << duration << " microseconds");
+                    INFO ("Average duration over " << nr_rounds << " rounds for "
+                        "Mikhailovsk without temporary topology: "
+                        << duration / nr_rounds << " microseconds");
                     REQUIRE (true);
                 }
 
                 delete p_lg;
             }
         }
+
+        GIVEN ("a valid config file for Mikhailovsk WITH temporary topology")
+        {
+		    std::string config_file("catchtest/testsettings/mikhailovsk-original-temp.json");
+
+            WHEN ("when timing request for a LineGraph")
+            {
+                // start timing
+                std::chrono::high_resolution_clock::time_point t1 =
+                    std::chrono::high_resolution_clock::now();
+
+                LineGraphType* p_lg;
+
+                int nr_rounds = 10;
+                for(int i = 0; i < nr_rounds; ++i)
+                {
+                    LineGraphUtility lgu(config_file);
+                    p_lg = lgu.getLineGraph();
+                    delete p_lg;
+                    p_lg = nullptr;
+                }
+
+                // end timing;
+                std::chrono::high_resolution_clock::time_point t2 =
+                    std::chrono::high_resolution_clock::now();
+
+                auto duration =
+                    std::chrono::duration_cast<std::chrono::microseconds>
+                        ( t2 - t1 ).count();
+
+
+                THEN ("we should have an average timing")
+                {
+                    INFO ("Average duration over " << nr_rounds << " rounds for "
+                        "Mikhailovsk WITH temporary topology: "
+                        << duration / nr_rounds << " microseconds");
+                    REQUIRE (true);
+                }
+
+                delete p_lg;
+            }
+        }
+
 
         GIVEN ("a valid config file for Partille without temporary topology")
         {
-		    std::string config_file("catchtest/testsettings/part_0815_settings.json");
+		    std::string config_file("catchtest/testsettings/partille-original.json");
 
             WHEN ("when timing request for a LineGraph")
             {
@@ -203,32 +249,80 @@ SCENARIO ("LineGraphUtility timing", "[lgu][timing]")
                 std::chrono::high_resolution_clock::time_point t1 =
                     std::chrono::high_resolution_clock::now();
 
-                LineGraphUtility lgu(config_file);
-                LineGraphType* p_lg = lgu.getLineGraph();
+                LineGraphType* p_lg;
+
+                int nr_rounds = 10;
+                for(int i = 0; i < nr_rounds; ++i)
+                {
+                    LineGraphUtility lgu(config_file);
+                    p_lg = lgu.getLineGraph();
+                    delete p_lg;
+                    p_lg = nullptr;
+                }
 
                 // end timing;
                 std::chrono::high_resolution_clock::time_point t2 =
                     std::chrono::high_resolution_clock::now();
 
                 auto duration =
-                    std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+                    std::chrono::duration_cast<std::chrono::microseconds>
+                        ( t2 - t1 ).count();
 
-                THEN ("we should have a line graph")
-                {
-                    REQUIRE (p_lg != nullptr);
-                    REQUIRE (boost::num_edges(*p_lg) > 0);
-                }
 
-                THEN ("we should have a timing")
+                THEN ("we should have an average timing")
                 {
-                    INFO ("Duration for Partille without temporary topology "
-                        << duration << " microseconds");
+                    INFO ("Average duration over " << nr_rounds << " rounds for "
+                        "Partille without temporary topology: "
+                        << duration / nr_rounds << " microseconds");
                     REQUIRE (true);
                 }
 
                 delete p_lg;
             }
         }
+
+        GIVEN ("a valid config file for Partille WITH temporary topology")
+        {
+		    std::string config_file("catchtest/testsettings/partille-original-temp.json");
+
+            WHEN ("when timing request for a LineGraph")
+            {
+                // start timing
+                std::chrono::high_resolution_clock::time_point t1 =
+                    std::chrono::high_resolution_clock::now();
+
+                LineGraphType* p_lg;
+
+                int nr_rounds = 10;
+                for(int i = 0; i < nr_rounds; ++i)
+                {
+                    LineGraphUtility lgu(config_file);
+                    p_lg = lgu.getLineGraph();
+                    delete p_lg;
+                    p_lg = nullptr;
+                }
+
+                // end timing;
+                std::chrono::high_resolution_clock::time_point t2 =
+                    std::chrono::high_resolution_clock::now();
+
+                auto duration =
+                    std::chrono::duration_cast<std::chrono::microseconds>
+                        ( t2 - t1 ).count();
+
+
+                THEN ("we should have an average timing")
+                {
+                    INFO ("Average duration over " << nr_rounds << " rounds for "
+                        "Partille WITH temporary topology: "
+                        << duration / nr_rounds << " microseconds");
+                    REQUIRE (true);
+                }
+
+                delete p_lg;
+            }
+        }
+
     }
     catch (LineGraphUtilityException& lgue)
     {

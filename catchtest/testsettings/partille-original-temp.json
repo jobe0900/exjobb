@@ -20,7 +20,7 @@
             "roads_prefix":   "highways",
             "schema_prefix":  "topo",
             "build": {
-                "temp_topo_name": "lgu_temp",
+                "temp_topo_name": "epoch_ms",
                 "srid":           900913,
                 "tolerance":      1.0 
             },
