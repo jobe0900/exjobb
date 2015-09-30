@@ -24,7 +24,7 @@
 #include "RestrictionsException.h"
 #include "Speed.h"
 #include "Vertex.h"
-#include "../config/VehicleConfig.h"
+#include "../config/Configuration.h"
 #include "../osm/OsmAccess.h"
 #include "../osm/OsmBarrier.h"
 #include "../osm/OsmTurningRestriction.h"
@@ -116,6 +116,13 @@ public:
 
 // OPERATORS
 // OPERATIONS
+
+    /** Check if this Restriction restricts when the Configuration is applied.
+     * @param   rConfig     Configuration
+     * @throw   RestrictionsException
+     */
+    bool                restricts(const Configuration& rConfig) const;
+
     /** Set vehicle properties for the specified edge.
      * Replacing any existing properties with the new ones.
      * @param   pVehicleProperties  The properties to install for the edge.

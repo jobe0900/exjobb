@@ -34,6 +34,68 @@ EdgeRestriction::~EdgeRestriction()
 }
 //============================= OPERATORS ====================================
 //============================= OPERATIONS ===================================
+bool
+EdgeRestriction::restricts(const Configuration& rConfig) const
+{
+    bool is_restricted = false;
+    bool is_generally_restricted = false;
+    bool is_vehicle_banned = false;
+
+    for(const auto& r : restrictionTypes())
+    {
+        switch (r)
+        {
+            case EdgeRestriction::DISUSED:
+                is_restricted = true; break;
+            case EdgeRestriction::VEHICLE_PROPERTIES:
+                if(vehicleProperties()
+                    .restrictsAccess(rConfig.getVehicleConfig()))
+                {
+                    is_restricted = true;
+                }
+                break;
+            case EdgeRestriction::BARRIER:
+                if(barrier()
+                    .restrictsAccess(rConfig.getBarrierRestrictionsRule()))
+                {
+                    is_restricted = true;
+                }
+                break;
+            case EdgeRestriction::GENERAL_ACCESS:
+                if(!generalAccess()
+                    .allowsAccess(rConfig.getAccessRule()))
+                {
+                    is_generally_restricted = true;
+                }
+                continue;
+            case EdgeRestriction::VEHICLE_TYPE_ACCESS:
+            {
+                OsmVehicle::VehicleType type =
+                    rConfig.getVehicleConfig().category;
+                if(hasVehicleTypeAccessRestriction(type))
+                {
+                    if(!vehicleTypeAccess(type)
+                        .allowsAccess(rConfig.getAccessRule()))
+                    {
+                        is_vehicle_banned = true;
+                    }
+                }
+            }
+            continue;
+            default:
+                continue;
+        }
+    }
+
+    if(is_restricted
+        || (is_generally_restricted && is_vehicle_banned)
+        || is_vehicle_banned)
+    {
+        return true;
+    }
+    return false;
+}
+
 void
 EdgeRestriction::setVehiclePropertyRestriction(
     EdgeRestriction::VehicleProperties* pVehicleProperties)

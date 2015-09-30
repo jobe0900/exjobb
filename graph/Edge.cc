@@ -85,15 +85,15 @@ Edge::Edge(EdgeIdType       id,
 { }
 
 Edge::Edge(Edge&& from)
-    :   mId(from.mId),
-        mOsmId(from.mOsmId),
-        mSource(from.mSource),
-        mTarget(from.mTarget),
-        mGeomData(from.mGeomData),
-        mRoadData(from.mRoadData),
-        mpRestrictions(from.mpRestrictions),
-        mCost(),
-        mSpeed()
+    : mId(from.mId),
+      mOsmId(from.mOsmId),
+      mSource(from.mSource),
+      mTarget(from.mTarget),
+      mGeomData(from.mGeomData),
+      mRoadData(from.mRoadData),
+      mpRestrictions(from.mpRestrictions),
+      mCost(),
+      mSpeed()
 {
     from.mpRestrictions = nullptr;
 }
@@ -259,68 +259,10 @@ Edge::isRestricted(const Configuration& rConfig) const
     {
         return false;
     }
-    const auto& restriction_types = mpRestrictions->restrictionTypes();
-
-    bool is_restricted = false;
-    bool is_generally_restricted = false;
-    bool is_vehicle_banned = false;
 
     try
     {
-        for(const auto& r : restriction_types)
-        {
-            switch (r)
-            {
-                case EdgeRestriction::DISUSED:
-                    is_restricted = true; break;
-                case EdgeRestriction::VEHICLE_PROPERTIES:
-                    if(mpRestrictions->vehicleProperties()
-                        .restrictsAccess(rConfig.getVehicleConfig()))
-                    {
-                        is_restricted = true;
-                    }
-                    break;
-                case EdgeRestriction::BARRIER:
-                    if(mpRestrictions->barrier()
-                        .restrictsAccess(rConfig.getBarrierRestrictionsRule()))
-                    {
-                        is_restricted = true;
-                    }
-                    break;
-                case EdgeRestriction::GENERAL_ACCESS:
-                    if(!mpRestrictions->generalAccess()
-                        .allowsAccess(rConfig.getAccessRule()))
-                    {
-                        is_generally_restricted = true;
-                    }
-                    continue;
-                case EdgeRestriction::VEHICLE_TYPE_ACCESS:
-                {
-                    OsmVehicle::VehicleType type =
-                        rConfig.getVehicleConfig().category;
-                    if(mpRestrictions->hasVehicleTypeAccessRestriction(type))
-                    {
-                        if(!mpRestrictions->vehicleTypeAccess(type)
-                            .allowsAccess(rConfig.getAccessRule()))
-                        {
-                            is_vehicle_banned = true;
-                        }
-                    }
-                }
-                    continue;
-                default:
-                    continue;
-            }
-        }
-
-        if(is_restricted
-            || (is_generally_restricted && is_vehicle_banned)
-            || is_vehicle_banned)
-        {
-            return true;
-        }
-        return false;
-
+        return mpRestrictions->restricts(rConfig);
     }
     catch (RestrictionsException& re)
     {
