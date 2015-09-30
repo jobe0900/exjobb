@@ -4,12 +4,11 @@
  *      Author: Jonas Bergman
  */
 
-#include "LineGraphUtility.h"  // class implemented
-
 #include "../mapprovider/postgis/PostGisProvider.h"
 #include "../mapprovider/jsontest/JsonTestProvider.h"
 
 #include <string>
+#include "LineGraphBuilderUtility.h"  // class implemented
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
@@ -185,7 +184,7 @@ LineGraphUtility::buildGraph()
     try
     {
         delete mpGraph;
-        mpGraph = new Graph(mTopology, mConfig);
+        mpGraph = new GraphBuilder(mTopology, mConfig);
     }
     catch (const std::exception& e)
     {

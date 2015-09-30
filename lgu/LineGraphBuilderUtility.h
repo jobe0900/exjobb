@@ -5,8 +5,8 @@
  * @author Jonas Bergman
  */
 
-#ifndef LGU_LINEGRAPHUTILITY_H_
-#define LGU_LINEGRAPHUTILITY_H_
+#ifndef LGU_LINEGRAPHBUILDERUTILITY_H_
+#define LGU_LINEGRAPHBUILDERUTILITY_H_
 
 // SYSTEM INCLUDES
 //
@@ -19,7 +19,7 @@
 //
 #include "LineGraphUtilityException.h"
 #include "../config/ConfigurationReader.h"
-#include "../graph/Graph.h"
+#include "../graph/GraphBuilder.h"
 #include "../mapprovider/MapProvider.h"
 
 // FORWARD REFERENCES
@@ -92,7 +92,7 @@ private:
     Configuration       mConfig;
     MapProvider*        mpMapProvider;
     Topology            mTopology;
-    Graph*              mpGraph;
+    GraphBuilder*              mpGraph;
 
 // CONSTANTS
 };
@@ -103,4 +103,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* LGU_LINEGRAPHUTILITY_H_ */
+#endif /* LGU_LINEGRAPHBUILDERUTILITY_H_ */

@@ -23,7 +23,6 @@
 // LOCAL INCLUDES
 //
 #include "CostQueries.h"
-#include "LineGraphSaveQueries.h"
 #include "RestrictionQueries.h"
 #include "TopologyQueries.h"
 #include "../MapProvider.h"
@@ -37,6 +36,7 @@
 #include "../../osm/OsmHighway.h"
 #include "../../osm/OsmVehicle.h"
 #include "../../util/TimeToStringMaker.h"
+#include "LineGraphBuilderSaveQueries.h"
 
 // FORWARD REFERENCES
 //
@@ -75,7 +75,7 @@ public:
 
     virtual void    setRestrictionsAndCosts(Topology& rTopology);
 
-    virtual void    persistLineGraph(const Graph& rGraph);
+    virtual void    persistLineGraph(const GraphBuilder& rGraph);
 
 // INQUIRY
 
@@ -268,7 +268,7 @@ private:
      * @param   rGraph      The graph with data.
      * @throw   MapProviderException
      */
-    void    insertData(const Graph& rGraph);
+    void    insertData(const GraphBuilder& rGraph);
 
     /** Prepare the LineGraph data for inserting into the database.
      * @param   rTrans      The transaction to operate within.
@@ -277,7 +277,7 @@ private:
      */
     void    prepareLineGraphData(
                 pqxx::transaction_base& rTrans,
-                const Graph&            rGraph);
+                const GraphBuilder&            rGraph);
 
     // Generic helpers to clean up the code some -----------------------------
     /** Check that the connection with the database is up, or throw exception.

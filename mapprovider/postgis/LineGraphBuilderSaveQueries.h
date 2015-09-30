@@ -3,8 +3,8 @@
  * @author Jonas Bergman
  */
 
-#ifndef MAPPROVIDER_POSTGIS_LINEGRAPHSAVEQUERIES_H_
-#define MAPPROVIDER_POSTGIS_LINEGRAPHSAVEQUERIES_H_
+#ifndef MAPPROVIDER_POSTGIS_LINEGRAPHBUILDERSAVEQUERIES_H_
+#define MAPPROVIDER_POSTGIS_LINEGRAPHBUILDERSAVEQUERIES_H_
 
 // SYSTEM INCLUDES
 //
@@ -17,10 +17,10 @@
 #include <boost/algorithm/string.hpp>
 #include <pqxx/pqxx>
 
+#include "../../graph/GraphBuilder.h"
 // LOCAL INCLUDES
 //
 #include "../../graph/Topology.h"
-#include "../../graph/Graph.h"
 
 /** Class for holding static queries for saving the line graph to database
  */
@@ -95,4 +95,4 @@ protected:
 private:
 };
 
-#endif /* MAPPROVIDER_POSTGIS_LINEGRAPHSAVEQUERIES_H_ */
+#endif /* MAPPROVIDER_POSTGIS_LINEGRAPHBUILDERSAVEQUERIES_H_ */

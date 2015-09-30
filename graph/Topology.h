@@ -46,7 +46,7 @@ typedef std::multimap<OsmIdType, EdgeIdType>    OsmIdToTopoIdEdgeMap;
  */
 class Topology
 {
-    friend class Graph;
+    friend class GraphBuilder;
 
 public:
 // LIFECYCLE

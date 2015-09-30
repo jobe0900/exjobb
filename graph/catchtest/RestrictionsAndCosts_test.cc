@@ -8,10 +8,10 @@
 
 #include "../../catchtest/catch.hpp"
 
-#include "../Graph.h"
 #include "../Topology.h"
 #include "../../config/ConfigurationReader.h"
 #include "../../mapprovider/postgis/PostGisProvider.h"
+#include "../GraphBuilder.h"
 
 // TURN RESTRICTION //////////////////////////////////////////////////////////
 
@@ -30,7 +30,7 @@ SCENARIO ("Building graph of Mikhailovsk with turn restriction",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration to build a Graph with turn restriction ")
@@ -47,7 +47,7 @@ SCENARIO ("Building graph of Mikhailovsk with turn restriction",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with turn restrictions")
@@ -116,7 +116,7 @@ SCENARIO ("Building graph of Partille with turn restriction",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration to build a Graph with turn restriction ")
@@ -133,7 +133,7 @@ SCENARIO ("Building graph of Partille with turn restriction",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with turn restrictions")
@@ -204,7 +204,7 @@ SCENARIO ("Building graph of Mikhailovsk with barrier block",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that restricts barrier block ")
@@ -221,7 +221,7 @@ SCENARIO ("Building graph of Mikhailovsk with barrier block",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with barrier block")
@@ -291,7 +291,7 @@ SCENARIO ("Building graph of Partille with barrier block",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that restricts barrier block ")
@@ -308,7 +308,7 @@ SCENARIO ("Building graph of Partille with barrier block",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with barrier block")
@@ -382,7 +382,7 @@ SCENARIO ("Building graph of Mikhailovsk with barrier bollard",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that restricts barrier bollard ")
@@ -399,7 +399,7 @@ SCENARIO ("Building graph of Mikhailovsk with barrier bollard",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with barrier bollard")
@@ -469,7 +469,7 @@ SCENARIO ("Building graph of Partille with barrier bollard",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that restricts barrier bollard ")
@@ -486,7 +486,7 @@ SCENARIO ("Building graph of Partille with barrier bollard",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with barrier bollard")
@@ -559,7 +559,7 @@ SCENARIO ("Building graph of Mikhailovsk with barrier lift gate",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that does not restrict barrier lift gate ")
@@ -576,7 +576,7 @@ SCENARIO ("Building graph of Mikhailovsk with barrier lift gate",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with barrier lift gate")
@@ -655,7 +655,7 @@ SCENARIO ("Building graph of Partille with barrier lift gate",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that does not restrict barrier lift gate ")
@@ -672,7 +672,7 @@ SCENARIO ("Building graph of Partille with barrier lift gate",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with barrier lift gate")
@@ -752,7 +752,7 @@ SCENARIO ("Building graph of Mikhailovsk with traffic signals",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that has cost for traffic signals ")
@@ -769,7 +769,7 @@ SCENARIO ("Building graph of Mikhailovsk with traffic signals",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with traffic lights")
@@ -847,7 +847,7 @@ SCENARIO ("Building graph of Partille with traffic signals",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that has cost for traffic signals ")
@@ -864,7 +864,7 @@ SCENARIO ("Building graph of Partille with traffic signals",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with traffic lights")
@@ -944,7 +944,7 @@ SCENARIO ("Building graph of Mikhailovsk with stop at node before crossing",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that has cost for stops ")
@@ -961,7 +961,7 @@ SCENARIO ("Building graph of Mikhailovsk with stop at node before crossing",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with stop signs")
@@ -1014,7 +1014,7 @@ SCENARIO ("Building graph of Partille with stop at node before crossing",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that has cost for traffic signals ")
@@ -1031,7 +1031,7 @@ SCENARIO ("Building graph of Partille with stop at node before crossing",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with stop signs")
@@ -1087,7 +1087,7 @@ SCENARIO ("Building graph of Mikhailovsk with stop for all at crossing",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that has cost for stops ")
@@ -1104,7 +1104,7 @@ SCENARIO ("Building graph of Mikhailovsk with stop for all at crossing",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with stop signs")
@@ -1178,7 +1178,7 @@ SCENARIO ("Building graph of Partille with stop for all at crossing",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that has cost for traffic signals ")
@@ -1195,7 +1195,7 @@ SCENARIO ("Building graph of Partille with stop for all at crossing",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with stop signs")
@@ -1270,7 +1270,7 @@ SCENARIO ("Building graph of Mikhailovsk with speed bump at node",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that has cost for stops ")
@@ -1287,7 +1287,7 @@ SCENARIO ("Building graph of Mikhailovsk with speed bump at node",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with stop signs")
@@ -1340,7 +1340,7 @@ SCENARIO ("Building graph of Partille with speed bump at node",
         Topology orig_topology;
         orig_pgp.getTopology(orig_topology);
         orig_pgp.setRestrictionsAndCosts(orig_topology);
-        Graph orig_graph(orig_topology, orig_config);
+        GraphBuilder orig_graph(orig_topology, orig_config);
 
         // ===================================================================
         GIVEN ("Configuration that has cost for stops ")
@@ -1357,7 +1357,7 @@ SCENARIO ("Building graph of Partille with speed bump at node",
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph(topology, config);
+            GraphBuilder graph(topology, config);
 
             // ...............................................................
             WHEN ("Comparing original to graph with stop signs")

@@ -5,11 +5,12 @@
  *      Author: Jonas Bergman
  */
 
+#include "../GraphBuilder.h"
+
 #include <iostream>
 
 #include "../../catchtest/catch.hpp"
 
-#include "../Graph.h"
 #include "../Topology.h"
 #include "../../config/ConfigurationReader.h"
 #include "../../mapprovider/postgis/PostGisProvider.h"
@@ -38,14 +39,14 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 			THEN ("we should not get an Exception")
 			{
 			    INFO ("calling Graph constructor");
-				REQUIRE_NOTHROW (Graph g(topology, config));
+				REQUIRE_NOTHROW (GraphBuilder g(topology, config));
 			}
 		}
 
 	    // ...................................................................
 		WHEN ("building a graph from the topology")
 		{
-		    Graph g(topology, config);
+		    GraphBuilder g(topology, config);
 		    const auto& boost_graph = g.getBoostGraph();
 		    LineGraphType& r_boost_line_graph = g.getBoostLineGraph();
 
@@ -70,7 +71,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		// ...................................................................
 		WHEN ("we try print out a Graph from the Topology")
 		{
-		    Graph g(topology, config);
+		    GraphBuilder g(topology, config);
 
 		    THEN ("we should get a print out")
 		    {
@@ -92,7 +93,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		    rd2.direction = Edge::DirectionType::FROM_TO;
 		    e2.setRoadData(rd2);
 
-		    Graph g2(topology, config);
+		    GraphBuilder g2(topology, config);
 
 		    THEN ("the # of edges in the graph representation"
 		          " should as many as in the topology")
@@ -117,7 +118,7 @@ SCENARIO ("Building a small graph", "[graph][basic]")
 		    rd2.direction = Edge::DirectionType::FROM_TO;
 		    e2.setRoadData(rd2);
 
-		    Graph g2(topology, config);
+		    GraphBuilder g2(topology, config);
 
 		    THEN ("the # of edges in the graph representation"
 		        " should be one more than in the topology")
@@ -149,9 +150,9 @@ SCENARIO ("Building graph with restrictions", "[graph][restrictions]")
             pgp.getTopology(topology);
             pgp.setRestrictionsAndCosts(topology);
 
-            Graph graph_restr(topology, config);
+            GraphBuilder graph_restr(topology, config);
 
-            Graph graph_unrestr(topology, config, false);
+            GraphBuilder graph_unrestr(topology, config, false);
 
             // ...............................................................
             WHEN ("Adding a turning restriction and a point restriction (barrier)")

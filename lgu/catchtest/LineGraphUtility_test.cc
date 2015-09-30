@@ -5,8 +5,9 @@
  *      Author: Jonas Bergman
  */
 
-#include "../LineGraphUtility.h"
 #include <chrono>
+
+#include "../LineGraphBuilderUtility.h"
 using namespace std::chrono;
 
 

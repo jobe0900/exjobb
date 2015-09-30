@@ -1,12 +1,12 @@
-/**  Graph.
+/**  GraphBuilder.
  *
- * #include "Graph.h"
+ * #include "GraphBuilder.h"
  *
  * @author Jonas Bergman
  */
 
-#ifndef GRAPH_GRAPH_H_
-#define GRAPH_GRAPH_H_
+#ifndef GRAPH_GRAPHBUILDER_H_
+#define GRAPH_GRAPHBUILDER_H_
 
 // SYSTEM INCLUDES
 //
@@ -50,7 +50,7 @@ struct GraphEdge
 
 /**
  * A Node in the LineGraph corresponds directly to an Edge in the original
- * Graph and topology. It is connected to another Node (Edge) if both the
+ * GraphBuilder and topology. It is connected to another Node (Edge) if both the
  * edges are adjacent and there is no restriction in the Vertex for travel
  * along them.
  * lgNodeId === graphEdgeId
@@ -109,51 +109,50 @@ typedef std::map<EdgeIdType, NodeType>       GraphEdgeIdToNodeMapType;
 
 
 /**
- * A class for a keeping Topology and optional Restrictions and Costs, and
- * from that informations building a Boost graph that is transformed to
- * another Boost graph representing a Line Graph.
+ * A class for building (Boost) Graph and LineGraph from a Topology and
+ * ra Configuration with optional Restrictions and Costs applied.
  */
-class Graph
+class GraphBuilder
 {
 public:
 // LIFECYCLE
     /** Constructor.
      * Disabled.
      */
-    Graph() = delete;
+    GraphBuilder() = delete;
 
     /** Constructor.
-     * Graph should be based on the supplied topology.
+     * GraphBuilder should be based on the supplied topology.
      * @param   rTopology       The topology to use as basis for the graph.
      * @param   rConfig         The configuration used for topology and all.
      * @param   useRestrictions If the graph should be built with restrictions or not.
      */
-    Graph(Topology& rTopology, const Configuration& rConfig, bool useRestrictions = true);
+    GraphBuilder(Topology& rTopology, const Configuration& rConfig, bool useRestrictions = true);
 
     /** Copy constructor.
      * Disabled.
      */
-    Graph(const Graph& from) = delete;
+    GraphBuilder(const GraphBuilder& from) = delete;
 
     /** Destructor.
      */
-    ~Graph();
+    ~GraphBuilder();
 
 // OPERATORS
     /** Output operator to print to a stream.
      */
     friend
-    std::ostream&       operator<<(std::ostream& os, const Graph& rGraph);
+    std::ostream&       operator<<(std::ostream& os, const GraphBuilder& rGraph);
 
 // OPERATIONS
 // ACCESS
     /**
-     * @return  The number of Vertices in the Graph.
+     * @return  The number of Vertices in the GraphBuilder.
      */
     size_t              nrVertices() const;
 
     /**
-     * @return  The number of Edges in the Graph.
+     * @return  The number of Edges in the GraphBuilder.
      */
     size_t              nrEdges() const;
 
@@ -168,13 +167,13 @@ public:
     size_t              nrLines() const;
 
     /** Builds graph if necessary before returning.
-     * @return  The Boost Graph representation of the Graph.
+     * @return  The Boost GraphBuilder representation of the GraphBuilder.
      * @throws  GraphException if something goes wrong building the graph.
      */
     const GraphType&    getBoostGraph();
 
     /** Get a reference to the line graph.
-     * @return  The Boost Graph representation of the LineGraph.
+     * @return  The Boost GraphBuilder representation of the LineGraph.
      * @throws  GraphException if something goes wrong building the graph.
      */
     LineGraphType&       getBoostLineGraph();
@@ -253,15 +252,15 @@ private:
 
     /** Get the graph vertex corresponding to a given id.
      * @param   id      The vertex' topology id.
-     * @return  Reference to the Graph vertex corresponding to id.
+     * @return  Reference to the GraphBuilder vertex corresponding to id.
      * @throw   GraphException if there is no corresponding vertex to id.
      */
     const VertexType&   getGraphVertex(VertexIdType id) const;
 
     // buidlLineGraph() ------------------------------------------------------
-    // Used when transforming the Graph to a LineGraph
+    // Used when transforming the GraphBuilder to a LineGraph
 
-    /** Start converting the Graph to a LineGraph.
+    /** Start converting the GraphBuilder to a LineGraph.
      */
     void                buildLineGraph();
 

@@ -1,18 +1,18 @@
 /*
- * Graph.cc
+ * GraphBuilder.cc
  *
  *  Created on: 2015-05-16
  *      Author: Jonas Bergman
  */
 
-#include "Graph.h"  // class implemented
+#include "GraphBuilder.h"  // class implemented
 
 #include <typeinfo>
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-Graph::Graph(Topology& rTopology, const Configuration& rConfig, bool useRestrictions)
+GraphBuilder::GraphBuilder(Topology& rTopology, const Configuration& rConfig, bool useRestrictions)
     : mGraph(),
       mLineGraph(),
       mIdToVertexMap(),
@@ -29,13 +29,13 @@ Graph::Graph(Topology& rTopology, const Configuration& rConfig, bool useRestrict
     buildLineGraph();
 }
 
-Graph::~Graph()
+GraphBuilder::~GraphBuilder()
 {
 }
 
 //============================= OPERATORS ====================================
 std::ostream&
-operator<<(std::ostream& os, const Graph& rGraph)
+operator<<(std::ostream& os, const GraphBuilder& rGraph)
 {
     rGraph.printGraphInformation(os);
 
@@ -56,70 +56,70 @@ operator<<(std::ostream& os, const Graph& rGraph)
 //============================= OPERATIONS ===================================
 //============================= ACESS      ===================================
 size_t
-Graph::nrVertices() const
+GraphBuilder::nrVertices() const
 {
     return mIdToVertexMap.size();
 }
 
 size_t
-Graph::nrEdges() const
+GraphBuilder::nrEdges() const
 {
     return mIdToEdgeMap.size();
 }
 
 size_t
-Graph::nrNodes() const
+GraphBuilder::nrNodes() const
 {
     return boost::num_vertices(mLineGraph);
 }
 
 size_t
-Graph::nrLines() const
+GraphBuilder::nrLines() const
 {
     return boost::num_edges(mLineGraph);
 }
 
 const GraphType&
-Graph::getBoostGraph()
+GraphBuilder::getBoostGraph()
 {
     return mGraph;
 }
 
 LineGraphType&
-Graph::getBoostLineGraph()
+GraphBuilder::getBoostLineGraph()
 {
     return mLineGraph;
 }
 
 const LineGraphType&
-Graph::getBoostLineGraph() const
+GraphBuilder::getBoostLineGraph() const
 {
     return mLineGraph;
 }
 
 const Topology&
-Graph::getTopology() const
+GraphBuilder::getTopology() const
 {
     return mrTopology;
 }
 
 //============================= INQUIRY    ===================================
 bool
-Graph::hasVertex(VertexIdType vertexId) const
+GraphBuilder::hasVertex(VertexIdType vertexId) const
 {
     const auto& it = mIdToVertexMap.find(vertexId);
     return (it != mIdToVertexMap.end());
 }
 
 bool
-Graph::hasNode(EdgeIdType nodeId) const
+GraphBuilder::hasNode(EdgeIdType nodeId) const
 {
     const auto& it = mEdgeIdToNodeMap.find(nodeId);
     return (it != mEdgeIdToNodeMap.end());
 }
 
 const NodeType&
-Graph::getLineGraphNode(NodeIdType id) const
+GraphBuilder::getLineGraphNode(NodeIdType id) const
 {
     const auto& res = mEdgeIdToNodeMap.find(id);
     if(res == mEdgeIdToNodeMap.end())
@@ -131,7 +131,7 @@ Graph::getLineGraphNode(NodeIdType id) const
 }
 
 bool
-Graph::isRestricted() const
+GraphBuilder::isRestricted() const
 {
     return mUseRestrictions;
 }
@@ -140,14 +140,14 @@ Graph::isRestricted() const
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
 void
-Graph::buildGraph()
+GraphBuilder::buildGraph()
 {
     addTopoVerticesToGraph();
     addTopoEdgesToGraph();
 }
 
 void
-Graph::addTopoVerticesToGraph()
+GraphBuilder::addTopoVerticesToGraph()
 {
     VertexIdType v_ix = 0;
     for(const auto& vertexpair : mrTopology.mVertexMap)
@@ -161,7 +161,7 @@ Graph::addTopoVerticesToGraph()
 }
 
 void
-Graph::addTopoEdgesToGraph()
+GraphBuilder::addTopoEdgesToGraph()
 {
     EdgeIdType e_ix = 0;
 
@@ -201,7 +201,7 @@ Graph::addTopoEdgesToGraph()
 }
 
 void
-Graph::addDirectedEdge(EdgeIdType id,
+GraphBuilder::addDirectedEdge(EdgeIdType id,
                        const VertexType& source,
                        const VertexType& target,
                        EdgeIdType e_ix,
@@ -223,7 +223,7 @@ Graph::addDirectedEdge(EdgeIdType id,
 }
 
 const VertexType&
-Graph::getGraphVertex(VertexIdType id) const
+GraphBuilder::getGraphVertex(VertexIdType id) const
 {
     const auto& res = mIdToVertexMap.find(id);
     if(res == mIdToVertexMap.end())
@@ -235,14 +235,14 @@ Graph::getGraphVertex(VertexIdType id) const
 }
 
 void
-Graph::buildLineGraph()
+GraphBuilder::buildLineGraph()
 {
     mLineGraph.clear();
     addGraphEdgesToLineGraph();
 }
 
 void
-Graph::addGraphEdgesToLineGraph()
+GraphBuilder::addGraphEdgesToLineGraph()
 {
     // iterate through edges: add as Node.
     for(auto e_it = boost::edges(mGraph);
@@ -263,7 +263,7 @@ Graph::addGraphEdgesToLineGraph()
 }
 
 void
-Graph::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
+GraphBuilder::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
 {
     EdgeIdType e_graph_id = boost::get(&GraphEdge::graphEdgeId, mGraph, rGraphEdge);
     EdgeIdType e_topo_id  = boost::get(&GraphEdge::topoEdgeId, mGraph, rGraphEdge);
@@ -282,7 +282,7 @@ Graph::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
 }
 
 void
-Graph::connectSourceNodeToTargetNodesViaVertex(
+GraphBuilder::connectSourceNodeToTargetNodesViaVertex(
     const NodeType& rSourceNode,
     const VertexType& rViaVertex)
 {
@@ -357,7 +357,7 @@ Graph::connectSourceNodeToTargetNodesViaVertex(
 }
 
 double
-Graph::calculateTurnCost(EdgeIdType sourceEdgeId, EdgeIdType targetEdgeId) const
+GraphBuilder::calculateTurnCost(EdgeIdType sourceEdgeId, EdgeIdType targetEdgeId) const
 {
     const Edge& source = mrTopology.getEdge(sourceEdgeId);
     const Edge& target = mrTopology.getEdge(targetEdgeId);
@@ -365,7 +365,7 @@ Graph::calculateTurnCost(EdgeIdType sourceEdgeId, EdgeIdType targetEdgeId) const
 }
 
 bool
-Graph::edgeHasNoExit(EdgeIdType edgeId)
+GraphBuilder::edgeHasNoExit(EdgeIdType edgeId)
 {
     Edge& e = mrTopology.getEdge(edgeId);
     if(e.hasRestrictions() && e.restrictions().hasNoExitRestriction())
@@ -376,7 +376,7 @@ Graph::edgeHasNoExit(EdgeIdType edgeId)
 }
 
 std::vector<EdgeIdType>
-Graph::getOutEdges(VertexIdType vertexId) const
+GraphBuilder::getOutEdges(VertexIdType vertexId) const
 {
     std::vector<EdgeIdType> out_edges;
     VertexType graphVertex = getGraphVertex(vertexId);
@@ -391,7 +391,7 @@ Graph::getOutEdges(VertexIdType vertexId) const
 }
 
 std::vector<EdgeIdType>
-Graph::getRestrictedTargets(EdgeIdType edgeId, bool isOppositeDir) const
+GraphBuilder::getRestrictedTargets(EdgeIdType edgeId, bool isOppositeDir) const
 {
     std::vector<EdgeIdType> restricted_targets;
 
@@ -441,7 +441,7 @@ Graph::getRestrictedTargets(EdgeIdType edgeId, bool isOppositeDir) const
 }
 
 bool
-Graph::isTargetRestricted(
+GraphBuilder::isTargetRestricted(
     const std::vector<EdgeIdType>& rRestrictedTargets,
     EdgeIdType targetId) const
 {
@@ -463,7 +463,7 @@ Graph::isTargetRestricted(
 }
 
 void
-Graph::printGraphInformation(std::ostream& os) const
+GraphBuilder::printGraphInformation(std::ostream& os) const
 {
     os << "Graph: #vertices: " << nrVertices()
        << ", #edges: " << nrEdges()
@@ -473,7 +473,7 @@ Graph::printGraphInformation(std::ostream& os) const
 }
 
 void
-Graph::printVertices(std::ostream& os) const
+GraphBuilder::printVertices(std::ostream& os) const
 {
     for(auto v_it = boost::vertices(mGraph);
         v_it.first != v_it.second;
@@ -492,7 +492,7 @@ Graph::printVertices(std::ostream& os) const
 }
 
 void
-Graph::printEdges(std::ostream& os) const
+GraphBuilder::printEdges(std::ostream& os) const
 {
     for(auto e_it = boost::edges(mGraph);
         e_it.first != e_it.second;
@@ -511,7 +511,7 @@ Graph::printEdges(std::ostream& os) const
 }
 
 void
-Graph::printNodes(std::ostream& os) const
+GraphBuilder::printNodes(std::ostream& os) const
 {
     for(auto n_it = boost::vertices(mLineGraph);
         n_it.first != n_it.second;
@@ -529,7 +529,7 @@ Graph::printNodes(std::ostream& os) const
 }
 
 void
-Graph::printLines(std::ostream& os) const
+GraphBuilder::printLines(std::ostream& os) const
 {
     for(auto line_it = boost::edges(mLineGraph);
         line_it.first != line_it.second;

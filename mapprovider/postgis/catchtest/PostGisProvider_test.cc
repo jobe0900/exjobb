@@ -19,7 +19,7 @@
 #include "../../../util/TimeToStringMaker.h"
 #include "../../../graph/Edge.h"
 #include "../../../graph/Vertex.h"
-#include "../../../graph/Graph.h"
+#include "../../../graph/GraphBuilder.h"
 
 SCENARIO ("PostGis topology handling", "[postgis][topology]")
 {
@@ -126,7 +126,7 @@ SCENARIO ("PostGis queries", "[postgis][query]")
 			    Topology topology;
 			    db_handler.getTopology(topology);
 			    Configuration config;
-			    Graph graph(topology, config);
+			    GraphBuilder graph(topology, config);
 			    std::ostringstream oss;
 
 			    THEN ("we should be able to print some information")

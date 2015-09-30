@@ -128,7 +128,7 @@ PostGisProvider::setRestrictionsAndCosts(Topology& rTopology)
 }
 
 void
-PostGisProvider::persistLineGraph(const Graph& rGraph)
+PostGisProvider::persistLineGraph(const GraphBuilder& rGraph)
 {
     setUpSchemaAndTables();
     insertData(rGraph);
@@ -582,7 +582,7 @@ PostGisProvider::createLineGraphTables()
 }
 
 void
-PostGisProvider::insertData(const Graph& rGraph)
+PostGisProvider::insertData(const GraphBuilder& rGraph)
 {
 	try
 	{
@@ -613,7 +613,7 @@ PostGisProvider::insertData(const Graph& rGraph)
 void
 PostGisProvider::prepareLineGraphData(
     pqxx::transaction_base& rTrans,
-    const Graph&            rGraph)
+    const GraphBuilder&            rGraph)
 {
     const LineGraphType& rLineGraph = rGraph.getBoostLineGraph();
     const Topology&      rTopology  = rGraph.getTopology();
