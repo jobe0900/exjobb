@@ -35,17 +35,17 @@ Configuration for connecting to the database holding map data. The expected keys
 Topology
 --------
 
-Configurations for building or reading topology from a database. Might have different meanings depeding on which *MapProvider* are used. Topologies can be prebuilt, or they can be generated each time, depending on the settings in `"build_topo"`. It is also possible to define a simple json test file, for testing simple topologies.
+Configurations for building or reading topology from a database. Might have different meanings depending on which *MapProvider* are used. Topologies can be pre-built, or they can be generated each time, depending on the settings in `"build_topo"`. It is also possible to define a simple json test file, for testing simple topologies.
 
 - **"provider"**:
     - *name* of *MapProvider*
         - `"postgis"` when using `postgis_topology` for building topologies.
-        - `"pgrouting"` when using `pgrouting` for building toplogies. 
+        - `"pgrouting"` when using `pgrouting` for building topologies. 
         - `"jsontest"` for simple json test topology.
 
 - **"postgis"**:  
     - **"topo_name"**:
-        - *basename* for prebuilt topologies (e.g. `"test"`), combined with `roads_prefix` and `topo_prefix` for actual names such as `"highways_test"` and `"topo_test"`.
+        - *basename* for pre-built topologies (e.g. `"test"`), combined with `roads_prefix` and `topo_prefix` for actual names such as `"highways_test"` and `"topo_test"`.
     
     - **"roads_prefix"**:
         - *prefix* to add to `topo_name` (e.g. `"highways"`) for table of roads network, see above.
@@ -122,7 +122,7 @@ Vehicle
 Configuration about the vehicle to route through the topology. Information might be needed to take restrictions in account.
 
 - **"category"**:
-    - *name* of OSM catagory of the vehicle. [OSM Access](http://wiki.openstreetmap.org/wiki/Key:access). (E.g. "motorcar"). Definition of the category must state dimensions as below.
+    - *name* of OSM category of the vehicle. [OSM Access](http://wiki.openstreetmap.org/wiki/Key:access). (E.g. "motorcar"). Definition of the category must state dimensions as below.
 - **_"category_name"_**:
     - *height* of vehicle in meters.
     - *length* of vehicle in meters.
