@@ -127,7 +127,10 @@ public:
      * @param   rConfig         The configuration used for topology and all.
      * @param   useRestrictions If the graph should be built with restrictions or not.
      */
-    GraphBuilder(Topology& rTopology, const Configuration& rConfig, bool useRestrictions = true);
+    GraphBuilder(
+        Topology& rTopology,
+        const Configuration& rConfig,
+        bool useRestrictions = true);
 
     /** Copy constructor.
      * Disabled.
@@ -233,6 +236,20 @@ private:
      */
     void                addTopoEdgesToGraph();
 
+    /** Check if an edge is restricted
+     * @param   rEdge   Reference to edge
+     * @return  bool
+     */
+    bool                isEdgeRestricted(const Edge& rEdge) const;
+
+    /** Add the correct number of directed edges from the topo Edge.
+     * @param   rEdge        The topological graph data
+     * @param   rNewEdgeId   The running id for the graph's directed edges.
+     */
+    void                addDirectedGraphEdges(
+                            const Edge& rEdge,
+                            EdgeIdType& rNewEdgeId);
+
     /** Add a directed edge from source to target.
      * Helper for 'addTopoEdgesToGraph()'.
      * @param   id      The edge's topology id.
@@ -319,6 +336,9 @@ private:
      */
     std::vector<EdgeIdType>
                         getRestrictedTargets(
+                            const LineGraphNode& rSourceNode) const;
+    std::vector<EdgeIdType>
+                        getRestrictedTargets(
                             EdgeIdType edgeId,
                             bool       isOppositeDir) const;
 
@@ -356,4 +376,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* GRAPH_TOPOLOGYGRAPH_H_ */
+#endif /* GRAPH_GRAPHBUILDER_H_ */

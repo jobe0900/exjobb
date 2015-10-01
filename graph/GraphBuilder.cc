@@ -12,7 +12,10 @@
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
 //============================= LIFECYCLE ====================================
-GraphBuilder::GraphBuilder(Topology& rTopology, const Configuration& rConfig, bool useRestrictions)
+GraphBuilder::GraphBuilder(
+    Topology& rTopology,
+    const Configuration& rConfig,
+    bool useRestrictions)
     : mGraph(),
       mLineGraph(),
       mIdToVertexMap(),
@@ -169,43 +172,63 @@ GraphBuilder::addTopoEdgesToGraph()
     {
         const Edge& e = edgepair.second;
 
-        if(mUseRestrictions && e.isRestricted(mrConfiguration))
+        if(isEdgeRestricted(e))
         {
-            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
-                        << "Graph:addTopoEdgeToGraph(): "
-                        << "Restricted Edge id " << e.id();
             continue;
         }
 
-        const VertexType& s = getGraphVertex(e.source());
-        const VertexType& t = getGraphVertex(e.target());
+        addDirectedGraphEdges(e, e_ix);
+    }
+}
 
-        if(e.roadData().direction == Edge::DirectionType::FROM_TO
-        || e.roadData().direction == Edge::DirectionType::BOTH)
-        {
-            for(size_t lane = 1; lane <= e.roadData().nrLanes; ++lane) {
-                addDirectedEdge(e.id(), s, t, e_ix, false);
-                ++e_ix;
-            }
+
+bool
+GraphBuilder::isEdgeRestricted(const Edge& rEdge) const
+{
+    if(mUseRestrictions && rEdge.isRestricted(mrConfiguration))
+    {
+        BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                            << "Graph:addTopoEdgeToGraph(): "
+                            << "Restricted Edge id " << rEdge.id();
+        return true;
+    }
+    return false;
+}
+
+void
+GraphBuilder::addDirectedGraphEdges(const Edge& rEdge, EdgeIdType& rNewEdgeId)
+{
+    const VertexType& s = getGraphVertex(rEdge.source());
+    const VertexType& t = getGraphVertex(rEdge.target());
+
+    // add all lanes in forward direction
+    if(rEdge.roadData().direction == Edge::DirectionType::FROM_TO
+        || rEdge.roadData().direction == Edge::DirectionType::BOTH)
+    {
+        for(size_t lane = 1; lane <= rEdge.roadData().nrLanes; ++lane) {
+            addDirectedEdge(rEdge.id(), s, t, rNewEdgeId, false);
+            ++rNewEdgeId;
         }
+    }
 
-        if(e.roadData().direction == Edge::DirectionType::TO_FROM
-        || e.roadData().direction == Edge::DirectionType::BOTH)
-        {
-            for(size_t lane = 1; lane <= e.roadData().nrLanes; ++lane) {
-                addDirectedEdge(e.id(), t, s, e_ix, true);
-                ++e_ix;
-            }
+    // add all lanes in backward direction
+    if(rEdge.roadData().direction == Edge::DirectionType::TO_FROM
+        || rEdge.roadData().direction == Edge::DirectionType::BOTH)
+    {
+        for(size_t lane = 1; lane <= rEdge.roadData().nrLanes; ++lane) {
+            addDirectedEdge(rEdge.id(), t, s, rNewEdgeId, true);
+            ++rNewEdgeId;
         }
     }
 }
 
 void
-GraphBuilder::addDirectedEdge(EdgeIdType id,
-                       const VertexType& source,
-                       const VertexType& target,
-                       EdgeIdType e_ix,
-                       bool  oppositeDirection)
+GraphBuilder::addDirectedEdge(
+    EdgeIdType          id,
+    const VertexType&   source,
+    const VertexType&   target,
+    EdgeIdType          e_ix,
+    bool                oppositeDirection)
 {
     const auto& res = boost::add_edge(source, target, mGraph);
     if(res.second == true)
@@ -286,27 +309,34 @@ GraphBuilder::connectSourceNodeToTargetNodesViaVertex(
     const NodeType& rSourceNode,
     const VertexType& rViaVertex)
 {
+    LineGraphNode source_node;
     EdgeIdType topo_source_id =
+//    source_node.topoEdgeId =
         boost::get(&LineGraphNode::topoEdgeId, mLineGraph, rSourceNode);
 
     if(edgeHasNoExit(topo_source_id))
+//    if(edgeHasNoExit(source_node.topoEdgeId))
     {
         return;
     }
 
     NodeIdType source_node_id =
+//    source_node.graphEdgeId =
         boost::get(&LineGraphNode::graphEdgeId, mLineGraph, rSourceNode);
     bool is_opposite_direction =
+//    source_node.oppositeDirection =
         boost::get(&LineGraphNode::oppositeDirection, mLineGraph, rSourceNode);
 
 
     std::vector<EdgeIdType> restricted_targets =
         getRestrictedTargets(topo_source_id, is_opposite_direction);
+//        getRestrictedTargets(source_node);
 
     VertexIdType via_topo_vertex_id =
         boost::get(&GraphVertex::topoVertexId, mGraph, rViaVertex);
 
     Edge& source_edge = mrTopology.getEdge(topo_source_id);
+//    Edge& source_edge = mrTopology.getEdge(source_node.topoEdgeId);
 
     for(auto target_it = boost::out_edges(rViaVertex, mGraph);
         target_it.first != target_it.second;
@@ -391,23 +421,86 @@ GraphBuilder::getOutEdges(VertexIdType vertexId) const
 }
 
 std::vector<EdgeIdType>
+//GraphBuilder::getRestrictedTargets(EdgeIdType edgeId, bool isOppositeDir) const
+GraphBuilder::getRestrictedTargets(const LineGraphNode& rSourceNode) const
+{
+    std::vector<EdgeIdType> restricted_targets;
+
+    // Find all out edges from the target vertex of the edge,
+    // which depends on if the edge is the opposite direction of the topo edge.
+//    Edge& edge = mrTopology.getEdge(edgeId);
+    Edge& edge = mrTopology.getEdge(rSourceNode.topoEdgeId);
+
+//    VertexIdType target_vertex = isOppositeDir ? edge.source() : edge.target();
+    VertexIdType target_vertex =
+        rSourceNode.oppositeDirection ? edge.source() : edge.target();
+
+    std::vector<EdgeIdType> out_edges = getOutEdges(target_vertex);
+    std::vector<EdgeIdType> targets;
+    targets.insert(targets.end(), out_edges.begin(), out_edges.end());
+
+    // build map of restricted targets
+    for(EdgeIdType e_id : targets)
+    {
+//        if(e_id == edgeId)
+        // don't add self to target
+        if(e_id == rSourceNode.topoEdgeId)
+        {
+            continue;
+        }
+
+        Edge& e = mrTopology.getEdge(e_id);
+
+        if(e.isRestricted(mrConfiguration))
+        {
+            BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                        << "Graph:getRestrictedTargets(): "
+//                        << "Source id " << edgeId
+                        << "Source id " << rSourceNode.topoEdgeId
+                        << " has restricted target: " << e_id;
+            restricted_targets.push_back(e_id);
+        }
+    }
+
+
+    // add turning restrictions to target restrictions
+    if(edge.hasRestrictions() && edge.restrictions().hasTurningRestriction())
+    {
+        BOOST_LOG_SEV(mLog, boost::log::trivial::info)
+                    << "Graph:getRestrictedTargets(): "
+//                    << "Source id " << edgeId << " has TURN restricted targets. ";
+                    << "Source id " << rSourceNode.topoEdgeId
+                    << " has TURN restricted targets. ";
+        std::vector<EdgeIdType> turn_restricted_targets =
+            edge.restrictions().restrictedTargetEdges();
+        restricted_targets.insert(restricted_targets.end(),
+            turn_restricted_targets.begin(), turn_restricted_targets.end());
+    }
+
+    return restricted_targets;
+}
+
+std::vector<EdgeIdType>
 GraphBuilder::getRestrictedTargets(EdgeIdType edgeId, bool isOppositeDir) const
 {
     std::vector<EdgeIdType> restricted_targets;
 
     // Find all out edges from the target vertex of the edge,
     // which depends on if the edge is the opposite direction of the topo edge.
-    std::vector<EdgeIdType> targets;
     Edge& edge = mrTopology.getEdge(edgeId);
 
     VertexIdType target_vertex = isOppositeDir ? edge.source() : edge.target();
 
     std::vector<EdgeIdType> out_edges = getOutEdges(target_vertex);
+    std::vector<EdgeIdType> targets;
     targets.insert(targets.end(), out_edges.begin(), out_edges.end());
 
+    // build map of restricted targets
     for(EdgeIdType e_id : targets)
     {
         if(e_id == edgeId)
+        // don't add self to target
+//        if(e_id == rSourceNode.topoEdgeId)
         {
             continue;
         }
@@ -419,22 +512,25 @@ GraphBuilder::getRestrictedTargets(EdgeIdType edgeId, bool isOppositeDir) const
             BOOST_LOG_SEV(mLog, boost::log::trivial::info)
                         << "Graph:getRestrictedTargets(): "
                         << "Source id " << edgeId
+//                        << "Source id " << rSourceNode.topoEdgeId
                         << " has restricted target: " << e_id;
             restricted_targets.push_back(e_id);
         }
     }
 
 
+    // add turning restrictions to target restrictions
     if(edge.hasRestrictions() && edge.restrictions().hasTurningRestriction())
     {
         BOOST_LOG_SEV(mLog, boost::log::trivial::info)
                     << "Graph:getRestrictedTargets(): "
-                    << "Source id " << edgeId << " has TURN restricted targets. ";
+                    << "Source id " << edgeId
+//                    << "Source id " << rSourceNode.topoEdgeId
+                    << " has TURN restricted targets. ";
         std::vector<EdgeIdType> turn_restricted_targets =
             edge.restrictions().restrictedTargetEdges();
         restricted_targets.insert(restricted_targets.end(),
             turn_restricted_targets.begin(), turn_restricted_targets.end());
-
     }
 
     return restricted_targets;
