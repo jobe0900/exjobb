@@ -375,6 +375,25 @@ private:
                         getRestrictedTargets(
                             const LineGraphNode& rSourceNode) const;
 
+    /** Look through the targets from a source to find which are restricted
+     * and add them to a collection of restricted.
+     * @param   rSsourceEdge        The source edge.
+     * @param   rTargets            Targets from that source.
+     * @param   rRestrictedTargets  A collection to build up.
+     */
+    void                findRestrictedTargets(
+                            const Edge&                     rSourceEdge,
+                            const std::vector<EdgeIdType>&  rTargets,
+                            std::vector<EdgeIdType>&        rRestrictedTargets) const;
+
+    /** Add the turning restricted targets to the other restricted targets.
+     * @param   rSourceEdge         The source edge.
+     * @param   rRestrictedTargets  The collection of restricted targets.
+     */
+    void                addTurningRestrictedTargets(
+                            const Edge&               rSource,
+                            std::vector<EdgeIdType>&  rRestrictedTargets) const;
+
     /**
      * @return  true if this target edge has restricted access from the source.
      */

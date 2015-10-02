@@ -468,20 +468,31 @@ GraphBuilder::getRestrictedTargets(const LineGraphNode& rSourceNode) const
 
     // Find all out edges from the target vertex of the edge,
     // which depends on if the edge is the opposite direction of the topo edge.
-    Edge& edge = mrTopology.getEdge(rSourceNode.topoEdgeId);
+    Edge& sourceEdge = mrTopology.getEdge(rSourceNode.topoEdgeId);
 
     VertexIdType target_vertex =
-        rSourceNode.oppositeDirection ? edge.source() : edge.target();
+        rSourceNode.oppositeDirection ? sourceEdge.source() : sourceEdge.target();
 
     std::vector<EdgeIdType> out_edges = getOutEdges(target_vertex);
     std::vector<EdgeIdType> targets;
     targets.insert(targets.end(), out_edges.begin(), out_edges.end());
 
     // build map of restricted targets
-    for(EdgeIdType e_id : targets)
+    findRestrictedTargets(sourceEdge, targets, restricted_targets);
+
+    return restricted_targets;
+}
+
+void
+GraphBuilder::findRestrictedTargets(
+    const Edge&                     rSourceEdge,
+    const std::vector<EdgeIdType>&  rTargets,
+    std::vector<EdgeIdType>&        rRestrictedTargets) const
+{
+    for(EdgeIdType e_id : rTargets)
     {
         // don't add self to target
-        if(e_id == rSourceNode.topoEdgeId)
+        if(e_id == rSourceEdge.id())
         {
             continue;
         }
@@ -492,28 +503,33 @@ GraphBuilder::getRestrictedTargets(const LineGraphNode& rSourceNode) const
         {
             BOOST_LOG_SEV(mLog, boost::log::trivial::info)
                         << "Graph:getRestrictedTargets(): "
-                        << "Source id " << rSourceNode.topoEdgeId
+                        << "Source id " << rSourceEdge.id()
                         << " has restricted target: " << e_id;
-            restricted_targets.push_back(e_id);
+            rRestrictedTargets.push_back(e_id);
         }
     }
 
-    // add turning restrictions to target restrictions
-    if(edge.hasRestrictions() && edge.restrictions().hasTurningRestriction())
+    addTurningRestrictedTargets(rSourceEdge, rRestrictedTargets);
+}
+
+void
+GraphBuilder::addTurningRestrictedTargets(
+    const Edge& rSourceEdge,
+    std::vector<EdgeIdType>& rRestrictedTargets) const
+{
+    if(rSourceEdge.hasRestrictions() &&
+        rSourceEdge.restrictions().hasTurningRestriction())
     {
         BOOST_LOG_SEV(mLog, boost::log::trivial::info)
                     << "Graph:getRestrictedTargets(): "
-                    << "Source id " << rSourceNode.topoEdgeId
+                    << "Source id " << rSourceEdge.id()
                     << " has TURN restricted targets. ";
         std::vector<EdgeIdType> turn_restricted_targets =
-            edge.restrictions().restrictedTargetEdges();
-        restricted_targets.insert(restricted_targets.end(),
+            rSourceEdge.restrictions().restrictedTargetEdges();
+        rRestrictedTargets.insert(rRestrictedTargets.end(),
             turn_restricted_targets.begin(), turn_restricted_targets.end());
     }
-
-    return restricted_targets;
 }
-
 
 bool
 GraphBuilder::isTargetRestricted(
