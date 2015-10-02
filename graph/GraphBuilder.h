@@ -308,6 +308,44 @@ private:
                             const NodeType& rSourceNode,
                             const VertexType& rViaVertex);
 
+    /** Extract LineGraphNode data from the LineGraph.
+     * @param   rNode     The descriptor in the LineGraph
+     * @return  a LineGraphNode
+     */
+    LineGraphNode       getLineGraphNodeData(const NodeType& rNode) const;
+
+    /** Add a line in the LineGraph, connecting the source and target nodes.
+     * @param   rSourceNode
+     * @param   rTargetNode
+     * @return  the added line
+     * @throw   GraphException
+     */
+    LineType            addLineGraphLine(
+                            const NodeType& rSourceNode,
+                            const NodeType& rTargetNode);
+
+    /** Add meta data ids for source, target and vertex to the newly added Line.
+     * @param   rLine
+     * @param   sourceId
+     * @param   targetId
+     * @param   viaVertexId
+     */
+    void                addLineMetaIds(
+                            const LineType& rLine,
+                            EdgeIdType sourceId,
+                            EdgeIdType targetId,
+                            VertexIdType viaVertexId);
+
+    /** Add the meta information about the cost to the new line.
+     * @param   rLine
+     * @param   rSourceEdge     The Source Edge
+     * @param   targetId        The id of the target edge in topology
+     */
+    void                addLineMetaCost(
+                            const LineType& rLine,
+                            const Edge&     rSourceEdge,
+                            EdgeIdType      targetId);
+
     /** Calculate the cost for making a turn from source edge to target.
      * Helper to `connectSourceNodeToTargetNodesViaVertex()`.
      * @param   sourceEdgeId    The edge (and node) id of the source.
@@ -330,17 +368,12 @@ private:
                         getOutEdges(VertexIdType vertexId) const;
 
     /**
-     * @param   edgeId          The topology id of the edge
-     * @param   isOppositeDir   If the graph edge is opposite direction of topo.
+     * @param   rSourceNode     The LineGraph Node
      * @return  A vector of all restricted edges from this Edge.
      */
     std::vector<EdgeIdType>
                         getRestrictedTargets(
                             const LineGraphNode& rSourceNode) const;
-    std::vector<EdgeIdType>
-                        getRestrictedTargets(
-                            EdgeIdType edgeId,
-                            bool       isOppositeDir) const;
 
     /**
      * @return  true if this target edge has restricted access from the source.

@@ -151,7 +151,7 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
 }
 
 
-SCENARIO ("LineGraphUtility timing", "[lgu][timing]")
+SCENARIO ("LineGraphUtility timing", "[lgu][.timing]")
 {
     try
     {
