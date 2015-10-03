@@ -8,7 +8,7 @@
 #include "../mapprovider/jsontest/JsonTestProvider.h"
 
 #include <string>
-#include "LineGraphBuilderUtility.h"  // class implemented
+#include "LineGraphUtility.h"  // class implemented
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
@@ -78,7 +78,6 @@ LineGraphUtility::persistLineGraph()
     catch(MapProviderException& mpe)
     {
         throw LineGraphUtilityException(mpe.what());
-
     }
 }
 //============================= ACESS      ===================================

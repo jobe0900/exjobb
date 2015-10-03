@@ -5,8 +5,8 @@
  * @author Jonas Bergman
  */
 
-#ifndef LGU_LINEGRAPHBUILDERUTILITY_H_
-#define LGU_LINEGRAPHBUILDERUTILITY_H_
+#ifndef LGU_LINEGRAPHUTILITY_H_
+#define LGU_LINEGRAPHUTILITY_H_
 
 // SYSTEM INCLUDES
 //
@@ -92,7 +92,7 @@ private:
     Configuration       mConfig;
     MapProvider*        mpMapProvider;
     Topology            mTopology;
-    GraphBuilder*              mpGraph;
+    GraphBuilder*       mpGraph;
 
 // CONSTANTS
 };
@@ -103,4 +103,4 @@ private:
 // EXTERNAL REFERENCES
 //
 
-#endif /* LGU_LINEGRAPHBUILDERUTILITY_H_ */
+#endif /* LGU_LINEGRAPHUTILITY_H_ */
