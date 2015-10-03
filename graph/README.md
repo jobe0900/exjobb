@@ -3,16 +3,16 @@ graph
 
 The `graph` package consists of classes for representing graphs.
 
-## Graph
-A Graph consists of a `Topology` and a `Configuration`. Those classes are used when building a `graph` and `linegraph` based on [Boost adjacency lists](http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/adjacency_list.html). The `Graph` class holds several `maps` that connects the original Edges and Vertices to those used internally in the Boost graphs, so that it is possible to backtrack information about those elements. The internal Boost types keeps some properties ["bundled"](http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/bundles.html), instead of as "interior" properties.
+## GraphBuilder
+The GraphBuilder is responsible for buildign graphs and linegraphs. It takes a `Topology` and a `Configuration`and uses them for building a `graph` and `linegraph` based on [Boost adjacency lists](http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/adjacency_list.html). The `GraphBuilder` class holds several `maps` that connects the original Edges and Vertices to those used internally in the Boost graphs, so that it is possible to backtrack information about those elements. The internal Boost types keeps some properties ["bundled"](http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/bundles.html), instead of as "interior" properties.
 
-The ordinary `graph` is a directed graph that connects the _vertices_ and _edges_ from the topology. The `linegraph` transforms that graph to an edge-based graph that turns the graph's edges into _nodes_ in the linegraph, and those edges are connected with _lines_.
+The ordinary `graph` is a directed graph that connects the _**vertices**_ and _**edges**_ from the topology. The `linegraph` transforms that graph to an edge-based graph that turns the graph's edges into _**nodes**_ in the linegraph, and those edges are connected with _**lines**_.
 
 ### Topology
 `Topology` is a class holding `Edges` and `Vertices` for the topology fetched from the `MapProvider`. It simply states which `Vertices` are connected by which `Edges`, without any costs or restrictions or directions. When created it validates that the `source` and `target` Vertices of the Edges actually exists in the topology.
 
 ### Edge
-The Edge holds some relevant data from the topology. It has an `id`, and a field for which the original `osm_id` was before building the database topology. It also holds id to `source` Vertex and id to `target` Vertex, some data about the geometry and the "road" such as # of lanes, a structure for costs and optionally for restrictions..
+The Edge holds some relevant data from the topology. It has an `id`, and a field for which the original `osm_id` was before building the database topology. It also holds id to `source` Vertex and id to `target` Vertex, some data about the geometry and the "road" such as number of lanes, a structure for costs and optionally for restrictions.
 
 ### EdgeCost
 The cost for travel among an edge is the number of seconds it takes. The base for this calculation is of course dependent on the length of the edge, and the speed. The speed an be set as an explicit `maxspeed` restriction, or by looking up the configuration for a `surface` if such is stated, else the speed is found by a look up for the default speed for the "highway type" (road category).
@@ -32,16 +32,6 @@ an edge. Those restrictions are:
 - **NoExit**: if the edge has no exit, it should not be used for building a linegraph.
 
 (Turn restriction via other edges and not just via a vertex are difficult. At the time when converting the topology to a line graph it is impossible to have the relevant information. The solution is to set a flag on the Edge that there exist a VIA_WAY restriction that must be taken into account when routing, and the routing module must look up and make its own decisions somehow.)
-
-#### PointRestrictions
-There can be tags at a point (node) but not necessarily at a vertex. Can be a barrier or a sign. They need to be related to the corresponding edge. Those tags that might impose restrictions on travel are
-
-- **Access**: to specify a `barrier` more
-- **Barrier**: might be combined with `access` (or other tags found in hstore if not following guidelines). What does for example `motorcar=no` mean, when no other vehicles are specified? Are all bigger than a car restricted, or are all other allowed?
-
-Traffic signs must add tags on the edge so there is no need to try to figure out which edge or vertex the sign belongs to.
-
-Edges that somehow are restricted are not included in the LineGraph as possible to travel to, but travel from that edge are allowed. This is to make it possible to use LineGraph routing in cooperation to some other technique, so it is possible to get routed somewhere along an edge that has a barrier restriction in the end, which makes the edge unsuitable for travel to.
 
 ### Vertex
 The Vertex class is simple with just an `id` and a `point` location.
