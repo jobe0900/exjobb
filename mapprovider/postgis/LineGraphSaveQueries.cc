@@ -4,7 +4,7 @@
  *      Author: Jonas Bergman
  */
 
-#include "LineGraphBuilderSaveQueries.h"
+#include "LineGraphSaveQueries.h"
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 

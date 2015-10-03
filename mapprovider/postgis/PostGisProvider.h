@@ -36,7 +36,7 @@
 #include "../../osm/OsmHighway.h"
 #include "../../osm/OsmVehicle.h"
 #include "../../util/TimeToStringMaker.h"
-#include "LineGraphBuilderSaveQueries.h"
+#include "LineGraphSaveQueries.h"
 
 // FORWARD REFERENCES
 //
