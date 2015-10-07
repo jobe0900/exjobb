@@ -92,7 +92,7 @@ private:
     Configuration       mConfig;
     MapProvider*        mpMapProvider;
     Topology            mTopology;
-    GraphBuilder*       mpGraph;
+    GraphBuilder*       mpGraphBuilder;
 
 // CONSTANTS
 };

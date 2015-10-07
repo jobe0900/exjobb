@@ -18,7 +18,7 @@ LineGraphUtility::LineGraphUtility(const std::string& rFilename)
       mConfig(),
       mpMapProvider(nullptr),
       mTopology(),
-      mpGraph(nullptr)
+      mpGraphBuilder(nullptr)
 {
     try
     {
@@ -34,7 +34,7 @@ LineGraphUtility::LineGraphUtility(const std::string& rFilename)
 LineGraphUtility::~LineGraphUtility()
 {
     delete mpMapProvider;
-    delete mpGraph;
+    delete mpGraphBuilder;
 }
 
 //============================= OPERATORS ====================================
@@ -42,7 +42,7 @@ LineGraphUtility::~LineGraphUtility()
 LineGraphType*
 LineGraphUtility::getLineGraph()
 {
-    LineGraphType& r_orig = mpGraph->getBoostLineGraph();
+    LineGraphType& r_orig = mpGraphBuilder->getBoostLineGraph();
     LineGraphType* p_new = new LineGraphType();
 
     // make a copy of the old graph into a new
@@ -73,7 +73,7 @@ LineGraphUtility::persistLineGraph()
 {
     try
     {
-        mpMapProvider->persistLineGraph(*mpGraph);
+        mpMapProvider->persistLineGraph(*mpGraphBuilder);
     }
     catch(MapProviderException& mpe)
     {
@@ -106,7 +106,7 @@ LineGraphUtility::initConfiguration()
     catch (ConfigurationException& ce)
     {
         delete mpMapProvider;
-        delete mpGraph;
+        delete mpGraphBuilder;
         throw LineGraphUtilityException(
             std::string("LineGraphUtility:initConfiguration: ") + ce.what());
     }
@@ -136,7 +136,7 @@ LineGraphUtility::initMapProvider()
     catch (MapProviderException& mpe)
     {
         delete mpMapProvider;
-        delete mpGraph;
+        delete mpGraphBuilder;
 
         throw LineGraphUtilityException(
             std::string("LineGraphUtility:initMapProvider: ") + mpe.what());
@@ -153,7 +153,7 @@ LineGraphUtility::initTopology()
     catch (MapProviderException& mpe)
     {
         delete mpMapProvider;
-        delete mpGraph;
+        delete mpGraphBuilder;
 
         throw LineGraphUtilityException(
             std::string("LineGraphUtility:initTopology ") + mpe.what());
@@ -170,7 +170,7 @@ LineGraphUtility::initRestrictionsAndCosts()
     catch (MapProviderException& mpe)
     {
         delete mpMapProvider;
-        delete mpGraph;
+        delete mpGraphBuilder;
 
         throw LineGraphUtilityException(
             std::string("LineGraphUtility:initRestrictionsAndCosts ") + mpe.what());
@@ -182,13 +182,13 @@ LineGraphUtility::buildGraph()
 {
     try
     {
-        delete mpGraph;
-        mpGraph = new GraphBuilder(mTopology, mConfig);
+        delete mpGraphBuilder;
+        mpGraphBuilder = new GraphBuilder(mTopology, mConfig);
     }
     catch (const std::exception& e)
     {
         delete mpMapProvider;
-        delete mpGraph;
+        delete mpGraphBuilder;
 
         throw LineGraphUtilityException(
             std::string("LineGraphUtility:buildGraph: ") + e.what());
