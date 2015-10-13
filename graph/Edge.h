@@ -132,7 +132,7 @@ public:
     /** Textual output of Edge.
      */
     friend
-    std::ostream&	  operator<<(std::ostream& os, const Edge& rEdge);
+    std::ostream&     operator<<(std::ostream& os, const Edge& rEdge);
 
 // OPERATIONS
     /** Set the Geometric data for this edge.
@@ -176,17 +176,17 @@ public:
     /**
      * @return  The id of this edge.
      */
-    EdgeIdType		  id()        const;
+    EdgeIdType        id()        const;
 
     /**
      * @return  The source vertex for this edge.
      */
-    VertexIdType	  sourceId()  const;
+    VertexIdType      sourceId()  const;
 
     /**
      * @return  The target vertex of this edge.
      */
-    VertexIdType	  targetId()  const;
+    VertexIdType      targetId()  const;
 
     /**
      * @return  The original OSM id for this edge.
@@ -259,10 +259,10 @@ public:
 
 private:
 // ATTRIBUTES
-    EdgeIdType		  mId;      // id in topology
+    EdgeIdType        mId;      // id in topology
     OsmIdType         mOsmId;
-    VertexIdType	  mSourceId;
-    VertexIdType	  mTargetId;
+    VertexIdType      mSourceId;
+    VertexIdType      mTargetId;
     GeomData          mGeomData;
     RoadData          mRoadData;
     EdgeRestriction*  mpRestrictions;

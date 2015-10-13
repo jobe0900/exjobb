@@ -107,19 +107,19 @@ Edge::~Edge()
 std::ostream&
 operator<<(std::ostream& os, const Edge& rEdge)
 {
-	os  << "Edge [id: " << rEdge.id()
-	    << ", osmId: " << rEdge.osmId()
-		<< ", source: " << rEdge.sourceId()
-		<< ", target: " << rEdge.targetId()
-		<< ", cost: " << rEdge.cost()
-		<< ", length: " << rEdge.geomData().length
-		<< ", speed: " << rEdge.speed()
-		<< "\n   road data: ";
-	rEdge.roadData().print(os);
+    os  << "Edge [id: " << rEdge.id()
+        << ", osmId: " << rEdge.osmId()
+        << ", source: " << rEdge.sourceId()
+        << ", target: " << rEdge.targetId()
+        << ", cost: " << rEdge.cost()
+        << ", length: " << rEdge.geomData().length
+        << ", speed: " << rEdge.speed()
+        << "\n   road data: ";
+    rEdge.roadData().print(os);
 
-	os  << "]";
+    os  << "]";
 
-	return os;
+    return os;
 }
 
 
