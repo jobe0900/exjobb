@@ -26,7 +26,7 @@
 //
 
 /**
- * Information about names in the database for topology data.
+ * Information about names in the database for cost data.
  */
 struct CostConfig
 {
