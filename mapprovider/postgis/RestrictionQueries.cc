@@ -39,7 +39,7 @@ RestrictionQueries::TurningRestrictions::
     OsmTurningRestriction* p_restriction {nullptr};
 
     // VIA WAY
-    if(fromEdge.target() != toEdge.source())
+    if(fromEdge.targetId() != toEdge.sourceId())
     {
         p_restriction = new OsmTurningRestriction(
             type,
@@ -50,7 +50,7 @@ RestrictionQueries::TurningRestrictions::
     // VIA NODE
     else
     {
-        VertexIdType vertexId = fromEdge.target();
+        VertexIdType vertexId = fromEdge.targetId();
         p_restriction = new OsmTurningRestriction(
             type,
             fromEdge.id(),

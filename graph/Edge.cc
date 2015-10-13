@@ -60,8 +60,8 @@ Edge::Edge(EdgeIdType       id,
            Edge::RoadData   roadData)
     : mId(id),
       mOsmId(osmId),
-      mSource(source),
-      mTarget(target),
+      mSourceId(source),
+      mTargetId(target),
       mGeomData(geomData),
       mRoadData(roadData),
       mpRestrictions(nullptr),
@@ -75,8 +75,8 @@ Edge::Edge(EdgeIdType       id,
            VertexIdType     target)
     : mId(id),
       mOsmId(osmId),
-      mSource(source),
-      mTarget(target),
+      mSourceId(source),
+      mTargetId(target),
       mGeomData(),
       mRoadData(),
       mpRestrictions(nullptr),
@@ -87,8 +87,8 @@ Edge::Edge(EdgeIdType       id,
 Edge::Edge(Edge&& from)
     : mId(from.mId),
       mOsmId(from.mOsmId),
-      mSource(from.mSource),
-      mTarget(from.mTarget),
+      mSourceId(from.mSourceId),
+      mTargetId(from.mTargetId),
       mGeomData(from.mGeomData),
       mRoadData(from.mRoadData),
       mpRestrictions(from.mpRestrictions),
@@ -109,8 +109,8 @@ operator<<(std::ostream& os, const Edge& rEdge)
 {
 	os  << "Edge [id: " << rEdge.id()
 	    << ", osmId: " << rEdge.osmId()
-		<< ", source: " << rEdge.source()
-		<< ", target: " << rEdge.target()
+		<< ", source: " << rEdge.sourceId()
+		<< ", target: " << rEdge.targetId()
 		<< ", cost: " << rEdge.cost()
 		<< ", length: " << rEdge.geomData().length
 		<< ", speed: " << rEdge.speed()
@@ -174,12 +174,12 @@ Edge::id() const
 { return mId; }
 
 VertexIdType
-Edge::source() const
-{ return mSource; }
+Edge::sourceId() const
+{ return mSourceId; }
 
 VertexIdType
-Edge::target() const
-{ return mTarget; }
+Edge::targetId() const
+{ return mTargetId; }
 
 OsmIdType
 Edge::osmId() const

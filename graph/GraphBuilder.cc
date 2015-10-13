@@ -198,8 +198,8 @@ GraphBuilder::isEdgeRestricted(const Edge& rEdge) const
 void
 GraphBuilder::addDirectedGraphEdges(const Edge& rEdge, EdgeIdType& rNewEdgeId)
 {
-    const VertexType& s = getGraphVertex(rEdge.source());
-    const VertexType& t = getGraphVertex(rEdge.target());
+    const VertexType& s = getGraphVertex(rEdge.sourceId());
+    const VertexType& t = getGraphVertex(rEdge.targetId());
 
     // add all lanes in forward direction
     if(rEdge.roadData().direction == Edge::DirectionType::FROM_TO
@@ -277,7 +277,7 @@ GraphBuilder::addGraphEdgesToLineGraph()
         NodeType node;
         addGraphEdgeAsLineGraphNode(edge, node);
 
-        // look up target vertex.
+        // look up targetId vertex.
         VertexType via_vertex = boost::target(edge, mGraph);
 
         // connect all possible travels from 'edge' via the vertex
@@ -365,7 +365,7 @@ GraphBuilder::connectSourceNodeToTargetNodesViaVertex(
                     + ", target: " + std::to_string(target_edge_id));
             }
         }
-        else // log restricted target
+        else // log restricted targetId
         {
             Edge& s = mrTopology.getEdge(source_node.topoEdgeId);
             Edge& t = mrTopology.getEdge(target_topo_id);
@@ -466,12 +466,12 @@ GraphBuilder::getRestrictedTargets(const LineGraphNode& rSourceNode) const
 {
     std::vector<EdgeIdType> restricted_targets;
 
-    // Find all out edges from the target vertex of the edge,
+    // Find all out edges from the targetId vertex of the edge,
     // which depends on if the edge is the opposite direction of the topo edge.
     Edge& sourceEdge = mrTopology.getEdge(rSourceNode.topoEdgeId);
 
     VertexIdType target_vertex =
-        rSourceNode.oppositeDirection ? sourceEdge.source() : sourceEdge.target();
+        rSourceNode.oppositeDirection ? sourceEdge.sourceId() : sourceEdge.targetId();
 
     std::vector<EdgeIdType> out_edges = getOutEdges(target_vertex);
     std::vector<EdgeIdType> targets;
@@ -491,7 +491,7 @@ GraphBuilder::findRestrictedTargets(
 {
     for(EdgeIdType e_id : rTargets)
     {
-        // don't add self to target
+        // don't add self to targetId
         if(e_id == rSourceEdge.id())
         {
             continue;

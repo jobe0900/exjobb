@@ -181,12 +181,12 @@ public:
     /**
      * @return  The source vertex for this edge.
      */
-    VertexIdType	  source()    const;
+    VertexIdType	  sourceId()  const;
 
     /**
      * @return  The target vertex of this edge.
      */
-    VertexIdType	  target()    const;
+    VertexIdType	  targetId()  const;
 
     /**
      * @return  The original OSM id for this edge.
@@ -259,10 +259,10 @@ public:
 
 private:
 // ATTRIBUTES
-    EdgeIdType		  mId;
+    EdgeIdType		  mId;      // id in topology
     OsmIdType         mOsmId;
-    VertexIdType	  mSource;
-    VertexIdType	  mTarget;
+    VertexIdType	  mSourceId;
+    VertexIdType	  mTargetId;
     GeomData          mGeomData;
     RoadData          mRoadData;
     EdgeRestriction*  mpRestrictions;
