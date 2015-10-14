@@ -1,8 +1,8 @@
-/**  Data structure for configuration of database connnection.
+/**  Data structure for configuration of database connection.
  *
  * #include "DatabaseConfig.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 #ifndef CONFIG_DATABASECONFIG_H_
 #define CONFIG_DATABASECONFIG_H_
@@ -28,26 +28,27 @@
 struct DatabaseConfig
 {
 // ATTRIBUTES
-	std::string		hostname;
-	int				port;
-	std::string		username;
-	std::string		password;
-	std::string		database;
+    std::string        hostname;
+    int                port;
+    std::string        username;
+    std::string        password;
+    std::string        database;
 
 
 // OPERATIONS
-	/** Construct a connection string from the attributes.
-	 * @return	A valid connection string for 'pqxx::conn()'
-	 */
-	std::string     getConnectionString() const {
-	    std::ostringstream oss;
-	    oss << "host=" << hostname
-	        << " port=" << port
-	        << " user=" << username
-	        << " password=" << password
-	        << " dbname=" << database;
-	    return  oss.str();
-	}
+    /** Construct a connection string from the attributes.
+     * @return    A valid connection string for 'pqxx::conn()'
+     */
+    std::string     getConnectionString() const
+    {
+        std::ostringstream oss;
+        oss << "host=" << hostname
+            << " port=" << port
+            << " user=" << username
+            << " password=" << password
+            << " dbname=" << database;
+        return  oss.str();
+    }
 
 private:
 };

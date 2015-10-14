@@ -2,7 +2,7 @@
  *
  * #include "Configuration.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef CONFIG_CONFIGURATION_H_
@@ -114,7 +114,5 @@ private:
 
 // EXTERNAL REFERENCES
 //
-
-
 
 #endif /* CONFIG_CONFIGURATION_H_ */

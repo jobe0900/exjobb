@@ -2,7 +2,7 @@
  *
  * #include "ConfigurationException.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef CONFIG_CONFIGURATIONEXCEPTION_H_
@@ -30,29 +30,29 @@ class ConfigurationException : public std::exception
 {
 public:
 // LIFECYCLE
-	/** Default constructor.
-	 */
-	ConfigurationException() = delete;
+    /** Default constructor.
+     */
+    ConfigurationException() = delete;
 
-	/** Constructor taking a message to display.
-	 *
-	 * @param	message		The message to prepend when 'what()' is called.
-	 */
-	ConfigurationException(const std::string& rMessage) noexcept
-		: std::exception(), mMessage(rMessage)
-	{}
+    /** Constructor taking a message to display.
+     *
+     * @param	message		The message to prepend when 'what()' is called.
+     */
+    ConfigurationException(const std::string& rMessage) noexcept
+        : std::exception(), mMessage(rMessage)
+    {}
 
 // OPERATORS
 // OPERATIONS
 // ACCESS
 // INQUIRY
-	const char* what() const noexcept
-	{return (mMessage + " " + std::exception::what()).c_str();}
+    const char* what() const noexcept
+    { return (mMessage + " " + std::exception::what()).c_str(); }
 
 protected:
 private:
 // ATTRIBUTES
-	std::string		mMessage;
+    std::string		mMessage;
 };
 
 // INLINE METHODS

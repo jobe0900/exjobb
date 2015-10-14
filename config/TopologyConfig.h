@@ -2,7 +2,7 @@
  *
  * #include "TopologyConfig.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef CONFIG_TOPOLOGYCONFIG_H_

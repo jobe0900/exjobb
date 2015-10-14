@@ -2,7 +2,7 @@
  *
  * #include "VehicleConfig.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 #ifndef CONFIG_VEHICLECONFIG_H_
 #define CONFIG_VEHICLECONFIG_H_
@@ -27,14 +27,14 @@
 struct VehicleConfig
 {
 // ATTRIBUTES
-	OsmVehicle::VehicleType	    category;
-	double			            height;
-	double			            length;
-	double			            weight;
-	double			            width;
-	unsigned                    maxspeed;
-	unsigned                    acceleration; // seconds 0 - 100 km/h
-	unsigned                    deceleration; // seconds 100 - 0 km/h
+    OsmVehicle::VehicleType     category;
+    double                      height;
+    double                      length;
+    double                      weight;
+    double                      width;
+    unsigned                    maxspeed;
+    unsigned                    acceleration; // seconds 0 - 100 km/h
+    unsigned                    deceleration; // seconds 100 - 0 km/h
 };
 
 // INLINE METHODS

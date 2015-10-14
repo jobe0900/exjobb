@@ -1,12 +1,9 @@
 /*
  * Configuration.cc
- *
- *  Created on: 2015-05-14
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "Configuration.h"  // class implemented
-
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
@@ -60,5 +57,4 @@ Configuration::getCostConfig() const
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
 

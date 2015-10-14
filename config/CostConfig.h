@@ -2,7 +2,7 @@
  *
  * #include "CostConfig.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef CONFIG_COSTCONFIG_H_
