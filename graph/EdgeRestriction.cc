@@ -1,7 +1,7 @@
 /*
  * EdgeRestriction.cc
  *
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "EdgeRestriction.h"  // class implemented

@@ -1,14 +1,12 @@
 /*
  * Topology.cc
  *
- *  Created on: 2015-05-11
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "Topology.h"  // class implemented
 
 #include <utility>
-
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
@@ -36,20 +34,20 @@ Topology::addEdge(EdgeIdType        id,
                   Edge::GeomData    geomData,
                   Edge::RoadData    roadData)
 {
- 	try
-	{
-	    getVertex(source);
-	    getVertex(target);
-	    Edge edge(id, osmId, source, target, geomData, roadData);
-		auto res = mEdgeMap.emplace(id, std::move(edge));
-		mOsmEdgeMap.insert({osmId, id});
-		return res.first->second;
-	}
-	catch (TopologyException& e)
-	{
-		throw TopologyException("Cannot add edge: " + std::to_string(id) +
-				". " + e.what());
-	}
+     try
+    {
+        getVertex(source);
+        getVertex(target);
+        Edge edge(id, osmId, source, target, geomData, roadData);
+        auto res = mEdgeMap.emplace(id, std::move(edge));
+        mOsmEdgeMap.insert({osmId, id});
+        return res.first->second;
+    }
+    catch (TopologyException& e)
+    {
+        throw TopologyException("Cannot add edge: " + std::to_string(id) +
+                ". " + e.what());
+    }
 }
 
 Edge&

@@ -2,7 +2,7 @@
  *
  * #include "TopologyException.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef GRAPH_TOPOLOGYEXCEPTION_H_
@@ -30,29 +30,29 @@ class TopologyException : public std::exception
 {
 public:
 // LIFECYCLE
-	/** Default constructor.
-	 */
-	TopologyException() = delete;
+    /** Default constructor.
+     */
+    TopologyException() = delete;
 
-	/** Constructor taking a message to display.
-	 *
-	 * @param	message		The message to prepend when 'what()' is called.
-	 */
-	TopologyException(const std::string& rMessage) noexcept
-		: std::exception(), mMessage(rMessage)
-	{}
+    /** Constructor taking a message to display.
+     *
+     * @param    message        The message to prepend when 'what()' is called.
+     */
+    TopologyException(const std::string& rMessage) noexcept
+        : std::exception(), mMessage(rMessage)
+    {}
 
 // OPERATORS
 // OPERATIONS
 // ACCESS
 // INQUIRY
-	const char* what() const noexcept
-	{return mMessage.c_str();}
+    const char* what() const noexcept
+    { return mMessage.c_str(); }
 
 protected:
 private:
 // ATTRIBUTES
-	std::string		mMessage;
+    std::string        mMessage;
 };
 
 // INLINE METHODS

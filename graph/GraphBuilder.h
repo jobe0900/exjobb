@@ -2,7 +2,7 @@
  *
  * #include "GraphBuilder.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef GRAPH_GRAPHBUILDER_H_
@@ -110,7 +110,7 @@ typedef std::map<EdgeIdType, NodeType>       GraphEdgeIdToNodeMapType;
 
 /**
  * A class for building (Boost) Graph and LineGraph from a Topology and
- * ra Configuration with optional Restrictions and Costs applied.
+ * a Configuration with optional Restrictions and Costs applied.
  */
 class GraphBuilder
 {
@@ -150,12 +150,12 @@ public:
 // OPERATIONS
 // ACCESS
     /**
-     * @return  The number of Vertices in the GraphBuilder.
+     * @return  The number of Vertices in the Graph.
      */
     size_t              nrVertices() const;
 
     /**
-     * @return  The number of Edges in the GraphBuilder.
+     * @return  The number of Edges in the Graph.
      */
     size_t              nrEdges() const;
 
@@ -170,13 +170,13 @@ public:
     size_t              nrLines() const;
 
     /** Builds graph if necessary before returning.
-     * @return  The Boost GraphBuilder representation of the GraphBuilder.
+     * @return  The Boost Graph representation of the Graph.
      * @throws  GraphException if something goes wrong building the graph.
      */
     const GraphType&    getBoostGraph();
 
     /** Get a reference to the line graph.
-     * @return  The Boost GraphBuilder representation of the LineGraph.
+     * @return  The Boost Graph representation of the LineGraph.
      * @throws  GraphException if something goes wrong building the graph.
      */
     LineGraphType&       getBoostLineGraph();
@@ -269,13 +269,13 @@ private:
 
     /** Get the graph vertex corresponding to a given id.
      * @param   id      The vertex' topology id.
-     * @return  Reference to the GraphBuilder vertex corresponding to id.
+     * @return  Reference to the Graph vertex corresponding to id.
      * @throw   GraphException if there is no corresponding vertex to id.
      */
     const VertexType&   getGraphVertex(VertexIdType id) const;
 
     // buidlLineGraph() ------------------------------------------------------
-    // Used when transforming the GraphBuilder to a LineGraph
+    // Used when transforming the Graph to a LineGraph
 
     /** Start converting the GraphBuilder to a LineGraph.
      */

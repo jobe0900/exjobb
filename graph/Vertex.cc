@@ -1,8 +1,7 @@
 /*
  * Vertex.cc
  *
- *  Created on: 2015-05-11
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "Vertex.h"  // class implemented

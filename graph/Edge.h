@@ -2,7 +2,7 @@
  *
  * #include "Edge.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef GRAPH_EDGE_H_
@@ -10,7 +10,6 @@
 
 // SYSTEM INCLUDES
 //
-
 #include <limits>
 
 // PROJECT INCLUDES

@@ -1,8 +1,7 @@
 /*
  * GraphBuilder.cc
  *
- *  Created on: 2015-05-16
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "GraphBuilder.h"  // class implemented
@@ -286,10 +285,13 @@ GraphBuilder::addGraphEdgesToLineGraph()
 }
 
 void
-GraphBuilder::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge, NodeType& rNode)
+GraphBuilder::addGraphEdgeAsLineGraphNode(const EdgeType& rGraphEdge,
+                                          NodeType& rNode)
 {
-    EdgeIdType e_graph_id = boost::get(&GraphEdge::graphEdgeId, mGraph, rGraphEdge);
-    EdgeIdType e_topo_id  = boost::get(&GraphEdge::topoEdgeId, mGraph, rGraphEdge);
+    EdgeIdType e_graph_id =
+        boost::get(&GraphEdge::graphEdgeId, mGraph, rGraphEdge);
+    EdgeIdType e_topo_id  =
+        boost::get(&GraphEdge::topoEdgeId, mGraph, rGraphEdge);
 
     if(!hasNode(e_graph_id))
     {
@@ -327,7 +329,8 @@ GraphBuilder::connectSourceNodeToTargetNodesViaVertex(
 
     // TARGET
     // get targets that are restricted
-    std::vector<EdgeIdType> restricted_targets = getRestrictedTargets(source_node);
+    std::vector<EdgeIdType> restricted_targets =
+        getRestrictedTargets(source_node);
 
     // look at all out edges from the via-vertex
     for(auto target_it = boost::out_edges(rViaVertex, mGraph);
@@ -335,7 +338,8 @@ GraphBuilder::connectSourceNodeToTargetNodesViaVertex(
         ++target_it.first)
     {
         const EdgeType& target = *(target_it.first);
-        EdgeIdType target_topo_id = boost::get(&GraphEdge::topoEdgeId, mGraph, target);
+        EdgeIdType target_topo_id =
+            boost::get(&GraphEdge::topoEdgeId, mGraph, target);
 
         if(!isTargetRestricted(restricted_targets, target_topo_id))
         {
@@ -390,7 +394,8 @@ GraphBuilder::getLineGraphNodeData(const NodeType& rNode) const
 }
 
 LineType
-GraphBuilder::addLineGraphLine(const NodeType& rSourceNode, const NodeType& rTargetNode)
+GraphBuilder::addLineGraphLine(const NodeType& rSourceNode,
+                               const NodeType& rTargetNode)
 {
     const auto& line_add =
         boost::add_edge(rSourceNode, rTargetNode, mLineGraph);
@@ -428,7 +433,8 @@ GraphBuilder::addLineMetaCost(
 }
 
 double
-GraphBuilder::calculateTurnCost(EdgeIdType sourceEdgeId, EdgeIdType targetEdgeId) const
+GraphBuilder::calculateTurnCost(EdgeIdType sourceEdgeId,
+                                EdgeIdType targetEdgeId) const
 {
     const Edge& source = mrTopology.getEdge(sourceEdgeId);
     const Edge& target = mrTopology.getEdge(targetEdgeId);
@@ -471,7 +477,8 @@ GraphBuilder::getRestrictedTargets(const LineGraphNode& rSourceNode) const
     Edge& sourceEdge = mrTopology.getEdge(rSourceNode.topoEdgeId);
 
     VertexIdType target_vertex =
-        rSourceNode.oppositeDirection ? sourceEdge.sourceId() : sourceEdge.targetId();
+        rSourceNode.oppositeDirection ?
+            sourceEdge.sourceId() : sourceEdge.targetId();
 
     std::vector<EdgeIdType> out_edges = getOutEdges(target_vertex);
     std::vector<EdgeIdType> targets;
@@ -571,8 +578,10 @@ GraphBuilder::printVertices(std::ostream& os) const
         ++v_it.first)
     {
         const VertexType& v = *v_it.first;
-        VertexIdType graph_vertex_id = boost::get(&GraphVertex::graphVertexId, mGraph, v);
-        VertexIdType topo_vertex_id  = boost::get(&GraphVertex::topoVertexId, mGraph, v);
+        VertexIdType graph_vertex_id =
+            boost::get(&GraphVertex::graphVertexId, mGraph, v);
+        VertexIdType topo_vertex_id  =
+            boost::get(&GraphVertex::topoVertexId, mGraph, v);
         const Vertex& vertex = mrTopology.getVertex(topo_vertex_id);
 
         os << "   graph_vertex_id: " << graph_vertex_id
@@ -590,8 +599,10 @@ GraphBuilder::printEdges(std::ostream& os) const
         ++e_it.first)
     {
         const EdgeType& e = *(e_it.first);
-        EdgeIdType graph_edge_id = boost::get(&GraphEdge::graphEdgeId, mGraph, e);
-        EdgeIdType topo_edge_id  = boost::get(&GraphEdge::topoEdgeId, mGraph, e);
+        EdgeIdType graph_edge_id =
+            boost::get(&GraphEdge::graphEdgeId, mGraph, e);
+        EdgeIdType topo_edge_id  =
+            boost::get(&GraphEdge::topoEdgeId, mGraph, e);
         const Edge& edge = mrTopology.getEdge(topo_edge_id);
 
         os << "   graph_edge_id: " << graph_edge_id

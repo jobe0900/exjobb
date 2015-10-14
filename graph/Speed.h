@@ -1,7 +1,7 @@
 /** The Speed type.
  * Speed.h
  *
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef GRAPH_SPEED_H_

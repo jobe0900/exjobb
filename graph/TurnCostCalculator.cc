@@ -19,7 +19,8 @@ TurnCostCalculator::getTurnCost(
     double vehicle_length = rConfig.getVehicleConfig().length;
 
     Speed angle_speed = getAngleSpeed(rSource, rTarget);
-    Speed size_speed = getVehicleSizeSpeed(rSource, rTarget, vehicle_length, angle_speed);
+    Speed size_speed =
+        getVehicleSizeSpeed(rSource, rTarget, vehicle_length, angle_speed);
     Speed turn_speed = getSmallestSpeed({angle_speed, size_speed});
 
     double decel_factor = rConfig.getVehicleConfig().acceleration / 100.0;

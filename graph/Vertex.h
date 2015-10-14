@@ -2,7 +2,7 @@
  *
  * #include "Vertex.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef GRAPH_VERTEX_H_

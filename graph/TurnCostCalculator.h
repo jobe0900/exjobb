@@ -2,7 +2,7 @@
  *
  * #include "TurnCostCalculator.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef GRAPH_TURNCOSTCALCULATOR_H_

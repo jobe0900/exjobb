@@ -1,11 +1,10 @@
 /*
  * EdgeCost.cc
  *
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "EdgeCost.h"  // class implemented
-
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 //============================= LIFECYCLE ====================================
@@ -61,5 +60,4 @@ EdgeCost::hasCost(EdgeCost::CostType type) const
 }
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
 

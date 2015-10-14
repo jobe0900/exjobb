@@ -2,7 +2,7 @@
  *
  * #include "RestrictionsException.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef GRAPH_RESTRICTIONSEXCEPTION_H_
@@ -48,7 +48,7 @@ public:
 // ACCESS
 // INQUIRY
     const char* what() const noexcept
-    {return mMessage.c_str();}
+    { return mMessage.c_str(); }
 
 protected:
 private:
@@ -61,6 +61,5 @@ private:
 
 // EXTERNAL REFERENCES
 //
-
 
 #endif /* GRAPH_RESTRICTIONSEXCEPTION_H_ */
