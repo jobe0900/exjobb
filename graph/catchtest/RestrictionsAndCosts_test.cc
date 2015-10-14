@@ -1,7 +1,7 @@
 /* Tests for the different kind of restrictions
  *
  * Graph_test.cc
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include <iostream>
@@ -1391,6 +1391,5 @@ SCENARIO ("Building graph of Partille with speed bump at node",
     {
         INFO(dbe.what());
         REQUIRE (false);    // force output of error and failure
-
     }
 }

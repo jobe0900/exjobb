@@ -1,15 +1,14 @@
 /* Tests for EdgeCost class
  * EdgeCost_test.cc
  *
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
-
 
 #include "../../catchtest/catch.hpp"
 
 #include "../EdgeCost.h"
 
-SCENARIO ("Keeping track of costs for an Edge", "[edgecost]")
+SCENARIO ("Keeping track of costs for an Edge", "[graph][edgecost]")
 {
     EdgeCost costs;
 
@@ -65,5 +64,4 @@ SCENARIO ("Keeping track of costs for an Edge", "[edgecost]")
         }
     }
 }
-
 

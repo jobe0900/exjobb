@@ -5,9 +5,8 @@
  *
  * TurnCostCalculator_test.cc
  *
- *      Author: Jonas Bergman
+ *  @author  Jonas Bergman
  */
-
 
 #include "../../catchtest/catch.hpp"
 
@@ -31,7 +30,8 @@ SCENARIO ("Keeping track of costs for Turn", "[turncost]")
     secondary.roadType = OsmHighway::HighwayType::SECONDARY;
 
 
-    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
+    std::string config_file(
+        "catchtest/testsettings/mikh_restr_0617-testsettings.json");
     ConfigurationReader config_reader(config_file);
     Configuration config;
     config_reader.fillConfiguration(config);
