@@ -1,8 +1,7 @@
 ///*
 // * JsonTestProvider_test.cc
 // *
-// *  Created on: 2015-05-18
-// *      Author: Jonas Bergman
+// * @author  Jonas Bergman
 // */
 //
 //#include "../JsonTestProvider.h"

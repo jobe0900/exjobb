@@ -3,7 +3,7 @@
  *
  * #include "MapProvider.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef MAPPROVIDER_MAPPROVIDER_H_
@@ -80,8 +80,6 @@ public:
      * @throws  MapProviderException
      */
     virtual void    persistLineGraph(const GraphBuilder& rGraph) = 0;
-//                        const LineGraphType&    rLineGraph,
-//                        const Topology&         rTopology) = 0;
 
 // ACCESS
 // INQUIRY

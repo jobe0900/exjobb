@@ -2,7 +2,7 @@
  *
  * #include "MapProviderException.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef MAPPROVIDER_MAPPROVIDEREXCEPTION_H_
@@ -31,29 +31,29 @@ class MapProviderException : public std::exception
 public:
 // LIFECYCLE
 
-	/** Default constructor.
-	 */
-	MapProviderException() = delete;
+    /** Default constructor.
+     */
+    MapProviderException() = delete;
 
-	/** Constructor taking a message to display.
-	 *
-	 * @param	message		The message to prepend when 'what()' is called.
-	 */
-	MapProviderException(const std::string& rMessage) noexcept
-		: std::exception(), mMessage(rMessage)
-	{}
+    /** Constructor taking a message to display.
+     *
+     * @param    message        The message to prepend when 'what()' is called.
+     */
+    MapProviderException(const std::string& rMessage) noexcept
+        : std::exception(), mMessage(rMessage)
+    {}
 
 // OPERATORS
 // OPERATIONS
 // ACCESS
 // INQUIRY
-	const char* what() const noexcept
-	{return mMessage.c_str();}
+    const char* what() const noexcept
+    { return mMessage.c_str(); }
 
 protected:
 private:
 // ATTRIBUTES
-	std::string		mMessage;
+    std::string        mMessage;
 };
 
 // INLINE METHODS

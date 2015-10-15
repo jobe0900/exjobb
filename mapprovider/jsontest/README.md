@@ -3,7 +3,7 @@ JsonTest
 
 This package exists for the sole purpose of testing in the initial stages of development, so that we easily could read in a small set of well-known edges and vertices.
 
-But the test is now commented out, as it has not been update to keep up with advances in the development.
+But the test is now commented out, as it has not been updated to keep up with advances in the development.
 
 Format of test file in json is:
 

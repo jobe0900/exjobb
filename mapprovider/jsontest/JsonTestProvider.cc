@@ -1,8 +1,7 @@
 /*
  * JsonTestProvider.cc
  *
- *  Created on: 2015-05-18
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "JsonTestProvider.h"  // class implemented
@@ -33,7 +32,6 @@ JsonTestProvider::~JsonTestProvider()
 //============================= OPERATIONS ===================================
 void
 JsonTestProvider::getTopology(Topology& rTopology)
-//JsonTestProvider::getMapData(Topology& rTopology)
 {
     using namespace boost::property_tree;
 

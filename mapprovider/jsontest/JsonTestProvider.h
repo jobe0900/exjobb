@@ -2,7 +2,7 @@
  *
  * #include "JsonTestProvider.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 #ifndef MAPPROVIDER_JSONTEST_JSONTESTPROVIDER_H_
 #define MAPPROVIDER_JSONTEST_JSONTESTPROVIDER_H_
