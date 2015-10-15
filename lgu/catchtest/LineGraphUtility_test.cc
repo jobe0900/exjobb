@@ -1,8 +1,7 @@
 /*
  * LineGraphUtility_test.cc
  *
- *  Created on: 2015-05-18
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "../LineGraphUtility.h"
@@ -21,8 +20,8 @@ SCENARIO ("LineGraphUtility construction", "[lgu][construction]")
     {
         GIVEN ("a valid config file set up to use jsontest as provider")
         {
-		    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
-
+            std::string config_file(
+                "catchtest/testsettings/mikh_restr_0617-testsettings.json");
             //................................................................
             WHEN ("creating a LineGraphUtility")
             {
@@ -51,8 +50,9 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
     {
         GIVEN ("a valid config file")
         {
-		    std::string config_file("catchtest/testsettings/mikh_restr_0617-testsettings.json");
-		    LineGraphUtility lgu(config_file);
+            std::string config_file(
+                "catchtest/testsettings/mikh_restr_0617-testsettings.json");
+            LineGraphUtility lgu(config_file);
 
             WHEN ("asking for a LineGraph")
             {
@@ -158,7 +158,8 @@ SCENARIO ("LineGraphUtility timing", "[lgu][.timing]")
     {
         GIVEN ("a valid config file for Mikhailovsk without temporary topology")
         {
-		    std::string config_file("catchtest/testsettings/mikhailovsk-original.json");
+            std::string config_file(
+                "catchtest/testsettings/mikhailovsk-original.json");
 
             WHEN ("when timing request for a LineGraph")
             {
@@ -200,7 +201,8 @@ SCENARIO ("LineGraphUtility timing", "[lgu][.timing]")
 
         GIVEN ("a valid config file for Mikhailovsk WITH temporary topology")
         {
-		    std::string config_file("catchtest/testsettings/mikhailovsk-original-temp.json");
+            std::string config_file(
+                "catchtest/testsettings/mikhailovsk-original-temp.json");
 
             WHEN ("when timing request for a LineGraph")
             {
@@ -243,7 +245,8 @@ SCENARIO ("LineGraphUtility timing", "[lgu][.timing]")
 
         GIVEN ("a valid config file for Partille without temporary topology")
         {
-		    std::string config_file("catchtest/testsettings/partille-original.json");
+            std::string config_file(
+                "catchtest/testsettings/partille-original.json");
 
             WHEN ("when timing request for a LineGraph")
             {
@@ -285,7 +288,8 @@ SCENARIO ("LineGraphUtility timing", "[lgu][.timing]")
 
         GIVEN ("a valid config file for Partille WITH temporary topology")
         {
-		    std::string config_file("catchtest/testsettings/partille-original-temp.json");
+            std::string config_file(
+                "catchtest/testsettings/partille-original-temp.json");
 
             WHEN ("when timing request for a LineGraph")
             {
@@ -311,7 +315,6 @@ SCENARIO ("LineGraphUtility timing", "[lgu][.timing]")
                 auto duration =
                     std::chrono::duration_cast<std::chrono::microseconds>
                         ( t2 - t1 ).count();
-
 
                 THEN ("we should have an average timing")
                 {

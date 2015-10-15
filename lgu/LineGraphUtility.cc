@@ -1,7 +1,7 @@
 /*
  * LineGraphUtility.cc
  *
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "../mapprovider/postgis/PostGisProvider.h"

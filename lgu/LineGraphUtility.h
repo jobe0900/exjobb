@@ -2,7 +2,7 @@
  *
  * #include "LineGraphUtility.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef LGU_LINEGRAPHUTILITY_H_

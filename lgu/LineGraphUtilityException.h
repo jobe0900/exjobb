@@ -2,7 +2,7 @@
  *
  * #include "LineGraphUtilityException.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef LGU_LINEGRAPHUTILITYEXCEPTION_H_
