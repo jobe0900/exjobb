@@ -1,14 +1,10 @@
 /*
  * RestrictionQueries.cc
  *
- *  Created on: 2015-05-31
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
-
 #include "RestrictionQueries.h"  // class implemented
-
-#include <iostream>
 
 // Result --------------------------------------------------------------------
 //static
@@ -450,8 +446,6 @@ RestrictionQueries::addPointRestrictionsToEdge(
 {
     try
     {
-//        std::cerr << "Number of point restrictions: "<< rResult.size() << std::endl;
-
         for(const pqxx::tuple& row : rResult)
         {
             // throw exception if no edgeId
@@ -467,9 +461,6 @@ RestrictionQueries::addPointRestrictionsToEdge(
                 OsmBarrier::parseString(barrierTypeString);
             r_restrictions.setBarrierRestriction(barrierType);
             CostQueries::addBarrierCostToEdge(edge, barrierType, rConfig);
-
-//            std::cerr << "Edge: " << edgeId
-//                << " has barrier: " << barrierTypeString << std::endl;
 
             std::string colString;
             colString = row[EdgePointRestrictions::ACCESS].as<std::string>("");
@@ -623,5 +614,4 @@ RestrictionQueries::endOfQuery()
         "ORDER BY edge_id ASC;"
     );
 }
-
 

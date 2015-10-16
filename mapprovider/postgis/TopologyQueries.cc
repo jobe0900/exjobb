@@ -1,8 +1,7 @@
 /*
  * TopologyQueries.cc
  *
- *  Created on: 2015-06-01
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "TopologyQueries.h"  // class implemented
@@ -22,11 +21,11 @@ TopologyQueries::getTopologyVertices(
     pqxx::result&           rResult,
     const std::string&      rVertexTable)
 {
-		rResult = rTrans.exec(
-				"SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
-				" FROM " + rVertexTable +
-				" ORDER BY node_id ASC;"
-		);
+        rResult = rTrans.exec(
+                "SELECT node_id, ST_X(geom) AS x, ST_Y(geom) AS y "
+                " FROM " + rVertexTable +
+                " ORDER BY node_id ASC;"
+        );
 }
 
 // static
@@ -305,7 +304,4 @@ TopologyQueries::deleteTemporaryTopoRecord(pqxx::transaction_base& rTrans,
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
-
-
 

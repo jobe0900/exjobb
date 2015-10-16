@@ -1,6 +1,8 @@
 /** Queries for saving the LineGraph to database
+ *
  * #include "LineGraphSaveQueries.h"
- * @author Jonas Bergman
+ *
+ * @author  Jonas Bergman
  */
 
 #ifndef MAPPROVIDER_POSTGIS_LINEGRAPHSAVEQUERIES_H_
@@ -17,9 +19,9 @@
 #include <boost/algorithm/string.hpp>
 #include <pqxx/pqxx>
 
-#include "../../graph/GraphBuilder.h"
 // LOCAL INCLUDES
 //
+#include "../../graph/GraphBuilder.h"
 #include "../../graph/Topology.h"
 
 /** Class for holding static queries for saving the line graph to database

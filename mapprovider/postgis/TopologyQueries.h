@@ -1,9 +1,9 @@
-/**  A class for holding static queries about the topology for the
- * PostGisProvider.
+/**  A class for holding static queries about the topology
+ * for the PostGisProvider.
  *
  * #include "TopologyQueries.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef MAPPROVIDER_POSTGIS_TOPOLOGYQUERIES_H_

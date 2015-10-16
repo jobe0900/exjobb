@@ -1,8 +1,7 @@
 /*
  * PostGisProvider.cc
  *
- *  Created on: 2015-05-07
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "PostGisProvider.h"  // class implemented
@@ -87,22 +86,22 @@ catch(const std::exception& e)
 
 PostGisProvider::~PostGisProvider()
 {
-	try
-	{
-	    if(mBuildTempTopology)
-	    {
-	        removeTopology();
-	    }
-		if(mConnection.is_open())
-		{
-			mConnection.disconnect();
-		}
-	}
-	catch(const std::exception& e)
-	{
+    try
+    {
+        if(mBuildTempTopology)
+        {
+            removeTopology();
+        }
+        if(mConnection.is_open())
+        {
+            mConnection.disconnect();
+        }
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(
             std::string("PostGisProvider:dtor: ") + e.what());
-	}
+    }
 }
 
 //============================= OPERATORS ====================================
@@ -141,23 +140,23 @@ PostGisProvider::persistLineGraph(const GraphBuilder& rGraph)
 void
 PostGisProvider::getTopologyVertices(pqxx::result& rVertexResult)
 {
-	try
-	{
-	    testConnection();
+    try
+    {
+        testConnection();
 
-		// NON-TRANSACTION START
-		pqxx::nontransaction transaction(mConnection);
+        // NON-TRANSACTION START
+        pqxx::nontransaction transaction(mConnection);
 
-		TopologyQueries::getTopologyVertices(
-		    transaction,
-		    rVertexResult,
-		    mTopoVertexTable);
-	}
-	catch(const std::exception& e)
-	{
+        TopologyQueries::getTopologyVertices(
+            transaction,
+            rVertexResult,
+            mTopoVertexTable);
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(
             std::string("PostGisProvider:getTopologyVertices: ") + e.what());
-	}
+    }
 }
 
 void
@@ -172,25 +171,25 @@ PostGisProvider::addVertexResultToTopology(
 void
 PostGisProvider::getTopologyEdges(pqxx::result& rEdgeResult)
 {
-	try
-	{
-	    testConnection();
+    try
+    {
+        testConnection();
 
-		// NON-TRANSACTION START
-		pqxx::nontransaction transaction(mConnection);
+        // NON-TRANSACTION START
+        pqxx::nontransaction transaction(mConnection);
 
-		TopologyQueries::getTopologyEdges(
-		    transaction,
-		    rEdgeResult,
-		    mTopoEdgeTable,
-		    mSchemaName,
-		    mOsmEdgeTable);
-	}
-	catch(const std::exception& e)
-	{
+        TopologyQueries::getTopologyEdges(
+            transaction,
+            rEdgeResult,
+            mTopoEdgeTable,
+            mSchemaName,
+            mOsmEdgeTable);
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(
             std::string("PostGisProvider:getTopoEdges: ") + e.what());
-	}
+    }
 }
 
 void
@@ -201,77 +200,76 @@ PostGisProvider::addEdgeResultToTopology(
     TopologyQueries::addEdgeResultToTopology(rResult, rTopology);
 }
 
-
 void
 PostGisProvider::buildTopology(int srid, double tolerance)
 {
-	try
-	{
-	    testConnection();
+    try
+    {
+        testConnection();
 
-		// TRANSACTION START
-		pqxx::work transaction(mConnection);
+        // TRANSACTION START
+        pqxx::work transaction(mConnection);
 
-		try
-		{
-		    TopologyQueries::installPostgisTopology(transaction);
-		    TopologyQueries::setSearchPath(transaction);
-		    TopologyQueries::createTemporaryTable(transaction, mOsmEdgeTable);
-		    TopologyQueries::createTemporarySchema(
-		        transaction, mSchemaName, srid);
-		    TopologyQueries::addTopoGeometryColumn(
-		        transaction, mSchemaName, mOsmEdgeTable);
-		    TopologyQueries::fillTopoGeometryColumn(
-		        transaction, mSchemaName, mOsmEdgeTable, tolerance);
+        try
+        {
+            TopologyQueries::installPostgisTopology(transaction);
+            TopologyQueries::setSearchPath(transaction);
+            TopologyQueries::createTemporaryTable(transaction, mOsmEdgeTable);
+            TopologyQueries::createTemporarySchema(
+                transaction, mSchemaName, srid);
+            TopologyQueries::addTopoGeometryColumn(
+                transaction, mSchemaName, mOsmEdgeTable);
+            TopologyQueries::fillTopoGeometryColumn(
+                transaction, mSchemaName, mOsmEdgeTable, tolerance);
 
-		    // TRANSACTION END
-		    transaction.commit();
-		}
-		catch (const std::exception& e)
-		{
-		    transaction.abort();
-		    throw e;
-		}
-	}
-	catch(const std::exception& e)
-	{
+            // TRANSACTION END
+            transaction.commit();
+        }
+        catch (const std::exception& e)
+        {
+            transaction.abort();
+            throw e;
+        }
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(
             std::string("PostGisProvider:buildTopology: ") + e.what());
-	}
+    }
 }
 
 
 void
 PostGisProvider::removeTopology()
 {
-	try
-	{
-	    testConnection();
+    try
+    {
+        testConnection();
 
-		// TRANSACTION START
-		pqxx::work transaction(mConnection);
+        // TRANSACTION START
+        pqxx::work transaction(mConnection);
 
-		try
-		{
-		    TopologyQueries::dropTemporaryTable(transaction, mOsmEdgeTable);
-		    TopologyQueries::dropTemporarySchema(transaction, mSchemaName);
-		    TopologyQueries::deleteTemporaryLayerRecord(transaction, mOsmEdgeTable);
-		    TopologyQueries::deleteTemporaryTopoRecord(transaction, mSchemaName);
+        try
+        {
+            TopologyQueries::dropTemporaryTable(transaction, mOsmEdgeTable);
+            TopologyQueries::dropTemporarySchema(transaction, mSchemaName);
+            TopologyQueries::deleteTemporaryLayerRecord(transaction, mOsmEdgeTable);
+            TopologyQueries::deleteTemporaryTopoRecord(transaction, mSchemaName);
 
-		    // TRANSACTION END
-		    transaction.commit();
-		}
-		catch (const std::exception& e)
-		{
-		    transaction.abort();
-		    throw e;
-		}
-	}
-	catch(const std::exception& e)
-	{
+            // TRANSACTION END
+            transaction.commit();
+        }
+        catch (const std::exception& e)
+        {
+            transaction.abort();
+            throw e;
+        }
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(std::string(
             "PostGisProvider:removeTopology: ") + e.what());
-	}
+    }
 }
 
 void
@@ -421,26 +419,26 @@ PostGisProvider::addTurningRestrictionsToEdge(
 void
 PostGisProvider::getEdgePointRestrictions(pqxx::result& rResult)
 {
-	try
-	{
-	    testConnection();
+    try
+    {
+        testConnection();
 
-		// NON-TRANSACTION START
-		pqxx::nontransaction transaction(mConnection);
+        // NON-TRANSACTION START
+        pqxx::nontransaction transaction(mConnection);
 
-		RestrictionQueries::getEdgePointRestrictions(
-		    transaction,
-		    rResult,
-		    mPointTableName,
-		    mTopoEdgeTable,
-		    mOsmEdgeTable,
-		    mSchemaName);
-	}
-	catch(const std::exception& e)
-	{
+        RestrictionQueries::getEdgePointRestrictions(
+            transaction,
+            rResult,
+            mPointTableName,
+            mTopoEdgeTable,
+            mOsmEdgeTable,
+            mSchemaName);
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(
             std::string("PostGisProvider:getEdgePointRestrictions: ") + e.what());
-	}
+    }
 }
 
 void
@@ -504,26 +502,26 @@ PostGisProvider::addTravelTimeCosts(
 void
 PostGisProvider::getOtherEdgeCosts(pqxx::result& rResult)
 {
-	try
-	{
-	    testConnection();
+    try
+    {
+        testConnection();
 
-		// NON-TRANSACTION START
-		pqxx::nontransaction transaction(mConnection);
+        // NON-TRANSACTION START
+        pqxx::nontransaction transaction(mConnection);
 
-		CostQueries::getOtherCosts(
-		    transaction,
-		    rResult,
-		    mPointTableName,
-		    mTopoEdgeTable,
-		    mOsmEdgeTable,
-		    mSchemaName);
-	}
-	catch(const std::exception& e)
-	{
+        CostQueries::getOtherCosts(
+            transaction,
+            rResult,
+            mPointTableName,
+            mTopoEdgeTable,
+            mOsmEdgeTable,
+            mSchemaName);
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(
             std::string("PostGisProvider:getOtherEdgeCosts: ") + e.what());
-	}
+    }
 }
 
 void
@@ -545,69 +543,69 @@ PostGisProvider::setUpSchemaAndTables()
 void
 PostGisProvider::createLineGraphSchema()
 {
-	try
-	{
-	    testConnection();
+    try
+    {
+        testConnection();
 
-		// NON-TRANSACTION START
-		pqxx::nontransaction transaction(mConnection);
+        // NON-TRANSACTION START
+        pqxx::nontransaction transaction(mConnection);
 
-		LineGraphSaveQueries::dropCreateSchema(transaction, mLineGraphSchema);
-	}
-	catch(const std::exception& e)
-	{
+        LineGraphSaveQueries::dropCreateSchema(transaction, mLineGraphSchema);
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(
             std::string("PostGisProvider:createLineGraphSchema: ") + e.what());
-	}
+    }
 }
 
 void
 PostGisProvider::createLineGraphTables()
 {
-	try
-	{
-	    testConnection();
+    try
+    {
+        testConnection();
 
-		// NON-TRANSACTION START
-		pqxx::nontransaction transaction(mConnection);
+        // NON-TRANSACTION START
+        pqxx::nontransaction transaction(mConnection);
 
-		LineGraphSaveQueries::dropCreateLineTable(transaction, mLineGraphLineTable);
-		LineGraphSaveQueries::dropCreateNodeTable(transaction, mLineGraphNodeTable);
-	}
-	catch(const std::exception& e)
-	{
+        LineGraphSaveQueries::dropCreateLineTable(transaction, mLineGraphLineTable);
+        LineGraphSaveQueries::dropCreateNodeTable(transaction, mLineGraphNodeTable);
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(
             std::string("PostGisProvider:createLineGraphTables: ") + e.what());
-	}
+    }
 }
 
 void
 PostGisProvider::insertData(const GraphBuilder& rGraph)
 {
-	try
-	{
-	    testConnection();
+    try
+    {
+        testConnection();
 
-		pqxx::work transaction(mConnection);
+        pqxx::work transaction(mConnection);
 
-		try
-		{
-		    prepareLineGraphData(transaction, rGraph);
+        try
+        {
+            prepareLineGraphData(transaction, rGraph);
 
-		    // TRANSACTION END
-		    transaction.commit();
-		}
-		catch (const std::exception& e)
-		{
-		    transaction.abort();
-		    throw e;
-		}
-	}
-	catch(const std::exception& e)
-	{
+            // TRANSACTION END
+            transaction.commit();
+        }
+        catch (const std::exception& e)
+        {
+            transaction.abort();
+            throw e;
+        }
+    }
+    catch(const std::exception& e)
+    {
         throw MapProviderException(
             std::string("PostGisProvider:insertData: ") + e.what());
-	}
+    }
 }
 
 void
@@ -668,7 +666,6 @@ PostGisProvider::prepareLineGraphData(
             mLineGraphLineTable,
             cost,
             lineWKT);
-
     }
 }
 

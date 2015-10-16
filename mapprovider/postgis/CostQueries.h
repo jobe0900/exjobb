@@ -2,7 +2,7 @@
  *
  * #include "CostQueries.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 #ifndef MAPPROVIDER_POSTGIS_COSTQUERIES_H_
 #define MAPPROVIDER_POSTGIS_COSTQUERIES_H_

@@ -2,7 +2,7 @@
  *
  * #include "RestrictionQueries.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef MAPPROVIDER_POSTGIS_RESTRICTIONQUERIES_H_
@@ -287,8 +287,5 @@ private:
     /** AS ON ORDER BY */
     static std::string  endOfQuery();
 };
-
-
-
 
 #endif /* MAPPROVIDER_POSTGIS_RESTRICTIONQUERIES_H_ */

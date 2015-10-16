@@ -1,9 +1,8 @@
 /*
  * CostQueries.cc
  *
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
-
 
 #include "CostQueries.h"  // class implemented
 
@@ -315,5 +314,4 @@ CostQueries::endOfQuery()
         "ORDER BY edge_id ASC;"
     );
 }
-
 

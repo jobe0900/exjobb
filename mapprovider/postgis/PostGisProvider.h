@@ -2,7 +2,7 @@
  *
  * #include "PostGisProvider.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef MAPPROVIDER_POSTGIS_POSTGISPROVIDER_H_
@@ -43,8 +43,7 @@
 
 /**
  * A class to handle the reading of data from the PostGis database.
- * The configurations for the connection and the base name of the
- * topology name is given.
+ * The configurations for the connection is given.
  */
 class PostGisProvider : public MapProvider
 {
