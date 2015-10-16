@@ -8,7 +8,6 @@
         "database":    "mikh_style"
     },
     
-    
     "topology": 
     {
         "provider":      "postgis",
@@ -51,7 +50,6 @@
         
     },
     
-    
     "vehicle": 
     {
         "category":   "motorcar",
@@ -67,7 +65,7 @@
         }
     },
 
-	"access":
+    "access":
    {
       "allow":
       [

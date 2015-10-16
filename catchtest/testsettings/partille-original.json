@@ -1,21 +1,20 @@
 {
-	"database":	
-	{
-		"host":        "127.0.0.1",
-		"port":         5432,
-		"username":    "tester",
-		"password":    "tester",
-		"database":    "partille-original"
-	},
-	
-	
-	"topology": 
-	{
-	    "provider":      "postgis",
-	    
-	    "postgis": 
-	    {
-	        
+    "database":    
+    {
+        "host":        "127.0.0.1",
+        "port":         5432,
+        "username":    "tester",
+        "password":    "tester",
+        "database":    "partille-original"
+    },
+    
+    "topology": 
+    {
+        "provider":      "postgis",
+        
+        "postgis": 
+        {
+            
             "topo_name":      "lgu",
             "roads_prefix":   "highways",
             "schema_prefix":  "topo",
@@ -38,34 +37,33 @@
                 "id_col":    "node_id",
                 "geom_col":  "geom"
             }
-	    },
-	    
-	    "pgrouting": 
-	    {
-	    },
-	    
-	    "jsontest": 
+        },
+        
+        "pgrouting": 
+        {
+        },
+        
+        "jsontest": 
         {
             "test_file": ""
         }
-	    
-	},
-	
-	
-	"vehicle": 
-	{
-		"category":   "motorcar",
-		"motorcar": 
-		{
-		   "height":       1.6,
-		   "length":       4.5,
-		   "width":        1.9,
-		   "weight":       2.0,
-		   "maxspeed":     200,
-		   "acceleration": 10,
-		   "deceleration": 7
-		}
-	},
+        
+    },
+    
+    "vehicle": 
+    {
+        "category":   "motorcar",
+        "motorcar": 
+        {
+           "height":       1.6,
+           "length":       4.5,
+           "width":        1.9,
+           "weight":       2.0,
+           "maxspeed":     200,
+           "acceleration": 10,
+           "deceleration": 7
+        }
+    },
 
    "access":
    {

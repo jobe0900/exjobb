@@ -8,7 +8,6 @@
         "database":    "partille-turn_no_left"
     },
     
-    
     "topology": 
     {
         "provider":      "postgis",
@@ -51,7 +50,6 @@
         
     },
     
-    
     "vehicle": 
     {
         "category":   "motorcar",
@@ -67,7 +65,7 @@
         }
     },
     
-	"access":
+    "access":
    {
       "allow":
       [
@@ -112,20 +110,20 @@
       {
           "motorway":      {"high": 110, "low":  90},
           "motorway_link": {"high":  90, "low":  90},
-          "trunk":         {"high":  90, "low":  70},
-          "trunk_link":    {"high":  90, "low":  70},
-          "primary":       {"high":  90, "low":  70},
-          "primary_link":  {"high":  90, "low":  70},
-          "secondary":     {"high":  80, "low":  60},
-          "secondary_link":{"high":  80, "low":  60},
-          "tertiary":      {"high":  70, "low":  50},
-          "tertiary_link": {"high":  70, "low":  50},
-          "unclassified":  {"high":  70, "low":  50},
-          "residential":   {"high":  50, "low":  30},
-          "service":       {"high":  40, "low":  30},
-          "living_street": {"high":  30, "low":  30},
+          "trunk":         {"high":  90, "low":  60},
+          "trunk_link":    {"high":  90, "low":  60},
+          "primary":       {"high":  90, "low":  60},
+          "primary_link":  {"high":  90, "low":  60},
+          "secondary":     {"high":  90, "low":  60},
+          "secondary_link":{"high":  90, "low":  60},
+          "tertiary":      {"high":  90, "low":  60},
+          "tertiary_link": {"high":  90, "low":  60},
+          "unclassified":  {"high":  90, "low":  60},
+          "residential":   {"high":  90, "low":  60},
+          "service":       {"high":  40, "low":  20},
+          "living_street": {"high":  20, "low":  20},
           "bus_guideway":  {"high":  80, "low":  60},
-          "road":          {"high":  70, "low":  50}
+          "road":          {"high":  80, "low":  50}
       },
      
       "surface":

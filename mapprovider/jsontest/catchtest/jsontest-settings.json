@@ -8,7 +8,6 @@
         "database":    "mikh_style"
     },
     
-    
     "topology": 
     {
         "provider":      "jsontest",
@@ -16,9 +15,9 @@
         "postgis": 
         {
             
-            "topo_name":      "test",
-            "roads_prefix":   "highways",
-            "schema_prefix":  "topo",
+            "topo_name":         "test",
+            "roads_prefix":      "highways",
+            "schema_prefix":     "topo",
             "build": {
                 "temp_topo_name": "epoch_ms",
                 "srid":           900913,
@@ -34,9 +33,9 @@
             },
             "vertex": 
             {
-                "table":     "node",
-                "id_col":    "node_id",
-                "geom_col":  "geom"
+                "table":      "node",
+                "id_col":     "node_id",
+                "geom_col":   "geom"
             }
         },
         
@@ -48,9 +47,7 @@
         {
             "test_file": "mapprovider/jsontest/catchtest/test-topology.json"
         }
-        
     },
-    
     
     "vehicle": 
     {
@@ -84,4 +81,4 @@
            "living_street": {"high":  20, "low":  20}
        }
     }
-}   
+}

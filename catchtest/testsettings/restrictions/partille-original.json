@@ -8,7 +8,6 @@
         "database":    "partille-original"
     },
     
-    
     "topology": 
     {
         "provider":      "postgis",
@@ -50,7 +49,6 @@
         }
         
     },
-    
     
     "vehicle": 
     {

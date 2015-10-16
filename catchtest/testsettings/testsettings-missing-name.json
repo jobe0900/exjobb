@@ -1,8 +1,8 @@
 {
-	"database":	{
-		"host": "127.0.0.1",
-		"port": 5432,
-		"password": "jonas",
-		"database": "mikh_style"
-	}
+    "database": {
+        "host": "127.0.0.1",
+        "port": 5432,
+        "password": "jonas",
+        "database": "mikh_style"
+    }
 }
