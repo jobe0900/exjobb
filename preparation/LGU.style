@@ -77,42 +77,42 @@
 # If importing with both --hstore and --extra-attributes the meta-data will
 # end up in the tags hstore column regardless of the style file.
 
-# OsmType	Tag					DataType	Flags
-##################################################
-node,way	access				text		linear
-node,way 	barrier 			text 		linear
-node 		crossing 			text 		linear
-node,way 	disused 			text 		linear
-node,way 	emergency 			text 		linear
-node,way 	highway 			text 		linear
-node,way 	incline				text 		linear
-way 		junction 			text 		linear
-way 		lanes				text		linear
-way 		maxheight 			text 	    linear
-way 		maxlength 			text 	    linear
-way 		maxspeed 			text 	    linear
-way	 		minspeed 			text 		linear
-way	 		maxweight 			text 		linear
-way	 		maxwidth 			text 		linear
-node,way 	noexit				text 		linear
-way 		oneway 				text 		linear
-node,way 	public_transport 	text 		linear
-node,way	restriction			text		linear
-node,way    railway 			text 		linear # :level_crossing, tram, tram_stop
-way 		surface 			text 		linear
-node 		toll 				text 		linear
-way 		tracktype 			text 		linear
-node,way 	traffic_calming 	text 		linear
-node,way 	traffic_sign 		text 		linear
+# OsmType   Tag                 DataType     Flags
+###################################################
+node,way    access              text         linear
+node,way    barrier             text         linear
+node        crossing            text         linear
+node,way    disused             text         linear
+node,way    emergency           text         linear
+node,way    highway             text         linear
+node,way    incline             text         linear
+way         junction            text         linear
+way         lanes               text         linear
+way         maxheight           text         linear
+way         maxlength           text         linear
+way         maxspeed            text         linear
+way         minspeed            text         linear
+way         maxweight           text         linear
+way         maxwidth            text         linear
+node,way    noexit              text         linear
+way         oneway              text         linear
+node,way    public_transport    text         linear
+node,way    restriction         text         linear
+node,way    railway             text         linear # :level_crossing, tram, tram_stop
+way         surface             text         linear
+node        toll                text         linear
+way         tracktype           text         linear
+node,way    traffic_calming     text         linear
+node,way    traffic_sign        text         linear
 
 # Access restrictions for vehicle types
-node,way	goods				text 		linear
-node,way	hgv					text 		linear
-node,way	lhv					text 		linear
-node,way	motorcar			text 		linear
-node,way	motor_vehicle		text 		linear
-node,way	psv					text 		linear
-node,way	vehicle				text 		linear
+node,way    goods               text         linear
+node,way    hgv                 text         linear
+node,way    lhv                 text         linear
+node,way    motorcar            text         linear
+node,way    motor_vehicle       text         linear
+node,way    psv                 text         linear
+node,way    vehicle             text         linear
 
 
 
@@ -124,65 +124,65 @@ node,way	vehicle				text 		linear
 
 # These tags are used by mappers to keep track of data.
 # They aren't very useful for rendering.
-node,way    note                    text    delete
-node,way    note:*                  text    delete
-node,way    source                  text    delete
-node,way    source_ref              text    delete
-node,way    source:*                text    delete
-node,way    attribution             text    delete
-node,way    comment                 text    delete
-node,way    fixme                   text    delete
+node,way    note                text         delete
+node,way    note:*              text         delete
+node,way    source              text         delete
+node,way    source_ref          text         delete
+node,way    source:*            text         delete
+node,way    attribution         text         delete
+node,way    comment             text         delete
+node,way    fixme               text         delete
 
 # Tags generally dropped by editors, not otherwise covered
-node,way    created_by              text    delete
-node,way    odbl                    text    delete
-node,way    odbl:note               text    delete
-node,way    SK53_bulk:load          text    delete
+node,way    created_by          text         delete
+node,way    odbl                text         delete
+node,way    odbl:note           text         delete
+node,way    SK53_bulk:load      text         delete
 
 # Lots of import tags
 # TIGER (US)
-node,way    tiger:*                 text    delete
+node,way    tiger:*             text         delete
 
 # NHD (US)
 # NHD has been converted every way imaginable
-node,way    NHD:*                   text    delete
-node,way    nhd:*                   text    delete
+node,way    NHD:*               text         delete
+node,way    nhd:*               text         delete
 
 # GNIS (US)
-node,way    gnis:*                  text    delete
+node,way    gnis:*              text         delete
 
 # Geobase (CA)
-node,way    geobase:*               text    delete
+node,way    geobase:*           text         delete
 # NHN (CA)
-node,way    accuracy:meters         text    delete
-node,way    sub_sea:type            text    delete
-node,way    waterway:type           text    delete
+node,way    accuracy:meters     text         delete
+node,way    sub_sea:type        text         delete
+node,way    waterway:type       text         delete
 
 # KSJ2 (JA)
 # See also note:ja and source_ref above
-node,way    KSJ2:*                  text    delete
+node,way    KSJ2:*              text         delete
 # Yahoo/ALPS (JA)
-node,way    yh:*                    text    delete
+node,way    yh:*                text         delete
 
 # osak (DK)
-node,way    osak:*                  text    delete
+node,way    osak:*              text         delete
 
 # kms (DK)
-node,way    kms:*                   text    delete
+node,way    kms:*               text         delete
 
 # ngbe (ES)
 # See also note:es and source:file above
-node,way    ngbe:*                  text    delete
+node,way    ngbe:*              text         delete
 
 # naptan (UK)
-node,way    naptan:*                text    delete
+node,way    naptan:*            text         delete
 
 # Corine (CLC) (Europe)
-node,way    CLC:*                   text    delete
+node,way    CLC:*               text         delete
 
 # misc
-node,way    3dshapes:ggmodelk       text    delete
-node,way    AND_nosr_r              text    delete
-node,way    import                  text    delete
-node,way    it:fvg:*                text    delete
+node,way    3dshapes:ggmodelk   text         delete
+node,way    AND_nosr_r          text         delete
+node,way    import              text         delete
+node,way    it:fvg:*            text         delete
 

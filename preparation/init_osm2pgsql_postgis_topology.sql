@@ -41,7 +41,8 @@ $$ LANGUAGE 'plpgsql';
 --
 -- Find all the restrictions and put them in table 'turning_restrictions'
 --
-CREATE OR REPLACE FUNCTION find_osm_turning_restrictions(osm_edges_table text, topo_edges_table text)
+CREATE OR REPLACE FUNCTION 
+    find_osm_turning_restrictions(osm_edges_table text, topo_edges_table text)
 RETURNS integer 
 AS $$
 DECLARE
@@ -94,13 +95,13 @@ BEGIN
                fromOsmId := 
                   trim(leading 'wn' from restrictionRecord.members[ix])::bigint;
                nrFrom := nrFrom + 1;
-	        ELSIF restrictionRecord.members[ix+1] LIKE 'to' THEN 
-	           toOsmId := 
-	              trim(leading 'wn' from restrictionRecord.members[ix])::bigint;
-	           nrTo := nrTo + 1;
-	        ELSIF restrictionRecord.members[ix+1] LIKE 'via' THEN 
-	           viaText := viaText || restrictionRecord.members[ix] || ',';
-	        END IF;
+            ELSIF restrictionRecord.members[ix+1] LIKE 'to' THEN 
+               toOsmId := 
+                  trim(leading 'wn' from restrictionRecord.members[ix])::bigint;
+               nrTo := nrTo + 1;
+            ELSIF restrictionRecord.members[ix+1] LIKE 'via' THEN 
+               viaText := viaText || restrictionRecord.members[ix] || ',';
+            END IF;
          END LOOP;
 
          IF (nrFrom != 1 OR nrTo != 1) THEN
@@ -110,26 +111,26 @@ BEGIN
          -- look for restriction type
          FOR ix IN 1..array_upper(restrictions, 1)
          LOOP
-	        IF (SELECT restrictions[ix] = ANY(restrictionRecord.tags)) THEN
-	           restrType := restrictions[ix];
-	           EXIT;
-	        END IF;
+            IF (SELECT restrictions[ix] = ANY(restrictionRecord.tags)) THEN
+               restrType := restrictions[ix];
+               EXIT;
+            END IF;
          END LOOP;
 
         -- find topology edge ids that might be affected
         -- each osm edge could have two topology edges (in and out at vertex)
         -- and there is no really easy way of finding who is who?
         FOR edgeId IN 
-	       SELECT * 
-	       FROM find_topo_edges_at_turning_restriction(
-	          osm_edges_table, 
-	          fromOsmId, 
-	          toOsmId, 
-	          topo_edges_table) 
-	       AS f(id integer)
-	    LOOP
-	       edges := array_append(edges, edgeId);
-	    END LOOP;
+           SELECT * 
+           FROM find_topo_edges_at_turning_restriction(
+              osm_edges_table, 
+              fromOsmId, 
+              toOsmId, 
+              topo_edges_table) 
+           AS f(id integer)
+        LOOP
+           edges := array_append(edges, edgeId);
+        END LOOP;
 
          -- store findings
          INSERT INTO turning_restrictions
