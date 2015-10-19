@@ -1,15 +1,11 @@
 /*
  * OsmTurningRestriction_test.cc
  *
- *  Created on: 2015-05-26
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "../OsmTurningRestriction.h"
-
-
 #include "../../catchtest/catch.hpp"
-
 
 SCENARIO ("OsmTurningRestriction functionality testing", "[osm][turning]")
 {

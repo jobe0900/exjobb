@@ -1,15 +1,11 @@
 /*
  * OsmHighway_test.cc
  *
- *  Created on: 2015-05-24
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "../OsmHighway.h"
-
-
 #include "../../catchtest/catch.hpp"
-
 
 SCENARIO ("OsmHighway functionality testing", "[osm][highway]")
 {

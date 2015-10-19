@@ -1,15 +1,11 @@
 /*
  * OsmBarrier_test.cc
  *
- *  Created on: 2015-05-25
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #include "../OsmBarrier.h"
-
-
 #include "../../catchtest/catch.hpp"
-
 
 SCENARIO ("OsmBarrier functionality testing", "[osm][barrier]")
 {
@@ -132,7 +128,4 @@ SCENARIO ("OsmBarrier functionality testing", "[osm][barrier]")
 
     }
 }
-
-
-
 
