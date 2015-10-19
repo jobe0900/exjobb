@@ -2,7 +2,7 @@
  *
  * #include "OsmException.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef OSM_OSMEXCEPTION_H_

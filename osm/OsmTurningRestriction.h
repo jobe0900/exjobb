@@ -2,7 +2,7 @@
  *
  * #include "OsmTurningRestriction.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef OSM_OSMTURNINGRESTRICTION_H_
@@ -28,6 +28,9 @@
 // FORWARD REFERENCES
 //
 
+/**
+ * Class for working with "turning restrictions" from OSM relations.
+ */
 class OsmTurningRestriction
 {
 public:

@@ -1,8 +1,7 @@
 /*
  * OsmId.cc
  *
- *  Created on: 1 jun 2015
- *      Author: jonas
+ * @author  Jonas Bergman
  */
 
 #include "OsmId.h"

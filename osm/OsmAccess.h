@@ -2,7 +2,7 @@
  *
  * #include "OsmAccess.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef OSM_OSMACCESS_H_
@@ -25,7 +25,9 @@
 // FORWARD REFERENCES
 //
 
-
+/**
+ * Class to represent OSM key `access`.
+ */
 class OsmAccess
 {
 public:

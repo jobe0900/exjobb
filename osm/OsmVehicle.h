@@ -2,7 +2,7 @@
  *
  * #include "OsmVehicle.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef OSM_OSMVEHICLE_H_
@@ -22,7 +22,9 @@
 // FORWARD REFERENCES
 //
 
-
+/**
+ * Class for working with different categories of vehicles.
+ */
 class OsmVehicle
 {
 public:

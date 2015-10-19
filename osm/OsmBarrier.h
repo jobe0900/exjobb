@@ -2,7 +2,7 @@
  *
  * #include "OsmBarrier.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef OSM_OSMBARRIER_H_
@@ -28,6 +28,9 @@
 //
 
 
+/**
+ * Class to represent OSM key `barrier`.
+ */
 class OsmBarrier
 {
 public:

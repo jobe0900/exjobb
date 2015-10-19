@@ -1,6 +1,8 @@
 /**  Access to `Highway` data from the OSM file.
  *
  * #include "OsmHighway.h"
+ *
+ * @author Jonas Bergman
  */
 
 #ifndef OSM_OSMHIGHWAY_H_
@@ -23,6 +25,9 @@
 //
 
 
+/**
+ * Class for categoreis of OSM `highway` and `surface`.
+ */
 class OsmHighway
 {
 public:

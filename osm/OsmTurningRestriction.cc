@@ -1,13 +1,10 @@
 /*
  * OsmTurningRestriction.cc
  *
- *  Created on: 2015-05-25
- *      Author: Jonas Bergman
+ * @author  Jonas Bergman
  */
 
-
 #include "OsmTurningRestriction.h"  // class implemented
-
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 

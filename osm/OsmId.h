@@ -1,8 +1,7 @@
 /*
  * OsmId.h
  *
- *  Created on: 1 jun 2015
- *      Author: jonas
+ * @author  Jonas Bergman
  */
 
 #ifndef OSM_OSMID_H_
