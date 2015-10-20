@@ -1,15 +1,13 @@
 /*
  * TimeToStringMaker.cc
  *
- *  Created on: 2015-05-13
- *      Author: jonas
+ * @author  Jonas Bergman
  */
 
 
 #include "TimeToStringMaker.h"  // class implemented
 
 #include <chrono>
-
 
 /////////////////////////////// PUBLIC ///////////////////////////////////////
 
@@ -33,9 +31,4 @@ TimeToStringMaker::getEpochMsTimeString()
 /////////////////////////////// PROTECTED  ///////////////////////////////////
 
 /////////////////////////////// PRIVATE    ///////////////////////////////////
-
-
-
-
-
 

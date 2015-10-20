@@ -1,8 +1,8 @@
-/**  Abstract Base class to provide strings based on time.
+/**  Static class to provide strings based on time.
  *
  * #include "TimeToStringMaker.h"
  *
- * @author Jonas Bergman
+ * @author  Jonas Bergman
  */
 
 #ifndef UTIL_TIMETOSTRINGMAKER_H_
@@ -22,28 +22,28 @@
 //
 
 /**
- * An interface for classes who provide strings from times.
+ * Class who provide strings from times.
  */
 class TimeToStringMaker
 {
 public:
 // LIFECYCLE
 
-	/** Default constructor.
-	 */
-	TimeToStringMaker() = delete;
+    /** Default constructor.
+     */
+    TimeToStringMaker() = delete;
 
-	/** Copy constructor */
-	TimeToStringMaker(const TimeToStringMaker& from) = delete;
+    /** Copy constructor */
+    TimeToStringMaker(const TimeToStringMaker& from) = delete;
 
 // OPERATORS
 // OPERATIONS
 
-	/** Get the current time as a string.
-	 *
-	 * @return	A string representation of the time.
-	 */
-	static std::string		getEpochMsTimeString();
+    /** Get the current time as a string.
+     *
+     * @return    A string representation of the time.
+     */
+    static std::string        getEpochMsTimeString();
 
 // ACCESS
 // INQUIRY

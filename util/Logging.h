@@ -5,6 +5,7 @@
  * Needs a lot of linking to work:
  * -lboost_log -lboost_log_setup -lboost_thread -lboost_system -lpthread
  *
+ * @author  Jonas Bergman
  *
  */
 
@@ -50,7 +51,5 @@ struct Logging
 private:
     static bool isInited;
 };
-
-
 
 #endif /* LGU_LOGGING_H_ */
