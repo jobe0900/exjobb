@@ -74,6 +74,12 @@ public:
      */
     void             persistLineGraph();
 
+    /** Output information about # vertices, edges, nodes, lines.
+     */
+    void             printGraphInformation(
+                        std::string propmt,
+                        std::ostream& os) const;
+
 // ACCESS
 // INQUIRY
 

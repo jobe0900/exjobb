@@ -80,6 +80,15 @@ LineGraphUtility::persistLineGraph()
         throw LineGraphUtilityException(mpe.what());
     }
 }
+
+void
+LineGraphUtility::printGraphInformation(
+    std::string prompt,
+    std::ostream& os) const
+{
+    os << prompt;
+    mpGraphBuilder->printGraphInformation(os);
+}
 //============================= ACESS      ===================================
 //============================= INQUIRY    ===================================
 /////////////////////////////// PROTECTED  ///////////////////////////////////

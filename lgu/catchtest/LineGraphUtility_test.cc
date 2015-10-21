@@ -152,7 +152,7 @@ SCENARIO ("LineGraphUtility operation", "[lgu][operation]")
 }
 
 
-SCENARIO ("LineGraphUtility timing", "[lgu][.timing]")
+SCENARIO ("LineGraphUtility timing", "[lgu][timing]")
 {
     try
     {
@@ -328,6 +328,54 @@ SCENARIO ("LineGraphUtility timing", "[lgu][.timing]")
             }
         }
 
+    }
+    catch (LineGraphUtilityException& lgue)
+    {
+        INFO(lgue.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+    catch (const std::exception& e)
+    {
+        INFO(e.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+}
+
+SCENARIO ("LineGraphUtility size and order", "[lgu][print_size]")
+{
+    try
+    {
+        GIVEN ("a valid config file for Mikhailovsk")
+        {
+            std::string config_file(
+                "catchtest/testsettings/mikhailovsk-original.json");
+
+            WHEN ("asking for size and order of graphs")
+            {
+                LineGraphUtility lgu(config_file);
+                THEN ("we should get a print out of sizes")
+                {
+                    lgu.printGraphInformation("Mikhailovsk: ", std::cout);
+                    REQUIRE(true);
+                }
+            }
+        }
+
+        GIVEN ("a valid config file for Partille")
+        {
+            std::string config_file(
+                "catchtest/testsettings/partille-original.json");
+
+            WHEN ("asking for size and order of graphs")
+            {
+                LineGraphUtility lgu(config_file);
+                THEN ("we should get a print out of sizes")
+                {
+                    lgu.printGraphInformation("Partille: ", std::cout);
+                    REQUIRE(true);
+                }
+            }
+        }
     }
     catch (LineGraphUtilityException& lgue)
     {

@@ -565,7 +565,7 @@ GraphBuilder::printGraphInformation(std::ostream& os) const
 {
     os << "Graph: #vertices: " << nrVertices()
        << ", #edges: " << nrEdges()
-       << ", #nodes: " << nrNodes()
+       << ". LineGraph: #nodes: " << nrNodes()
        << ", #lines: " << nrLines()
        << std::endl;
 }
