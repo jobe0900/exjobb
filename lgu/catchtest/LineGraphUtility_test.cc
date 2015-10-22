@@ -388,3 +388,56 @@ SCENARIO ("LineGraphUtility size and order", "[lgu][print_size]")
         REQUIRE (false);    // force output of error and failure
     }
 }
+
+SCENARIO ("LineGraphUtility persisting linegraph", "[lgu][persist_linegraph]")
+{
+    try
+    {
+        GIVEN ("a valid config file for Mikhailovsk")
+        {
+            std::string config_file(
+//                "catchtest/testsettings/mikhailovsk-original.json");
+//                "catchtest/testsettings/restrictions/mikhailovsk-turn_no_right.json");
+                "catchtest/testsettings/restrictions/mikhailovsk-barrier_bollard.json");
+
+            WHEN ("asking to persist line graph")
+            {
+                LineGraphUtility lgu(config_file);
+
+                THEN ("we should have persisted line graph")
+                {
+                    lgu.persistLineGraph();
+                    REQUIRE(true);
+                }
+            }
+        }
+
+//        GIVEN ("a valid config file for Partille")
+//        {
+//            std::string config_file(
+////                "catchtest/testsettings/partille-original.json");
+//                "catchtest/testsettings/restrictions/partille-barrier_block.json");
+//
+//            WHEN ("asking to persist line graph")
+//            {
+//                LineGraphUtility lgu(config_file);
+//
+//                THEN ("we should have persisted line graph")
+//                {
+//                    lgu.persistLineGraph();
+//                    REQUIRE(true);
+//                }
+//            }
+//        }
+    }
+    catch (LineGraphUtilityException& lgue)
+    {
+        INFO(lgue.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+    catch (const std::exception& e)
+    {
+        INFO(e.what());
+        REQUIRE (false);    // force output of error and failure
+    }
+}
