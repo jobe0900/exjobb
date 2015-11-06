@@ -27,12 +27,12 @@ The code is organized in folders (kind of "packages") to keep it modularized. Th
 
 - **`catchtest`**: The main for the testing framework.
 - **`config`**: For configuration related code.
+- **`doc`**: For documentation, report and uml diagrams.
 - **`graph`**: For code that is related to Graphs.
 - **`lgu`**: The main entry point into this software.
 - **`mapprovider`**: The package for code providing access to map data.
 - **`osm`**: Classes representing some concepts in OpenStreetMap data.
 - **`preparation`**: osm-files and sql-files and instructions on how to set up database.
-- **`uml`**: For uml documentation.
 - **`util`**: A few utility classes.
 
 Each folder should have its own `README.md` that describes what the contents and the purpose of that package is. Each package should also have their own tests in a `catchtest` folder, and preferably an *exception class*.
