@@ -1,0 +1,340 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Directory listings}\label{appendix_directory_listings}
+Contents of the directories in this project. The source code is available at\\
+\url{https://bitbucket.org/jobe0900/exjobb/src} or \\
+\url{https://github.com/jobe0900/exjobb}.
+
+\section{root}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 / .
+    .2 \hyperref[lst:dir-catchtest]{catchtest/} . 
+    .2 \hyperref[lst:dir-config]{config/} . 
+    .2 \hyperref[lst:dir-doc]{doc/} . 
+    .2 \hyperref[lst:dir-graph]{graph/} . 
+    .2 \hyperref[lst:dir-lgu]{lgu/} .
+    .2 \hyperref[lst:dir-mapprovider]{mapprovider/} . 
+    .2 \hyperref[lst:dir-osm]{osm/} .
+    .2 \hyperref[lst:dir-preparation]{preparation/} .
+    .2 \hyperref[lst:dir-util]{util/} .
+    .2 \hyperref[lst:root-readme-md]{README.md} . 
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Directory structure in root of the project}
+\label{lst:dir-root}
+\end{mylisting}
+\subsection{README.md}\label{lst:root-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/README.md}
+
+\section{catchtest}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 catchtest/ .
+    .3 catch.hpp .
+    .3 catchmain.cc .
+    .3 \hyperref[lst:catchtest-readme-md]{README.md} .
+    .3 testsettings/ .
+    .4 mikhailovsk-original.json . 
+    .4 mikhailovsk-original-temp.json . 
+    .4 partille-original-temp.json . 
+    .4 partille-original-temp.json .
+    .4 \ldots \DTcomment{(10 more .json files)} . 
+    .4 restrictions/ . 
+    .5 mikhailovsk-barrier\_block.json .
+    .5 partille-highway\_traffic\_signals.json . 
+    .7 \ldots \DTcomment{(17 more .json files)} .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/catchtest}}
+\label{lst:dir-catchtest}
+\end{mylisting}
+
+\subsection{catchtest/README.md}\label{lst:catchtest-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/catchtest/README.md}
+
+
+\section{config}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 config/ . 
+    .3 catchtest/ . 
+    .4 ConfigurationReader\_test.cc .
+    .3 Configuration.cc . 
+    .3 Configuration.h . 
+    .3 ConfigurationException.h . 
+    .3 ConfigurationReader.cc . 
+    .3 ConfigurationReader.h . 
+    .3 CostConfig.h . 
+    .3 DatabaseConfig.h . 
+    .3 \hyperref[lst:config-readme-md]{README.md} .
+    .3 TopologyConfig.h . 
+    .3 VehicleConfig.h . 
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/config}}
+\label{lst:dir-config}
+\end{mylisting}
+
+\subsection{config/README.md}\label{lst:config-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/config/README.md}
+
+\section{doc}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 doc/ . 
+    .3 presentation/ . 
+    .3 report/ . 
+    .4 latex/\DTcomment{\LaTeX original} . 
+    .4 jobe0900\_report.pdf . 
+    .4 \hyperref[lst:report-readme-md]{README.md} . 
+    .3 uml/ .
+    .4 \DTcomment{.xml, .svg, .pdf diagram files} . 
+    .4 \hyperref[lst:uml-readme-md]{README.md} . 
+    .3 \hyperref[lst:doc-readme-md]{README.md} .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/doc}}
+\label{lst:dir-doc}
+\end{mylisting}
+
+\subsection{doc/README.md}\label{lst:doc-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/doc/README.md}
+
+\subsection{doc/report/README.md}\label{lst:report-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/doc/report/README.md}
+
+\subsection{doc/uml/README.md}\label{lst:uml-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/doc/uml/README.md}
+
+
+\section{graph}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2  graph/ . 
+    .3  catchtest/ . 
+    .4  EdgeCost\_test.cc . 
+    .4  GraphBuilder\_test.cc . 
+    .4  RestrictionsAndCosts\_test.cc . 
+    .4  Topology\_test.cc . 
+    .4  TurnCostCalculator\_test.cc . 
+    .3  Cost.h . 
+    .3  Edge.cc . 
+    .3  Edge.h . 
+    .3  EdgeCost.cc . 
+    .3  EdgeCost.h . 
+    .3  EdgeRestriction.cc . 
+    .3  EdgeRestriction.h . 
+    .3  GraphBuilder.cc . 
+    .3  GraphBuilder.h . 
+    .3  GraphException.h . 
+    .3 \hyperref[lst:graph-readme-md]{README.md} .
+    .3  RestrictionsException.h . 
+    .3  Speed.h . 
+    .3  Topology.cc . 
+    .3  Topology.h . 
+    .3  TopologyException.h . 
+    .3  TurnCostCalculator.cc . 
+    .3  TurnCostCalculator.h . 
+    .3  Vertex.cc . 
+    .3  Vertex.h . 
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/graph}}
+\label{lst:dir-graph}
+\end{mylisting}
+
+\subsection{graph/README.md}\label{lst:graph-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/graph/README.md}
+
+
+\section{lgu}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 lgu/ . 
+    .3 catchtest/ . 
+    .4 LineGraphUtility\_test.cc .
+    .3 LineGraphUtility.cc . 
+    .3 LineGraphUtility.h . 
+    .3 LineGraphUtilityException.h . 
+    .3 \hyperref[lst:lgu-readme-md]{README.md} .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/lgu}}
+\label{lst:dir-lgu}
+\end{mylisting}
+
+\subsection{lgu/README.md}\label{lst:lgu-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/lgu/README.md}
+
+\section{mapprovider}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 mapprovider/ . 
+    .3 catchtest/ . 
+    .4 MapProvider\_test.cc .
+    .3 jsontest/ . 
+    .4 catchtest/ .
+    .5 JsonTestProvider\_test.cc .
+    .5 jsontest-settings.json .
+    .5 test-topology.json .
+    .4 JsonTestProvider.cc .
+    .4 JsonTestProvider.h .
+    .4 \hyperref[lst:mapprovider-jsontest-readme-md]{README.md} .
+    .3 postgis/ . 
+    .4 catchtest/ .
+    .5 PostGisProvider\_test.cc .
+    .4 CostQueries.cc .
+    .4 CostQueries.h .
+    .4 LineGraphSaveQueries.cc .
+    .4 LineGraphSaveQueries.h .
+    .4 PostGisProvider.cc .
+    .4 PostGisProvider.h .
+    .4 RestrictionQueries.cc .
+    .4 RestrictionQueries.h .
+    .4 TopologyQueries.cc .
+    .4 \hyperref[lst:mapprovider-postgis-readme-md]{README.md} .
+    .3 MapProvider.h .
+    .3 MapProviderException.h .
+    .3 \hyperref[lst:mapprovider-readme-md]{README.md} .
+    .3 README.md .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/mapprovider}}
+\label{lst:dir-mapprovider}
+\end{mylisting}
+
+\subsection{mapprovider/README.md}\label{lst:mapprovider-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/mapprovider/README.md}
+
+\subsection{mapprovider/postgis/README.md}\label{lst:mapprovider-postgis-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/mapprovider/postgis/README.md}
+
+\subsection{mapprovider/jsontest/README.md}\label{lst:mapprovider-jsontest-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/mapprovider/jsontest/README.md}
+
+\section{osm}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 osm/ . 
+    .3 catchtest/ . 
+    .4 OsmAccess\_test.cc .
+    .4 OsmBarrier\_test.cc .
+    .4 OsmHighway\_test.cc .
+    .4 OsmTurningRestriction\_test.cc .
+    .4 OsmVehicle\_test.cc .
+    .3 OsmAccess.cc .
+    .3 OsmAccess.h .
+    .3 OsmBarrier.cc .
+    .3 OsmBarrier.h .
+    .3 OsmException.h .
+    .3 OsmHighway.cc .
+    .3 OsmHighway.h .
+    .3 OsmId.cc .
+    .3 OsmId.h .
+    .3 OsmTurningRestriction.cc .
+    .3 OsmTurningRestriction.h .
+    .3 OsmVehicle.cc .
+    .3 OsmVehicle.h .
+    .3 \hyperref[lst:osm-readme-md]{README.md} .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/osm}}
+\label{lst:dir-osm}
+\end{mylisting}
+
+\subsection{osm/README.md}\label{lst:osm-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/osm/README.md}
+
+
+\section{preparation}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 preparation/ . 
+    .3 restrictions/ . 
+    .4 \ldots\DTcomment{osm-files modified with added restrictions} .
+    .3 build\_postgis\_topology.sql .
+    .3 init\_osm2pgsql\_postgis\_topology.sql .
+    .3 LGU.style .
+    .3 mikhailovsk.osm .
+    .3 partille.osm .
+    .3 \hyperref[lst:preparation-readme-md]{README.md} .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/preparation}}
+\label{lst:dir-preparation}
+\end{mylisting}
+
+\subsection{preparation/README.md}\label{lst:preparation-readme-md}
+\inputminted[breaklines=true]{text}{parts/code/preparation/README.md}
+
+
+\section{util} 
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 util/ . 
+    .3 catchtest/\DTcomment{empty directory} . 
+    .3 Logging.cc .
+    .3 Logging.h .
+    .3 Point.h .
+    .3 TimeToStringMaker.cc .
+    .3 TimeToStringMaker.h .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/util}}
+\label{lst:dir-util}
+\end{mylisting}
+
+\end{document}
+

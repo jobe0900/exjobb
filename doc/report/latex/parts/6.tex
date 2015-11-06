@@ -1,0 +1,100 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Discussion}
+Presented below is my personal views of parts of the project and the outcome of it.
+
+%========================================================================================
+\section{Research}
+% ---------------------------------------------------------------------------------------
+\subsection{Graph theory}
+Starting out on this project, I thought that one of the main obstacles would be no prior knowledge of \textit{graph theory}, so I set out to allow for some time initially to get into the field. I am glad to have gained some fundamental knowledge of the area, but the time spent here could have been less.
+
+% ---------------------------------------------------------------------------------------
+\subsection{Map routing}
+Reading about theory regarding map routing and graphs was really interesting, and a lot of research has been done in this area in later years. It initially gave me some ideas I thought I would like to try out, but once development got going, those theories vanished in favor of finding working solutions quickly.
+
+% ---------------------------------------------------------------------------------------
+\subsection{Map data}
+\textit{OpenStreetMap} is the source of map data for this project, and a lot of high quality projects. That puzzles me somewhat, because I have found it kind of messy. It is an \textit{XML} application, but it has no official \textit{schema}. That is, there is an informal consensus on which tags are good, but one can also make up ones own tags\footnote{\url{http://wiki.openstreetmap.org/wiki/Map_Features}}. Another example of the messiness is the \texttt{maxspeed} tag, which can have the values \textit{60; 50 mph; 10 knots}. That is, the default case is a unit of \textit{km/h} and one can read the value as numeric. But one cannot be sure of that, because other units are allowed, and in that case one needs to parse the value as a string to find out which unit is used. It would surely have been better to let the unit be an attribute of the value, so one did not need to parse every value. In this project I decided to skip parsing, and just assume all values are \textit{km/h}.
+
+But, as said, a lot of good applications using \textit{OSM} exists, see \ref{sect:available-applications}, so it is possible to work with. And it might also be unfair to say that \textit{OpenStreetmap} is messy; it might be the case that it simply reflects the complex and difficult reality in the traffic, with lots of different rules and restrictions dependent on context and conditions.
+
+% ---------------------------------------------------------------------------------------
+\subsection{Available applications}
+The fact that a lot of applications already existed, and some of them being \textit{open source} and using \textit{OpenStreetMap} as the the source for map data, made the direction of this project a little difficult. I proposed to the company that there are some good solutions out there that might just need some adaption to work, but they wanted their own thing. So the question for me was if I was to look at and copy features and concepts of those existing solutions anyway or just blindly go down my own path. In order to steer clear of issues with plagiarism I chose the latter, and that has surely impacted the project negatively. It would have been wiser to build upon the experience of others, developed through years.
+
+
+%========================================================================================
+\section{Methodology}
+The main methodology for the project was supposed to be test driven (either BDD or TDD), but to be honest, most tests were written after the implementation of a feature, functioning more as unit test, than driving the development. I don't think that has affected the outcome of the project negatively, it is more a matter which workflow feels best.
+
+
+%========================================================================================
+\section{Design}
+Previously I have bee more into heavy design and modeling before starting coding, but in the last year I have tried to become more ``agile'', and start testing things out and be prepared to refactor and remodel when needed.
+
+In this project perhaps it could have been good to design more, to have really thought through how the restrictions should work. On the other hand, a lot of the difficulties was discovered only when working on them, so it would be hard to have the full picture before. It is a balance in getting going and learning, and modeling before. What is clear, is that parts of the software as it stands now, should be re-modeled, specifically the \textit{restrictions}.
+
+
+%========================================================================================
+\section{Development}
+
+% ---------------------------------------------------------------------------------------
+\subsection{Coding standard}
+This was the first time I had to code to a standard. It was kind of awkward and unintuitive at first as it differs from my personal style, especially since having started to trying to practice \textit{``Clean Code''}. and have less comments and visual dividers in the file. But after a short time the style became pretty easy to use. I don't think I have followed the standard completely, but it was too lng to read and get into before beginning to code.
+
+% ---------------------------------------------------------------------------------------
+\subsection{Memory management}
+I tried to avoid pointers and only use references, but that turned out to be clumsy, so at times I reverted to using raw pointers. Eventually, I found out that it would have been a lot better to use the smart pointers from C++11 (or even Boost), but I did not want to spend the time needed for learning how to use them and redo the memory management completely. 
+
+% ---------------------------------------------------------------------------------------
+\subsection{Tools}
+% ---------------------------------------------------------------------------------------
+\subsubsection{OSM conversion}
+I tested and looked at a number of tools for converting \textit{OpenStreetMap} data to a \textit{PostGIS} database, and the choice fell on \textit{osm2pgsql}. I am not certain that it was the right choice, as it has is shortcomings when working with restrictions. Fortunately, the developed software module is flexible so one can write a new \textit{MapProvider} if one decides to work with another tool, that uses a different approach. 
+
+% ---------------------------------------------------------------------------------------
+\subsubsection{Database}
+The \textit{pqxx} library was easy and straight-forward to work with.
+
+% ---------------------------------------------------------------------------------------
+\subsubsection{Boost}
+This was the first time for me to use \textit{Boost}. I have only used small parts of the library: obviously the \textit{graph} package, the \textit{property\_tree} for parsing \textit{json} and the \textit{logging} package. There are some tricky concepts, but also a lot of useful stuff. Getting into all the long names and templates takes some getting used to, but it was OK.
+
+% ---------------------------------------------------------------------------------------
+\subsubsection{Catch test}
+I really enjoyed the \textit{Catch} testing library; small and easy to use. It didn't play so nicely with \textit{Eclipse CDT}, marking errors throughout in the editor, but good enough.
+
+% ---------------------------------------------------------------------------------------
+\subsection{OpenStreetMap}
+
+% ---------------------------------------------------------------------------------------
+\subsubsection{Restrictions}
+\textit{Turning restrictions} are \textit{relations}, and \textit{osm2pgsql} does not really handle relations, so a lot of parsing was needed. And in the case of \textit{conditional restrictions} I have not found out how to work with them. \textit{osm2pgsql} can be instructed to put tags into separate columns in the database, but with conditional restrictions the tags changes `looks' and the only way to find them is by parsing the \textit{hstore} column. 
+
+Also, the \textit{restriction} class in the application is kind of messy. It could do with some remodeling, partly to clean up, and partly to make it more extensible to incorporate \textit{conditions}. The \textit{OSM} syntax for \textit{conditional restrictions}\footnote{\url{http://wiki.openstreetmap.org/wiki/Conditional_restrictions}} is shown in listing \ref{lst:conditional-restriction-syntax}, and could work as a model for developing a more generic restrictions class.
+
+\begin{mylisting}
+\begin{textcode}
+<restriction-type>[:<transportation mode>][:<direction>]:conditional
+  = <restriction-value> @ <condition>[;<restriction-value> @ <condition>]
+\end{textcode}
+\caption{Syntax of conditional restrictions in OpenStreetMap.}
+\label{lst:conditional-restriction-syntax}
+\end{mylisting}
+
+%========================================================================================
+\section{Documentation}
+A lot of the time of the project has also been devoted to documentation and writing this report. I took the opportunity to learn how to write a report in \LaTeX, using the excellent web service \url{www.sharelatex.com}. It has been a pleasure, and it feels really good not to depend on the shaky features with cross-referencing in word processors.
+
+%========================================================================================
+\section{Results}
+As the project does not fulfill all requirements and did not finish on time, it was not all that successful. The reason for not meeting the specification is that I ran out of time, partly due to the specification was supplied more than two weeks late, and partly due to the complexities with handling restrictions.
+
+It would be possible to continue development, most on finding good ways to handle conditional restrictions. From my horizon, I still think that the best solution would be to adapt an existing solution that has been developed and refined by many people through many years. Perhaps using \textit{OSRM} together with a \textit{PostGIS} database as demonstrated here: \url{https://www.mapbox.com/blog/osrm-using-external-data/}. But I do not have any overview of the greater project, and what it is trying to accomplish.
+
+This project shows that there exists really good products, and that rolling ones own is not trivial. What first seemed like a straightforward sequential piece of software turned out to be tangled in complex handling of restrictions.
+
+\end{document}

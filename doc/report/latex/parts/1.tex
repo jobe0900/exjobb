@@ -1,0 +1,45 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Introduction}
+The work presented in this thesis is about flexible routing of public transportation. The result of the work is a software module that loads map data and converts it into in-memory data structures that can be used for routing decisions by exposing an \textit{API}, (Application Programming Interface). This module is part of a bigger transportation optimization system that is meant to enable flexible public transportation solutions. 
+
+The module will be used for finding efficient routes in a dynamic traffic environment, i.e. the complete solution must take turn restriction, traffic lights and road signs into account. The outline of how to do this is by loading map data from \href{http://www.openstreetmap.org}{\textit{OpenStreetMap}}\footnote{\url{http://www.openstreetmap.org}} into a database (\href{http://www.postgresql.org}{\textit{PostgreSQL}}\footnote{\url{http://www.postgresql.org}} extended with \href{http://postgis.net}{\textit{PostGIS}}\footnote{\url{http://postgis.net}} ). Upon a request directed to the API, the module should build (with soft real-time requirements) a data structure suitable for passing to a routing algorithm.
+
+
+\section{Background and problem motivation}
+The company (\textit{anonymized}) aims at developing a solution for managing \emph{flexible} public transportation, meaning no more buses standing idle and empty at bus stops, waiting just in case another bus fills up. The buses can be directed to where they are needed, and part of the solution is finding the best routes and give directions to the drivers where they should go. The public does not need to wait at bus stops, but can ask for pick-up via a mobile app.
+
+There can obviously be huge benefits from such a transportation system. Less vehicles are needed, and better utilization of the vehicles, which should be good both for the environment and the finances of the operation. The public should also benefit from having access to public transportation where needed, and not from fixed locations.
+
+Central for such a system is efficient routing of the vehicles, with almost instant updates on restrictions made available to the drivers needing directions. This project is a small piece in that puzzle.
+
+\section{Overall aim}
+This project should result in a working software module, fulfilling the requirements set by the company. There is needed some preliminary studying of graph theory, data structures, and research into what theories and solutions that already might exist, and if so, if they can be adapted and used in this project.
+
+\section{Scope}
+The scope of this project is to create the routing data structures representing the map data, not the routing algorithms, although they might affect one another, such that the choice of algorithm might affect what data structures are suitable.
+
+\section{Detailed problem statement}
+The software in this project is a module, exposing a function. When the function is called, it should load map data from a database, which has previously been loaded with OpenStreetMap-data, and build a connected graph to be used for routing decisions, and the data structure is returned to the caller so it can be used for routing. The building of the graph should happen in \emph{soft real-time} so that it reflects all known restrictions in the database. For example if one road gets temporarily closed it should be marked as such, and that should be represented in the graph.
+
+The requirements from the company states that the graph should be represented as a \emph{line graph}, which is a basic technique for representing available turns at junctions. The software module shall be implemented in C++, using the \href{http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/index.html}{\emph{Boost Graph Library}}\footnote{\url{http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/index.html}} for the data structures. The software should be developed using \emph{Behavior Driven Development} (BDD) or \emph{Test Driven Development} (TDD) as methodologies, and otherwise adhere to the company's coding standards.
+
+\section{Outline}
+\begin{itemize}
+\item  Chapter 2 will present some background on graph theory, and research in map routing, regarding both theoretical foundations and some available implementations.
+
+\item Chapter 3 shows the methods and tools used.
+
+\item Chapter 4 is about the design and implementation of the software module.
+
+\item Chapter 5 presents the results from testing the implementation.
+
+\item Chapter 6 will include some discussion and conclusions made during this project.
+\end{itemize}
+
+\section{Contributions}
+The work presented in this report is the sole work of the author.
+
+\end{document}

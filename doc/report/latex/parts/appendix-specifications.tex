@@ -1,0 +1,51 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Specification}\label{appendix-specification}
+The complete specifications from the company.
+
+\section{General}
+\textit{Line Graph Utility, LGU} is a software utility which can poll a PostGIS database for a road network and builds a directed line graph from that. The directed line graph is stored in memory and the call to \texttt{get\_directed\_line\_graph()} returns a directed line graph stored in a C++ \textit{Boost} graph structure. The directed line graph is built based on the time of the day, road signs, traffic lights and other conditions.
+
+\section{Main use case}
+\begin{enumerate}[\thesection .1]
+    \item Call \texttt{get\_directed\_line\_graph()} from C++ code.
+    \item LGU queries the PostGIS database and builds a graph from the road network.
+    \item LGU builds a directed line graph from the previous step (i.e. it converts nodes to edges and assigns weight to those edges based on road signs and other elements which are present in the nodes).
+    \item \texttt{get\_directed\_line\_graph()} returns a directed line graph structure which is based on a C Boost graph structure to the function caller.
+\end{enumerate}
+
+\section{Optional use case}
+\begin{enumerate}[\thesection .1]
+    \item All main use case steps.
+    \item Write the resulting directed line graph to a separate heterogeneous table in the PostGIS database so that the graph can be viewed in QGis.
+\end{enumerate}
+
+\section{Functional requirements}
+\begin{enumerate}[\thesection .1]
+    \item LGU should take into account the following elements when building a directed line graph and calculating a weight for each edge: road signs (including time scheduling for those), traffic lights, road type (OSM road types), time of the day, road marking (i.e. separate lanes should be treated as separate edges), crossing and roundabouts slowdown, slopes and downhills, one way streets, road conditions, 'closed road' attribute.
+    \item LGU should take into account restricted turns in the road network when building a directed line graph; i.e. it should not create edges between newly created nodes in a line graph.
+    \item LGU should only take road signs and other conditions which are already present in the PostGIS database, the database is the only source of data for LGU.
+    \item LGU should store all its settings in a \texttt{settings.json} file.
+\end{enumerate}
+
+\section{Non-functional requirements}
+\begin{enumerate}[\thesection .1]
+    \item LGU should be written in C/C++; or, Boost.Python can be used
+    \item LGU can re-use architecture and code from the pgRouting software, which has a very similar structure. Namely it can re-use the steps 1 and 2 of the pgRouting's source code:
+    \begin{itemize}
+    \item A C module that uses a query is passed in Postgresql in order to build a line graph.
+    \item C++ modules that convert it into a boost graph, and launch the routing.
+    \item Return a result into psql server (this step is not required)
+    \end{itemize}
+\end{enumerate}
+
+\section{Testing requirements}
+LGU should be tested with a road network map built from 2 \texttt{.osm} files, \texttt{partille.osm} and \texttt{mikhailovsk.osm}.
+
+\section{Coding standard}\label{sect:coding-standard}
+Not actually written down in this document, but noted in an earlier conversation was that the company uses a \textit{coding standard} \footnote{\url{http://www.possibility.com/Cpp/CppCodingStandard.html}} that must be followed.
+
+\end{document}
+

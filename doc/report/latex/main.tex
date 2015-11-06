@@ -1,0 +1,326 @@
+\documentclass[a4paper]{report}
+
+% language and encoding
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[iso]{datetime}
+
+% Enter document info here -------------------------------------------------------
+\newcommand
+    {\Author}{Jonas Bergman}
+\newcommand
+    {\AuthorEmail}{jobe0900@student.miun.se}
+\newcommand
+    {\Title}{Line Graph Utility}
+\newcommand
+    {\Subtitle}{A software module for routing}
+\newcommand
+    {\MajorSubjectSv}{Datateknik}
+\newcommand
+    {\MajorSubject}{Computer engineering}
+\newcommand
+    {\Keywords}{my first keyword, my first keyword, more keywords.}
+\newcommand
+    {\Division}{DSV}
+\newcommand
+    {\Programme}{Programvaruteknik}
+\newcommand
+    {\Credits}{180}
+\newcommand
+    {\MainFieldOfStudy}{Software technology}
+\newcommand
+    {\Semester}{Fall, 2015}
+\newcommand
+    {\Examiner}{Ulf Jennehag}
+\newcommand
+    {\ExaminerEmail}{ulf.jennehag@miun.se}
+\newcommand
+    {\Supervisor}{Börje Hansson}
+\newcommand
+    {\SupervisorEmail}{borje.hansson@miun.se}
+% End document info here ---------------------------------------------------------
+
+
+
+% page setup and headers
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    total={210mm, 297mm},
+    left=37mm,
+    right=30mm,
+    top=30mm,
+    bottom=25mm,
+}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}  % clear header and footer
+\lhead{\Title{} -- \Subtitle\\\Author}
+\rhead{\today}
+\cfoot{\thepage}
+% make chapter's first pages have headers and footers
+\makeatletter
+\let\ps@plain\ps@fancy
+\makeatother
+
+% get the hanging header numbering and spacing
+\usepackage{titlesec}
+% \setcounter{secnumdepth}{3}
+% \setcounter{tocdepth}{3}
+\newlength\titleindent
+\setlength\titleindent{17mm}
+\titleformat{\chapter}
+    {\fontfamily{qhv}\selectfont\huge\bfseries}
+    {\llap
+        {\parbox [t]
+            {\titleindent}
+            {\thechapter}
+        }
+    }
+    {-0.25em}{}
+\titleformat{\section}
+    {\fontfamily{qhv}\selectfont\Large\bfseries}
+    {\llap
+        {\parbox [t]
+            {\titleindent}
+            {\thesection\hfill}
+        }
+    }
+    {-0.25em}{}
+\titleformat{\subsection}
+    {\fontfamily{qhv}\selectfont\large\bfseries}
+    {\llap
+        {\parbox [t]
+            {\titleindent}
+            {\thesubsection\hfill}
+        }
+    }
+    {-0.25em}{}
+\titleformat{\subsubsection}
+    {\fontfamily{qhv}\selectfont\large}
+    {\llap
+        {\parbox [t]
+            {\titleindent}
+            {\thesubsubsection\hfill}
+        }
+    }
+    {-0.25em}{}
+
+\titlespacing*{\chapter}{0pt}{0em}{0.4em}
+\titlespacing*{\section}{0pt}{2em}{0.4em}
+\titlespacing*{\subsection}{0pt}{2em}{0.4em}
+\titlespacing*{\subsubsection}{0pt}{2em}{0.4em}
+
+
+\usepackage[bottom]{footmisc}
+
+% math equations and matrices
+\usepackage{amsmath}
+\usepackage{kbordermatrix}
+
+% bibliography
+% \usepackage[backend=biber, sorting=none, urldate=iso8601]{biblatex}
+\usepackage[backend=bibtex, sorting=none, urldate=iso8601]{biblatex}
+\addbibresource{bibliography.bib}
+
+% use subfiles to separate different parts of the document
+\usepackage{subfiles}
+
+% create dummy text while composing
+\usepackage{lipsum}
+
+\usepackage{color}
+\definecolor{beige}{rgb}{0.96, 0.96, 0.86}
+\definecolor{cosmiclatte}{rgb}{1.0, 0.97, 0.91}
+\definecolor{ghostwhite}{rgb}{0.97, 0.97, 1.0}
+\definecolor{darkbrown}{rgb}{0.4, 0.26, 0.13}
+\definecolor{burntumber}{rgb}{0.54, 0.2, 0.14}
+
+\usepackage[chapter]{minted}
+\usepackage{caption}
+\newminted{cpp} {
+    fontsize=\footnotesize, 
+    frame=lines, 
+    framesep=1.5mm,
+    tabsize=4, 
+    linenos=true, 
+    breaklines=true,
+    bgcolor=beige
+}
+\newminted{bash} {
+    fontsize=\footnotesize, 
+    frame=lines, 
+    framesep=1.5mm,
+    tabsize=4, 
+    linenos=false, 
+    breaklines=true,
+    bgcolor=ghostwhite
+}
+\newminted{gherkin} {
+    fontsize=\footnotesize, 
+    frame=lines, 
+    framesep=1.5mm,
+    tabsize=4, 
+    linenos=false, 
+    breaklines=true,
+    bgcolor=beige
+}
+\newminted{text} {
+    fontsize=\footnotesize, 
+    frame=lines, 
+    framesep=1.5mm,
+    tabsize=4, 
+    linenos=false, 
+    breaklines=true,
+    bgcolor=beige
+}
+\newenvironment{mylisting}[1][H]
+    {\captionsetup{aboveskip=-0.1\normalbaselineskip, belowskip=0.5mm}
+        \begin{listing}[#1]
+    }
+    {\end{listing}
+}
+\usepackage[T1]{fontenc}
+\usepackage{inconsolata}
+
+% images
+\usepackage{graphicx}
+\graphicspath{ {parts/images/} }
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta}
+\usepackage{transparent}
+\usepackage{subcaption}
+
+% references as links, and pdf specific
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks  =   true,
+    urlcolor    =   blue,
+    linkcolor   =   burntumber,
+    citecolor   =   black,
+    pdftitle    =   {\Title -\Subtitle - \Author},
+    pdfauthor   =   {\Author},
+    bookmarks   =   true,
+    pdfpagemode =   UseOutlines,
+    pdfstartpage =  1
+}
+
+% allow urls to break in bibliography
+\usepackage[hyphenbreaks]{breakurl}
+
+% allow rotated figure
+\usepackage{rotating}
+
+% directory listings
+\usepackage{dirtree}
+
+% multiple rows in tables
+\usepackage{multirow}
+% lineheight in tables
+\renewcommand{\arraystretch}{1.3}
+
+% numbered lists with section number included
+\usepackage{enumerate}
+
+% appendices get their own numbering
+\newcommand{\NewAppendix}[1]{
+    % put appendix on a new page
+    \clearpage
+
+    % reset the page counter
+    \pagenumbering{arabic}
+
+    % set the format for the appendix page number
+    % \renewcommand{\thepage}{\thesection - \arabic{page}}
+    \renewcommand{\thepage}{#1-\arabic{page}}
+}
+
+% better tilde
+\newcommand{\mytilde}{\raise.17ex\hbox{$\scriptstyle\mathtt{\sim}$}}
+
+%----------------------------------------------------------------------------------------
+% Composition
+%----------------------------------------------------------------------------------------
+% basic info
+\title{\Title}
+\author{\Author}
+\date{\today}
+
+% begin
+\begin{document}
+
+\begin{titlepage}
+\subfile{parts/00titlepage}
+\end{titlepage}
+
+% publisher page goes here
+\cleardoublepage
+\subfile{parts/01publisherpage}
+
+% FRONT START roman numeral pages here
+\pagenumbering{roman}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Abstract}
+\subfile{parts/02abstract}
+
+% \cleardoublepage
+% \phantomsection
+% \addcontentsline{toc}{chapter}{Foreword}
+% \subfile{parts/03foreword}
+
+% \cleardoublepage
+% \phantomsection
+% \addcontentsline{toc}{chapter}{Terminology}
+% \subfile{parts/04terminology}
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Table of contents}
+\tableofcontents
+% FRONT END
+
+\clearpage
+
+% MAIN START
+\pagenumbering{arabic}
+
+\subfile{parts/1}
+\subfile{parts/2}
+\subfile{parts/3}
+% comment out for building without code appendix
+\subfile{parts/4}
+% \subfile{parts/4-code}
+\subfile{parts/5}
+\subfile{parts/6}
+
+\medskip
+
+% MAIN END
+
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography
+
+\clearpage
+\appendix
+\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}
+
+\NewAppendix{A}
+\subfile{parts/appendix-specifications}
+
+\NewAppendix{B}
+\subfile{parts/appendix-diagrams}
+
+\NewAppendix{C}
+% comment out for building without code appendix
+\subfile{parts/appendix-directory-listings}
+% \subfile{parts/appendix-directory-listings-code}
+
+% comment out for building without code appendix
+% \NewAppendix{D}
+% \subfile{parts/appendix-code}
+
+\end{document}

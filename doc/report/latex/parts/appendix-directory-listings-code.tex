@@ -1,0 +1,297 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\chapter{Directory listings}\label{appendix_directory_listings}
+Contents of the directories in this project.
+
+\vspace{2em}
+
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 / .
+    .2 \hyperref[lst:dir-catchtest]{catchtest/} . 
+    .2 \hyperref[lst:dir-config]{config/} . 
+    .2 \hyperref[lst:dir-doc]{doc/} . 
+    .2 \hyperref[lst:dir-graph]{graph/} . 
+    .2 \hyperref[lst:dir-lgu]{lgu/} .
+    .2 \hyperref[lst:dir-mapprovider]{mapprovider/} . 
+    .2 \hyperref[lst:dir-osm]{osm/} .
+    .2 \hyperref[lst:dir-preparation]{preparation/} .
+    .2 \hyperref[lst:dir-util]{util/} .
+    .2 \hyperref[lst:root-readme-md]{README.md} . 
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Directory structure in root of the project}
+\label{lst:dir-root}
+\end{mylisting}
+
+\vspace{2em}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 catchtest/ .
+    .3 catch.hpp .
+    .3 \hyperref[lst:catchtest-catchmain-cc]{catchmain.cc} .
+    .3 \hyperref[lst:catchtest-readme-md]{README.md} .
+    .3 testsettings/ .
+    .4 \hyperref[lst:catchtest-testsettings-mikhailovsk-original-json]{mikhailovsk-original.json} . 
+    .4 \hyperref[lst:catchtest-testsettings-mikhailovsk-original-temp-json]{mikhailovsk-original-temp.json} . 
+    .4 \hyperref[lst:catchtest-testsettings-partille-original-json]{partille-original-temp.json} . 
+    .4 \hyperref[lst:catchtest-testsettings-partille-original-temp-json]{partille-original-temp.json} .
+    .4 \ldots \DTcomment{(10 more .json files)} . 
+    .4 restrictions/ . 
+    .5 \hyperref[lst:catchtest-testsettings-restrictions-mikhailovsk-barrier-block-json]{mikhailovsk-barrier\_block.json} .
+    .5 \hyperref[lst:catchtest-testsettings-restrictions-partille-traffic-signals-json]{partille-highway\_traffic\_signals.json} . 
+    .5 \ldots \DTcomment{(17 more .json files)} .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/catchtest}}
+\label{lst:dir-catchtest}
+\end{mylisting}
+
+
+\vspace{2em}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 config/ . 
+    .3 catchtest/ . 
+    .4 \hyperref[lst:config-configuration-reader-test-cc]{ConfigurationReader\_test.cc} .
+    .3 \hyperref[lst:config-configuration-cc]{Configuration.cc} . 
+    .3 \hyperref[lst:config-configuration-h]{Configuration.h} . 
+    .3 \hyperref[lst:config-configuration-exception-h]{ConfigurationException.h} . 
+    .3 \hyperref[lst:config-configuration-reader-cc]{ConfigurationReader.cc} . 
+    .3 \hyperref[lst:config-configuration-reader-h]{ConfigurationReader.h} . 
+    .3 \hyperref[lst:config-cost-config-h]{CostConfig.h} . 
+    .3 \hyperref[lst:config-database-config-h]{DatabaseConfig.h} . 
+    .3 \hyperref[lst:config-readme-md]{README.md} . 
+    .3 \hyperref[lst:config-topology-config-h]{TopologyConfig.h} . 
+    .3 \hyperref[lst:config-vehicle-config-h]{VehicleConfig.h} . 
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/config}}
+\label{lst:dir-config}
+\end{mylisting}
+
+\vspace{2em}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 doc/ .
+    .3 presentation/ . 
+    .3 report/ . 
+    .4 latex/\DTcomment{\LaTeX original} . 
+    .4 jobe0900\_report.pdf . 
+    .4 \hyperref[lst:report-readme-md]{README.md} . 
+    .3 uml/ .
+    .4 \DTcomment{.xml, .svg, .pdf diagram files} . 
+    .4 \hyperref[lst:uml-readme-md]{README.md} . 
+    .3 \hyperref[lst:doc-readme-md]{README.md} .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/doc}}
+\label{lst:dir-doc}
+\end{mylisting}
+
+\vspace{2em}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2  graph/ . 
+    .3  catchtest/ . 
+    .4  \hyperref[lst:graph-edge-cost-test-cc]{EdgeCost\_test.cc} . 
+    .4  \hyperref[lst:graph-graph-builder-test-cc]{GraphBuilder\_test.cc} . 
+    .4  \hyperref[lst:graph-restrictions-and-costs-test-cc]{RestrictionsAndCosts\_test.cc} . 
+    .4  \hyperref[lst:graph-topology-test-cc]{Topology\_test.cc} . 
+    .4  \hyperref[lst:graph-turn-cost-calculator-test-cc]{TurnCostCalculator\_test.cc} . 
+    .3  \hyperref[lst:graph-cost-h]{Cost.h} . 
+    .3  \hyperref[lst:graph-edge-cc]{Edge.cc} . 
+    .3  \hyperref[lst:graph-edge-h]{Edge.h} . 
+    .3  \hyperref[lst:graph-edge-cost-cc]{EdgeCost.cc} . 
+    .3  \hyperref[lst:graph-edge-cost-h]{EdgeCost.h} . 
+    .3  \hyperref[lst:graph-edge-restriction-cc]{EdgeRestriction.cc} . 
+    .3  \hyperref[lst:graph-edge-restriction-h]{EdgeRestriction.h} . 
+    .3  \hyperref[lst:graph-graph-builder-cc]{GraphBuilder.cc} . 
+    .3  \hyperref[lst:graph-graph-builder-h]{GraphBuilder.h} . 
+    .3  \hyperref[lst:graph-graph-exception-h]{GraphException.h} . 
+    .3  \hyperref[lst:graph-readme-md]{README.md} . 
+    .3  \hyperref[lst:graph-restrictions-exception-h]{RestrictionsException.h} . 
+    .3  \hyperref[lst:graph-speed-h]{Speed.h} . 
+    .3  \hyperref[lst:graph-topology-cc]{Topology.cc} . 
+    .3  \hyperref[lst:graph-topology-h]{Topology.h} . 
+    .3  \hyperref[lst:graph-topology-exception-h]{TopologyException.h} . 
+    .3  \hyperref[lst:graph-turn-cost-calculator-cc]{TurnCostCalculator.cc} . 
+    .3  \hyperref[lst:graph-turn-cost-calculator-h]{TurnCostCalculator.h} . 
+    .3  \hyperref[lst:graph-vertex-cc]{Vertex.cc} . 
+    .3  \hyperref[lst:graph-vertex-h]{Vertex.h} . 
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/graph}}
+\label{lst:dir-graph}
+\end{mylisting}
+
+\vspace{2em}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 lgu/ . 
+    .3 catchtest/ . 
+    .4 \hyperref[lst:lgu-linegraph-utility-test-cc]{LineGraphUtility\_test.cc} .
+    .3 \hyperref[lst:lgu-linegraph-utility-cc]{LineGraphUtility.cc} . 
+    .3 \hyperref[lst:lgu-linegraph-utility-h]{LineGraphUtility.h} . 
+    .3 \hyperref[lst:lgu-linegraph-utility-exception-h]{LineGraphUtilityException.h} . 
+    .3 \hyperref[lst:lgu-readme-md]{README.md} . 
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/lgu}}
+\label{lst:dir-lgu}
+\end{mylisting}
+
+\vspace{2em}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 mapprovider/ . 
+    .3 catchtest/ . 
+    .4 \hyperref[lst:mapprovider-mapprovider-test-cc]{MapProvider\_test.cc} .
+    .3 jsontest/ . 
+    .4 catchtest/ .
+    .5 \hyperref[lst:mapprovider-jsontest-jsontest-provider-test-cc]{JsonTestProvider\_test.cc} .
+    .5 \hyperref[lst:mapprovider-jsontest-jsontest-settings-json]{jsontest-settings.json} .
+    .5 \hyperref[lst:mapprovider-jsontest-test-topology-json]{test-topology.json} .
+    .4 \hyperref[lst:mapprovider-jsontest-jsontest-provider-cc]{JsonTestProvider.cc} .
+    .4 \hyperref[lst:mapprovider-jsontest-jsontest-provider-h]{JsonTestProvider.h} .
+    .4 \hyperref[lst:mapprovider-jsontest-readme-md]{README.md} .
+    .3 postgis/ . 
+    .4 catchtest/ .
+    .5 \hyperref[lst:mapprovider-postgis-postgis-provider-test-cc]{PostGisProvider\_test.cc} .
+    .4 \hyperref[lst:mapprovider-postgis-cost-queries-cc]{CostQueries.cc} .
+    .4 \hyperref[lst:mapprovider-postgis-cost-queries-h]{CostQueries.h} .
+    .4 \hyperref[lst:mapprovider-postgis-linegraph-save-queries-cc]{LineGraphSaveQueries.cc} .
+    .4 \hyperref[lst:mapprovider-postgis-linegraph-save-queries-h]{LineGraphSaveQueries.h} .
+    .4 \hyperref[lst:mapprovider-postgis-postgis-provider-cc]{PostGisProvider.cc} .
+    .4 \hyperref[lst:mapprovider-postgis-postgis-provider-h]{PostGisProvider.h} .
+    .4 \hyperref[lst:mapprovider-postgis-restriction-queries-cc]{RestrictionQueries.cc} .
+    .4 \hyperref[lst:mapprovider-postgis-restriction-queries-h]{RestrictionQueries.h} .
+    .4 \hyperref[lst:mapprovider-postgis-topology-queries-cc]{TopologyQueries.cc} .
+    .4 \hyperref[lst:mapprovider-postgis-readme-md]{README.md} .
+    .3 \hyperref[lst:mapprovider-mapprovider-h]{MapProvider.h} .
+    .3 \hyperref[lst:mapprovider-mapprovider-exception-h]{MapProviderException.h} .
+    .3 \hyperref[lst:mapprovider-readme-md]{README.md} .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/mapprovider}}
+\label{lst:dir-mapprovider}
+\end{mylisting}
+
+\vspace{2em}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 osm/ . 
+    .3 catchtest/ . 
+    .4 \hyperref[lst:osm-access-test-cc]{OsmAccess\_test.cc} .
+    .4 \hyperref[lst:osm-barrier-test-cc]{OsmBarrier\_test.cc} .
+    .4 \hyperref[lst:osm-highway-test-cc]{OsmHighway\_test.cc} .
+    .4 \hyperref[lst:osm-turning-restriction-test-cc]{OsmTurningRestriction\_test.cc} .
+    .4 \hyperref[lst:osm-vehicle-test-cc]{OsmVehicle\_test.cc} .
+    .3 \hyperref[lst:osm-access-cc]{OsmAccess.cc} .
+    .3 \hyperref[lst:osm-access-h]{OsmAccess.h} .
+    .3 \hyperref[lst:osm-barrier-cc]{OsmBarrier.cc} .
+    .3 \hyperref[lst:osm-barrier-h]{OsmBarrier.h} .
+    .3 \hyperref[lst:osm-exception-h]{OsmException.h} .
+    .3 \hyperref[lst:osm-highway-cc]{OsmHighway.cc} .
+    .3 \hyperref[lst:osm-highway-h]{OsmHighway.h} .
+    .3 \hyperref[lst:osm-id-cc]{OsmId.cc} .
+    .3 \hyperref[lst:osm-id-h]{OsmId.h} .
+    .3 \hyperref[lst:osm-turning-restriction-cc]{OsmTurningRestriction.cc} .
+    .3 \hyperref[lst:osm-turning-restriction-h]{OsmTurningRestriction.h} .
+    .3 \hyperref[lst:osm-vehicle-cc]{OsmVehicle.cc} .
+    .3 \hyperref[lst:osm-vehicle-h]{OsmVehicle.h} .
+    .3 \hyperref[lst:osm-readme-md]{README.md} . 
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/osm}}
+\label{lst:dir-osm}
+\end{mylisting}
+
+
+\vspace{2em}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 preparation/ . 
+    .3 restrictions/ . 
+    .4 \ldots\DTcomment{osm-files modified with added restrictions} .
+    .3 \hyperref[lst:preparation-build-postgis-topology-sql]{build\_postgis\_topology.sql} .
+    .3 \hyperref[lst:preparation-init-osm2pgsql-postgis-topology-sql]{init\_osm2pgsql\_postgis\_topology.sql} .
+    .3 \hyperref[lst:preparation-lgu-style]{LGU.style} .
+    .3 \hyperref[lst:preparation-mikhailovsk-osm]{mikhailovsk.osm} .
+    .3 \hyperref[lst:preparation-partille-osm]{partille.osm} .
+    .3 \hyperref[lst:preparation-readme-md]{README.md} . 
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/preparation}}
+\label{lst:dir-preparation}
+\end{mylisting}
+
+
+\vspace{2em}
+\begin{mylisting}
+\hrule
+\vspace{0.5em}
+\dirtree{%
+    .1 \hyperref[lst:dir-root]{/} . 
+    .2 util/ . 
+    .3 catchtest/\DTcomment{empty directory} . 
+    .3 \hyperref[lst:util-logging-cc]{Logging.cc} .
+    .3 \hyperref[lst:util-logging-h]{Logging.h} .
+    .3 \hyperref[lst:util-point-h]{Point.h} .
+    .3 \hyperref[lst:util-time-to-string-maker-cc]{TimeToStringMaker.cc} .
+    .3 \hyperref[lst:util-time-to-string-maker-h]{TimeToStringMaker.h} .
+}
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+\caption{Files in \texttt{/util}}
+\label{lst:dir-util}
+\end{mylisting}
+
+\end{document}

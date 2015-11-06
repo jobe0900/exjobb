@@ -1,0 +1,13 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\chapter*{Abstract}
+This project was about building a line graph utility, a software module that should read map data
+from a PostGIS database and transform that information into a line graph (edge based graph) that the calling software could use to perform routing decisions. This outer calling application is part of a project (by an anonymized company) for flexible public transportation, that is meant to manage and direct a fleet of vehicles to where the customers actually are, instead of idling at bus stops. The software module should take different kinds of restrictions and conditions into account when building the line graph, to reflect the actual traffic situation. That can be turn restrictions, traffic signs, inclination, or conditions such as temporary hindrances, time of day. Some are static, but others vary dynamically and the state is to be found in the database.
+
+This study has found a set of tools that aids in the transformation of OpenStreetMap data into a PostGIS database; for building the topology of the map; querying the database; and data structures for representing the graph and line graph. 
+
+The result of the project is a piece of working software that can return a line graph as a Boost graph with some restrictions taken into account, but it has not yet implemented them all, and more specifically, it does not handle conditional restrictions yet. There remains a good deal of work to implement all that complex logic.
+
+\end{document}

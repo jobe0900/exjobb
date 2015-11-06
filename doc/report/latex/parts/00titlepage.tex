@@ -1,0 +1,77 @@
+\documentclass[../main.tex]{subfiles}
+
+\begin{document}
+
+\newgeometry{a4paper, bottom=15mm}
+\thispagestyle{empty}
+
+\begin{tikzpicture}[overlay, remember picture]
+\definecolor{miun_blue}{RGB}{1,122,194}
+\definecolor{miun_yellow}{RGB}{255,213,32}
+
+\node[shift={(1,-1)}] at (current page.north west) 
+{
+    \begin{tikzpicture}[overlay, remember picture]
+        \path[fill=miun_blue] (0,-22) rectangle (19,0);
+        \fontfamily{qhv}\selectfont
+        \node[above right, white] at (15mm,-115mm) 
+        {
+            \fontsize{24}{24}\bfseries\selectfont
+            Självständigt arbete på grundnivå
+        };
+        \node[above right, white] at (15mm,-132mm) 
+        {
+            \fontsize{19}{19}\itshape\selectfont
+            Independent degree project -- first cycle
+        };
+        \fontsize{12}{12}\selectfont
+        \node[above right, white] at (15mm,-172mm) 
+        {
+            \mdseries\selectfont
+            \MajorSubjectSv
+        };
+        \node[above right, white] at (15mm,-178mm) 
+        {
+            \itshape\selectfont
+            \MajorSubject
+        };
+        \node[above right, white] at (15mm,-187mm) 
+        {
+            \bfseries\selectfont
+            \Title
+        };
+        \node[above right, white] at (15mm,-193mm) 
+        {
+            \mdseries\selectfont
+            \Subtitle
+        };
+        \node[above right, white] at (15mm,-203mm) 
+        {
+            \bfseries\selectfont
+            \Author
+        };
+    \end{tikzpicture}
+        
+};
+
+\end{tikzpicture}
+
+\vfill
+\centering
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=63mm]{MU_logotyp_int_CMYK.eps}
+\end{figure}
+
+\vspace{3mm}
+
+\fontfamily{qhv}\fontsize{6}{7.5}\selectfont
+\noindent
+\textbf{Campus Härnösand} Universitetsbacken 1, SE-871 88. \textbf{Campus Sundsvall} Holmgatan 10, SE-851 70 Sundsvall.\\
+\textbf{Campus Östersund} Kunskapens väg 8, SE-831 25 Östersund.\\
+Phone: +46 (0)771 97 50 00, Fax: +46 (0)771 97 50 01.
+
+\restoregeometry
+
+\end{document}

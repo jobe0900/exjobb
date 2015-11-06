@@ -1,0 +1,211 @@
+{
+    "database":    
+    {
+        "host":        "127.0.0.1",
+        "port":         5432,
+        "username":    "tester",
+        "password":    "tester",
+        "database":    "partille-original"
+    },
+    
+    "topology": 
+    {
+        "provider":      "postgis",
+        
+        "postgis": 
+        {
+            
+            "topo_name":      "lgu",
+            "roads_prefix":   "highways",
+            "schema_prefix":  "topo",
+            "build": {
+                "temp_topo_name": "",
+                "srid":           900913,
+                "tolerance":      1.0 
+            },
+            "edge": 
+            {
+                "table":      "edge_data",
+                "id_col":     "edge_id",
+                "source_col": "start_node",
+                "target_col": "end_node",
+                "geom_col":   "geom"
+            },
+            "vertex": 
+            {
+                "table":     "node",
+                "id_col":    "node_id",
+                "geom_col":  "geom"
+            }
+        },
+        
+        "pgrouting": 
+        {
+        },
+        
+        "jsontest": 
+        {
+            "test_file": ""
+        }
+        
+    },
+    
+    "vehicle": 
+    {
+        "category":   "motorcar",
+        "motorcar": 
+        {
+           "height":       1.6,
+           "length":       4.5,
+           "width":        1.9,
+           "weight":       2.0,
+           "maxspeed":     200,
+           "acceleration": 10,
+           "deceleration": 7
+        }
+    },
+
+   "access":
+   {
+      "allow":
+      [
+         "yes",
+         "permissive",
+         "designated"
+      ]
+   },
+   
+   "restrict":
+   {
+      "barriers":
+      [
+         "block",
+         "bollard",
+         "bus_trap",
+         "chain",
+         "cycle_barrier",
+         "debris",
+         "full-height_turnstile",
+         "horse_stile",
+         "jersey_barrier",
+         "kent_carriage_gap",
+         "kissing_gate",
+         "log",
+         "motorcycle_barrier",
+         "rope",
+         "sally_port",
+         "spikes",
+         "stile",
+         "sump_buster",
+         "swing_gate",
+         "turnstile",
+         "yes"
+      ]
+      
+   },
+    
+   "cost":
+   {
+      "default_speed":
+      {
+          "motorway":      {"high": 110, "low":  90},
+          "motorway_link": {"high":  90, "low":  90},
+          "trunk":         {"high":  90, "low":  60},
+          "trunk_link":    {"high":  90, "low":  60},
+          "primary":       {"high":  90, "low":  60},
+          "primary_link":  {"high":  90, "low":  60},
+          "secondary":     {"high":  90, "low":  60},
+          "secondary_link":{"high":  90, "low":  60},
+          "tertiary":      {"high":  90, "low":  60},
+          "tertiary_link": {"high":  90, "low":  60},
+          "unclassified":  {"high":  90, "low":  60},
+          "residential":   {"high":  90, "low":  60},
+          "service":       {"high":  40, "low":  20},
+          "living_street": {"high":  20, "low":  20},
+          "bus_guideway":  {"high":  80, "low":  60},
+          "road":          {"high":  80, "low":  50}
+      },
+      
+      "surface":
+      {
+         "paved":           1000,
+         "asphalt":         1000,
+         "cobblestone":     20,
+         "cobblestone:flattened": 40,
+         "sett":            40,
+         "concrete":        1000,
+         "concrete:lanes":  40,
+         "concrete:plates": 100,
+         "paving_stones":   40,
+         "metal":           60,
+         "wood":            30,
+         "unpaved":         60,
+         "compacted":       70,
+         "dirt":            40,
+         "earth":           40,
+         "fine_gravel":     50,
+         "grass":           10,
+         "grass_paver":     20,
+         "gravel":          60,
+         "ground":          20,
+         "ice":             70,
+         "mud":             5,
+         "pebblestone":     50,
+         "salt":            70,
+         "sand":            70,
+         "snow":            50,
+         "woodchips":       5,
+         "metal_grid":      40
+      },
+      
+      "barriers":
+      [
+         ["border_control",    120],
+         ["bump_gate",          30],
+         ["bus_trap",           30],
+         ["cattle_grid",        20],
+         ["entrance",           10],
+         ["gate",               30],
+         ["hampshire_gate",     60],
+         ["height_restrictor",   5],
+         ["jersey_barrier",     10],
+         ["lift_gate",          60],
+         ["sump_buster",        30],
+         ["swing_gate",         60],
+         ["toll_booth",         40]
+      ],
+      
+      "highway":
+      [
+         ["bus_stop",            5],
+         ["crossing",            5],
+         ["give_way",           20],
+         ["mini_roundabout",    20],
+         ["stop",               30],
+         ["traffic_signals",    30]      
+      ],
+      
+      "railway":
+      [
+         ["level_crossing",     20]
+      ],
+      
+      "public_transport":
+      [
+         ["stop_position",       5]
+      ],
+      
+      "traffic_calming":
+      [
+         ["yes",                10],
+         ["bump",               10],
+         ["hump",               10],
+         ["table",              10],
+         ["cushion",            10],
+         ["rumble_strip",       10],
+         ["chicane",            10],
+         ["choker",             10],
+         ["island",              5]
+      ]
+   }
+}   
