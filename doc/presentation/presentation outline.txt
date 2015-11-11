@@ -1,0 +1,242 @@
+Line Graph Utility
+    - a software module for routing of public ransportation
+
+1. background
+==================================================
+
+-(6)-
+Flexible: 
+    No timetables
+    Customers order ride via app or phone
+    System calculates best routes
+    Drivers gets real-time instructions
+
+-(12)-
+Gain:
+    Less idle vehicles      (company & society)
+	    Efficient use of fleet
+            Environment 
+            Economy
+    Less waiting        (customers)
+
+-(16)-
+MAPS & GRAPHS
+
+Map:
+    Projection of reality on 2D-surface. Geometry.
+    Semantics about connection of roads.
+
+When routing:
+	Interesting:
+		Connections
+		Relations
+	Not:
+		Geometry
+
+Topology
+	Undirected graph
+	Static as road network is stable
+	
+Terminology
+	Vertex = node, point, dot
+	Edge = arc, line
+
+-(20)-
+To be able to apply dynamic restrictions to the static topology we construct a DIRECTED graph.
+
+Specifies possible travel on roads in the map.
+
+Each lane becomes an edge in correct direction.
+    One-way road = edge in one direction.
+    Several lanes = several parallel edges.
+
+
+-(25)-
+Last step: transform directed graph to LINE graph.
+
+Specifies possible turns in the map.
+
+Edge -> Node
+Nodes connected with Lines where travel is allowed.
+
+
+
+-(35)-
+2. problem statement
+====================================================
+Software module exposing function, returning data structure for routing in soft real-time.
+
+HOW:
+Sequential operation:
+
+Load map data.
+	Build topology
+
+Consider restrictions and conditions.
+	Directed graph.
+	Restrictions.
+Return data structure for routing decisions.
+	LineGraph
+	    Calculate costs = 
+			Travel time on from edge (length + speed + surface) +
+			Restriction costs (speed bumps) +
+			Turn costs (angle + vehicle props ...)
+	
+	
+-(49)-
+Diversion: restrictions
+
+DYNAMIC restriction like road work  = closed road.
+
+Topology not affected.
+
+Directed graph = travel along roads → no edges.
+
+Line graph = transformed graph.
+	No edges → no nodes → no lines
+	
+STATIC restriction like “No turn”
+
+Topology not affected
+
+Directed graph = travel along roads → not affected.
+
+Line graph = allowed turns.
+	Edges → nodes 
+	BUT
+	Not allowed turn→ no line
+
+
+-(59)-
+Given set of tools:	
+	C++, Boost Graph Library, 
+	OpenStreetMap (crowd sourced, open).
+	PostGis (PostgreSQL + spatial data).
+	BDD/TDD
+Configurable settings in JSON.
+
+
+-(65)-
+3. method
+============================================================
+Requirement
+	BDD or TDD
+
+-(70)-
+BDD test cases:
+	Scenario
+	Given
+	When
+	Then
+
+-(78)-
+TOOLS
+    Some were given, others I have spent a lot of time investigating.
+    
+Catch
+    Header only
+	Easy to use
+	
+Json
+    Boost Property Tree
+	As already using Boost in project
+	
+Loading map data
+	From .osm file into PostGIS
+    Lots of different tools
+    osm2pgsql OK, but weak on relations and conditional tags...
+
+Build topology
+	postgis_topology
+		Extension to PostGIS
+
+Work against DB
+	Libpqxx
+		Official library for PostgreSQL
+		Needs linking
+
+BGL
+	Hard to read with property lists
+	Bundled templates...
+	
+	Bundled properties are more understandable
+	Happy to have found them!
+	
+JOSM
+    Modifying maps
+        Add restrictions for testing
+
+
+-(87)-
+4. results
+===============================================================
+DESIGN
+
+Main use case
+	Instantiate LineGraphUtility
+		Load Configuration
+		Instantiate correct MapProvider
+		Get Topology
+		Apply Restrictions and Costs
+		Instantiate GraphBuilder
+	Get LineGraph
+	
+Update Restrictions and Costs
+	Clear Restrictions and Cost from Topology
+	Apply Restrictions and Costs
+	Instantiate GraphBuilder
+	(Get LineGraph)
+	
+Update Topology
+	Clear Topology
+	Read in new Topology
+	Apply Restrictions and Costs
+	Instantiate GraphBuilder
+	(Get LineGraph)
+
+Class diagram
+	Packages:
+		config
+		graph
+		lgu
+		mapprovider
+		osm
+		util
+
+RESULTS:
+-(92)-
+	Tests performed during development asserts that software produces wished results.
+	The specification is fulfilled,
+-(95)-
+		Except for Restrictions (conditional)
+	        Example conditional restriction
+	    And conditions
+	Performance test
+		Sizes of test graphs
+		Result
+			Fetch a Line Graph
+			Topology pre-built / on demand
+		Soft real-time
+	Visual examination
+		Load data in QGIS, looks correct?
+		
+-(103)-		
+5. conclusions
+=================================================================
+Module:
+	Working but incomplete
+
+	Late from start
+		Stress, suboptimal decisions (?)
+
+	Business logic for restrictions
+		Much more complex than thought
+		
+-(109)-		
+6. future work
+=================================================================
+What remains:
+
+	It is possible to keep on working with the restrictions, but needs re-modeling.
+
+	Possibly using the syntax as a base for a more generic restriction class.
