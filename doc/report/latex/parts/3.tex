@@ -3,7 +3,33 @@
 \begin{document}
 
 \chapter{Methodology}
-The overall methodology for the development is a combination a of \emph{Behaviour Driven Development, BDD} and \emph{Test Driven Development, TDD}, meaning all features of the module have either a \emph{scenario} (BDD) or a \emph{test case} (TDD) written.
+The methodology used in this project:
+\begin{itemize}
+    \item Theory studies.
+    \begin{itemize}
+        \item Graph theory.
+        \item Maps and routing.
+    \end{itemize}
+    \item Analysis.
+    \begin{itemize}
+        \item Tools.
+        \item Design.
+    \end{itemize}
+    \item Development (incremental).
+    \begin{itemize}
+        \item Coding.
+        \item Testing.
+        \item Documenting.
+    \end{itemize}
+    \item Evaluation.
+\end{itemize}
+
+\noindent
+The \textit{``Detailed problem statement''} in section \ref{sect:detailed-problem} and the final specifications in appendix \ref{appendix-specification} resolves some of these steps: several of the tools are given, while the investigation for the others are described below. 
+
+The methodology to use for the development is also given, either \emph{Behaviour Driven Development, BDD} or \emph{Test Driven Development, TDD}, meaning all features of the module have either a \emph{scenario} (BDD) or a \emph{test case} (TDD) written. This is suitable to use with an incremental, iterative development model, where one is constantly re-evaluating and adding and testing new features. One could move the ``design'' step from ``Analysis'' and under ``Development'' as the design is allowed to change. The \textit{coding standard} gives guidance on \textit{coding} and \textit{documentation}. 
+
+Another part of testing, is visual examination to see that the graphs looks like expected. There will also be performance tests, to see that the software fulfills the requirements for \textit{soft real-time} execution. There will also be evaluation of fulfillment of the other requirements in the specification.
 
 \vspace{1em}
 \noindent
@@ -185,7 +211,7 @@ $ psql -U jonas -d mikh_db -c "UPDATE roads SET topo_geom = topology.toTopoGeom(
 \subsubsection{Alternatives}
 One might load the database, and build a topology with \href{http://pgrouting.org/docs/tools/osm2pgrouting.html}{osm2pgrouting}\footnote{\url{http://pgrouting.org/docs/tools/osm2pgrouting.html}}, and the PostgreSQL extension \href{http://pgrouting.org/index.html}{pgRouting}\footnote{\url{http://pgrouting.org/index.html}}. That solution is pretty smooth, and might heal the topology with a tolerance, but it seems it only builds the topology and does not give access to tags and other information usable when calculating costs.
 
-Another attempt, was to run a topology building SQL function (as in \url{http://blog.loudhush.ro/2011/10/using-pgrouting-on-osm-database.html}), and then run another function to remove all nodes without topological meaning. But that lead to the problem shown in figure \ref{fig:qgis-not-connected}, as there had been no ``healing'' of nodes first. One solution could of course to write antoher function for that, or to fix the \texttt{.osm}-file manually in JOSM before loading it into the database. But the solution with the PostGIS topology seems like a better way to go.
+Another attempt, was to run a topology building SQL function (as in \url{http://blog.loudhush.ro/2011/10/using-pgrouting-on-osm-database.html}), and then run another function to remove all nodes without topological meaning. But that lead to the problem shown in figure \ref{fig:qgis-not-connected}, as there had been no ``healing'' of nodes first. One solution could of course to write another function for that, or to fix the \texttt{.osm}-file manually in JOSM before loading it into the database. But the solution with the PostGIS topology seems like a better way to go.
 
 %.....................................................................................
 \subsection{Examining map data}

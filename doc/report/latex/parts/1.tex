@@ -21,10 +21,12 @@ This project should result in a working software module, fulfilling the requirem
 \section{Scope}
 The scope of this project is to create the routing data structures representing the map data, not the routing algorithms, although they might affect one another, such that the choice of algorithm might affect what data structures are suitable.
 
-\section{Detailed problem statement}
+\section{Detailed problem statement}\label{sect:detailed-problem}
 The software in this project is a module, exposing a function. When the function is called, it should load map data from a database, which has previously been loaded with OpenStreetMap-data, and build a connected graph to be used for routing decisions, and the data structure is returned to the caller so it can be used for routing. The building of the graph should happen in \emph{soft real-time} so that it reflects all known restrictions in the database. For example if one road gets temporarily closed it should be marked as such, and that should be represented in the graph.
 
 The requirements from the company states that the graph should be represented as a \emph{line graph}, which is a basic technique for representing available turns at junctions. The software module shall be implemented in C++, using the \href{http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/index.html}{\emph{Boost Graph Library}}\footnote{\url{http://www.boost.org/doc/libs/1_54_0/libs/graph/doc/index.html}} for the data structures. The software should be developed using \emph{Behavior Driven Development} (BDD) or \emph{Test Driven Development} (TDD) as methodologies, and otherwise adhere to the company's coding standards.
+
+A more formal specification from the company can be found in appendix \ref{appendix-specification}.
 
 \section{Outline}
 \begin{itemize}
