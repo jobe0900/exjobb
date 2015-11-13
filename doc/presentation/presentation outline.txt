@@ -42,7 +42,7 @@ Terminology
 	Edge = arc, line
 
 -(20)-
-To be able to apply dynamic restrictions to the static topology we construct a DIRECTED graph.
+Topology is UNDIRECTED. To looka at travel in graph, we need to construct a DIRECTED graph.
 
 Specifies possible travel on roads in the map.
 
@@ -105,6 +105,10 @@ Line graph = allowed turns.
 	Edges → nodes 
 	BUT
 	Not allowed turn→ no line
+	
+PRELIMINARY STEP
+
+ON DEMAND
 
 
 -(59)-
@@ -232,6 +236,9 @@ Module:
 	Business logic for restrictions
 		Much more complex than thought
 		
+		Thought Graph theory was to be the hard part
+		But messy OSM was
+		
 -(109)-		
 6. future work
 =================================================================
@@ -239,4 +246,4 @@ What remains:
 
 	It is possible to keep on working with the restrictions, but needs re-modeling.
 
-	Possibly using the syntax as a base for a more generic restriction class.
+	Possibly using the syntax as a base for a more generic restriction class. (From OSM documentation).
